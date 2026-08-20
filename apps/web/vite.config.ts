@@ -13,7 +13,7 @@ const rootPackageJson = JSON.parse(readFileSync(rootPackageJsonPath, "utf-8")) a
 const appVersion = JSON.stringify(rootPackageJson.version ?? "0.0.0");
 const workspaceRoot = fileURLToPath(new URL("../..", import.meta.url));
 
-const serverPaths = ["/api", "/mcp", "/uploads", "/.well-known", "/schema.json"] as const;
+const serverPaths = ["/api", "/uploads", "/.well-known", "/schema.json"] as const;
 
 const serverProxy = serverPaths.reduce(
 	(acc, path) => {
@@ -40,7 +40,7 @@ export default defineConfig({
 	build: {
 		chunkSizeWarningLimit: 10 * 1024, // 10 MB
 		rolldownOptions: {
-			external: ["bcrypt", "sharp", "@aws-sdk/client-s3", "ioredis", "linkedom"],
+			external: ["bcrypt", "sharp", "@aws-sdk/client-s3", "linkedom"],
 		},
 	},
 

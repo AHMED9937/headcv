@@ -1,6 +1,6 @@
+import { Trans } from "@lingui/react/macro";
 import { m } from "motion/react";
 import { useIsClient } from "usehooks-ts";
-import { AISettingsSection } from "./components/ai-section";
 
 export function IntegrationsSettingsPage() {
 	const isClient = useIsClient();
@@ -14,7 +14,9 @@ export function IntegrationsSettingsPage() {
 			transition={{ duration: 0.25, ease: "easeOut" }}
 			className="grid max-w-4xl gap-8 will-change-[transform,opacity]"
 		>
-			<AISettingsSection />
+			<p className="text-muted-foreground text-sm">
+				<Trans>No integrations are available yet.</Trans>
+			</p>
 		</m.div>
 	);
 }

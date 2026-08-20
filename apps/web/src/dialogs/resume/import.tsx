@@ -4,7 +4,7 @@ import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { DownloadSimpleIcon, FileIcon, UploadSimpleIcon } from "@phosphor-icons/react";
 import { useStore } from "@tanstack/react-form";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -12,7 +12,6 @@ import z from "zod";
 import { JSONResumeImporter } from "@reactive-resume/import/json-resume";
 import { ReactiveResumeJSONImporter } from "@reactive-resume/import/reactive-resume-json";
 import { ReactiveResumeV4JSONImporter } from "@reactive-resume/import/reactive-resume-v4-json";
-import { Badge } from "@reactive-resume/ui/components/badge";
 import { Button } from "@reactive-resume/ui/components/button";
 import {
 	DialogContent,
@@ -28,7 +27,7 @@ import { cn } from "@reactive-resume/utils/style";
 import { Combobox } from "@/components/ui/combobox";
 import { useFormBlocker } from "@/hooks/use-form-blocker";
 import { getOrpcErrorMessage } from "@/libs/error-message";
-import { client, orpc } from "@/libs/orpc/client";
+import { orpc } from "@/libs/orpc/client";
 import { useAppForm } from "@/libs/tanstack-form";
 import { useDialogStore } from "../store";
 
@@ -36,21 +35,6 @@ const formSchema = z.discriminatedUnion("type", [
 	z.object({
 		type: z.literal(""),
 		file: z.undefined(),
-	}),
-	z.object({
-		type: z.literal("pdf"),
-		file: z.instanceof(File).refine((file) => file.type === "application/pdf", { message: "File must be a PDF" }),
-	}),
-	z.object({
-		type: z.literal("docx"),
-		file: z
-			.instanceof(File)
-			.refine(
-				(file) =>
-					file.type === "application/msword" ||
-					file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-				{ message: "File must be a Microsoft Word document" },
-			),
 	}),
 	z.object({
 		type: z.literal("reactive-resume-json"),
@@ -75,19 +59,6 @@ const formSchema = z.discriminatedUnion("type", [
 type FormValues = z.infer<typeof formSchema>;
 type ImportType = FormValues["type"];
 
-function fileToBase64(file: File): Promise<string> {
-	return new Promise((resolve, reject) => {
-		const reader = new FileReader();
-		reader.onload = () => {
-			const result = reader.result as string;
-			// remove data URL prefix (e.g., "data:application/pdf;base64," or "data:application/vnd...;base64,")
-			resolve(result.split(",")[1]);
-		};
-		reader.onerror = reject;
-		reader.readAsDataURL(file);
-	});
-}
-
 export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 	const navigate = useNavigate();
 	const closeDialog = useDialogStore((state) => state.closeDialog);
@@ -97,8 +68,6 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 	const [isImporting, setIsImporting] = useState<boolean>(false);
 
 	const { mutateAsync: importResume } = useMutation(orpc.resume.import.mutationOptions());
-	const { data: aiProviders, isLoading: isLoadingAiProviders } = useQuery(orpc.aiProviders.list.queryOptions());
-	const hasAIProvider = aiProviders?.some((provider) => provider.enabled && provider.testStatus === "success") ?? false;
 
 	const form = useAppForm({
 		defaultValues: {
@@ -112,7 +81,7 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 			setIsImporting(true);
 
 			const toastId = toast.loading(t`Importing your resume...`, {
-				description: t`This may take a few minutes, depending on the response of the AI provider. Please do not close the window or refresh the page.`,
+				description: t`This may take a few moments. Please do not close the window or refresh the page.`,
 			});
 
 			try {
@@ -136,41 +105,11 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 					data = importer.parse(json);
 				}
 
-				if (value.type === "pdf") {
-					if (isLoadingAiProviders) throw new Error(t`Loading AI providers. Please try again in a moment.`);
-					if (!hasAIProvider)
-						throw new Error(t`This feature requires a tested AI provider. Please add one in the settings.`);
-
-					const base64 = await fileToBase64(value.file);
-
-					data = await client.ai.parsePdf({
-						file: { name: value.file.name, data: base64 },
-					});
-				}
-
-				if (value.type === "docx") {
-					if (isLoadingAiProviders) throw new Error(t`Loading AI providers. Please try again in a moment.`);
-					if (!hasAIProvider)
-						throw new Error(t`This feature requires a tested AI provider. Please add one in the settings.`);
-
-					const base64 = await fileToBase64(value.file);
-
-					const mediaType =
-						value.file.type === "application/msword"
-							? ("application/msword" as const)
-							: ("application/vnd.openxmlformats-officedocument.wordprocessingml.document" as const);
-
-					data = await client.ai.parseDocx({
-						mediaType,
-						file: { name: value.file.name, data: base64 },
-					});
-				}
-
 				if (!data) {
 					throw new Error(
 						t({
-							comment: "Error shown when AI import endpoint returns no parsed resume data",
-							message: "No data was returned from the AI provider.",
+							comment: "Error shown when the selected import file could not be parsed",
+							message: "No data could be parsed from the selected file.",
 						}),
 					);
 				}
@@ -184,12 +123,8 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 					getOrpcErrorMessage(error, {
 						byCode: {
 							BAD_REQUEST: t({
-								comment: "Error shown when AI parsing returns invalid resume structure during import",
+								comment: "Error shown when the imported file has an invalid resume structure",
 								message: "The imported file could not be parsed into a valid resume.",
-							}),
-							BAD_GATEWAY: t({
-								comment: "Error shown when AI provider is unreachable during PDF/DOCX resume import",
-								message: "Could not reach the AI provider. Please try again.",
 							}),
 						},
 						fallback: t({
@@ -236,7 +171,7 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 				<DialogDescription>
 					<Trans>
 						Continue where you left off by importing an existing resume you created using Reactive Resume or any another
-						resume builder. Supported formats include PDF, Microsoft Word, as well as JSON files from Reactive Resume.
+						resume builder. Supported formats include JSON files from Reactive Resume and JSON Resume.
 					</Trans>
 				</DialogDescription>
 			</DialogHeader>
@@ -284,30 +219,6 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 													comment: "Import source option for standard JSON Resume format",
 													message: "JSON Resume",
 												}),
-											},
-											{
-												value: "pdf",
-												label: (
-													<div className="flex items-center gap-x-2">
-														{t({
-															comment: "File format label in import source selector",
-															message: "PDF",
-														})}{" "}
-														<Badge>{t`AI`}</Badge>
-													</div>
-												),
-											},
-											{
-												value: "docx",
-												label: (
-													<div className="flex items-center gap-x-2">
-														{t({
-															comment: "File format label in import source selector",
-															message: "Microsoft Word",
-														})}{" "}
-														<Badge>{t`AI`}</Badge>
-													</div>
-												),
 											},
 										]}
 									/>

@@ -1,8 +1,6 @@
 import { Hono } from "hono";
-import { handleMcp } from "../mcp/handler";
 import { handleOpenApi } from "../openapi/handler";
 import {
-	handleMcpServerCard,
 	handleOAuthAuthorizationServer,
 	handleOAuthProtectedResource,
 	handleOpenIdConfiguration,
@@ -29,10 +27,7 @@ export function createApp() {
 	app.get("/api/uploads/*", (c) => handleUpload(c.req.raw));
 	app.get("/uploads/*", (c) => handleUpload(c.req.raw));
 	app.get("/schema.json", () => handleSchemaJson());
-	app.all("/mcp", (c) => handleMcp(c.req.raw));
-	app.all("/mcp/*", (c) => handleMcp(c.req.raw));
 
-	app.get("/.well-known/mcp/server-card.json", () => handleMcpServerCard());
 	app.get("/.well-known/oauth-authorization-server", (c) => handleOAuthAuthorizationServer(c.req.raw));
 	app.get("/.well-known/oauth-authorization-server/*", (c) => handleOAuthAuthorizationServer(c.req.raw));
 	app.get("/.well-known/openid-configuration", (c) => handleOpenIdConfiguration(c.req.raw));

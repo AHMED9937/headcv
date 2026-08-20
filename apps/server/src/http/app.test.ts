@@ -7,8 +7,6 @@ const mocks = vi.hoisted(() => ({
 	handleOpenApi: vi.fn(),
 	handleHealth: vi.fn(),
 	handleUpload: vi.fn(),
-	handleMcp: vi.fn(),
-	handleMcpServerCard: vi.fn(),
 	handleOAuthAuthorizationServer: vi.fn(),
 	handleOAuthProtectedResource: vi.fn(),
 	handleOpenIdConfiguration: vi.fn(),
@@ -39,7 +37,6 @@ vi.mock("../openapi/handler", () => ({
 }));
 
 vi.mock("../openapi/metadata", () => ({
-	handleMcpServerCard: mocks.handleMcpServerCard,
 	handleOAuthAuthorizationServer: mocks.handleOAuthAuthorizationServer,
 	handleOAuthProtectedResource: mocks.handleOAuthProtectedResource,
 	handleOpenIdConfiguration: mocks.handleOpenIdConfiguration,
@@ -62,10 +59,6 @@ vi.mock("../static/web", () => ({
 	handleWebAppHead: mocks.handleWebAppHead,
 }));
 
-vi.mock("../mcp/handler", () => ({
-	handleMcp: mocks.handleMcp,
-}));
-
 beforeEach(() => {
 	vi.clearAllMocks();
 	mocks.handleAuth.mockResolvedValue(new Response("auth"));
@@ -74,8 +67,6 @@ beforeEach(() => {
 	mocks.handleOpenApi.mockResolvedValue(new Response("openapi"));
 	mocks.handleHealth.mockReturnValue(new Response("health"));
 	mocks.handleUpload.mockResolvedValue(new Response("upload"));
-	mocks.handleMcp.mockResolvedValue(new Response("mcp"));
-	mocks.handleMcpServerCard.mockReturnValue(new Response("server-card"));
 	mocks.handleOAuthAuthorizationServer.mockReturnValue(new Response("oauth-authorization-server"));
 	mocks.handleOAuthProtectedResource.mockReturnValue(new Response("oauth-protected-resource"));
 	mocks.handleOpenIdConfiguration.mockReturnValue(new Response("openid-configuration"));

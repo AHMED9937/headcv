@@ -5,7 +5,7 @@ import {
 	GearIcon,
 	HouseSimpleIcon,
 	KeyIcon,
-	OpenAiLogoIcon,
+	PuzzlePieceIcon,
 	ReadCvLogoIcon,
 	ShieldCheckIcon,
 	UserCircleIcon,
@@ -104,11 +104,11 @@ export function NavigationCommandGroup() {
 				</CommandItem>
 
 				<CommandItem
-					keywords={[t`Integrations`, t`Artificial Intelligence`]}
+					keywords={[t`Integrations`]}
 					value="navigation.settings.integrations"
 					onSelect={() => onNavigate("/dashboard/settings/integrations")}
 				>
-					<OpenAiLogoIcon />
+					<PuzzlePieceIcon />
 					<Trans>Integrations</Trans>
 				</CommandItem>
 

@@ -60,8 +60,6 @@
 							"guides/fitting-content-on-a-page",
 							"guides/adding-a-cover-letter",
 							"guides/using-the-builder-dock",
-							"guides/using-ai-in-the-builder",
-							"guides/using-ai-agent",
 							"guides/exporting-your-resume",
 							"guides/sharing-your-resume-publicly",
 							"guides/using-private-notes"
@@ -73,14 +71,7 @@
 					},
 					{
 						"group": "Integrations",
-						"pages": [
-							"guides/using-the-api",
-							"guides/using-the-patch-api",
-							"guides/using-the-mcp-server",
-							"guides/using-ai",
-							"guides/ai-agent-tools",
-							"guides/json-resume-schema"
-						]
+						"pages": ["guides/using-the-api", "guides/using-the-patch-api", "guides/json-resume-schema"]
 					},
 					{
 						"group": "Use Cases",
@@ -89,9 +80,7 @@
 							"use-cases/open-source-resume-builder",
 							"use-cases/privacy-focused-resume-builder",
 							"use-cases/self-hosted-resume-builder",
-							"use-cases/api-mcp-resume-automation",
-							"use-cases/export-and-share-resumes",
-							"use-cases/ai-resume-builder"
+							"use-cases/export-and-share-resumes"
 						]
 					},
 					{

@@ -1,0 +1,86 @@
+name: baseline
+
+on:
+  pull_request:
+  push:
+    branches: ["chore/upstream-reactive-resume-v5.1.6"]
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  no-ai-gate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: "pnpm"
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Fail on forbidden AI/MCP packages in dependency tree
+        run: |
+          set -euo pipefail
+          for pkg in "@reactive-resume/ai" "@reactive-resume/mcp" openai anthropic "@ai-sdk/anthropic" "@ai-sdk/openai" "@ai-sdk/google" "@ai-sdk/openai-compatible" "@ai-sdk/react" ollama-ai-provider-v2 "@modelcontextprotocol/sdk"; do
+            if pnpm why "$pkg" 2>/dev/null | grep -q .; then
+              echo "Forbidden AI/MCP package found in dependency tree: $pkg"
+              exit 1
+            fi
+          done
+
+      - name: Fail on forbidden AI/MCP source references
+        run: |
+          set -euo pipefail
+          if grep -RIl -E "@reactive-resume/ai|@reactive-resume/mcp" apps packages --include="*.ts" --include="*.tsx" --include="*.json"; then
+            echo "Forbidden AI/MCP import or reference found in source."
+            exit 1
+          fi
+          if grep -RIl -iE "openai|anthropic|@ai-sdk|ollama-ai-provider-v2" apps packages --include="*.ts" --include="*.tsx" --include="*.json"; then
+            echo "Forbidden AI provider reference found in source."
+            exit 1
+          fi
+
+  build:
+    needs: no-ai-gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: "pnpm"
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Boundaries
+        run: pnpm exec turbo boundaries
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build

@@ -36,7 +36,6 @@ describe("web app fallback classification", () => {
 		"/auth/login",
 		"/dashboard",
 		"/builder/resume-1",
-		"/agent",
 		"/templates",
 		"/templates/azurill.pdf",
 	])("serves noindex shell for known app prefix %s", async (pathname) => {
@@ -68,7 +67,6 @@ describe("web app fallback classification", () => {
 
 	it.each([
 		"/api/foo",
-		"/mcp/foo",
 		"/uploads/foo",
 	])("does not treat reserved two-segment path %s as a public resume", async (pathname) => {
 		const response = await handleWebApp(new Request(`https://example.com${pathname}`));

@@ -14,7 +14,6 @@ import { InformationSectionBuilder } from "./sections/information";
 import { LayoutSectionBuilder } from "./sections/layout";
 import { NotesSectionBuilder } from "./sections/notes";
 import { PageSectionBuilder } from "./sections/page";
-import { ResumeAnalysisSectionBuilder } from "./sections/resume-analysis";
 import { SharingSectionBuilder } from "./sections/sharing";
 import { StatisticsSectionBuilder } from "./sections/statistics";
 import { TemplateSectionBuilder } from "./sections/template";
@@ -30,7 +29,6 @@ function getSectionComponent(type: RightSidebarSection) {
 		.with("notes", () => <NotesSectionBuilder />)
 		.with("sharing", () => <SharingSectionBuilder />)
 		.with("statistics", () => <StatisticsSectionBuilder />)
-		.with("analysis", () => <ResumeAnalysisSectionBuilder />)
 		.with("export", () => <ExportSectionBuilder />)
 		.with("information", () => <InformationSectionBuilder />)
 		.exhaustive();

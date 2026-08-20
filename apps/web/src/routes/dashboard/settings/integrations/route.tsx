@@ -1,5 +1,5 @@
 import { t } from "@lingui/core/macro";
-import { BrainIcon } from "@phosphor-icons/react";
+import { PuzzlePieceIcon } from "@phosphor-icons/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Separator } from "@reactive-resume/ui/components/separator";
 import { IntegrationsSettingsPage } from "@/features/settings/integrations";
@@ -12,7 +12,7 @@ export const Route = createFileRoute("/dashboard/settings/integrations")({
 function RouteComponent() {
 	return (
 		<div className="space-y-4">
-			<DashboardHeader icon={BrainIcon} title={t`Integrations`} />
+			<DashboardHeader icon={PuzzlePieceIcon} title={t`Integrations`} />
 
 			<Separator />
 
