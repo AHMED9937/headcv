@@ -89,5 +89,5 @@ pnpm why ollama-ai-provider-v2
 
 ## Windows notes
 
-- `pnpm build` at the repo root runs `apps/web`'s `build` script, which uses `rm -rf dist` (POSIX). This fails under native PowerShell. Use Git Bash/WSL for the root `pnpm build`, or build `apps/web` directly with `pnpm exec vite build` after manually removing `apps/web/dist` (`Remove-Item -Recurse -Force dist`). `apps/server`'s build (`tsdown`) is cross-platform and works fine under PowerShell.
+- `pnpm build` at the repo root now works under PowerShell. The `apps/web` `build` script was changed from `rm -rf dist && vite build` (POSIX-only) to `vite build --emptyOutDir`, which is cross-platform and produces the same clean `dist/` output.
 - `corepack enable` may fail with an `EPERM` error on `C:\Program Files\nodejs\pnpx` if the shell lacks admin rights. This does not block `pnpm install`/`pnpm <script>` if a compatible pnpm (`11.3.0`, matching `packageManager` in `package.json`) is already installed and on `PATH`.

@@ -54,5 +54,10 @@ temp
 /data
 /apps/web/data
 
+# Workspace planning artifacts (kept outside the application repo)
+/.lavish/
+/templates/
+/Doc/pack/html-mocks/
+
 # Git Hooks
 .vite-hooks/

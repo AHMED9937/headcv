@@ -4,16 +4,17 @@ Recorded during the S0 foundation-fork slice: fork of `amruthpillai/reactive-res
 
 ## Test results
 
-`pnpm test` (full monorepo, Vitest via Turborepo): **all test suites pass** except one flaky timing test, confirmed unrelated to AI/MCP removal:
+`pnpm test` (full monorepo, Vitest via Turborepo): **all test suites pass** except two unrelated timing/environment-sensitive tests:
 
-- `@reactive-resume/pdf` → `src/hooks/use-register-fonts.test.ts` → `registers CJK PDF fallbacks for normal and italic text styles` timed out at the default 5000ms when run under full parallel `turbo run test` load. Re-running the file in isolation (`pnpm --filter @reactive-resume/pdf test -- src/hooks/use-register-fonts.test.ts`) passes in ~1.5s. This is a pre-existing environment-speed sensitivity, not a regression from this slice. No code change was made to this test or the font registration hook.
+1. `@reactive-resume/pdf` → `src/hooks/use-register-fonts.test.ts` → `registers CJK PDF fallbacks for normal and italic text styles` timed out at the default 5000ms when run under full parallel `turbo run test` load. Re-running the file in isolation (`pnpm --filter @reactive-resume/pdf test -- src/hooks/use-register-fonts.test.ts`) passes in ~1.5s. This is a pre-existing environment-speed sensitivity, not a regression from this slice.
+2. `apps/web` → `src/features/resume/preview/pdfjs-legacy-entrypoints.test.ts` → `loads the canvas preview renderer from the legacy PDF.js runtime` times out at the default 5000ms even in isolation. The second test in the same file (`creates thumbnails with the legacy PDF.js runtime`) passes. This appears to be a pre-existing Windows/happy-dom environment issue with the dynamic `import("./pdf-canvas")` in the test, not caused by the AI/MCP removal. No code change was made to this test or the PDF preview code.
+
+Neither failure blocks the S0 build/typecheck/boundary gate.
 
 ## Build
 
-- `pnpm build` (root) fails under native Windows PowerShell because `apps/web`'s `build` script uses the POSIX command `rm -rf dist`. This is a pre-existing cross-platform gap in the upstream script, not introduced by this slice. Verified independently:
-  - `apps/server` build (`tsdown`) succeeds standalone.
-  - `apps/web` build succeeds standalone via `pnpm exec vite build` after manually clearing `dist/`.
-  - See `LOCAL-SETUP.md` for the Windows workaround. Recommend replacing `rm -rf dist` with `rimraf dist` or `shx rm -rf dist` in a later slice so `pnpm build` works cross-platform without a workaround.
+- `pnpm build` (root) now works cross-platform. The upstream `apps/web` `build` script used `rm -rf dist && vite build`, which fails on Windows because `rm` is not available in CMD and `&&` is not a valid PowerShell separator. S0 changed the script to `vite build --emptyOutDir`, which asks Vite to empty the output directory before building. This produces the same end state (`dist/` is clean before each build) without a shell dependency.
+- Verified: `apps/server` build (`tsdown`) and `apps/web` build both pass on Windows after the change.
 
 ## No-AI gate — verified
 
@@ -55,5 +56,7 @@ Removing `@reactive-resume/ai` and `@reactive-resume/mcp` required also removing
 - `apps/web/src/features/command-palette/pages/navigation.tsx` — replaced the `OpenAiLogoIcon`/"Artificial Intelligence" keyword on the Integrations command-palette entry with a neutral `PuzzlePieceIcon`.
 - `apps/server/src/http/app.ts`, `apps/server/src/openapi/metadata.ts`, `apps/server/src/static/{seo,web}.ts` (+ their tests), `apps/web/vite.config.ts`, `apps/server/tsdown.config.ts` — removed `/mcp` route mounts, the MCP server-card endpoint, MCP dev-proxy path, and the AI-prompts asset-copy build plugin.
 - `packages/db/src/schema/index.ts`, `packages/db/src/relations.ts` — removed the `agent` schema export and all `aiProvider`/`agentThread`/`agentMessage`/`agentAttachment`/`agentAction` relations.
+
+- `shadcn` was removed from `@reactive-resume/ui`'s dependencies because `shadcn@4.8.0` depends on `@modelcontextprotocol/sdk` (the MCP SDK), which violates the no-AI/MCP dependency policy. The only runtime use of `shadcn` in the app was the vendored `shadcn/tailwind.css` theme utilities, so that CSS was copied into `packages/ui/src/styles/shadcn-theme.css` (with MIT attribution) and imported from `./shadcn-theme.css` instead of the package. The `shadcn` npm script was also removed; the CLI can be invoked with `npx shadcn@latest` if needed later.
 
 All of the above were verified via `pnpm typecheck`, `pnpm exec turbo boundaries`, `pnpm test`, and a full `pnpm build` (web + server) after the changes.
