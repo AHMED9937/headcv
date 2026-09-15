@@ -1,0 +1,11 @@
+{
+	"buildCommand": "node tooling/vercel-build.mjs",
+	"outputDirectory": ".vercel/output",
+	"installCommand": "pnpm install --frozen-lockfile",
+	"framework": null,
+	"rewrites": [
+		{ "source": "/(api|uploads|\\.well-known|mcp)(.*)", "destination": "/server" },
+		{ "source": "/(schema\\.json|robots\\.txt|sitemap\\.xml|llms\\.txt)", "destination": "/server" },
+		{ "source": "/(.*)", "destination": "/index.html" }
+	]
+}

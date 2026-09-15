@@ -1,16 +1,23 @@
 import { existsSync } from "node:fs";
 import fs from "node:fs/promises";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { serveStatic } from "@hono/node-server/serve-static";
 
 function resolveWebDistPath() {
-	const candidates = [
-		// Source layout: apps/server/src/static/web.ts -> apps/web/dist
-		fileURLToPath(new URL("../../../web/dist", import.meta.url)),
-		// Bundled layout: apps/server/dist/index.mjs -> apps/web/dist
-		fileURLToPath(new URL("../../web/dist", import.meta.url)),
-	];
-	const [fallback] = candidates;
+	const candidates: string[] = [];
+
+	// ESM source layouts (dev and build from source).
+	if (import.meta.url) {
+		candidates.push(fileURLToPath(new URL("../../../web/dist", import.meta.url)));
+		candidates.push(fileURLToPath(new URL("../../web/dist", import.meta.url)));
+	}
+
+	// Bundled layout: the function root is the cwd and the web dist is copied
+	// next to the bundle under apps/web/dist.
+	candidates.push(join(process.cwd(), "apps", "web", "dist"));
+
+	const fallback = candidates[0];
 	if (!fallback) throw new Error("Could not resolve web dist path");
 
 	return candidates.find((candidate) => existsSync(candidate)) ?? fallback;
