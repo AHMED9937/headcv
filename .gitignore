@@ -10,6 +10,7 @@ dist
 # Environment Variables
 .env*
 !.env.example
+!.env.production.example
 
 # IDEs and Editors
 *~
@@ -53,6 +54,9 @@ temp
 # Local Storage Data
 /data
 /apps/web/data
+
+# Generated assets and previews
+/output
 
 # Workspace planning artifacts (kept outside the application repo)
 /.lavish/

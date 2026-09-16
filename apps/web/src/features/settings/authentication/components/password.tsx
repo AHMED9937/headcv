@@ -4,7 +4,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { m } from "motion/react";
 import { useCallback, useMemo } from "react";
 import { match } from "ts-pattern";
-import { Button } from "@reactive-resume/ui/components/button";
+import { Button } from "@headcv/ui/components/button";
 import { useDialogStore } from "@/dialogs/store";
 import { useAuthAccounts } from "./hooks";
 

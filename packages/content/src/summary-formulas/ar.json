@@ -1,0 +1,20 @@
+[
+	{
+		"id": "professional-summary-standard",
+		"facts": ["role", "yearsOfExperience", "industry"],
+		"pattern": "[role] بخبرة [yearsOfExperience] سنوات في [industry].",
+		"placeholders": ["role", "yearsOfExperience", "industry"]
+	},
+	{
+		"id": "professional-summary-skills",
+		"facts": ["role", "topSkill", "secondarySkill"],
+		"pattern": "[role] أجيد [topSkill] و [secondarySkill].",
+		"placeholders": ["role", "topSkill", "secondarySkill"]
+	},
+	{
+		"id": "professional-summary-achievement",
+		"facts": ["role", "yearsOfExperience", "topSkill"],
+		"pattern": "[role] موجّه نحو النتائج بخبرة [yearsOfExperience] سنوات، متخصص في [topSkill].",
+		"placeholders": ["role", "yearsOfExperience", "topSkill"]
+	}
+]

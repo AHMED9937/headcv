@@ -50,8 +50,8 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { match } from "ts-pattern";
 import z from "zod";
-import { Button } from "@reactive-resume/ui/components/button";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@reactive-resume/ui/components/dialog";
+import { Button } from "@headcv/ui/components/button";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@headcv/ui/components/dialog";
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -59,10 +59,10 @@ import {
 	DropdownMenuItem,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from "@reactive-resume/ui/components/dropdown-menu";
-import { PopoverHeader, PopoverTitle, PopoverTrigger } from "@reactive-resume/ui/components/popover";
-import { Toggle } from "@reactive-resume/ui/components/toggle";
-import { cn } from "@reactive-resume/utils/style";
+} from "@headcv/ui/components/dropdown-menu";
+import { PopoverHeader, PopoverTitle, PopoverTrigger } from "@headcv/ui/components/popover";
+import { Toggle } from "@headcv/ui/components/toggle";
+import { cn } from "@headcv/utils/style";
 import { usePrompt } from "@/hooks/use-prompt";
 import { isRTL } from "@/libs/locale";
 import { ColorPicker } from "./color-picker";

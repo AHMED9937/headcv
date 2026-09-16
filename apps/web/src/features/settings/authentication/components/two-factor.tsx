@@ -3,8 +3,8 @@ import { KeyIcon, LockOpenIcon, ToggleLeftIcon, ToggleRightIcon } from "@phospho
 import { m } from "motion/react";
 import { useCallback, useMemo } from "react";
 import { match } from "ts-pattern";
-import { Button } from "@reactive-resume/ui/components/button";
-import { Separator } from "@reactive-resume/ui/components/separator";
+import { Button } from "@headcv/ui/components/button";
+import { Separator } from "@headcv/ui/components/separator";
 import { useDialogStore } from "@/dialogs/store";
 import { authClient } from "@/libs/auth/client";
 import { useAuthAccounts } from "./hooks";

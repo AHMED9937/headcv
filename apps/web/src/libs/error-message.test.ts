@@ -1,6 +1,11 @@
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
+import { i18n } from "@lingui/core";
 import { ORPCError } from "@orpc/client";
 import { getOrpcErrorMessage, getReadableErrorMessage, getResumeErrorMessage } from "./error-message";
+
+beforeAll(() => {
+	i18n.loadAndActivate({ locale: "en", messages: {} });
+});
 
 describe("getReadableErrorMessage", () => {
 	it("returns the string error directly", () => {

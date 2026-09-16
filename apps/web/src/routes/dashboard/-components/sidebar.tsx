@@ -2,20 +2,11 @@ import type { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
-import {
-	BrainIcon,
-	ChatCircleDotsIcon,
-	GearSixIcon,
-	KeyIcon,
-	ReadCvLogoIcon,
-	ShieldCheckIcon,
-	UserCircleIcon,
-	WarningIcon,
-} from "@phosphor-icons/react";
+import { ChatCircleDotsIcon, GearSixIcon, ReadCvLogoIcon } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
 import { AnimatePresence, m } from "motion/react";
-import { Avatar, AvatarFallback, AvatarImage } from "@reactive-resume/ui/components/avatar";
-import { BrandIcon } from "@reactive-resume/ui/components/brand-icon";
+import { Avatar, AvatarFallback, AvatarImage } from "@headcv/ui/components/avatar";
+import { BrandIcon } from "@headcv/ui/components/brand-icon";
 import {
 	Sidebar,
 	SidebarContent,
@@ -30,8 +21,8 @@ import {
 	SidebarRail,
 	SidebarSeparator,
 	useSidebarState,
-} from "@reactive-resume/ui/components/sidebar";
-import { getInitials } from "@reactive-resume/utils/string";
+} from "@headcv/ui/components/sidebar";
+import { getInitials } from "@headcv/utils/string";
 import { Copyright } from "@/components/ui/copyright";
 import { UserDropdownMenu } from "@/features/user/dropdown-menu";
 
@@ -56,34 +47,9 @@ const appSidebarItems = [
 
 const settingsSidebarItems = [
 	{
-		icon: <UserCircleIcon />,
-		label: msg`Profile`,
-		href: "/dashboard/settings/profile",
-	},
-	{
 		icon: <GearSixIcon />,
-		label: msg`Preferences`,
-		href: "/dashboard/settings/preferences",
-	},
-	{
-		icon: <ShieldCheckIcon />,
-		label: msg`Authentication`,
-		href: "/dashboard/settings/authentication",
-	},
-	{
-		icon: <KeyIcon />,
-		label: msg`API Keys`,
-		href: "/dashboard/settings/api-keys",
-	},
-	{
-		icon: <BrainIcon />,
-		label: msg`Integrations`,
-		href: "/dashboard/settings/integrations",
-	},
-	{
-		icon: <WarningIcon />,
-		label: msg`Danger Zone`,
-		href: "/dashboard/settings/danger-zone",
+		label: msg`Settings`,
+		href: "/dashboard/settings/profile",
 	},
 ] as const satisfies SidebarItem[];
 
@@ -128,7 +94,7 @@ export function DashboardSidebar() {
 							render={
 								<Link to="/">
 									<BrandIcon variant="icon" className="size-6" />
-									<h1 className="sr-only">Reactive Resume</h1>
+									<h1 className="sr-only">HeadCV</h1>
 								</Link>
 							}
 						/>

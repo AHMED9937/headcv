@@ -1,6 +1,6 @@
 import type { IShadingAttributesProperties, ISpacingProperties } from "docx";
 import { ExternalHyperlink, HeadingLevel, Paragraph, TextRun } from "docx";
-import { parseColorString } from "@reactive-resume/utils/color";
+import { parseColorString } from "@headcv/utils/color";
 import { toSafeDocxLink } from "./link-utils";
 
 export interface HtmlStyleConfig {

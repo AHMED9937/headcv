@@ -1,0 +1,36 @@
+{
+	"name": "@headcv/mcp",
+	"version": "0.0.0",
+	"type": "module",
+	"private": true,
+	"exports": {
+		".": "./src/index.ts",
+		"./server-card": "./src/mcp-server-card.ts",
+		"./tool-names": "./src/mcp-tool-names.ts",
+		"./tools": "./src/tools.ts",
+		"./prompts": "./src/prompts.ts",
+		"./resources": "./src/resources.ts"
+	},
+	"scripts": {
+		"typecheck": "tsgo --noEmit",
+		"test": "vitest run --passWithNoTests",
+		"test:coverage": "vitest run --coverage --passWithNoTests",
+		"test:ci": "vitest run --coverage --reporter=default --reporter=github-actions --reporter=json --reporter=junit --outputFile.json=reports/vitest-results.json --outputFile.junit=reports/vitest-junit.xml --passWithNoTests",
+		"test:agent": "vitest run --reporter=agent --reporter=json --outputFile.json=reports/vitest-results.json --passWithNoTests"
+	},
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "^1.29.0",
+		"@orpc/server": "^1.14.3",
+		"@headcv/ai": "workspace:*",
+		"@headcv/api": "workspace:*",
+		"@headcv/env": "workspace:*",
+		"@headcv/schema": "workspace:*",
+		"zod": "^4.4.3"
+	},
+	"devDependencies": {
+		"@headcv/config": "workspace:*",
+		"@typescript/native-preview": "7.0.0-dev.20260526.1",
+		"typescript": "^6.0.3",
+		"vitest": "^4.1.7"
+	}
+}

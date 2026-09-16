@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
-import { Dialog } from "@reactive-resume/ui/components/dialog";
+import { Dialog } from "@headcv/ui/components/dialog";
 import { useDialogStore } from "@/dialogs/store";
 
 const updateResumeData = vi.hoisted(() => vi.fn());

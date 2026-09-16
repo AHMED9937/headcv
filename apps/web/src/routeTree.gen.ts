@@ -11,9 +11,13 @@
 import { Route as rootRouteImport } from "./routes/__root";
 import { Route as DashboardRouteRouteImport } from "./routes/dashboard/route";
 import { Route as AuthRouteRouteImport } from "./routes/auth/route";
+import { Route as AgentRouteRouteImport } from "./routes/agent/route";
 import { Route as HomeRouteRouteImport } from "./routes/_home/route";
+import { Route as TemplatesIndexRouteImport } from "./routes/templates/index";
+import { Route as SetupIndexRouteImport } from "./routes/setup/index";
 import { Route as DashboardIndexRouteImport } from "./routes/dashboard/index";
 import { Route as AuthIndexRouteImport } from "./routes/auth/index";
+import { Route as AgentIndexRouteImport } from "./routes/agent/index";
 import { Route as HomeIndexRouteImport } from "./routes/_home/index";
 import { Route as TemplatesSplatRouteImport } from "./routes/templates/$";
 import { Route as AuthVerify2faBackupRouteImport } from "./routes/auth/verify-2fa-backup";
@@ -23,16 +27,15 @@ import { Route as AuthResetPasswordRouteImport } from "./routes/auth/reset-passw
 import { Route as AuthRegisterRouteImport } from "./routes/auth/register";
 import { Route as AuthLoginRouteImport } from "./routes/auth/login";
 import { Route as AuthForgotPasswordRouteImport } from "./routes/auth/forgot-password";
+import { Route as AgentNewRouteImport } from "./routes/agent/new";
+import { Route as AgentThreadIdRouteImport } from "./routes/agent/$threadId";
 import { Route as UsernameSlugRouteImport } from "./routes/$username/$slug";
+import { Route as DashboardSettingsRouteRouteImport } from "./routes/dashboard/settings/route";
 import { Route as BuilderResumeIdRouteRouteImport } from "./routes/builder/$resumeId/route";
 import { Route as DashboardResumesIndexRouteImport } from "./routes/dashboard/resumes/index";
 import { Route as BuilderResumeIdIndexRouteImport } from "./routes/builder/$resumeId/index";
 import { Route as DashboardSettingsProfileRouteImport } from "./routes/dashboard/settings/profile";
-import { Route as DashboardSettingsPreferencesRouteImport } from "./routes/dashboard/settings/preferences";
-import { Route as DashboardSettingsJobSearchRouteImport } from "./routes/dashboard/settings/job-search";
 import { Route as DashboardSettingsDangerZoneRouteImport } from "./routes/dashboard/settings/danger-zone";
-import { Route as DashboardSettingsApiKeysRouteImport } from "./routes/dashboard/settings/api-keys";
-import { Route as DashboardSettingsIntegrationsRouteRouteImport } from "./routes/dashboard/settings/integrations/route";
 import { Route as DashboardSettingsAuthenticationIndexRouteImport } from "./routes/dashboard/settings/authentication/index";
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
@@ -45,8 +48,23 @@ const AuthRouteRoute = AuthRouteRouteImport.update({
   path: "/auth",
   getParentRoute: () => rootRouteImport,
 } as any);
+const AgentRouteRoute = AgentRouteRouteImport.update({
+  id: "/agent",
+  path: "/agent",
+  getParentRoute: () => rootRouteImport,
+} as any);
 const HomeRouteRoute = HomeRouteRouteImport.update({
   id: "/_home",
+  getParentRoute: () => rootRouteImport,
+} as any);
+const TemplatesIndexRoute = TemplatesIndexRouteImport.update({
+  id: "/templates/",
+  path: "/templates/",
+  getParentRoute: () => rootRouteImport,
+} as any);
+const SetupIndexRoute = SetupIndexRouteImport.update({
+  id: "/setup/",
+  path: "/setup/",
   getParentRoute: () => rootRouteImport,
 } as any);
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
@@ -58,6 +76,11 @@ const AuthIndexRoute = AuthIndexRouteImport.update({
   id: "/",
   path: "/",
   getParentRoute: () => AuthRouteRoute,
+} as any);
+const AgentIndexRoute = AgentIndexRouteImport.update({
+  id: "/",
+  path: "/",
+  getParentRoute: () => AgentRouteRoute,
 } as any);
 const HomeIndexRoute = HomeIndexRouteImport.update({
   id: "/",
@@ -104,10 +127,25 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: "/forgot-password",
   getParentRoute: () => AuthRouteRoute,
 } as any);
+const AgentNewRoute = AgentNewRouteImport.update({
+  id: "/new",
+  path: "/new",
+  getParentRoute: () => AgentRouteRoute,
+} as any);
+const AgentThreadIdRoute = AgentThreadIdRouteImport.update({
+  id: "/$threadId",
+  path: "/$threadId",
+  getParentRoute: () => AgentRouteRoute,
+} as any);
 const UsernameSlugRoute = UsernameSlugRouteImport.update({
   id: "/$username/$slug",
   path: "/$username/$slug",
   getParentRoute: () => rootRouteImport,
+} as any);
+const DashboardSettingsRouteRoute = DashboardSettingsRouteRouteImport.update({
+  id: "/settings",
+  path: "/settings",
+  getParentRoute: () => DashboardRouteRoute,
 } as any);
 const BuilderResumeIdRouteRoute = BuilderResumeIdRouteRouteImport.update({
   id: "/builder/$resumeId",
@@ -126,53 +164,33 @@ const BuilderResumeIdIndexRoute = BuilderResumeIdIndexRouteImport.update({
 } as any);
 const DashboardSettingsProfileRoute =
   DashboardSettingsProfileRouteImport.update({
-    id: "/settings/profile",
-    path: "/settings/profile",
-    getParentRoute: () => DashboardRouteRoute,
-  } as any);
-const DashboardSettingsPreferencesRoute =
-  DashboardSettingsPreferencesRouteImport.update({
-    id: "/settings/preferences",
-    path: "/settings/preferences",
-    getParentRoute: () => DashboardRouteRoute,
-  } as any);
-const DashboardSettingsJobSearchRoute =
-  DashboardSettingsJobSearchRouteImport.update({
-    id: "/settings/job-search",
-    path: "/settings/job-search",
-    getParentRoute: () => DashboardRouteRoute,
+    id: "/profile",
+    path: "/profile",
+    getParentRoute: () => DashboardSettingsRouteRoute,
   } as any);
 const DashboardSettingsDangerZoneRoute =
   DashboardSettingsDangerZoneRouteImport.update({
-    id: "/settings/danger-zone",
-    path: "/settings/danger-zone",
-    getParentRoute: () => DashboardRouteRoute,
-  } as any);
-const DashboardSettingsApiKeysRoute =
-  DashboardSettingsApiKeysRouteImport.update({
-    id: "/settings/api-keys",
-    path: "/settings/api-keys",
-    getParentRoute: () => DashboardRouteRoute,
-  } as any);
-const DashboardSettingsIntegrationsRouteRoute =
-  DashboardSettingsIntegrationsRouteRouteImport.update({
-    id: "/settings/integrations",
-    path: "/settings/integrations",
-    getParentRoute: () => DashboardRouteRoute,
+    id: "/danger-zone",
+    path: "/danger-zone",
+    getParentRoute: () => DashboardSettingsRouteRoute,
   } as any);
 const DashboardSettingsAuthenticationIndexRoute =
   DashboardSettingsAuthenticationIndexRouteImport.update({
-    id: "/settings/authentication/",
-    path: "/settings/authentication/",
-    getParentRoute: () => DashboardRouteRoute,
+    id: "/authentication/",
+    path: "/authentication/",
+    getParentRoute: () => DashboardSettingsRouteRoute,
   } as any);
 
 export interface FileRoutesByFullPath {
   "/": typeof HomeIndexRoute;
+  "/agent": typeof AgentRouteRouteWithChildren;
   "/auth": typeof AuthRouteRouteWithChildren;
   "/dashboard": typeof DashboardRouteRouteWithChildren;
   "/builder/$resumeId": typeof BuilderResumeIdRouteRouteWithChildren;
+  "/dashboard/settings": typeof DashboardSettingsRouteRouteWithChildren;
   "/$username/$slug": typeof UsernameSlugRoute;
+  "/agent/$threadId": typeof AgentThreadIdRoute;
+  "/agent/new": typeof AgentNewRoute;
   "/auth/forgot-password": typeof AuthForgotPasswordRoute;
   "/auth/login": typeof AuthLoginRoute;
   "/auth/register": typeof AuthRegisterRoute;
@@ -181,20 +199,22 @@ export interface FileRoutesByFullPath {
   "/auth/verify-2fa": typeof AuthVerify2faRoute;
   "/auth/verify-2fa-backup": typeof AuthVerify2faBackupRoute;
   "/templates/$": typeof TemplatesSplatRoute;
+  "/agent/": typeof AgentIndexRoute;
   "/auth/": typeof AuthIndexRoute;
   "/dashboard/": typeof DashboardIndexRoute;
-  "/dashboard/settings/integrations": typeof DashboardSettingsIntegrationsRouteRoute;
-  "/dashboard/settings/api-keys": typeof DashboardSettingsApiKeysRoute;
+  "/setup/": typeof SetupIndexRoute;
+  "/templates/": typeof TemplatesIndexRoute;
   "/dashboard/settings/danger-zone": typeof DashboardSettingsDangerZoneRoute;
-  "/dashboard/settings/job-search": typeof DashboardSettingsJobSearchRoute;
-  "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
   "/builder/$resumeId/": typeof BuilderResumeIdIndexRoute;
   "/dashboard/resumes/": typeof DashboardResumesIndexRoute;
   "/dashboard/settings/authentication/": typeof DashboardSettingsAuthenticationIndexRoute;
 }
 export interface FileRoutesByTo {
+  "/dashboard/settings": typeof DashboardSettingsRouteRouteWithChildren;
   "/$username/$slug": typeof UsernameSlugRoute;
+  "/agent/$threadId": typeof AgentThreadIdRoute;
+  "/agent/new": typeof AgentNewRoute;
   "/auth/forgot-password": typeof AuthForgotPasswordRoute;
   "/auth/login": typeof AuthLoginRoute;
   "/auth/register": typeof AuthRegisterRoute;
@@ -204,13 +224,12 @@ export interface FileRoutesByTo {
   "/auth/verify-2fa-backup": typeof AuthVerify2faBackupRoute;
   "/templates/$": typeof TemplatesSplatRoute;
   "/": typeof HomeIndexRoute;
+  "/agent": typeof AgentIndexRoute;
   "/auth": typeof AuthIndexRoute;
   "/dashboard": typeof DashboardIndexRoute;
-  "/dashboard/settings/integrations": typeof DashboardSettingsIntegrationsRouteRoute;
-  "/dashboard/settings/api-keys": typeof DashboardSettingsApiKeysRoute;
+  "/setup": typeof SetupIndexRoute;
+  "/templates": typeof TemplatesIndexRoute;
   "/dashboard/settings/danger-zone": typeof DashboardSettingsDangerZoneRoute;
-  "/dashboard/settings/job-search": typeof DashboardSettingsJobSearchRoute;
-  "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
   "/builder/$resumeId": typeof BuilderResumeIdIndexRoute;
   "/dashboard/resumes": typeof DashboardResumesIndexRoute;
@@ -219,10 +238,14 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   "/_home": typeof HomeRouteRouteWithChildren;
+  "/agent": typeof AgentRouteRouteWithChildren;
   "/auth": typeof AuthRouteRouteWithChildren;
   "/dashboard": typeof DashboardRouteRouteWithChildren;
   "/builder/$resumeId": typeof BuilderResumeIdRouteRouteWithChildren;
+  "/dashboard/settings": typeof DashboardSettingsRouteRouteWithChildren;
   "/$username/$slug": typeof UsernameSlugRoute;
+  "/agent/$threadId": typeof AgentThreadIdRoute;
+  "/agent/new": typeof AgentNewRoute;
   "/auth/forgot-password": typeof AuthForgotPasswordRoute;
   "/auth/login": typeof AuthLoginRoute;
   "/auth/register": typeof AuthRegisterRoute;
@@ -232,13 +255,12 @@ export interface FileRoutesById {
   "/auth/verify-2fa-backup": typeof AuthVerify2faBackupRoute;
   "/templates/$": typeof TemplatesSplatRoute;
   "/_home/": typeof HomeIndexRoute;
+  "/agent/": typeof AgentIndexRoute;
   "/auth/": typeof AuthIndexRoute;
   "/dashboard/": typeof DashboardIndexRoute;
-  "/dashboard/settings/integrations": typeof DashboardSettingsIntegrationsRouteRoute;
-  "/dashboard/settings/api-keys": typeof DashboardSettingsApiKeysRoute;
+  "/setup/": typeof SetupIndexRoute;
+  "/templates/": typeof TemplatesIndexRoute;
   "/dashboard/settings/danger-zone": typeof DashboardSettingsDangerZoneRoute;
-  "/dashboard/settings/job-search": typeof DashboardSettingsJobSearchRoute;
-  "/dashboard/settings/preferences": typeof DashboardSettingsPreferencesRoute;
   "/dashboard/settings/profile": typeof DashboardSettingsProfileRoute;
   "/builder/$resumeId/": typeof BuilderResumeIdIndexRoute;
   "/dashboard/resumes/": typeof DashboardResumesIndexRoute;
@@ -248,10 +270,14 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
     | "/"
+    | "/agent"
     | "/auth"
     | "/dashboard"
     | "/builder/$resumeId"
+    | "/dashboard/settings"
     | "/$username/$slug"
+    | "/agent/$threadId"
+    | "/agent/new"
     | "/auth/forgot-password"
     | "/auth/login"
     | "/auth/register"
@@ -260,20 +286,22 @@ export interface FileRouteTypes {
     | "/auth/verify-2fa"
     | "/auth/verify-2fa-backup"
     | "/templates/$"
+    | "/agent/"
     | "/auth/"
     | "/dashboard/"
-    | "/dashboard/settings/integrations"
-    | "/dashboard/settings/api-keys"
+    | "/setup/"
+    | "/templates/"
     | "/dashboard/settings/danger-zone"
-    | "/dashboard/settings/job-search"
-    | "/dashboard/settings/preferences"
     | "/dashboard/settings/profile"
     | "/builder/$resumeId/"
     | "/dashboard/resumes/"
     | "/dashboard/settings/authentication/";
   fileRoutesByTo: FileRoutesByTo;
   to:
+    | "/dashboard/settings"
     | "/$username/$slug"
+    | "/agent/$threadId"
+    | "/agent/new"
     | "/auth/forgot-password"
     | "/auth/login"
     | "/auth/register"
@@ -283,13 +311,12 @@ export interface FileRouteTypes {
     | "/auth/verify-2fa-backup"
     | "/templates/$"
     | "/"
+    | "/agent"
     | "/auth"
     | "/dashboard"
-    | "/dashboard/settings/integrations"
-    | "/dashboard/settings/api-keys"
+    | "/setup"
+    | "/templates"
     | "/dashboard/settings/danger-zone"
-    | "/dashboard/settings/job-search"
-    | "/dashboard/settings/preferences"
     | "/dashboard/settings/profile"
     | "/builder/$resumeId"
     | "/dashboard/resumes"
@@ -297,10 +324,14 @@ export interface FileRouteTypes {
   id:
     | "__root__"
     | "/_home"
+    | "/agent"
     | "/auth"
     | "/dashboard"
     | "/builder/$resumeId"
+    | "/dashboard/settings"
     | "/$username/$slug"
+    | "/agent/$threadId"
+    | "/agent/new"
     | "/auth/forgot-password"
     | "/auth/login"
     | "/auth/register"
@@ -310,13 +341,12 @@ export interface FileRouteTypes {
     | "/auth/verify-2fa-backup"
     | "/templates/$"
     | "/_home/"
+    | "/agent/"
     | "/auth/"
     | "/dashboard/"
-    | "/dashboard/settings/integrations"
-    | "/dashboard/settings/api-keys"
+    | "/setup/"
+    | "/templates/"
     | "/dashboard/settings/danger-zone"
-    | "/dashboard/settings/job-search"
-    | "/dashboard/settings/preferences"
     | "/dashboard/settings/profile"
     | "/builder/$resumeId/"
     | "/dashboard/resumes/"
@@ -325,11 +355,14 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   HomeRouteRoute: typeof HomeRouteRouteWithChildren;
+  AgentRouteRoute: typeof AgentRouteRouteWithChildren;
   AuthRouteRoute: typeof AuthRouteRouteWithChildren;
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren;
   BuilderResumeIdRouteRoute: typeof BuilderResumeIdRouteRouteWithChildren;
   UsernameSlugRoute: typeof UsernameSlugRoute;
   TemplatesSplatRoute: typeof TemplatesSplatRoute;
+  SetupIndexRoute: typeof SetupIndexRoute;
+  TemplatesIndexRoute: typeof TemplatesIndexRoute;
 }
 
 declare module "@tanstack/react-router" {
@@ -348,11 +381,32 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthRouteRouteImport;
       parentRoute: typeof rootRouteImport;
     };
+    "/agent": {
+      id: "/agent";
+      path: "/agent";
+      fullPath: "/agent";
+      preLoaderRoute: typeof AgentRouteRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     "/_home": {
       id: "/_home";
       path: "";
       fullPath: "/";
       preLoaderRoute: typeof HomeRouteRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/templates/": {
+      id: "/templates/";
+      path: "/templates";
+      fullPath: "/templates/";
+      preLoaderRoute: typeof TemplatesIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/setup/": {
+      id: "/setup/";
+      path: "/setup";
+      fullPath: "/setup/";
+      preLoaderRoute: typeof SetupIndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     "/dashboard/": {
@@ -368,6 +422,13 @@ declare module "@tanstack/react-router" {
       fullPath: "/auth/";
       preLoaderRoute: typeof AuthIndexRouteImport;
       parentRoute: typeof AuthRouteRoute;
+    };
+    "/agent/": {
+      id: "/agent/";
+      path: "/";
+      fullPath: "/agent/";
+      preLoaderRoute: typeof AgentIndexRouteImport;
+      parentRoute: typeof AgentRouteRoute;
     };
     "/_home/": {
       id: "/_home/";
@@ -432,12 +493,33 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport;
       parentRoute: typeof AuthRouteRoute;
     };
+    "/agent/new": {
+      id: "/agent/new";
+      path: "/new";
+      fullPath: "/agent/new";
+      preLoaderRoute: typeof AgentNewRouteImport;
+      parentRoute: typeof AgentRouteRoute;
+    };
+    "/agent/$threadId": {
+      id: "/agent/$threadId";
+      path: "/$threadId";
+      fullPath: "/agent/$threadId";
+      preLoaderRoute: typeof AgentThreadIdRouteImport;
+      parentRoute: typeof AgentRouteRoute;
+    };
     "/$username/$slug": {
       id: "/$username/$slug";
       path: "/$username/$slug";
       fullPath: "/$username/$slug";
       preLoaderRoute: typeof UsernameSlugRouteImport;
       parentRoute: typeof rootRouteImport;
+    };
+    "/dashboard/settings": {
+      id: "/dashboard/settings";
+      path: "/settings";
+      fullPath: "/dashboard/settings";
+      preLoaderRoute: typeof DashboardSettingsRouteRouteImport;
+      parentRoute: typeof DashboardRouteRoute;
     };
     "/builder/$resumeId": {
       id: "/builder/$resumeId";
@@ -462,52 +544,24 @@ declare module "@tanstack/react-router" {
     };
     "/dashboard/settings/profile": {
       id: "/dashboard/settings/profile";
-      path: "/settings/profile";
+      path: "/profile";
       fullPath: "/dashboard/settings/profile";
       preLoaderRoute: typeof DashboardSettingsProfileRouteImport;
-      parentRoute: typeof DashboardRouteRoute;
-    };
-    "/dashboard/settings/preferences": {
-      id: "/dashboard/settings/preferences";
-      path: "/settings/preferences";
-      fullPath: "/dashboard/settings/preferences";
-      preLoaderRoute: typeof DashboardSettingsPreferencesRouteImport;
-      parentRoute: typeof DashboardRouteRoute;
-    };
-    "/dashboard/settings/job-search": {
-      id: "/dashboard/settings/job-search";
-      path: "/settings/job-search";
-      fullPath: "/dashboard/settings/job-search";
-      preLoaderRoute: typeof DashboardSettingsJobSearchRouteImport;
-      parentRoute: typeof DashboardRouteRoute;
+      parentRoute: typeof DashboardSettingsRouteRoute;
     };
     "/dashboard/settings/danger-zone": {
       id: "/dashboard/settings/danger-zone";
-      path: "/settings/danger-zone";
+      path: "/danger-zone";
       fullPath: "/dashboard/settings/danger-zone";
       preLoaderRoute: typeof DashboardSettingsDangerZoneRouteImport;
-      parentRoute: typeof DashboardRouteRoute;
-    };
-    "/dashboard/settings/api-keys": {
-      id: "/dashboard/settings/api-keys";
-      path: "/settings/api-keys";
-      fullPath: "/dashboard/settings/api-keys";
-      preLoaderRoute: typeof DashboardSettingsApiKeysRouteImport;
-      parentRoute: typeof DashboardRouteRoute;
-    };
-    "/dashboard/settings/integrations": {
-      id: "/dashboard/settings/integrations";
-      path: "/settings/integrations";
-      fullPath: "/dashboard/settings/integrations";
-      preLoaderRoute: typeof DashboardSettingsIntegrationsRouteRouteImport;
-      parentRoute: typeof DashboardRouteRoute;
+      parentRoute: typeof DashboardSettingsRouteRoute;
     };
     "/dashboard/settings/authentication/": {
       id: "/dashboard/settings/authentication/";
-      path: "/settings/authentication";
+      path: "/authentication";
       fullPath: "/dashboard/settings/authentication/";
       preLoaderRoute: typeof DashboardSettingsAuthenticationIndexRouteImport;
-      parentRoute: typeof DashboardRouteRoute;
+      parentRoute: typeof DashboardSettingsRouteRoute;
     };
   }
 }
@@ -522,6 +576,22 @@ const HomeRouteRouteChildren: HomeRouteRouteChildren = {
 
 const HomeRouteRouteWithChildren = HomeRouteRoute._addFileChildren(
   HomeRouteRouteChildren,
+);
+
+interface AgentRouteRouteChildren {
+  AgentThreadIdRoute: typeof AgentThreadIdRoute;
+  AgentNewRoute: typeof AgentNewRoute;
+  AgentIndexRoute: typeof AgentIndexRoute;
+}
+
+const AgentRouteRouteChildren: AgentRouteRouteChildren = {
+  AgentThreadIdRoute: AgentThreadIdRoute,
+  AgentNewRoute: AgentNewRoute,
+  AgentIndexRoute: AgentIndexRoute,
+};
+
+const AgentRouteRouteWithChildren = AgentRouteRoute._addFileChildren(
+  AgentRouteRouteChildren,
 );
 
 interface AuthRouteRouteChildren {
@@ -550,30 +620,35 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 );
 
-interface DashboardRouteRouteChildren {
-  DashboardIndexRoute: typeof DashboardIndexRoute;
-  DashboardSettingsIntegrationsRouteRoute: typeof DashboardSettingsIntegrationsRouteRoute;
-  DashboardSettingsApiKeysRoute: typeof DashboardSettingsApiKeysRoute;
+interface DashboardSettingsRouteRouteChildren {
   DashboardSettingsDangerZoneRoute: typeof DashboardSettingsDangerZoneRoute;
-  DashboardSettingsJobSearchRoute: typeof DashboardSettingsJobSearchRoute;
-  DashboardSettingsPreferencesRoute: typeof DashboardSettingsPreferencesRoute;
   DashboardSettingsProfileRoute: typeof DashboardSettingsProfileRoute;
-  DashboardResumesIndexRoute: typeof DashboardResumesIndexRoute;
   DashboardSettingsAuthenticationIndexRoute: typeof DashboardSettingsAuthenticationIndexRoute;
 }
 
+const DashboardSettingsRouteRouteChildren: DashboardSettingsRouteRouteChildren =
+  {
+    DashboardSettingsDangerZoneRoute: DashboardSettingsDangerZoneRoute,
+    DashboardSettingsProfileRoute: DashboardSettingsProfileRoute,
+    DashboardSettingsAuthenticationIndexRoute:
+      DashboardSettingsAuthenticationIndexRoute,
+  };
+
+const DashboardSettingsRouteRouteWithChildren =
+  DashboardSettingsRouteRoute._addFileChildren(
+    DashboardSettingsRouteRouteChildren,
+  );
+
+interface DashboardRouteRouteChildren {
+  DashboardSettingsRouteRoute: typeof DashboardSettingsRouteRouteWithChildren;
+  DashboardIndexRoute: typeof DashboardIndexRoute;
+  DashboardResumesIndexRoute: typeof DashboardResumesIndexRoute;
+}
+
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardSettingsRouteRoute: DashboardSettingsRouteRouteWithChildren,
   DashboardIndexRoute: DashboardIndexRoute,
-  DashboardSettingsIntegrationsRouteRoute:
-    DashboardSettingsIntegrationsRouteRoute,
-  DashboardSettingsApiKeysRoute: DashboardSettingsApiKeysRoute,
-  DashboardSettingsDangerZoneRoute: DashboardSettingsDangerZoneRoute,
-  DashboardSettingsJobSearchRoute: DashboardSettingsJobSearchRoute,
-  DashboardSettingsPreferencesRoute: DashboardSettingsPreferencesRoute,
-  DashboardSettingsProfileRoute: DashboardSettingsProfileRoute,
   DashboardResumesIndexRoute: DashboardResumesIndexRoute,
-  DashboardSettingsAuthenticationIndexRoute:
-    DashboardSettingsAuthenticationIndexRoute,
 };
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
@@ -593,11 +668,14 @@ const BuilderResumeIdRouteRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   HomeRouteRoute: HomeRouteRouteWithChildren,
+  AgentRouteRoute: AgentRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
   BuilderResumeIdRouteRoute: BuilderResumeIdRouteRouteWithChildren,
   UsernameSlugRoute: UsernameSlugRoute,
   TemplatesSplatRoute: TemplatesSplatRoute,
+  SetupIndexRoute: SetupIndexRoute,
+  TemplatesIndexRoute: TemplatesIndexRoute,
 };
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

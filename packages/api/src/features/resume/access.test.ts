@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 
 const envMock = vi.hoisted(() => ({ APP_URL: "https://example.com" }));
 
-vi.mock("@reactive-resume/env/server", () => ({ env: envMock }));
+vi.mock("@headcv/env/server", () => ({ env: envMock }));
 
 const { hasResumeAccess, grantResumeAccess } = await import("./access");
 

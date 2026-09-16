@@ -1,5 +1,5 @@
 {
-	"name": "@reactive-resume/tooling",
+	"name": "@headcv/tooling",
 	"version": "0.0.0",
 	"type": "module",
 	"private": true,
@@ -9,8 +9,9 @@
 		"typecheck": "tsgo --noEmit"
 	},
 	"devDependencies": {
-		"@reactive-resume/config": "workspace:*",
-		"@reactive-resume/env": "workspace:*",
+		"@headcv/config": "workspace:*",
+		"@headcv/db": "workspace:*",
+		"@headcv/env": "workspace:*",
 		"@types/pg": "^8.20.0",
 		"@typescript/native-preview": "7.0.0-dev.20260526.1",
 		"drizzle-orm": "1.0.0-rc.3",

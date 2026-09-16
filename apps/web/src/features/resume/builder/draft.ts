@@ -1,4 +1,4 @@
-import type { ResumeData } from "@reactive-resume/schema/resume/data";
+import type { ResumeData } from "@headcv/schema/resume/data";
 import type { QueryClient, QueryKey } from "@tanstack/react-query";
 import type { WritableDraft } from "immer";
 import { t } from "@lingui/core/macro";
@@ -10,7 +10,9 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { immer } from "zustand/middleware/immer";
 import { create } from "zustand/react";
-import { applyResumePatches, createResumePatches } from "@reactive-resume/resume/patch";
+import { enforceResumeLocale, RESUME_LOCALE } from "@headcv/resume/locale";
+import { applyResumePatches, createResumePatches } from "@headcv/resume/patch";
+import { upgradeLegacyResumeTypography } from "@headcv/resume/readability";
 import { orpc, streamClient } from "@/libs/orpc/client";
 
 export type Resume = {
@@ -42,6 +44,11 @@ type ResumeStoreActions = {
 };
 
 type ResumeStore = ResumeStoreState & ResumeStoreActions;
+
+const normalizeResume = (resume: Resume): Resume => ({
+	...resume,
+	data: upgradeLegacyResumeTypography(enforceResumeLocale(resume.data)),
+});
 
 type Runtime = {
 	abortController: AbortController;
@@ -190,12 +197,13 @@ export const useResumeStore = create<ResumeStore>()(
 		isReady: false,
 
 		initialize: (resume) => {
-			if (resume) setRuntimeBaseline(resume);
+			const normalizedResume = resume ? normalizeResume(resume) : null;
+			if (normalizedResume) setRuntimeBaseline(normalizedResume);
 
 			set((state) => {
-				state.resume = resume;
-				state.resumeId = resume?.id;
-				state.isReady = resume !== null;
+				state.resume = normalizedResume;
+				state.resumeId = normalizedResume?.id;
+				state.isReady = normalizedResume !== null;
 			});
 		},
 
@@ -208,19 +216,21 @@ export const useResumeStore = create<ResumeStore>()(
 		},
 
 		replaceResumeDraft: (resume) => {
+			const normalizedResume = normalizeResume(resume);
 			set((state) => {
-				state.resume = resume;
-				state.resumeId = resume.id;
+				state.resume = normalizedResume;
+				state.resumeId = normalizedResume.id;
 				state.isReady = true;
 			});
 		},
 
 		replaceResumeFromServer: (resume) => {
-			setRuntimeBaseline(resume);
+			const normalizedResume = normalizeResume(resume);
+			setRuntimeBaseline(normalizedResume);
 
 			set((state) => {
-				state.resume = resume;
-				state.resumeId = resume.id;
+				state.resume = normalizedResume;
+				state.resumeId = normalizedResume.id;
 				state.isReady = true;
 			});
 		},
@@ -229,6 +239,7 @@ export const useResumeStore = create<ResumeStore>()(
 			set((state) => {
 				if (!state.resume) return;
 				fn(state.resume as WritableDraft<Resume>);
+				state.resume.data.metadata.page.locale = RESUME_LOCALE;
 			});
 		},
 
@@ -260,6 +271,7 @@ export const useResumeStore = create<ResumeStore>()(
 			set((state) => {
 				if (!state.resume) return;
 				fn(state.resume.data as WritableDraft<ResumeData>);
+				state.resume.data.metadata.page.locale = RESUME_LOCALE;
 			});
 
 			getRuntime(currentResume.id).hasPendingLocalChanges = true;
@@ -332,46 +344,27 @@ export function useUpdateResumeData() {
 
 export function useResumeUpdateSubscription() {
 	const queryClient = useQueryClient();
-	const replaceResumeFromServer = useResumeStore((state) => state.replaceResumeFromServer);
 	const params = useParams({ strict: false }) as { resumeId?: string };
 	const resumeId = params.resumeId;
-	const [_retryNonce, setRetryNonce] = useState(0);
+	const [retryNonce, setRetryNonce] = useState(0);
 
 	useEffect(() => {
 		if (!resumeId) return;
+		// Reading the attempt counter intentionally restarts this effect after a stream failure.
+		void retryNonce;
 
 		bindRuntimeQueryClient(resumeId, queryClient);
 
 		let didCancel = false;
 		let retryTimer: number | undefined;
+		void refreshResumeFromServer(resumeId, queryClient).catch(() => {});
 		const cancel = consumeEventIterator(createResumeUpdateEventIterator(resumeId), {
 			onEvent: async () => {
 				try {
-					const resume = (await orpc.resume.getById.call({ id: resumeId })) as Resume;
-
-					if (hasPendingLocalChanges(resumeId)) {
-						const runtime = getRuntime(resumeId);
-						const currentResume = useResumeStore.getState().resume;
-						const baselineData = runtime.baselineData ?? currentResume?.data;
-
-						if (currentResume && baselineData) {
-							const localOperations = createResumePatches(baselineData, currentResume.data);
-							const mergedData = applyResumePatches(resume.data, localOperations);
-
-							runtime.baselineData = cloneResumeData(resume.data);
-							runtime.hasPendingLocalChanges = localOperations.length > 0;
-							queryClient.setQueryData(getResumeQueryKey(resumeId), resume);
-							useResumeStore.getState().replaceResumeDraft({ ...resume, data: mergedData });
-							syncCurrentResume(resumeId);
-						} else {
-							runtime.baselineData = cloneResumeData(resume.data);
-							useResumeStore.getState().mergeResumeMetadata(resume);
-						}
-						return;
-					}
-
-					queryClient.setQueryData(getResumeQueryKey(resumeId), resume);
-					replaceResumeFromServer(resume);
+					await refreshResumeFromServer(resumeId, queryClient);
+					void queryClient.invalidateQueries({
+						queryKey: orpc.agent.actions.latestByResume.queryKey({ input: { resumeId } }),
+					});
 				} catch (error) {
 					if (error instanceof DOMException && error.name === "AbortError") return;
 					console.warn("Failed to refresh resume after update event:", error);
@@ -389,7 +382,28 @@ export function useResumeUpdateSubscription() {
 			if (retryTimer) window.clearTimeout(retryTimer);
 			void cancel().catch(() => {});
 		};
-	}, [queryClient, replaceResumeFromServer, resumeId]);
+	}, [queryClient, resumeId, retryNonce]);
+}
+
+export async function refreshResumeFromServer(resumeId: string, queryClient: QueryClient) {
+	const resume = (await orpc.resume.getById.call({ id: resumeId })) as Resume;
+	const currentResume = useResumeStore.getState().resume;
+	// A late response must not replace a different resume after navigation.
+	if (currentResume?.id !== resumeId) return;
+	if (hasPendingLocalChanges(resumeId)) {
+		const runtime = getRuntime(resumeId);
+		const baselineData = runtime.baselineData ?? currentResume.data;
+		const localOperations = createResumePatches(baselineData, currentResume.data);
+		const mergedData = applyResumePatches(resume.data, localOperations);
+		runtime.baselineData = cloneResumeData(resume.data);
+		runtime.hasPendingLocalChanges = localOperations.length > 0;
+		queryClient.setQueryData(getResumeQueryKey(resumeId), resume);
+		useResumeStore.getState().replaceResumeDraft({ ...resume, data: mergedData });
+		syncCurrentResume(resumeId);
+		return;
+	}
+	queryClient.setQueryData(getResumeQueryKey(resumeId), resume);
+	useResumeStore.getState().replaceResumeFromServer(resume);
 }
 
 export function useResumeCleanup() {

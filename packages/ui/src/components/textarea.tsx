@@ -1,5 +1,5 @@
 import type * as React from "react";
-import { cn } from "@reactive-resume/utils/style";
+import { cn } from "@headcv/utils/style";
 
 function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
 	return (

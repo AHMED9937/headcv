@@ -4,7 +4,7 @@ import type { StyleInput } from "./styles";
 import { Icon as PhosphorIcon } from "phosphor-icons-react-pdf/dynamic";
 import { Link as PdfLink, Text as PdfText, View } from "../../renderer";
 import { useTemplateIconSlot, useTemplateStyle } from "./context";
-import { composeLinkStyles, composeStyles } from "./styles";
+import { composeLinkStyles, composeStyles, getReadableSmallTextSize, mergeStyles } from "./styles";
 
 const asStyleInput = (style: unknown): StyleInput => style as StyleInput;
 
@@ -42,8 +42,23 @@ export const Link = ({ style, ...props }: ComponentProps<typeof PdfLink>) => {
 export const Small = ({ style, ...props }: ComponentProps<typeof PdfText>) => {
 	const textStyle = useTemplateStyle("text");
 	const smallStyle = useTemplateStyle("small");
+	const componentStyle = asStyleInput(style);
+	const resolvedSmallStyle = mergeStyles(smallStyle, componentStyle);
+	const fontSize =
+		typeof resolvedSmallStyle.fontSize === "number" ? getReadableSmallTextSize(resolvedSmallStyle.fontSize) : undefined;
 
-	return <PdfText style={composeStyles(textStyle, smallStyle, asStyleInput(style), safeTextStyle)} {...props} />;
+	return (
+		<PdfText
+			style={composeStyles(
+				textStyle,
+				smallStyle,
+				componentStyle,
+				fontSize !== undefined ? { fontSize } : undefined,
+				safeTextStyle,
+			)}
+			{...props}
+		/>
+	);
 };
 
 export const Bold = ({ style, ...props }: ComponentProps<typeof PdfText>) => {

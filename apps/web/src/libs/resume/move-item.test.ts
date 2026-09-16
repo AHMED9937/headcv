@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { i18n } from "@lingui/core";
 import { produce } from "immer";
-import { defaultResumeData } from "@reactive-resume/schema/resume/default";
+import { defaultResumeData } from "@headcv/schema/resume/default";
 import {
 	addItemToSection,
 	createCustomSectionWithItem,
@@ -32,7 +32,7 @@ describe("getSourceSectionTitle", () => {
 	});
 
 	it("returns localized default title when customSectionId is undefined", () => {
-		// Default section title comes from t`...` macro — we just check it's a non-empty string
+		// Default section title comes from t`...` macro  we just check it's a non-empty string
 		expect(getSourceSectionTitle(defaultResumeData, "experience").length).toBeGreaterThan(0);
 	});
 
@@ -214,7 +214,7 @@ describe("createCustomSectionWithItem", () => {
 	});
 
 	it("does not crash on out-of-range page index (no main column to push to)", () => {
-		// targetPageIndex=99 — page does not exist; section should still be created
+		// targetPageIndex=99  page does not exist; section should still be created
 		const result = produce(defaultResumeData, (draft) => {
 			createCustomSectionWithItem(draft, { id: "i1" } as never, "cover-letter", "X", 99);
 		});

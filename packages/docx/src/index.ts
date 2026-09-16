@@ -1,4 +1,4 @@
-import type { ResumeData } from "@reactive-resume/schema/resume/data";
+import type { ResumeData } from "@headcv/schema/resume/data";
 import { Packer } from "docx";
 import { buildDocument } from "./builder";
 

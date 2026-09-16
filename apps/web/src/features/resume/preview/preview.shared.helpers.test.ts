@@ -80,13 +80,13 @@ afterEach(() => {
 });
 
 describe("getPreviewCanvasScale", () => {
-	it("returns the desired render scale (4x) for small pages", () => {
+	it("returns the desired render scale (5x) for small pages", () => {
 		setDevicePixelRatio(1);
-		// width * height * 4 * 4 = 100 * 100 * 16 = 160_000 ≪ 16_777_216 budget
-		expect(getPreviewCanvasScale(100, 100)).toBe(4);
+		// width * height * 5 * 5 = 100 * 100 * 25 = 250_000 ≪ 24_000_000 budget
+		expect(getPreviewCanvasScale(100, 100)).toBe(5);
 	});
 
-	it("uses devicePixelRatio when it exceeds the desired 4x scale", () => {
+	it("uses devicePixelRatio when it exceeds the desired 5x scale", () => {
 		setDevicePixelRatio(8);
 		// 50*50*8*8 = 160_000 ≪ budget, so we keep the 8x devicePixelRatio
 		expect(getPreviewCanvasScale(50, 50)).toBe(8);
@@ -95,8 +95,8 @@ describe("getPreviewCanvasScale", () => {
 	it("clamps the scale when the page would exceed the canvas pixel budget", () => {
 		setDevicePixelRatio(1);
 		const scale = getPreviewCanvasScale(2000, 3000);
-		// Should NOT exceed the 4x desired scale and must satisfy the pixel budget.
-		expect(scale).toBeLessThan(4);
-		expect(scale * scale * 2000 * 3000).toBeLessThanOrEqual(16_777_216 + 1);
+		// Should NOT exceed the 5x desired scale and must satisfy the pixel budget.
+		expect(scale).toBeLessThan(5);
+		expect(scale * scale * 2000 * 3000).toBeLessThanOrEqual(24_000_000 + 1);
 	});
 });

@@ -52,7 +52,7 @@ describe("isAllowedOAuthRedirectUri", () => {
 
 - [ ] **Step 2: Run the focused utils test and verify it fails**
 
-Run: `pnpm --filter @reactive-resume/utils test -- src/url-security.node.test.ts`
+Run: `pnpm --filter @headcv/utils test -- src/url-security.node.test.ts`
 
 Expected before implementation: TypeScript/test failure because `isAllowedOAuthRedirectUri` still requires the removed allowlist argument.
 
@@ -89,7 +89,7 @@ export function isAllowedOAuthRedirectUri(
 
 - [ ] **Step 4: Run the focused utils test and verify it passes**
 
-Run: `pnpm --filter @reactive-resume/utils test -- src/url-security.node.test.ts`
+Run: `pnpm --filter @headcv/utils test -- src/url-security.node.test.ts`
 
 Expected after implementation: all tests in `url-security.node.test.ts` pass.
 
@@ -159,7 +159,7 @@ env: {
 Run:
 
 ```sh
-pnpm --filter @reactive-resume/auth typecheck
+pnpm --filter @headcv/auth typecheck
 pnpm --filter server typecheck
 ```
 
@@ -203,7 +203,7 @@ Expected: matches in env schema, Turbo config, docs, tests, and runtime validati
 Run:
 
 ```sh
-pnpm --filter @reactive-resume/utils test -- src/url-security.node.test.ts
+pnpm --filter @headcv/utils test -- src/url-security.node.test.ts
 pnpm --filter server test -- src/http/auth.test.ts
 ```
 
@@ -214,7 +214,7 @@ Expected: both commands exit 0.
 Run:
 
 ```sh
-pnpm --filter @reactive-resume/auth typecheck
+pnpm --filter @headcv/auth typecheck
 pnpm --filter server typecheck
 pnpm exec turbo boundaries
 ```

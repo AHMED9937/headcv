@@ -89,7 +89,7 @@ describe("StatisticsSectionBuilder", () => {
 			lastDownloadedAt: null,
 		};
 		renderStats();
-		// Just verify some 'Last viewed' copy appears — the date formatting depends on the runner's locale.
+		// Just verify some 'Last viewed' copy appears  the date formatting depends on the runner's locale.
 		expect(screen.getByText(/Last viewed/i)).toBeInTheDocument();
 	});
 });

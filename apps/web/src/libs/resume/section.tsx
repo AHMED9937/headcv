@@ -1,5 +1,5 @@
+import type { SectionType } from "@headcv/schema/resume/data";
 import type { IconProps } from "@phosphor-icons/react";
-import type { SectionType } from "@reactive-resume/schema/resume/data";
 import { t } from "@lingui/core/macro";
 import {
 	ArticleIcon,
@@ -24,6 +24,7 @@ import {
 	PhoneIcon,
 	ReadCvLogoIcon,
 	ShareFatIcon,
+	SparkleIcon,
 	StarIcon,
 	TextTIcon,
 	TranslateIcon,
@@ -31,9 +32,9 @@ import {
 	UserIcon,
 } from "@phosphor-icons/react";
 import { match } from "ts-pattern";
-import { cn } from "@reactive-resume/utils/style";
+import { cn } from "@headcv/utils/style";
 
-export type LeftSidebarSection = "picture" | "basics" | "summary" | SectionType | "custom";
+export type LeftSidebarSection = "picture" | "basics" | "summary" | SectionType | "custom" | "ai-review";
 
 // CustomSectionType values that are not in SectionType (used in custom sections only)
 type CustomOnlyType = "cover-letter";
@@ -47,12 +48,13 @@ export type RightSidebarSection =
 	| "notes"
 	| "sharing"
 	| "statistics"
+	| "analysis"
 	| "export"
 	| "information";
 
 export type SidebarSection = LeftSidebarSection | RightSidebarSection;
 
-export const leftSidebarSections: LeftSidebarSection[] = [
+export const leftSidebarSections = [
 	"picture",
 	"basics",
 	"summary",
@@ -69,9 +71,10 @@ export const leftSidebarSections: LeftSidebarSection[] = [
 	"volunteer",
 	"references",
 	"custom",
-] as const;
+	"ai-review",
+] as const satisfies readonly LeftSidebarSection[];
 
-export const rightSidebarSections: RightSidebarSection[] = [
+export const rightSidebarSections = [
 	"template",
 	"layout",
 	"typography",
@@ -80,9 +83,21 @@ export const rightSidebarSections: RightSidebarSection[] = [
 	"notes",
 	"sharing",
 	"statistics",
+	"analysis",
 	"export",
 	"information",
-] as const;
+] as const satisfies readonly RightSidebarSection[];
+
+export const designWorkspaceSections = [
+	"template",
+	"design",
+	"typography",
+	"layout",
+	"page",
+	"notes",
+] as const satisfies readonly RightSidebarSection[];
+
+export type DesignWorkspaceSection = (typeof designWorkspaceSections)[number];
 
 export const getSectionTitle = (type: SidebarSection | CustomOnlyType): string => {
 	return (
@@ -104,6 +119,7 @@ export const getSectionTitle = (type: SidebarSection | CustomOnlyType): string =
 			.with("volunteer", () => t`Volunteer`)
 			.with("references", () => t`References`)
 			.with("custom", () => t`Custom Sections`)
+			.with("ai-review", () => t`AI Review`)
 
 			// Custom Section Types (not in main sidebar)
 			.with("cover-letter", () => t`Cover Letter`)
@@ -117,6 +133,7 @@ export const getSectionTitle = (type: SidebarSection | CustomOnlyType): string =
 			.with("notes", () => t`Notes`)
 			.with("sharing", () => t`Sharing`)
 			.with("statistics", () => t`Statistics`)
+			.with("analysis", () => t`Analysis`)
 			.with("export", () => t`Export`)
 			.with("information", () => t`Information`)
 
@@ -146,6 +163,7 @@ export const getSectionIcon = (type: SidebarSection | CustomOnlyType, props?: Ic
 			.with("volunteer", () => <HandHeartIcon {...iconProps} />)
 			.with("references", () => <PhoneIcon {...iconProps} />)
 			.with("custom", () => <StarIcon {...iconProps} />)
+			.with("ai-review", () => <SparkleIcon {...iconProps} />)
 
 			// Custom Section Types (not in main sidebar)
 			.with("cover-letter", () => <EnvelopeSimpleIcon {...iconProps} />)
@@ -159,6 +177,7 @@ export const getSectionIcon = (type: SidebarSection | CustomOnlyType, props?: Ic
 			.with("notes", () => <NotepadIcon {...iconProps} />)
 			.with("sharing", () => <ShareFatIcon {...iconProps} />)
 			.with("statistics", () => <ChartLineIcon {...iconProps} />)
+			.with("analysis", () => <SparkleIcon {...iconProps} />)
 			.with("export", () => <DownloadIcon {...iconProps} />)
 			.with("information", () => <InfoIcon {...iconProps} />)
 

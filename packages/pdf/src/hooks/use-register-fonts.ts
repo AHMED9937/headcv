@@ -1,6 +1,6 @@
-import type { FontWeight } from "@reactive-resume/fonts";
-import type { ResumeData, Typography } from "@reactive-resume/schema/resume/data";
-import type { Locale } from "@reactive-resume/utils/locale";
+import type { FontWeight } from "@headcv/fonts";
+import type { ResumeData, Typography } from "@headcv/schema/resume/data";
+import type { Locale } from "@headcv/utils/locale";
 import { letters as cjkLetters } from "cjk-regex";
 import {
 	getFont,
@@ -9,8 +9,8 @@ import {
 	isStandardPdfFontFamily,
 	resolveLegacyFontAlias,
 	sortFontWeights,
-} from "@reactive-resume/fonts";
-import { isCJKLocale } from "@reactive-resume/utils/locale";
+} from "@headcv/fonts";
+import { isCJKLocale } from "@headcv/utils/locale";
 import { Font } from "../renderer";
 
 type FontWeightRange = {

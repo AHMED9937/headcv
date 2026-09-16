@@ -6,13 +6,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
 "Language: sk\n"
-"Project-Id-Version: reactive-resume\n"
+"Project-Id-Version: headcv\n"
 "Report-Msgid-Bugs-To: \n"
 "PO-Revision-Date: 2026-05-21 07:54\n"
 "Last-Translator: \n"
 "Language-Team: Slovak\n"
 "Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
-"X-Crowdin-Project: reactive-resume\n"
+"X-Crowdin-Project: headcv\n"
 "X-Crowdin-Project-ID: 503410\n"
 "X-Crowdin-Language: sk\n"
 "X-Crowdin-File: /apps/web/locales/en-US.po\n"
@@ -63,8 +63,8 @@ msgid "<0>Frequently</0><1>Asked</1><2>Questions</2>"
 msgstr "<0>Často</0><1>Kladené</1><2>Otázky</2>"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/information.tsx
-msgid "<0>Thank you for using Reactive Resume! This app is a labor of love, created mostly in my spare time, with wonderful support from open-source contributors around the world.</0><1>If Reactive Resume has been helpful to you, and you'd like to help keep it free and open for everyone, please consider making a donation. Every little bit is appreciated!</1>"
-msgstr "<0>Ďakujem, že používaš Reactive Resume! Táto aplikácia je projekt z lásky, vytváraný najmä v mojom voľnom čase s úžasnou podporou open‑source prispievateľov z celého sveta.</0><1>Ak ti Reactive Resume pomohlo a chceš prispieť k tomu, aby zostalo pre všetkých bezplatné a otvorené, zváž prosím dar. Každý, aj malý príspevok, sa ráta!</1>"
+msgid "<0>Thank you for using HeadCV! This app is a labor of love, created mostly in my spare time, with wonderful support from open-source contributors around the world.</0><1>If HeadCV has been helpful to you, and you'd like to help keep it free and open for everyone, please consider making a donation. Every little bit is appreciated!</1>"
+msgstr "<0>Ďakujem, že používaš HeadCV! Táto aplikácia je projekt z lásky, vytváraný najmä v mojom voľnom čase s úžasnou podporou open‑source prispievateľov z celého sveta.</0><1>Ak ti HeadCV pomohlo a chceš prispieť k tomu, aby zostalo pre všetkých bezplatné a otvorené, zváž prosím dar. Každý, aj malý príspevok, sa ráta!</1>"
 
 #: src/dialogs/api-key/create.tsx
 msgid "1 month"
@@ -100,16 +100,16 @@ msgid "A link to your resume has been copied to clipboard."
 msgstr "Odkaz na tvoj životopis bol skopírovaný do schránky."
 
 #: src/routes/_home/-sections/testimonials.tsx
-msgid "A lot of people have written to me over the years to share their experiences with Reactive Resume and how it has helped them, and I never get tired of reading them. If you have a story to share, let me know by sending me an email at <0>{email}</0>."
-msgstr "Za roky mi množstvo ľudí napísalo a podelili sa so svojimi skúsenosťami s Reactive Resume a tým, ako im pomohlo – a mňa tieto príbehy nikdy neomrzia. Ak máš vlastný príbeh, o ktorý sa chceš podeliť, daj mi vedieť e‑mailom na <0>{email}</0>."
+msgid "A lot of people have written to me over the years to share their experiences with HeadCV and how it has helped them, and I never get tired of reading them. If you have a story to share, let me know by sending me an email at <0>{email}</0>."
+msgstr "Za roky mi množstvo ľudí napísalo a podelili sa so svojimi skúsenosťami s HeadCV a tým, ako im pomohlo – a mňa tieto príbehy nikdy neomrzia. Ak máš vlastný príbeh, o ktorý sa chceš podeliť, daj mi vedieť e‑mailom na <0>{email}</0>."
 
 #: src/features/settings/pages/profile.tsx
 msgid "A new verification link has been sent to your email address. Please check your inbox to verify your account."
 msgstr "Nový overovací odkaz bol odoslaný na tvoju e‑mailovú adresu. Skontroluj, prosím, doručenú poštu a over svoj účet."
 
 #: src/components/ui/copyright.tsx
-msgid "A passion project by <0>Amruth Pillai</0>."
-msgstr "Nadšenecký projekt od <0>Amruth Pillai</0>."
+msgid "A passion project by <0>HeadCV</0>."
+msgstr "Nadšenecký projekt od <0>HeadCV</0>."
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/page.tsx
 msgid "A4"
@@ -744,8 +744,8 @@ msgid "Continue where you left off"
 msgstr "Pokračuj tam, kde si prestal"
 
 #: src/dialogs/resume/import.tsx
-msgid "Continue where you left off by importing an existing resume you created using Reactive Resume or any another resume builder. Supported formats include PDF, Microsoft Word, as well as JSON files from Reactive Resume."
-msgstr "Pokračuj tam, kde si prestal, importovaním existujúceho životopisu, ktorý si vytvoril pomocou Reactive Resume alebo iného nástroja na tvorbu životopisov. Podporované formáty: PDF, Microsoft Word a tiež JSON súbory z Reactive Resume."
+msgid "Continue where you left off by importing an existing resume you created using HeadCV or any another resume builder. Supported formats include PDF, Microsoft Word, as well as JSON files from HeadCV."
+msgstr "Pokračuj tam, kde si prestal, importovaním existujúceho životopisu, ktorý si vytvoril pomocou HeadCV alebo iného nástroja na tvorbu životopisov. Podporované formáty: PDF, Microsoft Word a tiež JSON súbory z HeadCV."
 
 #: src/routes/_home/-sections/donate.tsx
 msgid "Contributions fund bug fixes, security updates, and continuous improvements to keep the app running smoothly."
@@ -1116,8 +1116,8 @@ msgid "Donate"
 msgstr "Darovať"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/information.tsx
-msgid "Donate to Reactive Resume"
-msgstr "Prispej projektu Reactive Resume"
+msgid "Donate to HeadCV"
+msgstr "Prispej projektu HeadCV"
 
 #. Action button to download two-factor backup codes as a text file
 #: src/dialogs/auth/enable-two-factor.tsx
@@ -1319,12 +1319,12 @@ msgid "Expires on {0}"
 msgstr "Platnosť uplynie {0}"
 
 #: src/routes/_home/-sections/templates.tsx
-msgid "Explore our diverse selection of templates, each designed to fit different styles, professions, and personalities. Reactive Resume currently offers 12 templates, with more on the way."
-msgstr "Preskúmaj našu pestrú ponuku šablón navrhnutých pre rôzne štýly, profesie a osobnosti. Reactive Resume momentálne ponúka 12 šablón a ďalšie sú na ceste."
+msgid "Explore our diverse selection of templates, each designed to fit different styles, professions, and personalities. HeadCV currently offers 12 templates, with more on the way."
+msgstr "Preskúmaj našu pestrú ponuku šablón navrhnutých pre rôzne štýly, profesie a osobnosti. HeadCV momentálne ponúka 12 šablón a ďalšie sú na ceste."
 
 #: src/features/settings/pages/api-keys.tsx
-msgid "Explore the API documentation to learn how to integrate Reactive Resume with your applications. Find detailed endpoints, request examples, and authentication methods."
-msgstr "Preskúmaj API dokumentáciu a zisti, ako integrovať Reactive Resume do svojich aplikácií. Nájdeš tam podrobné endpointy, príklady požiadaviek a spôsoby autentifikácie."
+msgid "Explore the API documentation to learn how to integrate HeadCV with your applications. Find detailed endpoints, request examples, and authentication methods."
+msgstr "Preskúmaj API dokumentáciu a zisti, ako integrovať HeadCV do svojich aplikácií. Nájdeš tam podrobné endpointy, príklady požiadaviek a spôsoby autentifikácie."
 
 #: src/libs/resume/section.tsx
 msgid "Export"
@@ -1859,12 +1859,12 @@ msgid "Invalid AI provider configuration."
 msgstr "Neplatná konfigurácia poskytovateľa umelej inteligencie."
 
 #: src/routes/_home/-sections/faq.tsx
-msgid "Is Reactive Resume available in multiple languages?"
-msgstr "Je Reactive Resume dostupné vo viacerých jazykoch?"
+msgid "Is HeadCV available in multiple languages?"
+msgstr "Je HeadCV dostupné vo viacerých jazykoch?"
 
 #: src/routes/_home/-sections/faq.tsx
-msgid "Is Reactive Resume really free?"
-msgstr "Je Reactive Resume naozaj zadarmo?"
+msgid "Is HeadCV really free?"
+msgstr "Je HeadCV naozaj zadarmo?"
 
 #: src/dialogs/resume/sections/certification.tsx
 msgid "Issuer"
@@ -2595,42 +2595,42 @@ msgid "Publisher"
 msgstr "Vydavateľ"
 
 #: src/routes/_home/-sections/header.tsx
-msgid "Reactive Resume - Go to homepage"
-msgstr "Reactive Resume – prejsť na domovskú stránku"
+msgid "HeadCV - Go to homepage"
+msgstr "HeadCV – prejsť na domovskú stránku"
 
-#. Import source option for current Reactive Resume JSON format
+#. Import source option for current HeadCV JSON format
 #: src/dialogs/resume/import.tsx
-msgid "Reactive Resume (JSON)"
+msgid "HeadCV (JSON)"
 msgstr "Reaktívny životopis (JSON)"
 
 #: src/routes/_home/-sections/prefooter.tsx
-msgid "Reactive Resume continues to grow thanks to its vibrant community. This project owes its progress to numerous individuals who've dedicated their time and skills to make it better. We celebrate the coders who've enhanced its features on GitHub, the linguists whose translations on Crowdin have made it accessible to a broader audience, and the people who've donated to support its continued development."
-msgstr "Reactive Resume ďalej rastie vďaka živej komunite. Tento projekt vďačí za svoj pokrok mnohým ľuďom, ktorí mu venovali svoj čas a znalosti. Oslavujeme vývojárov, ktorí na GitHube vylepšili jeho funkcie, lingvistov, ktorých preklady na Crowdin sprístupnili aplikáciu širšiemu publiku, a ľudí, ktorí prispeli na podporu ďalšieho vývoja."
+msgid "HeadCV continues to grow thanks to its vibrant community. This project owes its progress to numerous individuals who've dedicated their time and skills to make it better. We celebrate the coders who've enhanced its features on GitHub, the linguists whose translations on Crowdin have made it accessible to a broader audience, and the people who've donated to support its continued development."
+msgstr "HeadCV ďalej rastie vďaka živej komunite. Tento projekt vďačí za svoj pokrok mnohým ľuďom, ktorí mu venovali svoj čas a znalosti. Oslavujeme vývojárov, ktorí na GitHube vylepšili jeho funkcie, lingvistov, ktorých preklady na Crowdin sprístupnili aplikáciu širšiemu publiku, a ľudí, ktorí prispeli na podporu ďalšieho vývoja."
 
 #: src/routes/_home/-sections/donate.tsx
-msgid "Reactive Resume is a free and open-source project, built with love and maintained by me and a community of contributors. Your donations help keep the lights on and the code flowing."
-msgstr "Reactive Resume je bezplatný a open‑source projekt, vytvorený z lásky a udržiavaný mnou a komunitou prispievateľov. Tvoje príspevky pomáhajú udržať svetlá rozsvietené a kód v pohybe."
+msgid "HeadCV is a free and open-source project, built with love and maintained by me and a community of contributors. Your donations help keep the lights on and the code flowing."
+msgstr "HeadCV je bezplatný a open‑source projekt, vytvorený z lásky a udržiavaný mnou a komunitou prispievateľov. Tvoje príspevky pomáhajú udržať svetlá rozsvietené a kód v pohybe."
 
 #: src/routes/_home/-sections/hero.tsx
-msgid "Reactive Resume is a free and open-source resume builder that simplifies the process of creating, updating, and sharing your resume."
-msgstr "Reactive Resume je bezplatný a open‑source nástroj na tvorbu životopisov, ktorý zjednodušuje vytváranie, aktualizáciu a zdieľanie tvojho životopisu."
+msgid "HeadCV is a free and open-source resume builder that simplifies the process of creating, updating, and sharing your resume."
+msgstr "HeadCV je bezplatný a open‑source nástroj na tvorbu životopisov, ktorý zjednodušuje vytváranie, aktualizáciu a zdieľanie tvojho životopisu."
 
 #: src/components/ui/donation-toast.tsx
-msgid "Reactive Resume is free and open source. If it has helped you, please consider donating."
-msgstr "Reactive Resume je bezplatný a má otvorený zdrojový kód. Ak vám pomohol, zvážte darovanie."
+msgid "HeadCV is free and open source. If it has helped you, please consider donating."
+msgstr "HeadCV je bezplatný a má otvorený zdrojový kód. Ak vám pomohol, zvážte darovanie."
 
 #: src/routes/_home/-sections/faq.tsx
-msgid "Reactive Resume is open-source, privacy-focused, and completely free. Unlike other resume builders, it doesn't show ads, track your data, or limit your features behind a paywall."
-msgstr "Reactive Resume je open‑source, zamerané na súkromie a úplne zadarmo. Na rozdiel od iných nástrojov na tvorbu životopisov nezobrazuje reklamy, nesleduje tvoje dáta a neuzamyká funkcie za paywallom."
+msgid "HeadCV is open-source, privacy-focused, and completely free. Unlike other resume builders, it doesn't show ads, track your data, or limit your features behind a paywall."
+msgstr "HeadCV je open‑source, zamerané na súkromie a úplne zadarmo. Na rozdiel od iných nástrojov na tvorbu životopisov nezobrazuje reklamy, nesleduje tvoje dáta a neuzamyká funkcie za paywallom."
 
 #. App version label in footer; includes semantic version variable
 #: src/components/ui/copyright.tsx
-msgid "Reactive Resume v{__APP_VERSION__}"
+msgid "HeadCV v{__APP_VERSION__}"
 msgstr "Reaktívny životopis v{__APP_VERSION__}"
 
-#. Import source option for legacy Reactive Resume v4 JSON format
+#. Import source option for legacy HeadCV v4 JSON format
 #: src/dialogs/resume/import.tsx
-msgid "Reactive Resume v4 (JSON)"
+msgid "HeadCV v4 (JSON)"
 msgstr "Reaktívny životopis v4 (JSON)"
 
 #: src/dialogs/resume/sections/cover-letter.tsx
@@ -3201,8 +3201,8 @@ msgid "Summary"
 msgstr "Zhrnutie"
 
 #: src/routes/_home/-sections/donate.tsx
-msgid "Support Reactive Resume"
-msgstr "Podpor Reactive Resume"
+msgid "Support HeadCV"
+msgstr "Podpor HeadCV"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/information.tsx
 msgid "Support the app by doing what you can!"
@@ -3406,8 +3406,8 @@ msgid "This thread is read-only because the working resume or AI provider is una
 msgstr "Toto vlákno je len na čítanie, pretože funkčný životopis alebo poskytovateľ umelej inteligencie nie je k dispozícii."
 
 #: src/dialogs/api-key/create.tsx
-msgid "This will generate a new API key to access the Reactive Resume API to allow machines to interact with your resume data."
-msgstr "Týmto vygeneruješ nový API kľúč na prístup k API Reactive Resume, aby mohli stroje pracovať s dátami tvojich životopisov."
+msgid "This will generate a new API key to access the HeadCV API to allow machines to interact with your resume data."
+msgstr "Týmto vygeneruješ nový API kľúč na prístup k API HeadCV, aby mohli stroje pracovať s dátami tvojich životopisov."
 
 #: src/features/settings/authentication/components/passkeys.tsx
 msgid "This will help you identify it later, if you plan to have multiple passkeys."
@@ -3440,8 +3440,8 @@ msgid "Tighten the skills section so it supports the target role instead of read
 msgstr "Dolaďte sekciu o zručnostiach tak, aby podporovala cieľovú rolu, a nie aby sa čítala ako zbierka kľúčových slov."
 
 #: src/routes/_home/-sections/hero.tsx
-msgid "Timelapse demonstration of building a resume with Reactive Resume"
-msgstr "Time‑lapse ukážka tvorby životopisu v Reactive Resume"
+msgid "Timelapse demonstration of building a resume with HeadCV"
+msgstr "Time‑lapse ukážka tvorby životopisu v HeadCV"
 
 #: src/dialogs/api-key/create.tsx
 msgid "Tip: Give your API key a name, corresponding to the purpose of the key, to help you identify it later."
@@ -3824,8 +3824,8 @@ msgid "What do you want to rename this section to?"
 msgstr "Ako chceš túto sekciu premenovať?"
 
 #: src/routes/_home/-sections/faq.tsx
-msgid "What makes Reactive Resume different from other resume builders?"
-msgstr "Čím sa Reactive Resume líši od iných nástrojov na tvorbu životopisov?"
+msgid "What makes HeadCV different from other resume builders?"
+msgstr "Čím sa HeadCV líši od iných nástrojov na tvorbu životopisov?"
 
 #: src/routes/_home/-sections/hero.tsx
 msgid "What's new in the latest version?"
@@ -3850,12 +3850,12 @@ msgid "X (Twitter)"
 msgstr "X (Twitter)"
 
 #: src/routes/_home/-sections/faq.tsx
-msgid "Yes, Reactive Resume is available in multiple languages. You can choose your preferred language in the settings page, or using the language switcher in the top right corner. If you don't see your language, or you would like to improve the existing translations, you can <0>contribute to the translations on Crowdin<1> (opens in new tab)</1></0>."
-msgstr "Áno, Reactive Resume je dostupné vo viacerých jazykoch. Uprednostňovaný jazyk si môžeš zvoliť na stránke nastavení alebo pomocou prepínača jazykov v pravom hornom rohu. Ak svoj jazyk nevidíš alebo chceš zlepšiť existujúce preklady, môžeš <0>prispieť k prekladom na Crowdin<1> (otvorí sa na novej karte)</1></0>."
+msgid "Yes, HeadCV is available in multiple languages. You can choose your preferred language in the settings page, or using the language switcher in the top right corner. If you don't see your language, or you would like to improve the existing translations, you can <0>contribute to the translations on Crowdin<1> (opens in new tab)</1></0>."
+msgstr "Áno, HeadCV je dostupné vo viacerých jazykoch. Uprednostňovaný jazyk si môžeš zvoliť na stránke nastavení alebo pomocou prepínača jazykov v pravom hornom rohu. Ak svoj jazyk nevidíš alebo chceš zlepšiť existujúce preklady, môžeš <0>prispieť k prekladom na Crowdin<1> (otvorí sa na novej karte)</1></0>."
 
 #: src/routes/_home/-sections/faq.tsx
-msgid "Yes! Reactive Resume is completely free to use, with no hidden costs, premium tiers, or subscription fees. It's open-source and will always remain free."
-msgstr "Áno! Reactive Resume je úplne zadarmo, bez skrytých poplatkov, prémiových úrovní či predplatného. Je open‑source a vždy ním zostane."
+msgid "Yes! HeadCV is completely free to use, with no hidden costs, premium tiers, or subscription fees. It's open-source and will always remain free."
+msgstr "Áno! HeadCV je úplne zadarmo, bez skrytých poplatkov, prémiových úrovní či predplatného. Je open‑source a vždy ním zostane."
 
 #: src/routes/_home/-sections/features.tsx
 msgid "You also have the option to deploy on your own servers using the Docker image."
@@ -3895,8 +3895,8 @@ msgid "Your data is secure, and never shared or sold to anyone."
 msgstr "Tvoje dáta sú v bezpečí a nikdy sa s nikým nezdieľajú ani nepredávajú."
 
 #: src/routes/_home/-sections/faq.tsx
-msgid "Your data is stored securely and is never shared with third parties. You can also self-host Reactive Resume on your own servers for complete control over your data."
-msgstr "Tvoje dáta sú bezpečne uložené a nikdy sa nezdieľajú s tretími stranami. Reactive Resume si môžeš tiež hostovať na vlastných serveroch a mať nad dátami úplnú kontrolu."
+msgid "Your data is stored securely and is never shared with third parties. You can also self-host HeadCV on your own servers for complete control over your data."
+msgstr "Tvoje dáta sú bezpečne uložené a nikdy sa nezdieľajú s tretími stranami. HeadCV si môžeš tiež hostovať na vlastných serveroch a mať nad dátami úplnú kontrolu."
 
 #: src/features/resume/builder/draft.ts
 msgid "Your latest changes could not be saved."

@@ -1,4 +1,4 @@
-import { generateId } from "@reactive-resume/utils/string";
+import { generateId } from "@headcv/utils/string";
 
 /**
  * Resolves initial values for section-item create dialogs.

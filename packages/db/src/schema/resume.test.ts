@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { getTableColumns, getTableName } from "drizzle-orm";
-import { defaultResumeData } from "@reactive-resume/schema/resume/default";
+import { defaultResumeData } from "@headcv/schema/resume/default";
 import { resume, resumeAnalysis, resumeStatistics } from "./resume";
 
 describe("resume table definition", () => {
@@ -29,7 +29,7 @@ describe("resume table definition", () => {
 
 	it("data column defaults to defaultResumeData when invoked", () => {
 		const columns = getTableColumns(resume);
-		// drizzle exposes the default function under `default` or via column config — the
+		// drizzle exposes the default function under `default` or via column config  the
 		// most stable way to assert intent is to make sure `data` has a default at all.
 		expect(columns.data).toBeDefined();
 		// Roundtrip the imported default to make sure the import wiring works.

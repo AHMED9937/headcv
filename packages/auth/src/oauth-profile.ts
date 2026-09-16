@@ -2,9 +2,9 @@ import type { SQL } from "drizzle-orm";
 import type { AnyPgColumn } from "drizzle-orm/pg-core";
 import { BetterAuthError } from "better-auth";
 import { and, eq, or, sql } from "drizzle-orm";
-import { db } from "@reactive-resume/db/client";
-import * as schema from "@reactive-resume/db/schema";
-import { generateId, toUsername } from "@reactive-resume/utils/string";
+import { db } from "@headcv/db/client";
+import * as schema from "@headcv/db/schema";
+import { generateId, toUsername } from "@headcv/utils/string";
 
 interface ExistingOAuthUser {
 	id: string;

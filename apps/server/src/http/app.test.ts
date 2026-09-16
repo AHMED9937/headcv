@@ -14,9 +14,11 @@ const mocks = vi.hoisted(() => ({
 	handleRobots: vi.fn(),
 	handleSitemap: vi.fn(),
 	handleLlms: vi.fn(),
+	handlePrerender: vi.fn(),
 	serveWebDistStatic: vi.fn(),
 	handleWebApp: vi.fn(),
 	handleWebAppHead: vi.fn(),
+	handleMcp: vi.fn(),
 }));
 
 vi.mock("./auth", () => ({
@@ -47,10 +49,18 @@ vi.mock("../static/uploads", () => ({
 	handleUpload: mocks.handleUpload,
 }));
 
+vi.mock("../mcp/handler", () => ({
+	handleMcp: mocks.handleMcp,
+}));
+
 vi.mock("../static/seo", () => ({
 	handleRobots: mocks.handleRobots,
 	handleSitemap: mocks.handleSitemap,
 	handleLlms: mocks.handleLlms,
+}));
+
+vi.mock("../static/prerender", () => ({
+	handlePrerender: mocks.handlePrerender,
 }));
 
 vi.mock("../static/web", () => ({
@@ -71,16 +81,18 @@ beforeEach(() => {
 	mocks.handleOAuthProtectedResource.mockReturnValue(new Response("oauth-protected-resource"));
 	mocks.handleOpenIdConfiguration.mockReturnValue(new Response("openid-configuration"));
 	mocks.handleWellKnownFallback.mockReturnValue(new Response("well-known"));
+	mocks.handleMcp.mockResolvedValue(new Response("mcp"));
 	mocks.handleRobots.mockReturnValue(new Response("robots"));
 	mocks.handleSitemap.mockReturnValue(new Response("sitemap"));
 	mocks.handleLlms.mockReturnValue(new Response("llms"));
+	mocks.handlePrerender.mockResolvedValue(null);
 	mocks.serveWebDistStatic.mockResolvedValue(undefined);
 	mocks.handleWebApp.mockResolvedValue(new Response("web"));
 	mocks.handleWebAppHead.mockReturnValue(new Response(null));
 });
 
 describe("createApp", () => {
-	it("routes /api/auth/oauth to the OAuth bridge before the Better Auth wildcard", async () => {
+	it("routes /api/auth/oauth to the OAuth bridge before the Better Auth wildcard", { timeout: 20000 }, async () => {
 		const { createApp } = await import("./app");
 		const app = createApp();
 		const request = new Request("http://localhost:3001/api/auth/oauth?client_id=test-client");

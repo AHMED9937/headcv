@@ -1,6 +1,6 @@
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox";
 import { CheckIcon } from "@phosphor-icons/react";
-import { cn } from "@reactive-resume/utils/style";
+import { cn } from "@headcv/utils/style";
 
 function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
 	return (

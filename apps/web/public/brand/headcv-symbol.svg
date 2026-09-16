@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <title>HeadCV</title>
+  <rect x="5" y="4" width="38" height="40" rx="10" fill="#1E3A5F"/>
+  <path d="M14 13v22M14 24h17M31 13v22" stroke="#F8FAFC" stroke-width="5" stroke-linecap="round"/>
+  <path d="M34 4h9v9L34 4Z" fill="#F4E9C9"/>
+  <path d="m31 36 3 3 7-8" stroke="#D6B65B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

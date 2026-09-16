@@ -47,7 +47,7 @@ describe("ProgressValue", () => {
 				<ProgressValue />
 			</Progress>,
 		);
-		// The value text is rendered by base-ui — just verify the slot exists
+		// The value text is rendered by base-ui  just verify the slot exists
 		const { container } = render(
 			<Progress value={50}>
 				<ProgressValue data-testid="v" />

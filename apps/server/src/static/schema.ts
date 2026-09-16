@@ -1,5 +1,5 @@
 import z from "zod";
-import { resumeDataSchema } from "@reactive-resume/schema/resume/data";
+import { resumeDataSchema } from "@headcv/schema/resume/data";
 
 export function handleSchemaJson() {
 	const resumeDataJSONSchema = z.toJSONSchema(resumeDataSchema);

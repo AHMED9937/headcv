@@ -1,4 +1,4 @@
-import type { CustomSection, CustomSectionType, ResumeData, SectionType } from "@reactive-resume/schema/resume/data";
+import type { CustomSection, CustomSectionType, ResumeData, SectionType } from "@headcv/schema/resume/data";
 import type { HtmlStyleConfig } from "./html-to-docx";
 import { BorderStyle, ExternalHyperlink, HeadingLevel, Paragraph, TabStopPosition, TabStopType, TextRun } from "docx";
 import { htmlToParagraphs } from "./html-to-docx";
@@ -78,7 +78,7 @@ function titleAndSubtitle(primary: string, secondary: string, rightText?: string
 	const children: (TextRun | ExternalHyperlink)[] = [new TextRun({ text: primary, bold: true, ...baseRun })];
 
 	if (secondary) {
-		children.push(new TextRun({ text: ` — ${secondary}`, ...baseRun }));
+		children.push(new TextRun({ text: `  ${secondary}`, ...baseRun }));
 	}
 
 	if (rightText) {
@@ -171,7 +171,7 @@ function renderExperience(section: Sections["experience"], colorHex: string): Pa
 						spacing: { before: 80 },
 						children: [
 							new TextRun({ text: role.position, bold: true, italics: true, ...baseRun }),
-							...(role.period ? [new TextRun({ text: ` — ${role.period}`, italics: true, ...baseRun })] : []),
+							...(role.period ? [new TextRun({ text: `  ${role.period}`, italics: true, ...baseRun })] : []),
 						],
 					}),
 				);
@@ -269,7 +269,7 @@ function renderSkills(section: Sections["skills"], colorHex: string): Paragraph[
 		const children: TextRun[] = [new TextRun({ text: item.name, bold: true, ...baseRun })];
 
 		if (item.proficiency) {
-			children.push(new TextRun({ text: ` — ${item.proficiency}`, ...baseRun }));
+			children.push(new TextRun({ text: `  ${item.proficiency}`, ...baseRun }));
 		}
 
 		if (item.keywords.length > 0) {
@@ -297,7 +297,7 @@ function renderLanguages(section: Sections["languages"], colorHex: string): Para
 		const children: TextRun[] = [new TextRun({ text: item.language, bold: true, ...baseRun })];
 
 		if (item.fluency) {
-			children.push(new TextRun({ text: ` — ${item.fluency}`, ...baseRun }));
+			children.push(new TextRun({ text: `  ${item.fluency}`, ...baseRun }));
 		}
 
 		paragraphs.push(new Paragraph({ spacing: { before: 60 }, children }));
@@ -428,7 +428,7 @@ function renderReferences(section: Sections["references"], colorHex: string): Pa
 		const children: TextRun[] = [new TextRun({ text: item.name, bold: true, ...baseRun })];
 
 		if (item.position) {
-			children.push(new TextRun({ text: ` — ${item.position}`, ...baseRun }));
+			children.push(new TextRun({ text: `  ${item.position}`, ...baseRun }));
 		}
 
 		paragraphs.push(new Paragraph({ spacing: { before: 120 }, children }));
@@ -467,7 +467,7 @@ function renderProfiles(section: Sections["profiles"], colorHex: string): Paragr
 		const children: (TextRun | ExternalHyperlink)[] = [new TextRun({ text: item.network, bold: true, ...baseRun })];
 
 		if (item.username) {
-			children.push(new TextRun({ text: ` — ${item.username}`, ...baseRun }));
+			children.push(new TextRun({ text: `  ${item.username}`, ...baseRun }));
 		}
 
 		paragraphs.push(new Paragraph({ spacing: { before: 60 }, children }));
@@ -528,7 +528,7 @@ export function renderCustomSection(section: CustomSection, colorHex: string): P
 		return paragraphs;
 	}
 
-	// Cover letter type — render recipient + content
+	// Cover letter type  render recipient + content
 	if (sectionType === "cover-letter") {
 		const paragraphs: Paragraph[] = [sectionHeading(section.title, colorHex)];
 		for (const item of visibleItems) {

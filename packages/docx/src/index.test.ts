@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 
 import { describe, expect, it } from "vitest";
-import { defaultResumeData } from "@reactive-resume/schema/resume/default";
+import { defaultResumeData } from "@headcv/schema/resume/default";
 import { buildDocx } from "./index";
 
 describe("buildDocx", () => {

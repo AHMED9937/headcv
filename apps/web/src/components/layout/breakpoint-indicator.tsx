@@ -1,4 +1,4 @@
-import { cn } from "@reactive-resume/utils/style";
+import { cn } from "@headcv/utils/style";
 
 type BreakpointIndicatorProps = {
 	position?: "top-right" | "bottom-right" | "top-left" | "bottom-left";

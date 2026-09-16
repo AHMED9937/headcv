@@ -1,7 +1,7 @@
 import { t } from "@lingui/core/macro";
 import { GithubLogoIcon, StarIcon } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
-import { Button } from "@reactive-resume/ui/components/button";
+import { Button } from "@headcv/ui/components/button";
 import { orpc } from "@/libs/orpc/client";
 import { CountUp } from "../animation/count-up";
 
@@ -18,7 +18,7 @@ export function GithubStarsButton() {
 			variant="outline"
 			nativeButton={false}
 			render={
-				<a target="_blank" href="https://github.com/amruthpillai/reactive-resume" aria-label={ariaLabel} rel="noopener">
+				<a target="_blank" href="https://github.com/AHMED9937/headcv" aria-label={ariaLabel} rel="noopener">
 					<GithubLogoIcon aria-hidden="true" />
 					{starCount != null ? (
 						<CountUp to={starCount} duration={0.5} separator="," className="font-bold" aria-hidden="true" />

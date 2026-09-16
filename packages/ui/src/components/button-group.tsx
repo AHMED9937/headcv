@@ -2,8 +2,8 @@ import type { VariantProps } from "class-variance-authority";
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { cva } from "class-variance-authority";
-import { Separator } from "@reactive-resume/ui/components/separator";
-import { cn } from "@reactive-resume/utils/style";
+import { Separator } from "@headcv/ui/components/separator";
+import { cn } from "@headcv/utils/style";
 
 const buttonGroupVariants = cva(
 	"flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 has-[>[data-slot=button-group]]:gap-2 has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-e-lg [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1",

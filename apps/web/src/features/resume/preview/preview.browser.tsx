@@ -2,11 +2,16 @@ import type { CSSProperties } from "react";
 import type { PreviewPageSize, ResolvedResumePreviewProps } from "./preview.shared";
 import { AnimatePresence, m } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-import { cn } from "@reactive-resume/utils/style";
+import { cn } from "@headcv/utils/style";
 import { createResumePdfBlob } from "@/features/resume/export/pdf-document";
 import { useResumeData } from "../builder/draft";
 import { PdfCanvasDocument, PdfCanvasPage } from "./pdf-canvas";
-import { getResumePreviewGapValue, getResumePreviewPageCount, ResumePreviewLoader } from "./preview.shared";
+import {
+	getResumePreviewGapValue,
+	getResumePreviewPageCount,
+	RESUME_PREVIEW_SECTION_MARKER_PREFIX,
+	ResumePreviewLoader,
+} from "./preview.shared";
 
 type PreviewPdf = {
 	file: Blob;
@@ -89,11 +94,13 @@ export function ResumePreviewClient({
 	pageScale,
 	pageClassName,
 	showPageNumbers,
+	renderSectionOverlay,
 }: ResolvedResumePreviewProps) {
 	const builderResumeData = useResumeData();
 	const resumeData = data ?? builderResumeData;
 
 	const [previewLayers, setPreviewLayers] = useState<PreviewPdf[]>([]);
+	const [error, setError] = useState<Error | null>(null);
 
 	const pdfIdRef = useRef(0);
 	const requestIdRef = useRef(0);
@@ -109,7 +116,9 @@ export function ResumePreviewClient({
 		const generatePdfPreview = async () => {
 			try {
 				if (cancelled || requestId !== requestIdRef.current) return;
-				const blob = await createResumePdfBlob(resumeData);
+				const blob = await createResumePdfBlob(resumeData, undefined, {
+					sectionMarkerPrefix: RESUME_PREVIEW_SECTION_MARKER_PREFIX,
+				});
 
 				if (!cancelled && requestId === requestIdRef.current) {
 					const nextPdf = createPreviewPdf(blob, pdfIdRef.current++, hasPreviewRef.current);
@@ -117,7 +126,10 @@ export function ResumePreviewClient({
 					hasPreviewRef.current = true;
 					setPreviewLayers((current) => addPreviewLayer(current, nextPdf));
 				}
-			} catch {}
+			} catch (error) {
+				console.error("Failed to generate resume preview PDF", error);
+				setError(error instanceof Error ? error : new Error(String(error)));
+			}
 		};
 
 		const timeoutId = window.setTimeout(() => {
@@ -131,6 +143,14 @@ export function ResumePreviewClient({
 	}, [resumeData]);
 
 	if (!resumeData) return null;
+
+	if (error) {
+		return (
+			<div className="flex h-full items-center justify-center p-6 text-center">
+				<p className="text-destructive text-sm">Unable to generate preview.</p>
+			</div>
+		);
+	}
 
 	const visiblePdf = getActivePreviewLayer(previewLayers);
 	const resolvedPageGap = getResumePreviewGapValue(pageGap);
@@ -149,7 +169,7 @@ export function ResumePreviewClient({
 	}
 
 	return (
-		<div className={cn("grid", className)}>
+		<div dir="ltr" className={cn("grid", className)}>
 			<AnimatePresence initial={false}>
 				{previewLayers.map((visiblePdf) => (
 					<m.div
@@ -194,6 +214,7 @@ export function ResumePreviewClient({
 												totalPages={totalPages}
 												className={pageClassName}
 												showPageNumbers={showPageNumbers}
+												renderSectionOverlay={renderSectionOverlay}
 												onLoadSuccess={(_, pageSize) => {
 													setPreviewLayers((current) =>
 														setPreviewPageSize(current, visiblePdf.id, pageNumber, pageSize),

@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet, redirect, useRouter } from "@tanstack/react-router";
-import { SidebarProvider } from "@reactive-resume/ui/components/sidebar";
+import { SidebarProvider } from "@headcv/ui/components/sidebar";
 import { createNoindexFollowMeta } from "@/libs/seo";
 import { getDashboardSidebarState, setDashboardSidebarState } from "./-components/functions";
 import { DashboardSidebar } from "./-components/sidebar";

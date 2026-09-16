@@ -1,11 +1,11 @@
-import type { ResumeData } from "@reactive-resume/schema/resume/data";
+import type { ResumeData } from "@headcv/schema/resume/data";
 import type { RouterOutput } from "@/libs/orpc/client";
 import { FileTextIcon } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import { useInView } from "motion/react";
 import { useEffect, useRef } from "react";
-import { Spinner } from "@reactive-resume/ui/components/spinner";
-import { cn } from "@reactive-resume/utils/style";
+import { Spinner } from "@headcv/ui/components/spinner";
+import { cn } from "@headcv/utils/style";
 import { createResumePdfBlob } from "@/features/resume/export/pdf-document";
 import { createPdfFirstPageImageUrl } from "@/features/resume/preview/pdf-thumbnail";
 import { getResumeThumbnailCacheKey } from "@/features/resume/preview/resume-thumbnail.shared";

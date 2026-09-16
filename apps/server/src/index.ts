@@ -1,6 +1,6 @@
 import { pathToFileURL } from "node:url";
 import { serve } from "@hono/node-server";
-import { env } from "@reactive-resume/env/server";
+import { env } from "@headcv/env/server";
 import { createApp } from "./http/app";
 import { runStartupChecks } from "./startup/checks";
 

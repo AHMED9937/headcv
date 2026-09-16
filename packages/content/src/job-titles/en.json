@@ -1,0 +1,74 @@
+[
+	{
+		"id": "general",
+		"title": "General CV",
+		"category": "General",
+		"experienceLevels": ["entry", "mid", "senior", "executive"]
+	},
+	{
+		"id": "software-engineer",
+		"title": "Software Engineer",
+		"category": "Technology",
+		"experienceLevels": ["entry", "mid", "senior", "executive"]
+	},
+	{
+		"id": "frontend-developer",
+		"title": "Frontend Developer",
+		"category": "Technology",
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "backend-developer",
+		"title": "Backend Developer",
+		"category": "Technology",
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "devops-engineer",
+		"title": "DevOps Engineer",
+		"category": "Technology",
+		"experienceLevels": ["mid", "senior"]
+	},
+	{
+		"id": "data-analyst",
+		"title": "Data Analyst",
+		"category": "Technology",
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "product-manager",
+		"title": "Product Manager",
+		"category": "Product",
+		"experienceLevels": ["mid", "senior", "executive"]
+	},
+	{
+		"id": "project-manager",
+		"title": "Project Manager",
+		"category": "Operations",
+		"experienceLevels": ["mid", "senior", "executive"]
+	},
+	{
+		"id": "ui-ux-designer",
+		"title": "UI/UX Designer",
+		"category": "Design",
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "marketing-manager",
+		"title": "Marketing Manager",
+		"category": "Marketing",
+		"experienceLevels": ["mid", "senior"]
+	},
+	{
+		"id": "sales-representative",
+		"title": "Sales Representative",
+		"category": "Sales",
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "customer-support-specialist",
+		"title": "Customer Support Specialist",
+		"category": "Support",
+		"experienceLevels": ["entry", "mid"]
+	}
+]

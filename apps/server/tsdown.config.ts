@@ -5,10 +5,12 @@ const rootPackageJson = JSON.parse(readFileSync(new URL("../../package.json", im
 	version?: string;
 };
 
-const shouldExternalizeThirdParty = (id: string) => {
-	if (id.startsWith("@reactive-resume/")) return false;
+const shouldExternalize = (id: string) => {
+	// Workspace packages are source-consumed through export maps; keep them as package imports.
+	if (id.startsWith("@headcv/")) return true;
+	// Source-relative imports are bundled.
 	if (id.startsWith("@/") || id.startsWith(".") || id.startsWith("/") || id.startsWith("\0")) return false;
-
+	// Third-party dependencies are externalized.
 	return true;
 };
 
@@ -24,7 +26,6 @@ export default defineConfig({
 	define: { __APP_VERSION__: JSON.stringify(rootPackageJson.version ?? "0.0.0") },
 	outExtensions: () => ({ js: ".mjs" }),
 	deps: {
-		alwaysBundle: [/^@reactive-resume\//],
-		neverBundle: shouldExternalizeThirdParty,
+		neverBundle: shouldExternalize,
 	},
 });

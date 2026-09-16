@@ -26,7 +26,7 @@ const dbMock = vi.hoisted(() => {
 	};
 });
 
-vi.mock("@reactive-resume/db/client", () => ({
+vi.mock("@headcv/db/client", () => ({
 	db: {
 		select: dbMock.select,
 		update: dbMock.update,

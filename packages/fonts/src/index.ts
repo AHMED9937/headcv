@@ -1,4 +1,4 @@
-import { unique } from "@reactive-resume/utils/field";
+import { unique } from "@headcv/utils/field";
 import webFontListJSON from "./webfontlist.json";
 
 export type FontCategory = "display" | "handwriting" | "monospace" | "serif" | "sans-serif";
@@ -206,7 +206,7 @@ export function getFallbackWebFontFamilies(family: string) {
  *
  * Source Han Sans/Serif SC covers all CJK-Unified ideographs, so a single
  * font handles Simplified/Traditional Chinese, Japanese kanji and Korean
- * hanja — the locales reporting #2986 / #3006.
+ * hanja  the locales reporting #2986 / #3006.
  */
 export function getPdfCjkFallbackFontFamily(family: string): string | null {
 	const fallback = getPrimaryCjkWebFont(family);

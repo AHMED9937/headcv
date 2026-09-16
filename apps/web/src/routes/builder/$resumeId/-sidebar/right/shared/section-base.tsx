@@ -1,8 +1,8 @@
 import type { RightSidebarSection } from "@/libs/resume/section";
 import { CaretDownIcon } from "@phosphor-icons/react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@reactive-resume/ui/components/accordion";
-import { Button } from "@reactive-resume/ui/components/button";
-import { cn } from "@reactive-resume/utils/style";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@headcv/ui/components/accordion";
+import { Button } from "@headcv/ui/components/button";
+import { cn } from "@headcv/utils/style";
 import { getSectionIcon, getSectionTitle } from "@/libs/resume/section";
 import { useSectionStore } from "../../../-store/section";
 

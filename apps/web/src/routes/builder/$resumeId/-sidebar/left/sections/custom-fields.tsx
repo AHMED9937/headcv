@@ -1,15 +1,15 @@
-import type { basicsSchema } from "@reactive-resume/schema/resume/data";
+import type { basicsSchema } from "@headcv/schema/resume/data";
 import type z from "zod";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { DotsSixVerticalIcon, LinkIcon, ListPlusIcon, XIcon } from "@phosphor-icons/react";
 import { Reorder, useDragControls } from "motion/react";
-import { Button } from "@reactive-resume/ui/components/button";
-import { FormControl, FormItem } from "@reactive-resume/ui/components/form";
-import { Input } from "@reactive-resume/ui/components/input";
-import { Label } from "@reactive-resume/ui/components/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@reactive-resume/ui/components/popover";
-import { generateId } from "@reactive-resume/utils/string";
+import { Button } from "@headcv/ui/components/button";
+import { FormControl, FormItem } from "@headcv/ui/components/form";
+import { Input } from "@headcv/ui/components/input";
+import { Label } from "@headcv/ui/components/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@headcv/ui/components/popover";
+import { generateId } from "@headcv/utils/string";
 import { IconPicker } from "@/components/input/icon-picker";
 import { withForm } from "@/libs/tanstack-form";
 

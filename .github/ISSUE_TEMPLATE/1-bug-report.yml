@@ -1,10 +1,10 @@
 name: 🐞 Bug Report
 
-description: Create a bug report to help improve Reactive Resume
+description: Create a bug report to help improve HeadCV
 
 title: "[Bug] <title>"
 labels: [bug, v5, needs triage]
-assignees: "AmruthPillai"
+assignees: "AHMED9937"
 
 body:
   - type: checkboxes
@@ -19,9 +19,9 @@ body:
     id: variant
     attributes:
       label: Product Variant
-      description: What variant of Reactive Resume are you using?
+      description: What variant of HeadCV are you using?
       options:
-        - Cloud (https://rxresu.me)
+        - Cloud (https://headcv.com)
         - Self-Hosted
     validations:
       required: true

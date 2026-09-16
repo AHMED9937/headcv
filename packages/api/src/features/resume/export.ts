@@ -1,7 +1,7 @@
 import { ORPCError } from "@orpc/server";
 import z from "zod";
-import { createResumePdfFile } from "@reactive-resume/pdf/server";
-import { generateFilename } from "@reactive-resume/utils/file";
+import { createResumePdfFile } from "@headcv/pdf/server";
+import { generateFilename } from "@headcv/utils/file";
 import { protectedProcedure } from "../../context";
 import { pdfExportRateLimit } from "../../middleware/rate-limit";
 import { resumeService } from "./service";

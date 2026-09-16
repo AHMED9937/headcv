@@ -6,14 +6,16 @@ import {
 	getRootStructuredData,
 } from "./seo";
 
+const canonicalUrl = "https://headcv.com/";
+
 describe("getCanonicalRootUrl", () => {
 	it("uses the production root when no origin is available", () => {
-		expect(getCanonicalRootUrl()).toBe("https://rxresu.me/");
+		expect(getCanonicalRootUrl()).toBe(canonicalUrl);
 	});
 
 	it("normalizes an app origin to the root URL", () => {
 		expect(getCanonicalRootUrl("http://localhost:3000")).toBe("http://localhost:3000/");
-		expect(getCanonicalRootUrl("https://rxresu.me/")).toBe("https://rxresu.me/");
+		expect(getCanonicalRootUrl(canonicalUrl)).toBe(canonicalUrl);
 	});
 });
 
@@ -25,15 +27,15 @@ describe("createNoindexFollowMeta", () => {
 
 describe("createRootStructuredDataScript", () => {
 	it("serializes JSON-LD using the structured data script id", () => {
-		const script = createRootStructuredDataScript("https://rxresu.me/");
+		const script = createRootStructuredDataScript(canonicalUrl);
 
-		expect(script.id).toBe("reactive-resume-structured-data");
+		expect(script.id).toBe("headcv-structured-data");
 		expect(script.type).toBe("application/ld+json");
 		expect(JSON.parse(script.children)).toMatchObject({ "@context": "https://schema.org" });
 	});
 
 	it("escapes script-breaking sequences in JSON-LD children", () => {
-		const script = createRootStructuredDataScript("https://rxresu.me/</script><!---->\u2028\u2029");
+		const script = createRootStructuredDataScript("https://headcv.com/</script><!---->\u2028\u2029");
 
 		expect(script.children).not.toContain("</script");
 		expect(script.children).not.toContain("<!--");
@@ -48,26 +50,27 @@ describe("createRootStructuredDataScript", () => {
 
 describe("getRootStructuredData", () => {
 	it("describes only conservative visible product facts", () => {
-		const schemas = getRootStructuredData("https://rxresu.me/");
+		const schemas = getRootStructuredData(canonicalUrl);
 
 		expect(schemas).toHaveLength(4);
 		expect(schemas[0]).toMatchObject({
 			"@type": "WebSite",
-			name: "Reactive Resume",
-			url: "https://rxresu.me/",
+			name: "HeadCV",
+			url: canonicalUrl,
 		});
 		expect(schemas[1]).toMatchObject({
 			"@type": ["SoftwareApplication", "WebApplication"],
-			name: "Reactive Resume",
+			name: "HeadCV",
 			applicationCategory: "BusinessApplication",
 			operatingSystem: "Web",
+			isAccessibleForFree: true,
 			offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
 		});
 		expect(schemas[3]).toMatchObject({
 			"@type": "FAQPage",
 			mainEntity: expect.arrayContaining([
 				expect.objectContaining({
-					name: "Is Reactive Resume really free?",
+					name: "Is HeadCV free to use?",
 				}),
 			]),
 		});

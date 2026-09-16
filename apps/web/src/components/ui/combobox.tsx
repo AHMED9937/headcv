@@ -2,7 +2,7 @@ import type { ComboboxTriggerState } from "@base-ui/react/combobox";
 import type { UseRenderRenderProp } from "@base-ui/react/use-render";
 import { t } from "@lingui/core/macro";
 import React from "react";
-import { Button } from "@reactive-resume/ui/components/button";
+import { Button } from "@headcv/ui/components/button";
 import {
 	ComboboxClear,
 	ComboboxContent,
@@ -14,9 +14,9 @@ import {
 	ComboboxTrigger,
 	ComboboxValue,
 	useFilter,
-} from "@reactive-resume/ui/components/combobox";
-import { Input } from "@reactive-resume/ui/components/input";
-import { cn } from "@reactive-resume/utils/style";
+} from "@headcv/ui/components/combobox";
+import { Input } from "@headcv/ui/components/input";
+import { cn } from "@headcv/utils/style";
 import { useControlledState } from "@/hooks/use-controlled-state";
 
 type ComboboxOption<TValue extends string | number = string> = {

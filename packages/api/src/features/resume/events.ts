@@ -1,4 +1,4 @@
-import { getPool } from "@reactive-resume/db/client";
+import { getPool } from "@headcv/db/client";
 
 const RESUME_UPDATED_CHANNEL = "resume_updated";
 

@@ -1,9 +1,6 @@
 import type { Icon } from "@phosphor-icons/react";
-import type { BuilderPreviewPageLayout } from "./page-layout";
 import { t } from "@lingui/core/macro";
 import {
-	AlignCenterHorizontalIcon,
-	AlignTopIcon,
 	ChatCircleDotsIcon,
 	CircleNotchIcon,
 	CubeFocusIcon,
@@ -14,34 +11,34 @@ import {
 	MagnifyingGlassMinusIcon,
 	MagnifyingGlassPlusIcon,
 } from "@phosphor-icons/react";
-import { useNavigate } from "@tanstack/react-router";
 import { m } from "motion/react";
 import { useCallback, useMemo, useState } from "react";
-import { useControls } from "react-zoom-pan-pinch";
 import { toast } from "sonner";
 import { useCopyToClipboard } from "usehooks-ts";
-import { buildDocx } from "@reactive-resume/docx";
-import { Button } from "@reactive-resume/ui/components/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@reactive-resume/ui/components/tooltip";
-import { downloadWithAnchor, generateFilename } from "@reactive-resume/utils/file";
-import { cn } from "@reactive-resume/utils/style";
+import { buildDocx } from "@headcv/docx";
+import { Button } from "@headcv/ui/components/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@headcv/ui/components/tooltip";
+import { downloadWithAnchor, generateFilename } from "@headcv/utils/file";
+import { cn } from "@headcv/utils/style";
+import { useAiAssistant } from "@/features/resume/builder/ai-assistant";
 import { useCurrentResume } from "@/features/resume/builder/draft";
 import { createResumePdfBlob } from "@/features/resume/export/pdf-document";
 import { authClient } from "@/libs/auth/client";
+import { formatPreviewScale } from "./preview-zoom";
 
 type BuilderDockProps = {
-	pageLayout: BuilderPreviewPageLayout;
-	onTogglePageLayout: () => void;
+	pageScale: number;
+	onZoomIn: () => void;
+	onZoomOut: () => void;
+	onFit: () => void;
 };
 
-export function BuilderDock({ pageLayout, onTogglePageLayout }: BuilderDockProps) {
+export function BuilderDock({ pageScale, onZoomIn, onZoomOut, onFit }: BuilderDockProps) {
 	const { data: session } = authClient.useSession();
 	const resume = useCurrentResume();
-	const navigate = useNavigate();
+	const { openThreads } = useAiAssistant();
 
 	const [_, copyToClipboard] = useCopyToClipboard();
-	const { zoomIn, zoomOut, centerView } = useControls();
-
 	const [isPrinting, setIsPrinting] = useState(false);
 
 	const publicUrl = useMemo(() => {
@@ -95,7 +92,7 @@ export function BuilderDock({ pageLayout, onTogglePageLayout }: BuilderDockProps
 	}, [resume]);
 
 	return (
-		<div className="fixed inset-x-0 bottom-4 flex items-center justify-center">
+		<div className="absolute inset-x-0 bottom-4 z-10 flex items-center justify-center">
 			<m.div
 				initial={{ opacity: 0, y: -18 }}
 				animate={{ opacity: 0.6, y: 0 }}
@@ -103,20 +100,18 @@ export function BuilderDock({ pageLayout, onTogglePageLayout }: BuilderDockProps
 				transition={{ duration: 0.2, ease: "easeOut" }}
 				className="flex items-center rounded-r-full rounded-l-full bg-popover px-2 shadow-xl will-change-[transform,opacity]"
 			>
-				<DockIcon icon={MagnifyingGlassPlusIcon} title={t`Zoom in`} onClick={() => zoomIn(0.1)} />
-				<DockIcon icon={MagnifyingGlassMinusIcon} title={t`Zoom out`} onClick={() => zoomOut(0.1)} />
-				<DockIcon icon={CubeFocusIcon} title={t`Center view`} onClick={() => centerView()} />
-				<DockIcon
-					icon={pageLayout === "horizontal" ? AlignTopIcon : AlignCenterHorizontalIcon}
-					title={t`Toggle page stacking`}
-					onClick={onTogglePageLayout}
-				/>
+				<DockIcon icon={MagnifyingGlassMinusIcon} title={t`Zoom out`} onClick={onZoomOut} />
+				<span className="min-w-12 text-center font-medium text-xs tabular-nums" aria-live="polite">
+					{formatPreviewScale(pageScale)}
+				</span>
+				<DockIcon icon={MagnifyingGlassPlusIcon} title={t`Zoom in`} onClick={onZoomIn} />
+				<DockIcon icon={CubeFocusIcon} title={t`Fit width`} onClick={onFit} />
 				<DockIcon
 					icon={ChatCircleDotsIcon}
-					title={t`Open AI agent`}
+					title={t`Open AI assistant`}
 					onClick={() => {
 						if (!resume) return;
-						void navigate({ to: "/agent/new", search: { resumeId: resume.id } });
+						openThreads();
 					}}
 				/>
 				<div className="mx-1 h-8 w-px bg-border" />

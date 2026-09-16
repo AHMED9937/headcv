@@ -1,5 +1,5 @@
-import type { ResumeData, SectionType } from "@reactive-resume/schema/resume/data";
-import type { Template } from "@reactive-resume/schema/templates";
+import type { ResumeData, SectionType } from "@headcv/schema/resume/data";
+import type { Template } from "@headcv/schema/templates";
 import {
 	BorderStyle,
 	convertMillimetersToTwip,
@@ -14,7 +14,7 @@ import {
 	TextRun,
 	WidthType,
 } from "docx";
-import { parseColorString } from "@reactive-resume/utils/color";
+import { parseColorString } from "@headcv/utils/color";
 import { toSafeDocxLink } from "./link-utils";
 import { renderBuiltInSection, renderCustomSection, renderSummary, setRenderConfig } from "./section-renderers";
 
@@ -395,7 +395,7 @@ export function buildDocument(data: ResumeData): Document {
 		sidebarShadingHex = blendWithWhite(colorHex, 0.2);
 	}
 
-	// Determine sidebar text colors — inverted when sidebar has a solid background
+	// Determine sidebar text colors  inverted when sidebar has a solid background
 	const sidebarTextColorHex = templateConfig.sidebarBackground === "solid" ? bgColorHex : textColorHex;
 	const sidebarHeadingColorHex = templateConfig.sidebarBackground === "solid" ? bgColorHex : colorHex;
 

@@ -44,7 +44,7 @@ writeFileSync(serverBundle, requireBanner + versionBanner + readFileSync(serverB
 // Install native-only runtime dependencies into a temporary directory (away
 // from the repo's pnpm-only .npmrc) and copy the resulting node_modules tree
 // into the function so the bundled ESM can resolve bcrypt/sharp .node binaries.
-const nativeDepsDir = mkdtempSync(join(tmpdir(), "nexacv-native-"));
+const nativeDepsDir = mkdtempSync(join(tmpdir(), "headcv-native-"));
 execSync("npm install bcrypt@6.0.0 sharp@0.34.5", {
 	cwd: nativeDepsDir,
 	stdio: "inherit",

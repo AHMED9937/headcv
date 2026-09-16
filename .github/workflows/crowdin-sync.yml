@@ -27,9 +27,9 @@ jobs:
           localization_branch_name: "l10n"
           commit_message: "[skip ci] chore(i18n): sync translations from crowdin"
           pull_request_title: "Sync Translations from Crowdin"
-          pull_request_body: "This is an automated pull request to sync translations from [Crowdin](https://crowdin.com/project/reactive-resume)."
+          pull_request_body: "This is an automated pull request to sync translations from [Crowdin](https://crowdin.com/project/headcv)."
           pull_request_labels: "l10n"
-          pull_request_reviewers: "amruthpillai"
+          pull_request_reviewers: "AHMED9937"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}

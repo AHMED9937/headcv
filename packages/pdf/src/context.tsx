@@ -1,11 +1,12 @@
-import type { ResumeData } from "@reactive-resume/schema/resume/data";
+import type { ResumeData } from "@headcv/schema/resume/data";
 import type { ReactNode } from "react";
 import type { SectionTitleResolver } from "./section-title";
 import { createContext, use } from "react";
-import { isRTL } from "@reactive-resume/utils/locale";
+import { isRTL } from "@headcv/utils/locale";
 
 type RenderContextValue = ResumeData & {
 	resolveSectionTitle?: SectionTitleResolver | undefined;
+	sectionMarkerPrefix?: string | undefined;
 	rtl: boolean;
 };
 
@@ -14,13 +15,18 @@ const RenderContext = createContext<RenderContextValue | null>(null);
 export type RenderProviderProps = {
 	data: ResumeData;
 	resolveSectionTitle?: SectionTitleResolver | undefined;
+	sectionMarkerPrefix?: string | undefined;
 	children: ReactNode;
 };
 
-export const RenderProvider = ({ data, resolveSectionTitle, children }: RenderProviderProps) => {
+export const RenderProvider = ({ data, resolveSectionTitle, sectionMarkerPrefix, children }: RenderProviderProps) => {
 	const rtl = isRTL(data.metadata.page.locale);
 
-	return <RenderContext.Provider value={{ ...data, resolveSectionTitle, rtl }}>{children}</RenderContext.Provider>;
+	return (
+		<RenderContext.Provider value={{ ...data, resolveSectionTitle, sectionMarkerPrefix, rtl }}>
+			{children}
+		</RenderContext.Provider>
+	);
 };
 
 export const useRender = (): RenderContextValue => {

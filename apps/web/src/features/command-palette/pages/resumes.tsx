@@ -4,16 +4,14 @@ import { PlusIcon, ReadCvLogoIcon } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useRouteContext } from "@tanstack/react-router";
 import { CommandLoading } from "cmdk";
-import { CommandItem, CommandShortcut } from "@reactive-resume/ui/components/command";
-import { Kbd } from "@reactive-resume/ui/components/kbd";
-import { useDialogStore } from "@/dialogs/store";
+import { CommandItem, CommandShortcut } from "@headcv/ui/components/command";
+import { Kbd } from "@headcv/ui/components/kbd";
 import { orpc } from "@/libs/orpc/client";
 import { useCommandPaletteStore } from "../store";
 import { BaseCommandGroup } from "./base";
 
 export function ResumesCommandGroup() {
 	const navigate = useNavigate();
-	const { openDialog } = useDialogStore();
 	const { session } = useRouteContext({ strict: false });
 	const reset = useCommandPaletteStore((state) => state.reset);
 	const peekPage = useCommandPaletteStore((state) => state.peekPage);
@@ -28,8 +26,7 @@ export function ResumesCommandGroup() {
 	);
 
 	const onCreate = async () => {
-		await navigate({ to: "/dashboard/resumes" });
-		openDialog("resume.create", undefined);
+		await navigate({ to: "/templates" });
 		reset();
 	};
 

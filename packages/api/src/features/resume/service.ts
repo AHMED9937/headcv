@@ -1,23 +1,28 @@
-import type { JsonPatchOperation } from "@reactive-resume/resume/patch";
-import type { ResumeData } from "@reactive-resume/schema/resume/data";
-import type { Locale } from "@reactive-resume/utils/locale";
+import type { JsonPatchOperation } from "@headcv/resume/patch";
+import type { StoredResumeAnalysis } from "@headcv/schema/resume/analysis";
+import type { ResumeData } from "@headcv/schema/resume/data";
+import type { Locale } from "@headcv/utils/locale";
 import type { ResumeUpdatedEvent } from "./events";
 import { ORPCError } from "@orpc/client";
 import { compare, hash } from "bcrypt";
 import { and, arrayContains, asc, desc, eq, isNotNull, sql } from "drizzle-orm";
 import { get } from "es-toolkit/compat";
 import { match } from "ts-pattern";
-import { db } from "@reactive-resume/db/client";
-import * as schema from "@reactive-resume/db/schema";
-import { applyResumePatches, ResumePatchError } from "@reactive-resume/resume/patch";
-import { defaultResumeData } from "@reactive-resume/schema/resume/default";
-import { generateId } from "@reactive-resume/utils/string";
+import { db } from "@headcv/db/client";
+import * as schema from "@headcv/db/schema";
+import { enforceResumeLocale } from "@headcv/resume/locale";
+import { applyResumePatches, ResumePatchError } from "@headcv/resume/patch";
+import { upgradeLegacyResumeTypography } from "@headcv/resume/readability";
+import { defaultResumeData } from "@headcv/schema/resume/default";
+import { generateId } from "@headcv/utils/string";
 import { getStorageService } from "../storage/service";
 import { grantResumeAccess, hasResumeAccess } from "./access";
 import { assertCanView, isOwner, redactResumeForViewer, shouldCountForStatistics } from "./access-policy";
 import { publishResumeUpdated } from "./events";
 
 type DbOrTx = typeof db | Parameters<Parameters<typeof db.transaction>[0]>[0];
+
+const normalizeResumeData = (data: ResumeData) => upgradeLegacyResumeTypography(enforceResumeLocale(data));
 
 function resumeVersionConflict(updatedAt: Date) {
 	return new ORPCError("RESUME_VERSION_CONFLICT", {
@@ -46,7 +51,7 @@ async function applyResumePatchTx(
 	let patchedData: ResumeData;
 
 	try {
-		patchedData = applyResumePatches(existing.data, input.operations);
+		patchedData = normalizeResumeData(applyResumePatches(existing.data, input.operations));
 	} catch (error) {
 		if (error instanceof ResumePatchError) {
 			throw new ORPCError("INVALID_PATCH_OPERATIONS", {
@@ -159,6 +164,44 @@ const statistics = {
 	},
 };
 
+const analysis = {
+	getById: async (input: { id: string; userId: string }) => {
+		const [result] = await db
+			.select({ analysis: schema.resumeAnalysis.analysis })
+			.from(schema.resume)
+			.leftJoin(schema.resumeAnalysis, eq(schema.resumeAnalysis.resumeId, schema.resume.id))
+			.where(and(eq(schema.resume.id, input.id), eq(schema.resume.userId, input.userId)));
+
+		if (!result) throw new ORPCError("NOT_FOUND");
+
+		return result.analysis ?? null;
+	},
+
+	upsert: async (input: { id: string; userId: string; analysis: StoredResumeAnalysis }) => {
+		const [resume] = await db
+			.select({ id: schema.resume.id })
+			.from(schema.resume)
+			.where(and(eq(schema.resume.id, input.id), eq(schema.resume.userId, input.userId)));
+
+		if (!resume) throw new ORPCError("NOT_FOUND");
+
+		await db
+			.insert(schema.resumeAnalysis)
+			.values({
+				resumeId: input.id,
+				analysis: input.analysis,
+			})
+			.onConflictDoUpdate({
+				target: [schema.resumeAnalysis.resumeId],
+				set: {
+					analysis: input.analysis,
+				},
+			});
+
+		return input.analysis;
+	},
+};
+
 function toSharedResumeResponse(
 	resume: {
 		id: string;
@@ -176,7 +219,7 @@ function toSharedResumeResponse(
 		name: resume.name,
 		slug: resume.slug,
 		tags: resume.tags,
-		data: resume.data,
+		data: normalizeResumeData(resume.data),
 		isPublic: resume.isPublic,
 		isLocked: resume.isLocked,
 		hasPassword,
@@ -194,6 +237,7 @@ async function notifyResumeUpdated(event: ResumeUpdatedEvent) {
 export const resumeService = {
 	tags,
 	statistics,
+	analysis,
 
 	list: async (input: { userId: string; tags: string[]; sort: "lastUpdatedAt" | "createdAt" | "name" }) => {
 		return await db
@@ -243,7 +287,7 @@ export const resumeService = {
 
 		if (!resume) throw new ORPCError("NOT_FOUND");
 
-		return resume;
+		return { ...resume, data: normalizeResumeData(resume.data) };
 	},
 
 	getBySlug: async (input: { username: string; slug: string; requestHeaders: Headers; currentUserId?: string }) => {
@@ -288,12 +332,16 @@ export const resumeService = {
 		name: string;
 		slug: string;
 		tags: string[];
-		locale: Locale;
+		locale?: Locale;
 		data?: ResumeData;
 	}) => {
 		const id = generateId();
-		const data = input.data ?? defaultResumeData;
-		data.metadata.page.locale = input.locale;
+		const baseData = input.data ?? defaultResumeData;
+		const data = normalizeResumeData(
+			input.locale
+				? { ...baseData, metadata: { ...baseData.metadata, page: { ...baseData.metadata.page, locale: input.locale } } }
+				: baseData,
+		);
 
 		try {
 			await db.insert(schema.resume).values({
@@ -346,7 +394,7 @@ export const resumeService = {
 			...(input.name !== undefined ? { name: input.name } : {}),
 			...(input.slug !== undefined ? { slug: input.slug } : {}),
 			...(input.tags !== undefined ? { tags: input.tags } : {}),
-			...(input.data !== undefined ? { data: input.data } : {}),
+			...(input.data !== undefined ? { data: normalizeResumeData(input.data) } : {}),
 			...(input.isPublic !== undefined ? { isPublic: input.isPublic } : {}),
 		};
 

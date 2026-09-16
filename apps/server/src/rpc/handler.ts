@@ -1,7 +1,7 @@
 import { onError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
 import { BatchHandlerPlugin, RequestHeadersPlugin, StrictGetMethodPlugin } from "@orpc/server/plugins";
-import router from "@reactive-resume/api/routers";
+import router from "@headcv/api/routers";
 import { mergeResponseHeaders } from "../http/headers";
 import { getRequestLocale } from "./locale";
 

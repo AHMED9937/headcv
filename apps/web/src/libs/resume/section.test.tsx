@@ -3,7 +3,13 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { i18n } from "@lingui/core";
 import { isValidElement } from "react";
-import { getSectionIcon, getSectionTitle, leftSidebarSections, rightSidebarSections } from "./section";
+import {
+	designWorkspaceSections,
+	getSectionIcon,
+	getSectionTitle,
+	leftSidebarSections,
+	rightSidebarSections,
+} from "./section";
 
 beforeAll(() => {
 	i18n.loadAndActivate({ locale: "en", messages: {} });
@@ -55,6 +61,13 @@ describe("sidebar section collections", () => {
 		expect(rightSidebarSections).toContain("template");
 		expect(rightSidebarSections).toContain("design");
 		expect(rightSidebarSections).toContain("export");
+	});
+
+	it("expose the intended editable sections in the Design workspace", () => {
+		expect(designWorkspaceSections).toEqual(["template", "design", "typography", "layout", "page", "notes"]);
+		for (const section of designWorkspaceSections) {
+			expect(rightSidebarSections).toContain(section);
+		}
 	});
 
 	it("do not overlap (every section belongs to exactly one sidebar)", () => {

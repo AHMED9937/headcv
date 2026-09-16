@@ -12,10 +12,10 @@ const envMock = vi.hoisted(() => ({
 	OAUTH_PROVIDER_NAME: undefined as string | undefined,
 }));
 
-vi.mock("@reactive-resume/env/server", () => ({ env: envMock }));
+vi.mock("@headcv/env/server", () => ({ env: envMock }));
 // auth.ts also imports db client and storage; stub them with no-op surfaces.
-vi.mock("@reactive-resume/db/client", () => ({ db: { delete: vi.fn() } }));
-vi.mock("@reactive-resume/db/schema", () => ({ user: {} }));
+vi.mock("@headcv/db/client", () => ({ db: { delete: vi.fn() } }));
+vi.mock("@headcv/db/schema", () => ({ user: {} }));
 vi.mock("../storage/service", () => ({ getStorageService: () => ({ delete: vi.fn() }) }));
 
 const { authService } = await import("./service");

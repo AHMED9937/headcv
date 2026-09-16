@@ -16,10 +16,10 @@ import { PencilSimpleIcon, XIcon } from "@phosphor-icons/react";
 import { AnimatePresence, m } from "motion/react";
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { Badge } from "@reactive-resume/ui/components/badge";
-import { Input } from "@reactive-resume/ui/components/input";
-import { Kbd } from "@reactive-resume/ui/components/kbd";
-import { cn } from "@reactive-resume/utils/style";
+import { Badge } from "@headcv/ui/components/badge";
+import { Input } from "@headcv/ui/components/input";
+import { Kbd } from "@headcv/ui/components/kbd";
+import { cn } from "@headcv/utils/style";
 import { useControlledState } from "@/hooks/use-controlled-state";
 
 const RETURN_KEY = "Enter";

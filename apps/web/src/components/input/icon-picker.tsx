@@ -1,15 +1,15 @@
-import type { IconName } from "@reactive-resume/schema/icons";
+import type { IconName } from "@headcv/schema/icons";
 import type { CellComponentProps } from "react-window";
 import { t } from "@lingui/core/macro";
 import { ProhibitIcon } from "@phosphor-icons/react";
 import Fuse from "fuse.js";
 import { memo, useCallback, useMemo, useState } from "react";
 import { Grid } from "react-window";
-import { icons } from "@reactive-resume/schema/icons";
-import { Button } from "@reactive-resume/ui/components/button";
-import { Input } from "@reactive-resume/ui/components/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@reactive-resume/ui/components/popover";
-import { cn } from "@reactive-resume/utils/style";
+import { icons } from "@headcv/schema/icons";
+import { Button } from "@headcv/ui/components/button";
+import { Input } from "@headcv/ui/components/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@headcv/ui/components/popover";
+import { cn } from "@headcv/utils/style";
 
 const columnCount = 8;
 const columnWidth = 36;

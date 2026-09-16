@@ -5,8 +5,9 @@ import { fileURLToPath } from "node:url";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";
-import { env } from "@reactive-resume/env/server";
-import { getLocalDataDirectory } from "@reactive-resume/utils/monorepo.node";
+import { getMigrationPoolConfig } from "@headcv/db/client";
+import { env } from "@headcv/env/server";
+import { getLocalDataDirectory } from "@headcv/utils/monorepo.node";
 
 function resolveFromCurrentModule(relativePath: string) {
 	return fileURLToPath(new URL(relativePath, import.meta.url));
@@ -27,7 +28,7 @@ function resolveWorkspaceFolder(folderName: string): string {
 async function runDatabaseMigrations() {
 	console.info("Running database migrations...");
 
-	const pool = new Pool({ connectionString: env.DATABASE_URL });
+	const pool = new Pool(getMigrationPoolConfig());
 	const db = drizzle({ client: pool });
 
 	try {

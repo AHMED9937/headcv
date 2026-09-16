@@ -2,8 +2,8 @@
 
 import { describe, expect, it } from "vitest";
 import { Document } from "docx";
-import { defaultResumeData } from "@reactive-resume/schema/resume/default";
-import { sampleResumeData } from "@reactive-resume/schema/resume/sample";
+import { defaultResumeData } from "@headcv/schema/resume/default";
+import { sampleResumeData } from "@headcv/schema/resume/sample";
 import { buildDocument } from "./builder";
 
 describe("buildDocument", () => {

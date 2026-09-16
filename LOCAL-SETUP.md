@@ -1,12 +1,12 @@
 # Local Setup
 
-This is the NexaCV v1 fork of `amruthpillai/reactive-resume` (baseline branch `chore/upstream-reactive-resume-v5.1.6`), with all AI/MCP features removed. See `AGENTS.md` for the codebase map and conventions, and `ARCHIVE.md` (on the `archive/upstream-ai-mcp-v5.1.6` branch) for what was removed.
+This is the HeadCV fork of `AHMED9937/headcv` (baseline branch `chore/upstream-headcv-v5.1.6`). AI/MCP features have been restored on `feat/restore-ai-mcp`. See `AGENTS.md` for the codebase map and conventions.
 
 ## Prerequisites
 
 - Node.js 24 (`corepack enable` manages pnpm automatically)
 - Docker (for PostgreSQL, and optionally SeaweedFS for S3-compatible storage)
-- [`dotenvx`](https://dotenvx.com/) CLI — `drizzle-kit` (used by `pnpm db:migrate` / `pnpm db:generate`) reads `DATABASE_URL` from `process.env` directly and does not auto-load `.env` files
+- [`dotenvx`](https://dotenvx.com/) CLI  `drizzle-kit` (used by `pnpm db:migrate` / `pnpm db:generate`) reads `DATABASE_URL` from `process.env` directly and does not auto-load `.env` files
 
 ## First-time setup
 
@@ -31,9 +31,9 @@ Then open `http://localhost:3000` and verify `http://localhost:3001/api/health` 
 
 ## Required environment variables
 
-- `APP_URL` — default `http://localhost:3000`
-- `DATABASE_URL` — default `postgresql://postgres:postgres@localhost:5432/postgres`
-- `AUTH_SECRET` — any non-empty string (generate with `openssl rand -hex 32`)
+- `APP_URL`  default `http://localhost:3000`
+- `DATABASE_URL`  default `postgresql://postgres:postgres@localhost:5432/postgres`
+- `AUTH_SECRET`  any non-empty string (generate with `openssl rand -hex 32`)
 
 ## Optional environment variable categories
 
@@ -42,12 +42,25 @@ See `.env.example` for the full list:
 - Application: `PORT`, `SERVER_PORT`
 - Social auth: `GOOGLE_*`, `GITHUB_*`, `LINKEDIN_*`
 - Custom OAuth: `OAUTH_*`
-- Email (SMTP): `SMTP_*` — without SMTP config, emails are logged to the console in dev
+- Email (SMTP): `SMTP_*`  without SMTP config, emails are logged to the console in dev
 - Storage: `S3_*`, `LOCAL_STORAGE_PATH`
 - Feature flags: `FLAG_DISABLE_SIGNUPS`, `FLAG_DISABLE_EMAIL_AUTH`, `FLAG_DISABLE_IMAGE_PROCESSING`, `FLAG_ALLOW_UNSAFE_OAUTH_REDIRECT_URI`
 - Tooling: `GOOGLE_CLOUD_API_KEY`, `CROWDIN_*`
+- Local/remote LLM (dev-only): `LLM_BASE_URL`, `LLM_MODEL`, `LLM_API_KEY`, `LLM_TIMEOUT`, `LLM_MAX_TOKENS`, `LLM_TEMPERATURE`
 
-**Removed for v1 (do not re-add without an explicit product decision):** `REDIS_URL`, `ENCRYPTION_SECRET`, `FLAG_ALLOW_UNSAFE_AI_BASE_URL`, and any AI provider key. These were used only by the upstream AI agent workspace and AI provider integrations, which are not part of the v1 no-AI build.
+AI chat requires `REDIS_URL` and `ENCRYPTION_SECRET` in `.env.local`, plus an enabled AI provider. Keep the encryption secret stable so saved provider credentials remain readable. `FLAG_ALLOW_UNSAFE_AI_BASE_URL` is only needed for explicitly trusted private provider endpoints.
+
+For host-based development, use `REDIS_URL=redis://localhost:6379`. If the existing `redis` container is stopped:
+
+```sh
+docker update --restart unless-stopped redis
+docker start redis
+docker exec redis redis-cli ping
+```
+
+The last command must return `PONG`. If no Redis container exists, create one with `docker run -d --name redis --restart unless-stopped -p 127.0.0.1:6379:6379 redis:7-alpine`. Do not start a second container on the same port. Docker itself must be running. For an app running inside Docker, use a Redis address reachable from that container, not `localhost`.
+
+A successful AI provider test does not verify Redis. If chat reports that its streaming service cannot connect, verify Redis before retrying. The chat checks the connection before saving a new message or starting generation. Existing saved conversations remain in PostgreSQL.
 
 > New environment variables must be added to `packages/env/src/server.ts` **and** the `globalEnv` array in `turbo.json`, or Turborepo's strict env mode will filter them out at runtime.
 
@@ -72,19 +85,9 @@ Focused checks (faster than repo-wide commands):
 
 ```sh
 pnpm --filter web typecheck
-pnpm --filter @reactive-resume/pdf test
-pnpm --filter @reactive-resume/api test
+pnpm --filter @headcv/pdf test
+pnpm --filter @headcv/api test
 pnpm exec turbo boundaries
-```
-
-## Verifying the no-AI gate locally
-
-```sh
-pnpm why @reactive-resume/ai       # must print "No packages found"
-pnpm why @reactive-resume/mcp      # must print "No packages found"
-pnpm why openai
-pnpm why anthropic
-pnpm why ollama-ai-provider-v2
 ```
 
 ## Windows notes

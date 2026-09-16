@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { produce } from "immer";
-import { defaultResumeData } from "@reactive-resume/schema/resume/default";
+import { defaultResumeData } from "@headcv/schema/resume/default";
 import { createSectionItem, updateSectionItem } from "./section-actions";
 
 describe("createSectionItem", () => {

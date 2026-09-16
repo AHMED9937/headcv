@@ -1,0 +1,20 @@
+[
+	{
+		"id": "professional-summary-standard",
+		"facts": ["role", "yearsOfExperience", "industry"],
+		"pattern": "[role] with [yearsOfExperience] years of experience in [industry].",
+		"placeholders": ["role", "yearsOfExperience", "industry"]
+	},
+	{
+		"id": "professional-summary-skills",
+		"facts": ["role", "topSkill", "secondarySkill"],
+		"pattern": "[role] skilled in [topSkill] and [secondarySkill].",
+		"placeholders": ["role", "topSkill", "secondarySkill"]
+	},
+	{
+		"id": "professional-summary-achievement",
+		"facts": ["role", "yearsOfExperience", "topSkill"],
+		"pattern": "Results-driven [role] with [yearsOfExperience] years of experience, specializing in [topSkill].",
+		"placeholders": ["role", "yearsOfExperience", "topSkill"]
+	}
+]

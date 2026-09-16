@@ -1,0 +1,130 @@
+[
+	{
+		"id": "general-accomplishment-metric",
+		"sectionType": "experience",
+		"jobTitleIds": ["general"],
+		"experienceLevels": ["entry", "mid", "senior", "executive"],
+		"pattern": "Achieved [Outcome] by [Action], resulting in [Metric].",
+		"placeholders": ["Outcome", "Action", "Metric"]
+	},
+	{
+		"id": "general-collaboration",
+		"sectionType": "experience",
+		"jobTitleIds": ["general"],
+		"experienceLevels": ["entry", "mid", "senior"],
+		"pattern": "Collaborated with [Stakeholder] to deliver [Deliverable] on schedule.",
+		"placeholders": ["Stakeholder", "Deliverable"]
+	},
+	{
+		"id": "general-process-improvement",
+		"sectionType": "experience",
+		"jobTitleIds": ["general"],
+		"experienceLevels": ["mid", "senior", "executive"],
+		"pattern": "Improved [Process] by [Action], reducing [Metric] by [Percentage].",
+		"placeholders": ["Process", "Action", "Metric", "Percentage"]
+	},
+	{
+		"id": "general-leadership",
+		"sectionType": "experience",
+		"jobTitleIds": ["general"],
+		"experienceLevels": ["senior", "executive"],
+		"pattern": "Led a team of [Number] [Role] to [Outcome] within [Timeframe].",
+		"placeholders": ["Number", "Role", "Outcome", "Timeframe"]
+	},
+	{
+		"id": "software-engineer-impact",
+		"sectionType": "experience",
+		"jobTitleIds": ["software-engineer", "frontend-developer", "backend-developer"],
+		"experienceLevels": ["mid", "senior"],
+		"pattern": "Built [Feature/System] used by [UserCount] users, improving [Metric] by [Percentage].",
+		"placeholders": ["Feature/System", "UserCount", "Metric", "Percentage"]
+	},
+	{
+		"id": "software-engineer-quality",
+		"sectionType": "experience",
+		"jobTitleIds": ["software-engineer", "frontend-developer", "backend-developer"],
+		"experienceLevels": ["entry", "mid", "senior"],
+		"pattern": "Reduced [BugType] bugs by [Percentage] through [Action].",
+		"placeholders": ["BugType", "Percentage", "Action"]
+	},
+	{
+		"id": "devops-reliability",
+		"sectionType": "experience",
+		"jobTitleIds": ["devops-engineer"],
+		"experienceLevels": ["mid", "senior"],
+		"pattern": "Increased [System] uptime to [Percentage] by implementing [Action].",
+		"placeholders": ["System", "Percentage", "Action"]
+	},
+	{
+		"id": "data-analyst-insight",
+		"sectionType": "experience",
+		"jobTitleIds": ["data-analyst"],
+		"experienceLevels": ["entry", "mid", "senior"],
+		"pattern": "Analyzed [Dataset] to identify [Insight], influencing [Decision].",
+		"placeholders": ["Dataset", "Insight", "Decision"]
+	},
+	{
+		"id": "product-manager-launch",
+		"sectionType": "experience",
+		"jobTitleIds": ["product-manager"],
+		"experienceLevels": ["mid", "senior", "executive"],
+		"pattern": "Launched [Product/Feature] that reached [Metric] within [Timeframe].",
+		"placeholders": ["Product/Feature", "Metric", "Timeframe"]
+	},
+	{
+		"id": "project-manager-delivery",
+		"sectionType": "experience",
+		"jobTitleIds": ["project-manager"],
+		"experienceLevels": ["mid", "senior"],
+		"pattern": "Delivered [Project] with [Budget/Scope] under [Constraint] while [Outcome].",
+		"placeholders": ["Project", "Budget/Scope", "Constraint", "Outcome"]
+	},
+	{
+		"id": "designer-research",
+		"sectionType": "experience",
+		"jobTitleIds": ["ui-ux-designer"],
+		"experienceLevels": ["entry", "mid", "senior"],
+		"pattern": "Conducted [ResearchMethod] with [Participants] users to inform [DesignDecision].",
+		"placeholders": ["ResearchMethod", "Participants", "DesignDecision"]
+	},
+	{
+		"id": "marketing-campaign",
+		"sectionType": "experience",
+		"jobTitleIds": ["marketing-manager"],
+		"experienceLevels": ["mid", "senior"],
+		"pattern": "Ran [Campaign] across [Channels], generating [Metric] at a [Ratio] ROI.",
+		"placeholders": ["Campaign", "Channels", "Metric", "Ratio"]
+	},
+	{
+		"id": "sales-growth",
+		"sectionType": "experience",
+		"jobTitleIds": ["sales-representative"],
+		"experienceLevels": ["entry", "mid", "senior"],
+		"pattern": "Closed [Number] deals worth [Value], exceeding quota by [Percentage].",
+		"placeholders": ["Number", "Value", "Percentage"]
+	},
+	{
+		"id": "support-satisfaction",
+		"sectionType": "experience",
+		"jobTitleIds": ["customer-support-specialist"],
+		"experienceLevels": ["entry", "mid"],
+		"pattern": "Maintained a [Score]% customer satisfaction score while resolving [Number] tickets.",
+		"placeholders": ["Score", "Number"]
+	},
+	{
+		"id": "summary-intro",
+		"sectionType": "summary",
+		"jobTitleIds": ["general"],
+		"experienceLevels": ["entry", "mid", "senior", "executive"],
+		"pattern": "[Role] with [Years] years of experience in [Industry/Domain].",
+		"placeholders": ["Role", "Years", "Industry/Domain"]
+	},
+	{
+		"id": "summary-skills",
+		"sectionType": "summary",
+		"jobTitleIds": ["general"],
+		"experienceLevels": ["entry", "mid", "senior", "executive"],
+		"pattern": "Skilled in [PrimarySkill] and [SecondarySkill], with a focus on [FocusArea].",
+		"placeholders": ["PrimarySkill", "SecondarySkill", "FocusArea"]
+	}
+]

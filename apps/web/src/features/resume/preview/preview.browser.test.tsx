@@ -1,10 +1,11 @@
 // @vitest-environment happy-dom
 
-import type { ResumeData } from "@reactive-resume/schema/resume/data";
+import type { ResumeData } from "@headcv/schema/resume/data";
 import { render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { sampleResumeData } from "@reactive-resume/schema/resume/sample";
+import { sampleResumeData } from "@headcv/schema/resume/sample";
 import { ResumePreviewClient } from "./preview.browser";
+import { RESUME_PREVIEW_SECTION_MARKER_PREFIX } from "./preview.shared";
 
 const previewMock = vi.hoisted(() => ({
 	builderResumeData: undefined as ResumeData | undefined,
@@ -53,11 +54,20 @@ vi.mock("./pdf-canvas", async () => {
 			onRenderSuccess,
 			pageNumber,
 			totalPages,
+			renderSectionOverlay,
 		}: {
 			onLoadSuccess: (pageNumber: number, pageSize: { height: number; width: number }) => void;
 			onRenderSuccess?: () => void;
 			pageNumber: number;
 			totalPages: number;
+			renderSectionOverlay?: (marker: {
+				sectionId: string;
+				pageNumber: number;
+				left: number;
+				top: number;
+				width: number;
+				height: number;
+			}) => React.ReactNode;
 		}) => {
 			React.useEffect(() => {
 				onLoadSuccess(pageNumber, { height: 200, width: 100 });
@@ -68,6 +78,14 @@ vi.mock("./pdf-canvas", async () => {
 				"div",
 				{ role: "img", "aria-label": `Resume page ${pageNumber} of ${totalPages}` },
 				"Rendered page",
+				renderSectionOverlay?.({
+					sectionId: "summary",
+					pageNumber,
+					left: 10,
+					top: 20,
+					width: 80,
+					height: 40,
+				}),
 			);
 		},
 	};
@@ -94,12 +112,34 @@ describe("ResumePreviewClient", () => {
 			<ResumePreviewClient data={sampleResumeData} pageLayout="vertical" pageScale={1.25} showPageNumbers={false} />,
 		);
 
-		expect(await screen.findByRole("img", { name: "Resume page 1 of 1" })).toBeTruthy();
+		const page = await screen.findByRole("img", { name: "Resume page 1 of 1" });
+		expect(page.closest("[dir=ltr]")).toBeInTheDocument();
 
 		await waitFor(() => {
 			expect(previewMock.toBlob).toHaveBeenCalledTimes(1);
 		});
 
-		expect(previewMock.toBlob).toHaveBeenCalledWith(sampleResumeData);
+		expect(previewMock.toBlob).toHaveBeenCalledWith(sampleResumeData, undefined, {
+			sectionMarkerPrefix: RESUME_PREVIEW_SECTION_MARKER_PREFIX,
+		});
+	});
+
+	it("renders section overlay content when renderSectionOverlay is provided", async () => {
+		const renderSectionOverlay = vi.fn(() => <div data-testid="section-overlay">AI updated</div>);
+		render(
+			<ResumePreviewClient
+				data={sampleResumeData}
+				pageLayout="vertical"
+				pageScale={1.25}
+				showPageNumbers={false}
+				renderSectionOverlay={renderSectionOverlay}
+			/>,
+		);
+
+		await waitFor(() => {
+			expect(renderSectionOverlay).toHaveBeenCalled();
+		});
+
+		expect(screen.getByTestId("section-overlay")).toBeInTheDocument();
 	});
 });

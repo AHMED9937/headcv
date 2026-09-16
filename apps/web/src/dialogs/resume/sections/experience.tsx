@@ -1,27 +1,30 @@
-import type { RoleItem } from "@reactive-resume/schema/resume/data";
+import type { RoleItem } from "@headcv/schema/resume/data";
 import type z from "zod";
 import type { DialogProps } from "@/dialogs/store";
+import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { PencilSimpleLineIcon, PlusIcon, RowsIcon, TrashSimpleIcon } from "@phosphor-icons/react";
 import { useStore } from "@tanstack/react-form";
 import { AnimatePresence, Reorder, useDragControls } from "motion/react";
-import { experienceItemSchema } from "@reactive-resume/schema/resume/data";
-import { Button } from "@reactive-resume/ui/components/button";
+import { experienceItemSchema } from "@headcv/schema/resume/data";
+import { Button } from "@headcv/ui/components/button";
 import {
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-} from "@reactive-resume/ui/components/dialog";
-import { FormControl, FormItem, FormLabel, FormMessage } from "@reactive-resume/ui/components/form";
-import { Input } from "@reactive-resume/ui/components/input";
-import { Switch } from "@reactive-resume/ui/components/switch";
-import { generateId } from "@reactive-resume/utils/string";
+} from "@headcv/ui/components/dialog";
+import { FormControl, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
+import { Input } from "@headcv/ui/components/input";
+import { Switch } from "@headcv/ui/components/switch";
+import { generateId } from "@headcv/utils/string";
 import { RichInput } from "@/components/input/rich-input";
 import { URLInput } from "@/components/input/url-input";
+import { PhrasePicker } from "@/components/phrase-picker";
+import { TipPopover } from "@/components/tip-popover";
 import { useDialogStore } from "@/dialogs/store";
-import { useUpdateResumeData } from "@/features/resume/builder/draft";
+import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
 import { useFormBlocker } from "@/hooks/use-form-blocker";
 import { makeSectionItem } from "@/libs/resume/make-section-item";
 import { createSectionItem, updateSectionItem } from "@/libs/resume/section-actions";
@@ -263,7 +266,7 @@ const ExperienceForm = withForm({
 					</form.Field>
 				)}
 
-				{/* Single Role Description — only show when no roles are defined */}
+				{/* Single Role Description  only show when no roles are defined */}
 				{!hasRoles && (
 					<form.Field name="description">
 						{(field) => (
@@ -275,6 +278,7 @@ const ExperienceForm = withForm({
 									<Trans>Description</Trans>
 								</FormLabel>
 								<FormControl render={<RichInput value={field.state.value} onChange={(v) => field.handleChange(v)} />} />
+								<ExperienceTipsAndPhrases value={field.state.value} onChange={field.handleChange} />
 								<FormMessage errors={field.state.meta.errors} />
 							</FormItem>
 						)}
@@ -392,3 +396,36 @@ const RoleFields = withForm({
 		);
 	},
 });
+
+function ExperienceTipsAndPhrases({ value, onChange }: { value: string; onChange: (value: string) => void }) {
+	const resume = useCurrentResume();
+	const jobTitleId = resume.data.metadata.targetJobTitleId || undefined;
+	const experienceLevel = resume.data.metadata.experienceLevel ?? "entry";
+	const locale = "en";
+
+	const tips = [
+		jobTitleId
+			? t`Tailor each bullet to skills commonly expected for this role.`
+			: t`Include measurable results so recruiters can quickly grasp your impact.`,
+		t`Start each point with a strong action verb, e.g., "Led", "Built", "Improved".`,
+		t`Quantify achievements with numbers, percentages, or time saved whenever possible.`,
+	];
+
+	const handleInsert = (text: string) => {
+		onChange(value ? `${value} <p>${text}</p>` : `<p>${text}</p>`);
+	};
+
+	return (
+		<div className="space-y-3 pt-2">
+			<div className="flex items-center justify-end">
+				<PhrasePicker
+					jobTitleId={jobTitleId}
+					experienceLevel={experienceLevel}
+					locale={locale}
+					onInsert={handleInsert}
+				/>
+			</div>
+			<TipPopover tips={tips} />
+		</div>
+	);
+}

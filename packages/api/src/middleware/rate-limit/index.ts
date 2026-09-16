@@ -1,6 +1,6 @@
 import { createRatelimitMiddleware } from "@orpc/experimental-ratelimit";
 import { MemoryRatelimiter } from "@orpc/experimental-ratelimit/memory";
-import { rateLimitConfig, TRUSTED_IP_HEADERS } from "@reactive-resume/utils/rate-limit";
+import { rateLimitConfig, TRUSTED_IP_HEADERS } from "@headcv/utils/rate-limit";
 
 const isRateLimitEnabled = process.env.NODE_ENV === "production";
 

@@ -19,7 +19,7 @@ describe("getLocaleOptions", () => {
 		const options = getLocaleOptions();
 		const values = options.map((opt) => opt.value);
 		expect(values).toContain("en-US");
-		expect(values).toContain("de-DE");
+		expect(values).toContain("ar-SA");
 	});
 
 	it("populates label and keywords with the same translated string", () => {

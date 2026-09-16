@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
@@ -12,14 +12,8 @@ vi.mock("@tanstack/react-router", () => ({
 		</a>
 	),
 }));
-vi.mock("@/components/input/github-stars-button", () => ({
-	GithubStarsButton: () => <div data-testid="github-stars-button" />,
-}));
 vi.mock("@/features/locale/combobox", () => ({
 	LocaleCombobox: ({ render: renderProp }: { render: React.ReactElement }) => renderProp,
-}));
-vi.mock("@/features/theme/toggle-button", () => ({
-	ThemeToggleButton: () => <button type="button" data-testid="theme-toggle" />,
 }));
 
 i18n.loadAndActivate({ locale: "en", messages: {} });
@@ -34,23 +28,31 @@ const renderHeader = () =>
 	);
 
 describe("Header", () => {
-	it("renders a homepage link with the brand icon", () => {
+	it("renders a homepage link with the HeadCV brand icon", () => {
 		const { container } = renderHeader();
 		const home = Array.from(container.querySelectorAll("a")).find((a) => a.getAttribute("href") === "/");
 		expect(home).toBeDefined();
-		expect(home?.getAttribute("aria-label")).toBe("Reactive Resume - Go to homepage");
+		expect(home?.getAttribute("aria-label")).toBe("HeadCV home");
 	});
 
-	it("renders a dashboard link with the documented aria-label", () => {
+	it("renders a Sign in link as a secondary action", () => {
 		const { container } = renderHeader();
-		const dashboard = Array.from(container.querySelectorAll("a")).find((a) => a.getAttribute("href") === "/dashboard");
-		expect(dashboard).toBeDefined();
+		const signin = Array.from(container.querySelectorAll("a")).find((a) => a.getAttribute("href") === "/auth/login");
+		expect(signin).toBeDefined();
+		expect(signin?.textContent).toBe("Sign in");
 	});
 
-	it("includes ThemeToggleButton and GithubStarsButton in the navigation", () => {
-		const { getByTestId } = renderHeader();
-		expect(getByTestId("theme-toggle")).toBeInTheDocument();
-		expect(getByTestId("github-stars-button")).toBeInTheDocument();
+	it("renders a language selector button", () => {
+		renderHeader();
+		expect(screen.getByLabelText("Change language")).toBeInTheDocument();
+	});
+
+	it("does not render the upstream dashboard, theme toggle, or GitHub stars chrome", () => {
+		const { container } = renderHeader();
+		const links = Array.from(container.querySelectorAll("a")).map((a) => a.getAttribute("href"));
+		expect(links).not.toContain("/dashboard");
+		expect(container.querySelector('[data-testid="theme-toggle"]')).toBeNull();
+		expect(container.querySelector('[data-testid="github-stars-button"]')).toBeNull();
 	});
 
 	it("labels the navigation landmark", () => {

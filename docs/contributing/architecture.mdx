@@ -1,13 +1,13 @@
 ---
 title: "Project Architecture"
-description: "Understand the Reactive Resume monorepo, runtime boundaries, and package ownership model"
+description: "Understand the HeadCV monorepo, runtime boundaries, and package ownership model"
 ---
 
-Reactive Resume is a pnpm/Turborepo monorepo. The product runs as one deployed Node.js process, while the source is split into a full-stack web app, a server adapter, and focused internal packages.
+HeadCV is a pnpm/Turborepo monorepo. The product runs as one deployed Node.js process, while the source is split into a full-stack web app, a server adapter, and focused internal packages.
 
 Internal packages are source-consumed through their `package.json` export maps. Import package subpaths, not another workspace's private `src` files.
 
-> This fork (NexaCV v1) removes all AI and MCP features from the upstream project. `packages/ai`, `packages/mcp`, and the `/mcp` route do not exist in this codebase; the original code is preserved in the `archive/upstream-ai-mcp-v5.1.6` branch.
+> This fork (HeadCV v1) removes all AI and MCP features from the upstream project. `packages/ai`, `packages/mcp`, and the `/mcp` route do not exist in this codebase; the original code is preserved in the `archive/upstream-ai-mcp-v5.1.6` branch.
 
 ---
 
@@ -23,7 +23,7 @@ flowchart TD
     Server["apps/server Hono adapter"]
     API["packages/api feature routers"]
     Auth["packages/auth"]
-    PDFServer["@reactive-resume/pdf/server"]
+    PDFServer["@headcv/pdf/server"]
   end
 
   Server --> RPC
@@ -65,8 +65,8 @@ flowchart TD
 
 ## Boundary Rules
 
-- Use `@reactive-resume/*` package exports for cross-workspace imports.
-- Do not import another workspace through `apps/**`, `packages/**`, `@reactive-resume/*/src/**`, or a TypeScript path alias to another workspace's `src`.
+- Use `@headcv/*` package exports for cross-workspace imports.
+- Do not import another workspace through `apps/**`, `packages/**`, `@headcv/*/src/**`, or a TypeScript path alias to another workspace's `src`.
 - Keep browser-only code in web features or explicit browser subpaths.
 - Keep server-only code in server packages or explicit server subpaths.
 - Keep environment-neutral domain packages free of DB, HTTP, DOM, and app imports.
@@ -123,8 +123,8 @@ Avoid reintroducing technical-layer folders such as `services/` or `helpers/` at
 
 `packages/pdf` owns React PDF generation:
 
-- `@reactive-resume/pdf/browser` creates browser PDF blobs.
-- `@reactive-resume/pdf/server` creates server PDF files.
+- `@headcv/pdf/browser` creates browser PDF blobs.
+- `@headcv/pdf/server` creates server PDF files.
 - Template code stays under `packages/pdf/src/templates`.
 
 Localized section-title resolution stays in the caller because it depends on web/server locale context. PDF.js preview and viewer code stays in `apps/web/src/features/resume`, not in `packages/pdf`.

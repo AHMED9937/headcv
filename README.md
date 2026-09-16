@@ -1,41 +1,34 @@
 <div align="center">
-  <a href="https://rxresu.me">
-    <img src="apps/web/public/opengraph/banner.jpg" alt="Reactive Resume" />
+  <a href="https://headcv.com">
+    <img src="apps/web/public/opengraph/banner.jpg" alt="HeadCV" />
   </a>
 
-  <h1>Reactive Resume</h1>
+  <h1>HeadCV</h1>
 
-  <p>Reactive Resume is a free and open-source resume builder that simplifies the process of creating, updating, and sharing your resume.</p>
+  <p>HeadCV is a free, open-source, ATS-friendly resume and CV builder. Start with a template, fill in your details, and export a professional PDF in minutes. No account required to try it.</p>
 
   <p>
-    <a href="https://rxresu.me"><strong>Get Started</strong></a>
+    <a href="https://headcv.com"><strong>Get Started</strong></a>
     ·
-    <a href="https://docs.rxresu.me"><strong>Learn More</strong></a>
+    <a href="./docs/getting-started/quickstart.mdx"><strong>Quick Start</strong></a>
   </p>
 
   <p>
-    <img src="https://img.shields.io/github/package-json/v/amruthpillai/reactive-resume?style=flat-square" alt="Reactive Resume Version">
-    <img src="https://img.shields.io/github/stars/amruthpillai/Reactive-Resume?style=flat-square" alt="GitHub Stars">
-    <img src="https://img.shields.io/github/license/amruthpillai/Reactive-Resume?style=flat-square" alt="License" />
-    <img src="https://img.shields.io/docker/pulls/amruthpillai/reactive-resume?style=flat-square" alt="Docker Pulls" />
-    <a href="https://discord.gg/aSyA5ZSxpb"><img src="https://img.shields.io/discord/1173518977851473940?style=flat-square&label=discord" alt="Discord" /></a>
-    <a href="https://crowdin.com/project/reactive-resume"><img src="https://badges.crowdin.net/reactive-resume/localized.svg?style=flat-square" alt="Crowdin" /></a>
-    <a href="https://github.com/sponsors/AmruthPillai"><img src="https://img.shields.io/github/sponsors/AmruthPillai?style=flat-square&label=sponsors" alt="Sponsors" /></a>
-    <a href="https://opencollective.com/reactive-resume/donate"><img src="https://img.shields.io/opencollective/backers/reactive-resume?style=flat-square&label=donations" alt="Donations" /></a>
+    <img src="https://img.shields.io/github/package-json/v/AHMED9937/headcv?style=flat-square" alt="HeadCV Version" />
+    <img src="https://img.shields.io/github/stars/AHMED9937/headcv?style=flat-square" alt="GitHub Stars" />
+    <img src="https://img.shields.io/github/license/AHMED9937/headcv?style=flat-square" alt="License" />
   </p>
 </div>
 
 ---
 
-Reactive Resume makes building resumes straightforward. Pick a template, fill in your details, and export to PDF—no account required for basic use. For those who want more control, the entire application can be self-hosted on your own infrastructure.
-
-Built with privacy as a core principle, Reactive Resume gives you complete ownership of your data. The codebase is fully open-source under the MIT license, with no tracking, no ads, and no hidden costs.
+HeadCV makes resume and CV creation fast, private, and predictable. The app gives users a live preview, drag-and-drop section control, and multiple export formats while keeping data ownership first. The entire stack is open-source under the MIT license with no tracking or ads by default.
 
 ## Features
 
 **Resume Building**
 
-- Real-time preview as you type
+- Live PDF preview as you type
 - Multiple export formats (PDF, JSON, DOCX)
 - Drag-and-drop section ordering
 - Custom sections for any content type
@@ -43,7 +36,7 @@ Built with privacy as a core principle, Reactive Resume gives you complete owner
 
 **Templates**
 
-- Professionally designed templates
+- Professionally designed, ATS-friendly templates
 - A4 and Letter size support
 - Customizable colors, fonts, and spacing
 - Custom CSS for advanced styling
@@ -57,11 +50,11 @@ Built with privacy as a core principle, Reactive Resume gives you complete owner
 
 **Extras**
 
-- AI integration (OpenAI, Google Gemini, Anthropic Claude)
-- Multi-language support
-- Share resumes via unique links
-- Import from JSON Resume format
-- Dark mode support
+- AI-assisted writing and resume analysis (optional, user-controlled)
+- Multi-language support including Arabic and other RTL languages
+- Share resumes via unique public links
+- Import from JSON Resume and HeadCV JSON formats
+- Dark and light mode
 - Passkey and two-factor authentication
 
 ## Templates
@@ -139,112 +132,90 @@ Built with privacy as a core principle, Reactive Resume gives you complete owner
 
 ## Quick Start
 
-The quickest way to run Reactive Resume locally:
+The fastest way to run HeadCV locally is with Docker:
 
 ```bash
 # Clone the repository
-git clone --depth=1  https://github.com/amruthpillai/reactive-resume.git
-cd reactive-resume
+git clone --depth=1 https://github.com/AHMED9937/headcv.git
+cd headcv
 
-# Start all services
+# Copy the example environment and start the stack
+cp .env.example .env
 docker compose up -d
 
 # Access the app
 open http://localhost:3000
 ```
 
-[![Build with Ona](https://ona.com/build-with-ona.svg)](https://app.ona.com/#https://github.com/amruthpillai/reactive-resume)
+For local development with Node.js 24, pnpm, and PostgreSQL, see the [setup guide](./docs/getting-started/quickstart.mdx) and [AGENTS.md](./AGENTS.md).
 
-For detailed setup instructions, environment configuration, and self-hosting guides, see the [documentation](https://docs.rxresu.me).
+## UI/UX Best Practices
+
+HeadCV is built around a content-first, tool-like workspace. The UI should feel like a focused productivity app, never a marketing page. These are the principles that shape every screen:
+
+- **Content is the hero.** The chrome is deliberately grayscale. Color comes from the user's resume content, not the app shell.
+- **Dark by default.** The dark workspace makes resume previews pop and reduces eye strain. Light mode is a full alternative, not an afterthought.
+- **Grayscale palette for app chrome.** Use the defined `--primary`, `--secondary`, `--muted`, and `--background` tokens. The only chromatic exception is destructive red for errors and delete actions.
+- **Tight radius, precise shapes.** Default to `rounded-lg` (0.3rem). The tool should feel precise, not playful.
+- **IBM Plex Sans Variable everywhere.** One typeface for the entire UI. Resume content uses a separate user-selected font system.
+- **Motion with purpose.** Use 0.35s–0.6s fade-up reveals, quick 0.2s hover transitions, and staggered entrances. Always respect `prefers-reduced-motion`.
+- **Three-panel builder.** Left sidebar for forms, center for the live PDF preview, right sidebar for design controls. Panels persist in cookies and collapse on mobile.
+- **RTL-first layout.** Use logical CSS properties (`ps-`, `pe-`, `ms-`, `me-`) so the UI mirrors correctly for Arabic, Hebrew, and other RTL locales.
+- **Never hardcode text.** All user-facing strings use Lingui macros (`t`, `msg`, `<Trans>`) with `.po` files under `apps/web/locales/`.
+- **Resume is separate from the app shell.** Template colors, fonts, and page layout are user-controlled and completely independent of the HeadCV UI palette.
+
+For the full design system, see [DESIGN.md](./DESIGN.md).
 
 ## Tech Stack
 
-| Category         | Technology                      |
-| ---------------- | ------------------------------- |
-| Framework        | TanStack Start (React 19, Vite) |
-| Runtime          | Node.js                         |
-| Language         | TypeScript                      |
-| Database         | PostgreSQL with Drizzle ORM     |
-| API              | ORPC (Type-safe RPC)            |
-| Auth             | Better Auth                     |
-| Styling          | Tailwind CSS                    |
-| UI Components    | Base UI + shadcn-style package  |
-| State Management | Zustand + TanStack Query        |
+| Category         | Technology                               |
+| ---------------- | ---------------------------------------- |
+| Web app          | TanStack Start, React 19, Vite           |
+| Server           | Hono, Node.js 24                         |
+| API              | oRPC (type-safe RPC)                     |
+| Auth             | Better Auth                              |
+| Database         | PostgreSQL with Drizzle ORM              |
+| Storage          | Local filesystem or S3-compatible        |
+| Styling          | Tailwind CSS 4                           |
+| UI Components    | Base UI + shadcn-style shared package    |
+| i18n             | Lingui                                   |
+| State management | Zustand, TanStack Query                  |
+| PDF rendering    | `@react-pdf/renderer` (client-side)      |
 
-## Documentation
+## Deploying
 
-Comprehensive guides are available at [docs.rxresu.me](https://docs.rxresu.me):
+**Vercel**
 
-| Guide                                                                        | Description                      |
-| ---------------------------------------------------------------------------- | -------------------------------- |
-| [Getting Started](https://docs.rxresu.me/getting-started)                    | First-time setup and basic usage |
-| [Self-Hosting](https://docs.rxresu.me/self-hosting/docker)                   | Deploy on your own server        |
-| [Development Setup](https://docs.rxresu.me/contributing/development)         | Local development environment    |
-| [Project Architecture](https://docs.rxresu.me/contributing/architecture)     | Codebase structure and patterns  |
-| [Exporting Your Resume](https://docs.rxresu.me/guides/exporting-your-resume) | PDF and JSON export options      |
+`vercel.json` and `tooling/vercel-build.mjs` are configured for Vercel's Node 24 functions. Set the required environment variables (`APP_URL`, `DATABASE_URL`, `AUTH_SECRET`) and any optional storage, SMTP, or OAuth credentials. See `.env.example` for the complete list.
 
-## Self-Hosting
+**Docker / Self-hosting**
 
-Reactive Resume can be self-hosted using Docker. The stack includes:
-
-- **PostgreSQL** — Database for storing user data and resumes
-- **SeaweedFS** (optional) — S3-compatible storage for file uploads
-
-> **From v5.1.0 onwards** — PDF generation now runs entirely client-side via `@react-pdf/renderer`. New deployments no longer require Browserless, Chromium, or any external print service as a dependency. The `PRINTER_*` and `BROWSERLESS_*` environment variables are no longer read and can be removed from your `.env`.
-
-Pull the latest image from Docker Hub or GitHub Container Registry:
+Build and run the stack with Docker Compose:
 
 ```bash
-# Docker Hub
-docker pull amruthpillai/reactive-resume:latest
-
-# GitHub Container Registry
-docker pull ghcr.io/amruthpillai/reactive-resume:latest
+docker compose up -d
 ```
 
-See the [self-hosting guide](https://docs.rxresu.me/self-hosting/docker) for complete instructions.
+This starts PostgreSQL, optional S3-compatible SeaweedFS, and the HeadCV app. Tweak `.env` to match your environment.
 
-## Support
+## Project Structure
 
-Reactive Resume is and always will be free and open-source. If it has helped you land a job or saved you time, please consider supporting continued development:
-
-<p>
-  <a href="https://github.com/sponsors/AmruthPillai">
-    <img src="https://img.shields.io/badge/GitHub%20Sponsors-Support-ea4aaa?style=flat-square&logo=github-sponsors" alt="GitHub Sponsors" />
-  </a>
-  <a href="https://opencollective.com/reactive-resume/donate">
-    <img src="https://img.shields.io/badge/Open%20Collective-Contribute-7FADF2?style=flat-square&logo=open-collective" alt="Open Collective" />
-  </a>
-</p>
-
-Other ways to support:
-
-- Star this repository
-- Report bugs and suggest features
-- Improve documentation
-- Help with translations
-
-## Star History
-
-<a href="https://www.star-history.com/#amruthpillai/reactive-resume&type=date&legend=top-left">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=amruthpillai/reactive-resume&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=amruthpillai/reactive-resume&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=amruthpillai/reactive-resume&type=date&legend=top-left" />
- </picture>
-</a>
+- `apps/web` — TanStack Start web app, landing page, builder, dashboard, and public resume views
+- `apps/server` — Hono server, API, auth, static uploads, and production build entry
+- `packages/*` — Shared packages under the `@headcv/*` workspace scope (`api`, `auth`, `db`, `email`, `env`, `pdf`, `schema`, `ui`, etc.)
+- `migrations/` — Drizzle database migrations
+- `docs/` — Product and development documentation
 
 ## Contributing
 
-Contributions make open-source thrive. Whether fixing a typo or adding a feature, all contributions are welcome.
+Contributions are welcome. Open an issue or pull request on the [main repository](https://github.com/AHMED9937/headcv).
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch (`git checkout -b feature/your-feature`)
+3. Commit your changes
+4. Push and open a pull request
 
-See the [development setup guide](https://docs.rxresu.me/contributing/development) for detailed instructions on how to set up the project locally.
+See [AGENTS.md](./AGENTS.md) for the codebase conventions and architecture map.
 
 ## License
 

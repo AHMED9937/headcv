@@ -1,10 +1,10 @@
 import type { VariantProps } from "class-variance-authority";
 import type * as React from "react";
 import { cva } from "class-variance-authority";
-import { Button } from "@reactive-resume/ui/components/button";
-import { Input } from "@reactive-resume/ui/components/input";
-import { Textarea } from "@reactive-resume/ui/components/textarea";
-import { cn } from "@reactive-resume/utils/style";
+import { Button } from "@headcv/ui/components/button";
+import { Input } from "@headcv/ui/components/input";
+import { Textarea } from "@headcv/ui/components/textarea";
+import { cn } from "@headcv/utils/style";
 
 function InputGroup({ className, ...props }: React.ComponentProps<"fieldset">) {
 	return (

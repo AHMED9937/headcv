@@ -3,8 +3,8 @@ import type {
 	CustomSectionType,
 	SectionItem as SectionItemType,
 	SectionType,
-} from "@reactive-resume/schema/resume/data";
-import type { ButtonProps } from "@reactive-resume/ui/components/button";
+} from "@headcv/schema/resume/data";
+import type { ButtonProps } from "@headcv/ui/components/button";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -23,7 +23,7 @@ import {
 } from "@phosphor-icons/react";
 import { Reorder, useDragControls } from "motion/react";
 import { useMemo } from "react";
-import { Button } from "@reactive-resume/ui/components/button";
+import { Button } from "@headcv/ui/components/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -34,8 +34,8 @@ import {
 	DropdownMenuSubContent,
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
-} from "@reactive-resume/ui/components/dropdown-menu";
-import { cn } from "@reactive-resume/utils/style";
+} from "@headcv/ui/components/dropdown-menu";
+import { cn } from "@headcv/utils/style";
 import { useDialogStore } from "@/dialogs/store";
 import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
 import { useConfirm } from "@/hooks/use-confirm";

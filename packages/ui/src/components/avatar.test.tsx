@@ -31,7 +31,7 @@ describe("AvatarFallback", () => {
 				<AvatarFallback data-testid="fb">JD</AvatarFallback>
 			</Avatar>,
 		);
-		// Note: fallback only renders if image fails — but data-slot should be set.
+		// Note: fallback only renders if image fails  but data-slot should be set.
 		// We just confirm no crash and that fallback is present in DOM.
 		const fb = screen.queryByTestId("fb");
 		// AvatarFallback may or may not be in the DOM depending on image state.

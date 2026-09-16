@@ -1,4 +1,4 @@
-import type { AuthSession } from "@reactive-resume/auth/types";
+import type { AuthSession } from "@headcv/auth/types";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { CheckIcon, WarningIcon } from "@phosphor-icons/react";
@@ -7,9 +7,9 @@ import { useRouter } from "@tanstack/react-router";
 import { AnimatePresence, m } from "motion/react";
 import { toast } from "sonner";
 import z from "zod";
-import { Button } from "@reactive-resume/ui/components/button";
-import { FormControl, FormItem, FormLabel, FormMessage } from "@reactive-resume/ui/components/form";
-import { Input } from "@reactive-resume/ui/components/input";
+import { Button } from "@headcv/ui/components/button";
+import { FormControl, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
+import { Input } from "@headcv/ui/components/input";
 import { authClient } from "@/libs/auth/client";
 import { getReadableErrorMessage } from "@/libs/error-message";
 import { useAppForm } from "@/libs/tanstack-form";

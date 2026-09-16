@@ -1,11 +1,12 @@
+import type { FeatureFlags } from "@headcv/api/features/flags";
+import type { AuthSession } from "@headcv/auth/types";
+import type { Locale } from "@headcv/utils/locale";
 import type { IconProps } from "@phosphor-icons/react";
-import type { FeatureFlags } from "@reactive-resume/api/features/flags";
-import type { AuthSession } from "@reactive-resume/auth/types";
-import type { Locale } from "@reactive-resume/utils/locale";
 import type { QueryClient } from "@tanstack/react-query";
 import type { orpc } from "@/libs/orpc/client";
 import type { Theme } from "@/libs/theme";
 import { i18n } from "@lingui/core";
+import { msg } from "@lingui/core/macro";
 import { I18nProvider } from "@lingui/react";
 import { IconContext } from "@phosphor-icons/react";
 import { HotkeysProvider } from "@tanstack/react-hotkeys";
@@ -13,10 +14,9 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { createRootRouteWithContext, HeadContent, Outlet } from "@tanstack/react-router";
 import { domAnimation, LazyMotion, MotionConfig } from "motion/react";
 import { useEffect, useMemo } from "react";
-import { DirectionProvider } from "@reactive-resume/ui/components/direction";
-import { Toaster } from "@reactive-resume/ui/components/sonner";
-import { TooltipProvider } from "@reactive-resume/ui/components/tooltip";
-import { BreakpointIndicator } from "@/components/layout/breakpoint-indicator";
+import { DirectionProvider } from "@headcv/ui/components/direction";
+import { Toaster } from "@headcv/ui/components/sonner";
+import { TooltipProvider } from "@headcv/ui/components/tooltip";
 import { DonationToast } from "@/components/ui/donation-toast";
 import { DialogManager } from "@/dialogs/manager";
 import { CommandPalette } from "@/features/command-palette";
@@ -37,16 +37,15 @@ type RouterContext = {
 	flags: FeatureFlags;
 };
 
-const appName = "Reactive Resume";
-const tagline = "A free and open-source resume builder";
-const title = `${appName} — ${tagline}`;
-const description =
-	"Reactive Resume is a free and open-source resume builder that simplifies the process of creating, updating, and sharing your resume.";
+const appName = msg`HeadCV`;
+const tagline = msg`Build a Professional CV in Minutes`;
+const description = msg`HeadCV is a guided CV builder that helps you create an ATS-friendly resume in minutes. Free to start; no credit card required.`;
 
 export const Route = createRootRouteWithContext<RouterContext>()({
 	component: RootComponent,
 	head: () => {
-		const appUrl = typeof window !== "undefined" ? window.location.origin : "https://rxresu.me";
+		const title = `${i18n._(appName)} | ${i18n._(tagline)}`;
+		const appUrl = typeof window !== "undefined" ? window.location.origin : "https://headcv.com";
 
 		return {
 			links: [
@@ -60,26 +59,27 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 			meta: [
 				{ title },
 				{ charSet: "UTF-8" },
-				{ name: "description", content: description },
+				{ name: "description", content: i18n._(description) },
 				{ name: "viewport", content: "width=device-width, initial-scale=1" },
 				// Meta Tags
-				{ name: "theme-color", content: "#09090B" },
-				{ name: "application-name", content: "Reactive Resume" },
+				{ name: "theme-color", content: "#1e3a5f" },
+				{ name: "application-name", content: i18n._(appName) },
 				{ name: "mobile-web-app-capable", content: "yes" },
 				{ name: "apple-mobile-web-app-capable", content: "yes" },
-				{ name: "apple-mobile-web-app-title", content: "Reactive Resume" },
+				{ name: "apple-mobile-web-app-title", content: i18n._(appName) },
 				{ name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
 				// Twitter Tags
-				{ property: "twitter:image", content: `${appUrl}/opengraph/banner.jpg` },
 				{ property: "twitter:card", content: "summary_large_image" },
 				{ property: "twitter:title", content: title },
-				{ property: "twitter:description", content: description },
+				{ property: "twitter:description", content: i18n._(description) },
+				{ property: "twitter:image", content: `${appUrl}/opengraph/banner.jpg` },
 				// OpenGraph Tags
-				{ property: "og:image", content: `${appUrl}/opengraph/banner.jpg` },
-				{ property: "og:site_name", content: appName },
+				{ property: "og:type", content: "website" },
+				{ property: "og:site_name", content: i18n._(appName) },
 				{ property: "og:title", content: title },
-				{ property: "og:description", content: description },
+				{ property: "og:description", content: i18n._(description) },
 				{ property: "og:url", content: appUrl },
+				{ property: "og:image", content: `${appUrl}/opengraph/banner.jpg` },
 			],
 		};
 	},
@@ -88,7 +88,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 			getTheme(),
 			getLocale(),
 			getSession(),
-			client.flags.get(),
+			client.flags.get().catch(() => ({ disableSignups: false, disableEmailAuth: false })),
 		]);
 
 		await loadLocale(locale);
@@ -120,7 +120,7 @@ function RootComponent() {
 							<IconContext.Provider value={iconContextValue}>
 								<ThemeProvider theme={theme}>
 									<HotkeysProvider>
-										<DirectionProvider>
+										<DirectionProvider direction={dir}>
 											<TooltipProvider>
 												<ConfirmDialogProvider>
 													<PromptDialogProvider>
@@ -130,8 +130,6 @@ function RootComponent() {
 														<DialogManager />
 														<CommandPalette />
 														<Toaster richColors position="bottom-right" />
-
-														{import.meta.env.DEV && <BreakpointIndicator />}
 													</PromptDialogProvider>
 												</ConfirmDialogProvider>
 											</TooltipProvider>

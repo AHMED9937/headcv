@@ -1,9 +1,11 @@
-import type { LayoutPage, ResumeData, Typography } from "@reactive-resume/schema/resume/data";
-import type { Template } from "@reactive-resume/schema/templates";
-import type { Locale } from "@reactive-resume/utils/locale";
+import type { LayoutPage, ResumeData, Typography } from "@headcv/schema/resume/data";
+import type { Template } from "@headcv/schema/templates";
+import type { Locale } from "@headcv/utils/locale";
 import type { ComponentType } from "react";
 import type { SectionTitleResolver } from "./section-title";
 import { useMemo } from "react";
+import { enforceResumeLocale } from "@headcv/resume/locale";
+import { upgradeLegacyResumeTypography } from "@headcv/resume/readability";
 import { RenderProvider } from "./context";
 import { registerFonts, resumeContentContainsCJK } from "./hooks/use-register-fonts";
 import { Document } from "./renderer";
@@ -20,32 +22,41 @@ export type ResumeDocumentProps = {
 	data: ResumeData;
 	template: Template;
 	resolveSectionTitle?: SectionTitleResolver | undefined;
+	sectionMarkerPrefix?: string | undefined;
 };
 
 const getLayoutPageKey = (page: LayoutPage, pageIndex: number) =>
 	`${page.fullWidth ? "full" : "split"}:${page.main.join(",")}:${page.sidebar.join(",")}:${pageIndex}`;
 
-export const ResumeDocument = ({ data, template, resolveSectionTitle }: ResumeDocumentProps) => {
+export const ResumeDocument = ({ data, template, resolveSectionTitle, sectionMarkerPrefix }: ResumeDocumentProps) => {
 	const TemplatePageComponent = getTemplatePage(template);
 	const creationDate = useMemo(() => new Date(), []);
-	const hasCjkContent = useMemo(() => resumeContentContainsCJK(data), [data]);
+	const normalizedData = useMemo(() => upgradeLegacyResumeTypography(enforceResumeLocale(data)), [data]);
+	const hasCjkContent = useMemo(() => resumeContentContainsCJK(normalizedData), [normalizedData]);
 	const typography = registerFonts(
-		data.metadata.typography,
-		data.metadata.page.locale as Locale,
+		normalizedData.metadata.typography,
+		normalizedData.metadata.page.locale as Locale,
 		hasCjkContent,
 	) as Typography;
 
 	// `registerFonts` widens `fontFamily` to `string | string[]` for CJK
 	// fallback (#2986); the cast carries that wider runtime value through
 	// `ResumeData` without changing the public schema.
-	const resumeData = useMemo(() => ({ ...data, metadata: { ...data.metadata, typography } }), [data, typography]);
+	const resumeData = useMemo(
+		() => ({ ...normalizedData, metadata: { ...normalizedData.metadata, typography } }),
+		[normalizedData, typography],
+	);
 
 	return (
-		<RenderProvider data={resumeData} resolveSectionTitle={resolveSectionTitle}>
+		<RenderProvider
+			data={resumeData}
+			resolveSectionTitle={resolveSectionTitle}
+			sectionMarkerPrefix={sectionMarkerPrefix}
+		>
 			<Document
 				pageMode="useNone"
 				creationDate={creationDate}
-				producer="Reactive Resume"
+				producer="HeadCV"
 				title={resumeData.basics.name}
 				author={resumeData.basics.name}
 				creator={resumeData.basics.name}

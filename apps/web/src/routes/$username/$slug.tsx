@@ -1,4 +1,4 @@
-import type { ResumeData } from "@reactive-resume/schema/resume/data";
+import type { ResumeData } from "@headcv/schema/resume/data";
 import type { RouterOutput } from "@/libs/orpc/client";
 import { ORPCError } from "@orpc/client";
 import { createFileRoute, lazyRouteComponent, notFound, redirect } from "@tanstack/react-router";
@@ -19,8 +19,8 @@ export const Route = createFileRoute("/$username/$slug")({
 	},
 	head: ({ loaderData }) => {
 		const resume = loaderData?.resume;
-		const title = resume ? resume.name || resume.data.basics.name || "Resume" : "Reactive Resume";
-		return { meta: [{ title: `${title} - Reactive Resume` }, createNoindexFollowMeta()] };
+		const title = resume ? resume.name || resume.data.basics.name || "Resume" : "HeadCV";
+		return { meta: [{ title: `${title} - HeadCV` }, createNoindexFollowMeta()] };
 	},
 	onError: (error) => {
 		if (error instanceof ORPCError && error.code === "NEED_PASSWORD") {

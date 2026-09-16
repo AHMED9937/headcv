@@ -26,7 +26,7 @@ describe("getNextWeights", () => {
 	});
 
 	it("returns the family's only weight (deduplicated) when only one is available", () => {
-		// Find a font with a single weight by scanning the fontList — fall back gracefully.
+		// Find a font with a single weight by scanning the fontList  fall back gracefully.
 		// We probe a known web font that may only ship 400; the test asserts uniqueness regardless.
 		const weights = getNextWeights("Source Sans 3");
 		if (weights) {

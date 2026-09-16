@@ -4,10 +4,10 @@ import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { onError } from "@orpc/server";
 import { BatchHandlerPlugin, RequestHeadersPlugin, StrictGetMethodPlugin } from "@orpc/server/plugins";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
-import { downloadResumePdfProcedure } from "@reactive-resume/api/features/resume/export";
-import router from "@reactive-resume/api/routers";
-import { env } from "@reactive-resume/env/server";
-import { resumeDataSchema } from "@reactive-resume/schema/resume/data";
+import { downloadResumePdfProcedure } from "@headcv/api/features/resume/export";
+import router from "@headcv/api/routers";
+import { env } from "@headcv/env/server";
+import { resumeDataSchema } from "@headcv/schema/resume/data";
 import { mergeResponseHeaders } from "../http/headers";
 import { getRequestLocale } from "../rpc/locale";
 
@@ -43,14 +43,14 @@ export async function handleOpenApi(request: Request) {
 	if (request.method === "GET" && (request.url.endsWith("/spec.json") || request.url.endsWith("/spec"))) {
 		const spec = await openAPIGenerator.generate(openAPIRouter, {
 			info: {
-				title: "Reactive Resume",
+				title: "HeadCV",
 				version: __APP_VERSION__,
-				description: "Reactive Resume API",
-				license: { name: "MIT", url: "https://github.com/amruthpillai/reactive-resume/blob/main/LICENSE" },
-				contact: { name: "Amruth Pillai", email: "hello@amruthpillai.com", url: "https://amruthpillai.com" },
+				description: "HeadCV API",
+				license: { name: "MIT", url: "https://github.com/AHMED9937/headcv/blob/main/LICENSE" },
+				contact: { name: "HeadCV", email: "hello@headcv.com", url: "https://headcv.com" },
 			},
 			servers: [{ url: `${env.APP_URL}/api/openapi` }],
-			externalDocs: { url: "https://docs.rxresu.me", description: "Reactive Resume Documentation" },
+			externalDocs: { url: "https://headcv.com", description: "HeadCV" },
 			commonSchemas: {
 				ResumeData: { schema: resumeDataSchema },
 			},

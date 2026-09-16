@@ -2,10 +2,10 @@ import type { RouterOutput } from "@/libs/orpc/client";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
 import { DotsThreeIcon, DownloadSimpleIcon, PlusIcon } from "@phosphor-icons/react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { AnimatePresence, m } from "motion/react";
 import { useMemo } from "react";
-import { Button } from "@reactive-resume/ui/components/button";
+import { Button } from "@headcv/ui/components/button";
 import { useDialogStore } from "@/dialogs/store";
 import { ResumeDropdownMenu } from "./menus/dropdown-menu";
 
@@ -16,10 +16,11 @@ type Props = {
 };
 
 export function ListView({ resumes }: Props) {
+	const navigate = useNavigate();
 	const { openDialog } = useDialogStore();
 
 	const handleCreateResume = () => {
-		openDialog("resume.create", undefined);
+		void navigate({ to: "/templates" });
 	};
 
 	const handleImportResume = () => {

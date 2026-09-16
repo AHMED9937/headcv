@@ -296,7 +296,7 @@ describe("legacy font compatibility (#2989)", () => {
 
 	it("getFontDisplayName preserves the legacy family name (UI is not rewritten)", () => {
 		// Users who picked "Times New Roman" should keep seeing that label
-		// in the typography sidebar — the alias is a render-time concern only.
+		// in the typography sidebar  the alias is a render-time concern only.
 		expect(getFontDisplayName("Times New Roman")).toBe("Times New Roman");
 	});
 });

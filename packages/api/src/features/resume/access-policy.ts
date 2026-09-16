@@ -1,4 +1,4 @@
-import type { ResumeData } from "@reactive-resume/schema/resume/data";
+import type { ResumeData } from "@headcv/schema/resume/data";
 import { ORPCError } from "@orpc/client";
 
 /**
@@ -6,7 +6,7 @@ import { ORPCError } from "@orpc/client";
  * leak to non-owners on the public view path."
  *
  * Owner-only mutation methods (update / patch / delete / setPassword / …)
- * intentionally do **not** call this module — their `WHERE userId = :owner`
+ * intentionally do **not** call this module  their `WHERE userId = :owner`
  * clauses already enforce ownership at the query level. The policy here
  * documents that contract and gates the dual-role read path (`getBySlug`)
  * where a non-owner viewer can legitimately read a public resume.
@@ -25,7 +25,7 @@ export function isOwner(resume: Resume, viewer: Viewer): boolean {
 
 /**
  * Throws `NOT_FOUND` (not `FORBIDDEN`) when the viewer is not allowed to see
- * the resume — same response as a nonexistent resume so the API does not
+ * the resume  same response as a nonexistent resume so the API does not
  * disclose existence of private resumes by id/slug.
  */
 export function assertCanView(resume: Resume, viewer: Viewer): void {
@@ -38,9 +38,9 @@ export function assertCanView(resume: Resume, viewer: Viewer): void {
  * Redact owner-only fields before serializing a resume to a non-owner viewer.
  *
  * Stripped on public view:
- *   - `resume.name` — the dashboard title chosen by the owner (often
- *     contains personal context like "Senior Eng @ Foo — final draft").
- *   - `resume.data.metadata.notes` — explicitly documented as "only visible
+ *   - `resume.name`  the dashboard title chosen by the owner (often
+ *     contains personal context like "Senior Eng @ Foo  final draft").
+ *   - `resume.data.metadata.notes`  explicitly documented as "only visible
  *     to the author when editing" in the resume schema.
  *
  * Everything else (including `data.basics.name`, the person's name on the

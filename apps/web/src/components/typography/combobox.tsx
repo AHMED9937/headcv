@@ -1,7 +1,7 @@
 import type { MultiComboboxProps, SingleComboboxProps } from "@/components/ui/combobox";
 import { useCallback, useMemo } from "react";
-import { fontList, getFont, getFontDisplayName, getFontSearchKeywords, sortFontWeights } from "@reactive-resume/fonts";
-import { cn } from "@reactive-resume/utils/style";
+import { fontList, getFont, getFontDisplayName, getFontSearchKeywords, sortFontWeights } from "@headcv/fonts";
+import { cn } from "@headcv/utils/style";
 import { Combobox } from "@/components/ui/combobox";
 import { FontDisplay } from "./font-display";
 

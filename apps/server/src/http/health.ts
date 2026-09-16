@@ -1,6 +1,6 @@
 import { sql } from "drizzle-orm";
-import { getStorageService } from "@reactive-resume/api/features/storage";
-import { db } from "@reactive-resume/db/client";
+import { getStorageService } from "@headcv/api/features/storage";
+import { db } from "@headcv/db/client";
 
 const HEALTHCHECK_TIMEOUT_MS = 1_500;
 
@@ -77,7 +77,7 @@ export async function handleHealth() {
 	const status = [database, storage].some((check) => check.status === "unhealthy") ? "unhealthy" : "healthy";
 
 	const checks = {
-		service: "reactive-resume",
+		service: "headcv",
 		version: process.env.npm_package_version,
 		status,
 		timestamp: new Date().toISOString(),

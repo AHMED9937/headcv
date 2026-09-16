@@ -10,7 +10,7 @@ const mocks = vi.hoisted(() => ({
 	},
 }));
 
-vi.mock("@reactive-resume/auth/config", () => ({
+vi.mock("@headcv/auth/config", () => ({
 	auth: {
 		api: {
 			getSession: mocks.getSession,
@@ -19,9 +19,9 @@ vi.mock("@reactive-resume/auth/config", () => ({
 	},
 }));
 
-vi.mock("@reactive-resume/db/client", () => ({ db: {} }));
-vi.mock("@reactive-resume/db/schema", () => ({ oauthClient: {}, verification: {} }));
-vi.mock("@reactive-resume/env/server", () => ({
+vi.mock("@headcv/db/client", () => ({ db: {} }));
+vi.mock("@headcv/db/schema", () => ({ oauthClient: {}, verification: {} }));
+vi.mock("@headcv/env/server", () => ({
 	env: mocks.env,
 }));
 

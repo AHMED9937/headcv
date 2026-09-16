@@ -1,0 +1,130 @@
+[
+	{
+		"id": "general-accomplishment-metric",
+		"sectionType": "experience",
+		"jobTitleIds": ["general"],
+		"experienceLevels": ["entry", "mid", "senior", "executive"],
+		"pattern": "حققت [Outcome] من خلال [Action]، مما أدى إلى [Metric].",
+		"placeholders": ["Outcome", "Action", "Metric"]
+	},
+	{
+		"id": "general-collaboration",
+		"sectionType": "experience",
+		"jobTitleIds": ["general"],
+		"experienceLevels": ["entry", "mid", "senior"],
+		"pattern": "تعاونت مع [Stakeholder] لتسليم [Deliverable] في الموعد المحدد.",
+		"placeholders": ["Stakeholder", "Deliverable"]
+	},
+	{
+		"id": "general-process-improvement",
+		"sectionType": "experience",
+		"jobTitleIds": ["general"],
+		"experienceLevels": ["mid", "senior", "executive"],
+		"pattern": "حسّنت [Process] من خلال [Action]، مما قلّل [Metric] بنسبة [Percentage].",
+		"placeholders": ["Process", "Action", "Metric", "Percentage"]
+	},
+	{
+		"id": "general-leadership",
+		"sectionType": "experience",
+		"jobTitleIds": ["general"],
+		"experienceLevels": ["senior", "executive"],
+		"pattern": "قادت فريقًا من [Number] [Role] لتحقيق [Outcome] خلال [Timeframe].",
+		"placeholders": ["Number", "Role", "Outcome", "Timeframe"]
+	},
+	{
+		"id": "software-engineer-impact",
+		"sectionType": "experience",
+		"jobTitleIds": ["software-engineer", "frontend-developer", "backend-developer"],
+		"experienceLevels": ["mid", "senior"],
+		"pattern": "طوّرت [Feature/System] يستخدمه [UserCount] مستخدم، مما حسّن [Metric] بنسبة [Percentage].",
+		"placeholders": ["Feature/System", "UserCount", "Metric", "Percentage"]
+	},
+	{
+		"id": "software-engineer-quality",
+		"sectionType": "experience",
+		"jobTitleIds": ["software-engineer", "frontend-developer", "backend-developer"],
+		"experienceLevels": ["entry", "mid", "senior"],
+		"pattern": "قلّلت أخطاء [BugType] بنسبة [Percentage] من خلال [Action].",
+		"placeholders": ["BugType", "Percentage", "Action"]
+	},
+	{
+		"id": "devops-reliability",
+		"sectionType": "experience",
+		"jobTitleIds": ["devops-engineer"],
+		"experienceLevels": ["mid", "senior"],
+		"pattern": "رفعت وقت تشغيل [System] إلى [Percentage] من خلال تنفيذ [Action].",
+		"placeholders": ["System", "Percentage", "Action"]
+	},
+	{
+		"id": "data-analyst-insight",
+		"sectionType": "experience",
+		"jobTitleIds": ["data-analyst"],
+		"experienceLevels": ["entry", "mid", "senior"],
+		"pattern": "حلّلت [Dataset] لتحديد [Insight]، مما أثر على [Decision].",
+		"placeholders": ["Dataset", "Insight", "Decision"]
+	},
+	{
+		"id": "product-manager-launch",
+		"sectionType": "experience",
+		"jobTitleIds": ["product-manager"],
+		"experienceLevels": ["mid", "senior", "executive"],
+		"pattern": "أطلقت [Product/Feature] التي حققت [Metric] خلال [Timeframe].",
+		"placeholders": ["Product/Feature", "Metric", "Timeframe"]
+	},
+	{
+		"id": "project-manager-delivery",
+		"sectionType": "experience",
+		"jobTitleIds": ["project-manager"],
+		"experienceLevels": ["mid", "senior"],
+		"pattern": "سلّمت [Project] بـ [Budget/Scope] تحت [Constraint] مع تحقيق [Outcome].",
+		"placeholders": ["Project", "Budget/Scope", "Constraint", "Outcome"]
+	},
+	{
+		"id": "designer-research",
+		"sectionType": "experience",
+		"jobTitleIds": ["ui-ux-designer"],
+		"experienceLevels": ["entry", "mid", "senior"],
+		"pattern": "أجريت [ResearchMethod] مع [Participants] مستخدم لدعم قرار التصميم [DesignDecision].",
+		"placeholders": ["ResearchMethod", "Participants", "DesignDecision"]
+	},
+	{
+		"id": "marketing-campaign",
+		"sectionType": "experience",
+		"jobTitleIds": ["marketing-manager"],
+		"experienceLevels": ["mid", "senior"],
+		"pattern": "نفّذت [Campaign] عبر [Channels]، محققة [Metric] بعائد استثمار [Ratio].",
+		"placeholders": ["Campaign", "Channels", "Metric", "Ratio"]
+	},
+	{
+		"id": "sales-growth",
+		"sectionType": "experience",
+		"jobTitleIds": ["sales-representative"],
+		"experienceLevels": ["entry", "mid", "senior"],
+		"pattern": "أغلقت [Number] صفقات بقيمة [Value]، متجاوزة الهدف بنسبة [Percentage].",
+		"placeholders": ["Number", "Value", "Percentage"]
+	},
+	{
+		"id": "support-satisfaction",
+		"sectionType": "experience",
+		"jobTitleIds": ["customer-support-specialist"],
+		"experienceLevels": ["entry", "mid"],
+		"pattern": "حافظت على درجة رضا عملاء [Score]% مع حل [Number] تذكرة.",
+		"placeholders": ["Score", "Number"]
+	},
+	{
+		"id": "summary-intro",
+		"sectionType": "summary",
+		"jobTitleIds": ["general"],
+		"experienceLevels": ["entry", "mid", "senior", "executive"],
+		"pattern": "[Role] بخبرة [Years] سنوات في [Industry/Domain].",
+		"placeholders": ["Role", "Years", "Industry/Domain"]
+	},
+	{
+		"id": "summary-skills",
+		"sectionType": "summary",
+		"jobTitleIds": ["general"],
+		"experienceLevels": ["entry", "mid", "senior", "executive"],
+		"pattern": "أجيد [PrimarySkill] و [SecondarySkill]، مع التركيز على [FocusArea].",
+		"placeholders": ["PrimarySkill", "SecondarySkill", "FocusArea"]
+	}
+]

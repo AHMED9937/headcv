@@ -16,8 +16,8 @@ import {
 	Text,
 } from "react-email";
 
-const appName = "Reactive Resume";
-const logoUrl = "https://rxresu.me/icon/dark.svg";
+const appName = "HeadCV";
+const logoUrl = "https://headcv.com/icon/light.svg";
 
 interface AuthEmailLayoutProps {
 	preview: string;
@@ -107,21 +107,10 @@ function AuthEmailLayout({ preview, heading, intro, details, actionLabel, action
 
 							<Hr className="my-10 border-zinc-700" />
 
-							<Text className="mt-8 text-xs leading-1 opacity-40">By the community, for the community.</Text>
-							<Text className="text-xs leading-1 opacity-40">
-								A passion project by{" "}
-								<Link
-									target="_blank"
-									rel="noopener noreferrer"
-									href="https://amruthpillai.com"
-									className="text-inherit underline underline-offset-2"
-								>
-									Amruth Pillai
-								</Link>
-								.
+							<Text className="mt-8 text-xs leading-1 opacity-40">
+								This is an automated account-security email from HeadCV. Please do not reply.
 							</Text>
-
-							<Text className="mt-8 font-heading font-medium text-base tracking-tight opacity-80">Reactive Resume</Text>
+							<Text className="mt-8 font-heading font-medium text-base tracking-tight opacity-80">HeadCV</Text>
 						</Section>
 					</Container>
 				</Body>
@@ -143,7 +132,7 @@ export function ResetPasswordEmail({ url }: ResetPasswordEmailProps) {
 			details="If this was not you, you can ignore this message and your password will remain unchanged."
 			actionLabel="Create New Password"
 			actionUrl={url}
-			outro="For security, only use links from emails sent by Reactive Resume."
+			outro="For security, only use links from emails sent by HeadCV."
 		/>
 	);
 }

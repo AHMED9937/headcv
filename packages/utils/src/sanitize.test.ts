@@ -76,7 +76,7 @@ describe("sanitizeCss", () => {
 	});
 
 	it("decodes hex CSS escapes before sanitizing", () => {
-		// \\6a\\61... encodes "javascript" — the decoder should expose this and the javascript: pattern then strips
+		// \\6a\\61... encodes "javascript"  the decoder should expose this and the javascript: pattern then strips
 		const css = "a { background: \\6a avascript:alert(1) }";
 		const result = sanitizeCss(css);
 		expect(result.toLowerCase()).not.toContain("javascript:");

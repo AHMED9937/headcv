@@ -1,11 +1,14 @@
 {
-	"name": "@reactive-resume/resume",
+	"name": "@headcv/resume",
 	"version": "0.0.0",
 	"type": "module",
 	"private": true,
 	"exports": {
 		"./icons": "./src/icons.ts",
-		"./patch": "./src/patch.ts"
+		"./locale": "./src/locale.ts",
+		"./normalize": "./src/normalize.ts",
+		"./patch": "./src/patch.ts",
+		"./readability": "./src/readability.ts"
 	},
 	"scripts": {
 		"typecheck": "tsgo --noEmit",
@@ -15,12 +18,12 @@
 		"test:agent": "vitest run --reporter=agent --reporter=json --outputFile.json=reports/vitest-results.json --passWithNoTests"
 	},
 	"dependencies": {
-		"@reactive-resume/schema": "workspace:*",
+		"@headcv/schema": "workspace:*",
 		"fast-json-patch": "^3.1.1",
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {
-		"@reactive-resume/config": "workspace:*",
+		"@headcv/config": "workspace:*",
 		"@typescript/native-preview": "7.0.0-dev.20260526.1",
 		"typescript": "^6.0.3"
 	}

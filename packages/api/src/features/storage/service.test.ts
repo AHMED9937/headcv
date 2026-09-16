@@ -12,7 +12,7 @@ const envMock = vi.hoisted(() => ({
 	FLAG_DISABLE_IMAGE_PROCESSING: false,
 }));
 
-vi.mock("@reactive-resume/env/server", () => ({ env: envMock }));
+vi.mock("@headcv/env/server", () => ({ env: envMock }));
 // sharp is exercised by processImageForUpload; keep it out of the import graph entirely
 // because resolving it loads native bindings we can't rely on in CI.
 vi.mock("sharp", () => {
@@ -88,7 +88,7 @@ describe("processImageForUpload", () => {
 		const result = await processImageForUpload(file);
 
 		expect(result.contentType).toBe("image/jpeg");
-		// Sharp mock returns "processed" — ensure we got something not equal to the input.
+		// Sharp mock returns "processed"  ensure we got something not equal to the input.
 		expect(result.data.length).toBeGreaterThan(0);
 		expect(Array.from(result.data)).not.toEqual([5, 6, 7, 8]);
 	});

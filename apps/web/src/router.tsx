@@ -16,7 +16,7 @@ export const getRouter = async () => {
 		getTheme(),
 		getLocale(),
 		getSession(),
-		client.flags.get(),
+		client.flags.get().catch(() => ({ disableSignups: false, disableEmailAuth: false })),
 	]);
 
 	await loadLocale(locale);

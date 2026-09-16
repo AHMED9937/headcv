@@ -1,12 +1,12 @@
 import { sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
-import { env } from "@reactive-resume/env/server";
+import { getMigrationPoolConfig } from "@headcv/db/client";
 
 export async function resetDatabase() {
 	console.log("Resetting database...");
 
-	const pool = new Pool({ connectionString: env.DATABASE_URL });
+	const pool = new Pool(getMigrationPoolConfig());
 	const db = drizzle({ client: pool });
 
 	try {

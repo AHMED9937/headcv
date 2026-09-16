@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
+import { DirectionProvider } from "./direction";
 import {
 	Sidebar,
 	SidebarContent,
@@ -129,6 +130,33 @@ describe("Sidebar", () => {
 		);
 		const sidebar = container.querySelector("[data-slot=sidebar]");
 		expect(sidebar).toHaveAttribute("data-side", side);
+	});
+
+	it.each([
+		["ltr", "left"],
+		["rtl", "right"],
+	] as const)("defaults to the logical start side in %s", (direction, expectedSide) => {
+		const { container } = render(
+			<DirectionProvider direction={direction}>
+				<SidebarProvider>
+					<Sidebar>x</Sidebar>
+				</SidebarProvider>
+			</DirectionProvider>,
+		);
+
+		expect(container.querySelector("[data-slot=sidebar]")).toHaveAttribute("data-side", expectedSide);
+	});
+
+	it("preserves an explicit physical side in RTL", () => {
+		const { container } = render(
+			<DirectionProvider direction="rtl">
+				<SidebarProvider>
+					<Sidebar side="left">x</Sidebar>
+				</SidebarProvider>
+			</DirectionProvider>,
+		);
+
+		expect(container.querySelector("[data-slot=sidebar]")).toHaveAttribute("data-side", "left");
 	});
 });
 

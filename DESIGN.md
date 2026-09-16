@@ -1,6 +1,6 @@
 ---
 version: alpha
-name: Reactive Resume
+name: HeadCV
 description: A monochrome, content-first design system for a free and open-source resume builder. Dark-by-default with light mode support.
 colors:
   primary: "#343434"
@@ -150,19 +150,19 @@ components:
 
 ## Overview
 
-Reactive Resume is a monochrome, content-first design system built for a resume builder used by tens of thousands of people worldwide. The visual identity prioritizes readability and unobtrusiveness — the user's resume content is always the hero, never the chrome around it.
+HeadCV is a monochrome, content-first design system built for a resume builder used by tens of thousands of people worldwide. The visual identity prioritizes readability and unobtrusiveness  the user's resume content is always the hero, never the chrome around it.
 
-The system defaults to dark mode with a warm near-black backdrop that makes the resume preview "float" as the visual anchor. Light mode is supported as a full alternative. The authenticated app shell (dashboard, builder, settings) uses an entirely achromatic grayscale palette — the sole chromatic exception is destructive red for dangerous actions. The landing page introduces subtle chromatic accents: blue-tinted spotlight gradients on the hero, a multicolor text-mask animation on hover, and social auth provider brand colors (Google blue, LinkedIn blue) on the login page.
+The system defaults to dark mode with a warm near-black backdrop that makes the resume preview "float" as the visual anchor. Light mode is supported as a full alternative. The authenticated app shell (dashboard, builder, settings) uses an entirely achromatic grayscale palette  the sole chromatic exception is destructive red for dangerous actions. The landing page introduces subtle chromatic accents: blue-tinted spotlight gradients on the hero, a multicolor text-mask animation on hover, and social auth provider brand colors (Google blue, LinkedIn blue) on the login page.
 
-The overall aesthetic is a professional tool UI: clean grid lines, subtle borders, generous whitespace, and typography that steps back to let the content shine. Think "VS Code meets Figma" — a productivity workspace, not a marketing site.
+The overall aesthetic is a professional tool UI: clean grid lines, subtle borders, generous whitespace, and typography that steps back to let the content shine. Think "VS Code meets Figma"  a productivity workspace, not a marketing site.
 
-One deliberate counterpoint to the serious UI: all resume templates are named after Pokemon (Azurill, Bronzor, Chikorita, Ditgar, Gengar, Pikachu, etc.). This is an intentional brand choice — playful naming for templates injects personality into an otherwise utilitarian interface, making templates feel collectible and memorable rather than generic ("Template 1", "Modern", "Classic").
+One deliberate counterpoint to the serious UI: all resume templates are named after Pokemon (Azurill, Bronzor, Chikorita, Ditgar, Gengar, Pikachu, etc.). This is an intentional brand choice  playful naming for templates injects personality into an otherwise utilitarian interface, making templates feel collectible and memorable rather than generic ("Template 1", "Modern", "Classic").
 
 ## Colors
 
-The palette is rooted in achromatic OKLch values (chroma = 0), producing a pure grayscale scale without warm or cool casts. Colors are defined as CSS custom properties using `oklch()` and consumed through Tailwind CSS 4 theme tokens. Always prefer CSS variables (e.g., `var(--primary)`) or Tailwind tokens (e.g., `bg-primary`) over raw color values. The hex values in this document's YAML front matter are agent-friendly approximations of the canonical OKLch definitions in `packages/ui/src/styles/globals.css` — use hex only where OKLch is unavailable.
+The palette is rooted in achromatic OKLch values (chroma = 0), producing a pure grayscale scale without warm or cool casts. Colors are defined as CSS custom properties using `oklch()` and consumed through Tailwind CSS 4 theme tokens. Always prefer CSS variables (e.g., `var(--primary)`) or Tailwind tokens (e.g., `bg-primary`) over raw color values. The hex values in this document's YAML front matter are agent-friendly approximations of the canonical OKLch definitions in `packages/ui/src/styles/globals.css`  use hex only where OKLch is unavailable.
 
-- **Primary (#343434 light / #EBEBEB dark):** Used for high-emphasis interactive surfaces — default buttons, selected states, and text selection. In dark mode this inverts to near-white so buttons remain prominent.
+- **Primary (#343434 light / #EBEBEB dark):** Used for high-emphasis interactive surfaces  default buttons, selected states, and text selection. In dark mode this inverts to near-white so buttons remain prominent.
 - **Foreground (#252525 light / #FBFBFB dark):** Body text and headings. High contrast against the background in both themes.
 - **Background (#FFFFFF light / #252525 dark):** The canvas. Pure white in light mode, warm near-black in dark mode.
 - **Card (#FFFFFF light / #343434 dark):** Elevated surface for cards, panels, and the builder sidebar. In dark mode, one step lighter than the background to create subtle depth.
@@ -172,9 +172,9 @@ The palette is rooted in achromatic OKLch values (chroma = 0), producing a pure 
 - **Input (#EBEBEB light / white at 15% opacity dark):** Form field borders, slightly more prominent than general borders to make input areas discoverable.
 - **Destructive (#DC2626 light / #EF4444 dark):** The only chromatic color in the palette. Reserved exclusively for delete actions, error states, and danger-zone operations. Used at 10% opacity as a background tint with full saturation for text, creating a soft but unmistakable warning.
 - **Ring (#B5B5B5 light / #8E8E8E dark):** Focus ring indicator at 50% opacity, surrounding focused interactive elements.
-- **Sidebar Primary (dark only, #6366F1):** An indigo value inherited from the shadcn/ui defaults. Not actively used in the current UI — sidebar active states use the standard grayscale primary token instead. Retained in the CSS custom properties for potential future customization.
+- **Sidebar Primary (dark only, #6366F1):** An indigo value inherited from the shadcn/ui defaults. Not actively used in the current UI  sidebar active states use the standard grayscale primary token instead. Retained in the CSS custom properties for potential future customization.
 
-Resume templates have their own independent color system — users pick primary, text, and background colors per resume through a color picker in the builder's Design panel. These template colors are completely separate from the app shell palette.
+Resume templates have their own independent color system  users pick primary, text, and background colors per resume through a color picker in the builder's Design panel. These template colors are completely separate from the app shell palette.
 
 ## Typography
 
@@ -186,7 +186,7 @@ The entire application uses a single typeface: **IBM Plex Sans Variable**. This 
 - **Small body (0.75rem / 12px, weight 400):** Captions, helper text, timestamps, and metadata.
 - **Label (0.8rem / ~13px, weight 500):** Button text, badge labels, and form field labels. Slightly heavier than body to denote interactivity.
 
-The resume content itself uses a separate font system — users choose from 1,000+ Google Fonts for their resume headings and body text, with category-aware fallback stacks including CJK support (Noto Sans SC, PingFang SC, Hiragino Sans GB for sans-serif; Noto Serif SC, Songti SC for serif). Standard PDF fonts (Helvetica, Courier, Times-Roman) are available as offline fallbacks.
+The resume content itself uses a separate font system  users choose from 1,000+ Google Fonts for their resume headings and body text, with category-aware fallback stacks including CJK support (Noto Sans SC, PingFang SC, Hiragino Sans GB for sans-serif; Noto Serif SC, Songti SC for serif). Standard PDF fonts (Helvetica, Courier, Times-Roman) are available as offline fallbacks.
 
 Font rendering uses `antialiased` (grayscale AA) and `proportional-nums` across the board for clean rendering and properly spaced numerals in dates and phone numbers.
 
@@ -196,9 +196,9 @@ Font rendering uses `antialiased` (grayscale AA) and `proportional-nums` across 
 
 The core builder uses a resizable three-panel layout powered by `react-resizable-panels`:
 
-- **Left sidebar (default 22%):** Resume section forms — personal info, experience, education, skills, and custom sections. Scrollable with collapsible section groups.
+- **Left sidebar (default 22%):** Resume section forms  personal info, experience, education, skills, and custom sections. Scrollable with collapsible section groups.
 - **Center artboard (default 56%):** Live resume preview rendered via PDF.js canvas. Supports zoom, pan, and pinch gestures via `react-zoom-pan-pinch`. The preview maintains A4 aspect ratio (210:297) with a subtle shadow to simulate a physical page.
-- **Right sidebar (default 22%):** Design controls — template picker, font selection, color picker, layout manager (page assignments, section ordering via drag-and-drop).
+- **Right sidebar (default 22%):** Design controls  template picker, font selection, color picker, layout manager (page assignments, section ordering via drag-and-drop).
 
 Panel sizes persist in cookies. On mobile (< 768px), sidebars collapse to 0% width and become toggleable overlays (max 95% width when open). The desktop minimum collapsed width is 48px (icon rail).
 
@@ -209,16 +209,16 @@ Standard sidebar navigation layout using the `Sidebar` component system. The sid
 ### Landing Page
 
 Full-width single-column marketing layout:
-1. **Floating builder preview** — A non-interactive screenshot of the builder as a hero visual, creating an immediate "this is what you get" impression.
-2. **Hero** — Centered headline, subheadline, and two CTAs (primary "Get Started" with arrow, ghost "Learn More" with icon).
-3. **Features grid** — 4-column responsive grid with icon + title + description cards, separated by thin border lines.
-4. **Template carousel** — Horizontally scrolling row of template preview thumbnails with Pokemon-themed names.
-5. **Testimonials** — Tiled user quotes in a masonry-style grid.
-6. **Support / FAQ / Footer** — Accordion FAQ, community section, and a 4-column footer with logo, resource links, community links, and license info.
+1. **Floating builder preview**  A non-interactive screenshot of the builder as a hero visual, creating an immediate "this is what you get" impression.
+2. **Hero**  Centered headline, subheadline, and two CTAs (primary "Get Started" with arrow, ghost "Learn More" with icon).
+3. **Features grid**  4-column responsive grid with icon + title + description cards, separated by thin border lines.
+4. **Template carousel**  Horizontally scrolling row of template preview thumbnails with Pokemon-themed names.
+5. **Testimonials**  Tiled user quotes in a masonry-style grid.
+6. **Support / FAQ / Footer**  Accordion FAQ, community section, and a 4-column footer with logo, resource links, community links, and license info.
 
 ### Responsive Breakpoints
 
-Mobile detection uses a 768px threshold via `MediaQueryList`. The layout is optimized for workspace productivity on larger screens, with responsive mobile support that adapts the multi-panel builder into a streamlined single-panel experience. Both desktop and mobile are supported experiences — the builder's three-panel layout leverages desktop space, while mobile surfaces the same editing capabilities through collapsible overlays.
+Mobile detection uses a 768px threshold via `MediaQueryList`. The layout is optimized for workspace productivity on larger screens, with responsive mobile support that adapts the multi-panel builder into a streamlined single-panel experience. Both desktop and mobile are supported experiences  the builder's three-panel layout leverages desktop space, while mobile surfaces the same editing capabilities through collapsible overlays.
 
 ### Page Aspect Ratio
 
@@ -236,9 +236,9 @@ Animations use the Motion library (formerly Framer Motion) and follow a consiste
 - **Easing:** `easeOut` for entrances (elements decelerate into position). `easeInOut` for looping/ambient animations.
 - **Performance:** Apply `will-change-[transform,opacity]` on animated elements and `will-change-transform` on continuously animated elements.
 
-**Hover/interaction animations** are quick (0.2s) and subtle — small scale bumps (`scale: 1.01`), slight y-offsets (`y: -2`), and `active:translate-y-px` for button press.
+**Hover/interaction animations** are quick (0.2s) and subtle  small scale bumps (`scale: 1.01`), slight y-offsets (`y: -2`), and `active:translate-y-px` for button press.
 
-**Ambient animations** loop infinitely with `easeInOut` — the scroll indicator bounces gently (`y: [0, 5, 0]` over 1.5s).
+**Ambient animations** loop infinitely with `easeInOut`  the scroll indicator bounces gently (`y: [0, 5, 0]` over 1.5s).
 
 **Reduced motion:** All CSS transitions and animations collapse to `0.01ms` duration and single iteration when `prefers-reduced-motion: reduce` is active. Motion library animations should also respect this preference.
 
@@ -246,12 +246,12 @@ Animations use the Motion library (formerly Framer Motion) and follow a consiste
 
 Elevation is handled through background color layering rather than drop shadows:
 
-- **Level 0 — Background:** The base canvas (`--background`).
-- **Level 1 — Card:** One step lighter in dark mode (`--card`), used for sidebars, panels, and cards.
-- **Level 2 — Popover:** Same as card, but appears above the content layer in popovers, dropdowns, and command palette.
-- **Level 3 — Overlay:** Backdrop blur (`backdrop-blur-xs` at 0.5px or `backdrop-blur-2xl` at 40px) with `backdrop-saturate-150` for modal overlays, creating a frosted-glass effect over the workspace.
+- **Level 0  Background:** The base canvas (`--background`).
+- **Level 1  Card:** One step lighter in dark mode (`--card`), used for sidebars, panels, and cards.
+- **Level 2  Popover:** Same as card, but appears above the content layer in popovers, dropdowns, and command palette.
+- **Level 3  Overlay:** Backdrop blur (`backdrop-blur-xs` at 0.5px or `backdrop-blur-2xl` at 40px) with `backdrop-saturate-150` for modal overlays, creating a frosted-glass effect over the workspace.
 
-The resume preview page uses a subtle drop shadow to simulate a physical sheet of paper floating above the dark artboard — one of the few places actual shadows appear.
+The resume preview page uses a subtle drop shadow to simulate a physical sheet of paper floating above the dark artboard  one of the few places actual shadows appear.
 
 ## Shapes
 
@@ -267,7 +267,7 @@ Border radius follows a multiplicative scale from a single `--radius` base of `0
 | `3xl` | 0.66rem (≈11px) | Large panels |
 | `4xl` | 0.78rem (≈12px) | Full-page modals |
 
-The radius scale is deliberately tight — the largest value (0.78rem) is still quite subtle. This avoids the "rounded everything" aesthetic and keeps the UI feeling precise and tool-like. Interactive elements consistently use `rounded-lg` as the default.
+The radius scale is deliberately tight  the largest value (0.78rem) is still quite subtle. This avoids the "rounded everything" aesthetic and keeps the UI feeling precise and tool-like. Interactive elements consistently use `rounded-lg` as the default.
 
 ## Components
 
@@ -310,17 +310,17 @@ Powered by `@dnd-kit` with `PointerSensor` and `KeyboardSensor`. Used in chip in
 
 ## Internationalization
 
-The app supports 40+ locales including RTL languages (Arabic, Hebrew, Persian, Urdu, Uyghur, Yiddish). i18n is not an afterthought — it shapes layout decisions:
+The app supports 40+ locales including RTL languages (Arabic, Hebrew, Persian, Urdu, Uyghur, Yiddish). i18n is not an afterthought  it shapes layout decisions:
 
 **Direction:** The `<html>` element receives `dir="rtl"` or `dir="ltr"` based on the active locale, detected via `isRTL()` which checks the language prefix against a known RTL set. All layout mirroring flows from this single attribute.
 
 **Logical properties:** Use CSS logical properties (`ps-`, `pe-`, `ms-`, `me-`, `inline-start`, `inline-end`, `inset-s-`, `inset-e-`) instead of physical (`pl-`, `pr-`, `ml-`, `mr-`, `left`, `right`). Button components already use `has-data-[icon=inline-start]:ps-2` and `has-data-[icon=inline-end]:pe-2` patterns. This ensures correct spacing in both LTR and RTL layouts without separate stylesheets.
 
-**Variable-length text:** Translations can be 30–50% longer than English (German, Finnish) or significantly shorter (CJK). UI elements should accommodate variable text length — avoid fixed widths on buttons and labels. Use `whitespace-nowrap` only where truncation is acceptable, and prefer `min-w-0` with `truncate` over fixed-width containers.
+**Variable-length text:** Translations can be 30–50% longer than English (German, Finnish) or significantly shorter (CJK). UI elements should accommodate variable text length  avoid fixed widths on buttons and labels. Use `whitespace-nowrap` only where truncation is acceptable, and prefer `min-w-0` with `truncate` over fixed-width containers.
 
 **Icons:** Directional icons (arrows, chevrons, progress indicators) should mirror in RTL contexts. Phosphor Icons provides mirrored variants for directional icons. Non-directional icons (settings gear, checkmark, delete) do not mirror.
 
-**Strings:** All user-facing strings use Lingui macros (`t`, `msg`, `<Trans>`) — never hardcode English text in components. Translation files are `.po` format under `/locale/`.
+**Strings:** All user-facing strings use Lingui macros (`t`, `msg`, `<Trans>`)  never hardcode English text in components. Translation files are `.po` format under `/locale/`.
 
 ## Do's and Don'ts
 
@@ -328,7 +328,7 @@ The app supports 40+ locales including RTL languages (Arabic, Hebrew, Persian, U
 
 - **Use the grayscale palette for all app chrome.** The absence of color is the brand. The resume content is the only thing that should be colorful.
 - **Default to dark mode.** The dark workspace makes resume previews pop and reduces eye strain during extended editing sessions.
-- **Use `text-sm` (14px) as the base text size.** The UI is information-dense — form fields, section labels, metadata — and needs to be scannable without feeling cramped.
+- **Use `text-sm` (14px) as the base text size.** The UI is information-dense  form fields, section labels, metadata  and needs to be scannable without feeling cramped.
 - **Keep border radius tight.** Use `rounded-lg` (0.3rem) as the default. The tool should feel precise, not playful.
 - **Respect reduced motion preferences.** All animations collapse to 0.01ms when `prefers-reduced-motion: reduce` is active.
 - **Use Phosphor Icons consistently.** Regular weight, `size-4` (16px) default. Icons should be functional labels, not decorative.

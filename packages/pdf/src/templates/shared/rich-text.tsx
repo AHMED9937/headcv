@@ -27,7 +27,7 @@ const richMarkStyle = {
 
 // react-pdf textkit reads BiDi base direction from each run's own `direction` attribute
 // (default "ltr"), and react-pdf-html buckets inline content into styleless inner <Text>
-// frames — so the rtl style has to be injected onto every descendant, not just a wrapper.
+// frames  so the rtl style has to be injected onto every descendant, not just a wrapper.
 const applyRtlDirectionRecursively = (node: ReactNode): ReactNode => {
 	if (Array.isArray(node)) {
 		return node.map((child, i) => {
@@ -107,7 +107,7 @@ export const RichText = ({ children }: { children: string }) => {
 							{marker}
 						</PdfText>
 					);
-					// Same BiDi-injection trick as the <p> renderer — see applyRtlDirectionRecursively.
+					// Same BiDi-injection trick as the <p> renderer  see applyRtlDirectionRecursively.
 					const contentNode = rtl ? (
 						<PdfText
 							key="content"

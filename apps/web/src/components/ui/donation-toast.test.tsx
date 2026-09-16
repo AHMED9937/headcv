@@ -26,7 +26,7 @@ const toastMock = vi.hoisted(() => ({
 	},
 }));
 
-vi.mock("@reactive-resume/ui/hooks/use-cookie", () => ({
+vi.mock("@headcv/ui/hooks/use-cookie", () => ({
 	useCookie: vi.fn(() => [useCookieMock.value, useCookieMock.setDismissed, vi.fn()] as const),
 }));
 
@@ -130,7 +130,7 @@ describe("DonationToast", () => {
 			expires: new Date("2026-06-10T12:05:00.000Z"),
 		});
 		expect(window.open).toHaveBeenCalledWith(
-			"https://opencollective.com/reactive-resume/donate",
+			"https://opencollective.com/headcv/donate",
 			"_blank",
 			"noopener,noreferrer",
 		);

@@ -28,7 +28,7 @@ const ConfirmRunner = ({
 
 describe("useConfirm", () => {
 	it("throws when used outside ConfirmDialogProvider", () => {
-		// React 19 logs the error rather than throwing — we use renderHook+ErrorBoundary alt:
+		// React 19 logs the error rather than throwing  we use renderHook+ErrorBoundary alt:
 		// Use the hook in a component and check that React surfaces the throw.
 		expect(() =>
 			render(

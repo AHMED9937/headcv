@@ -1,5 +1,8 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
+Disallow: /builder/
+Disallow: /dashboard/
+Disallow: /settings/
+Disallow: /agent/
 
-Sitemap: https://rxresu.me/sitemap.xml
+Sitemap: https://headcv.com/sitemap.xml

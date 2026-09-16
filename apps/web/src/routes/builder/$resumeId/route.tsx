@@ -1,12 +1,14 @@
-import type React from "react";
-import type { Layout } from "react-resizable-panels";
-import type { BuilderLayout } from "./-store/sidebar";
+import type { DesignWorkspaceSection, LeftSidebarSection } from "@/libs/resume/section";
+import type { MobileBuilderView } from "./-components/mobile-view-switch";
+import type { BuilderSearch, WorkspaceTab } from "./-components/workspace-search";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import Cookies from "js-cookie";
-import { useEffect, useRef } from "react";
-import { usePanelRef } from "react-resizable-panels";
-import { ResizableGroup, ResizablePanel, ResizableSeparator } from "@reactive-resume/ui/components/resizable";
+import { createFileRoute, Outlet, redirect, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { useBuilderStep } from "@/features/builder/use-builder-step";
+import { AiAssistantProvider } from "@/features/resume/builder/ai-assistant";
+import { AiAssistantBanner } from "@/features/resume/builder/ai-assistant-banner";
+import { AiAssistantFab } from "@/features/resume/builder/ai-assistant-fab";
+import { AiAssistantPanel } from "@/features/resume/builder/ai-assistant-panel";
 import {
 	useInitializeResumeStore,
 	useMergeResumeMetadata,
@@ -17,42 +19,34 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile";
 import { orpc } from "@/libs/orpc/client";
 import { createNoindexFollowMeta } from "@/libs/seo";
+import { GuidedEditor } from "./-components/guided-editor";
 import { BuilderHeader } from "./-components/header";
-import { BuilderSidebarLeft } from "./-sidebar/left";
-import { BuilderSidebarRight } from "./-sidebar/right";
-import {
-	BUILDER_LAYOUT_COOKIE_NAME,
-	DEFAULT_BUILDER_LAYOUT,
-	mapPanelLayoutToBuilderLayout,
-	parseBuilderLayoutCookie,
-	useBuilderSidebar,
-	useBuilderSidebarStore,
-} from "./-store/sidebar";
+import { ImportedWorkspace } from "./-components/imported-workspace";
+import { MobileViewSwitch } from "./-components/mobile-view-switch";
+import { builderSearchSchema, DEFAULT_CONTENT_SECTION, DEFAULT_DESIGN_SECTION } from "./-components/workspace-search";
 
 export const Route = createFileRoute("/builder/$resumeId")({
 	component: RouteComponent,
+	validateSearch: builderSearchSchema,
 	beforeLoad: async ({ context }) => {
 		if (!context.session) throw redirect({ to: "/auth/login", replace: true });
 		return { session: context.session };
 	},
 	loader: async ({ params, context }) => {
-		const [layout, resume] = await Promise.all([
-			getBuilderLayout(),
-			context.queryClient.ensureQueryData(orpc.resume.getById.queryOptions({ input: { id: params.resumeId } })),
-		]);
+		const resume = await context.queryClient.ensureQueryData(
+			orpc.resume.getById.queryOptions({ input: { id: params.resumeId } }),
+		);
 
-		return { layout, name: resume.name };
+		return { name: resume.name };
 	},
 	head: ({ loaderData }) => ({
 		meta: loaderData
-			? [{ title: `${loaderData.name} - Reactive Resume` }, createNoindexFollowMeta()]
+			? [{ title: `${loaderData.name} - HeadCV` }, createNoindexFollowMeta()]
 			: [createNoindexFollowMeta()],
 	}),
 });
 
 function RouteComponent() {
-	const { layout: initialLayout } = Route.useLoaderData();
-
 	const { resumeId } = Route.useParams();
 	const { data: resume } = useSuspenseQuery(orpc.resume.getById.queryOptions({ input: { id: resumeId } }));
 	const initializeResumeStore = useInitializeResumeStore();
@@ -86,100 +80,104 @@ function RouteComponent() {
 
 	if (!isInitialized) return null;
 
-	return <BuilderLayoutShell initialLayout={initialLayout} />;
+	return (
+		<AiAssistantProvider resumeId={resumeId}>
+			<BuilderLayoutShell />
+			<AiAssistantPanel />
+			<AiAssistantFab />
+		</AiAssistantProvider>
+	);
 }
 
-type BuilderLayoutShellProps = React.ComponentProps<"div"> & {
-	initialLayout: BuilderLayout;
-};
+function BuilderLayoutShell() {
+	const {
+		mode,
+		tab = "content",
+		section = DEFAULT_CONTENT_SECTION,
+		designSection = DEFAULT_DESIGN_SECTION,
+	} = Route.useSearch();
 
-function BuilderLayoutShell({ initialLayout }: BuilderLayoutShellProps) {
+	if (mode === "create") return <GuidedBuilderShell />;
+	return (
+		<ImportedBuilderShell tab={tab} section={section} designSection={designSection} isImported={mode === "import"} />
+	);
+}
+
+function GuidedBuilderShell() {
 	const isMobile = useIsMobile();
-	const canPersistLayoutRef = useRef(false);
-
-	const leftSidebarRef = usePanelRef();
-	const rightSidebarRef = usePanelRef();
-
-	const setLeftSidebar = useBuilderSidebarStore((state) => state.setLeftSidebar);
-	const setRightSidebar = useBuilderSidebarStore((state) => state.setRightSidebar);
-	const setLayout = useBuilderSidebarStore((state) => state.setLayout);
-
-	const { maxSidebarSize, collapsedSidebarSize } = useBuilderSidebar((state) => ({
-		maxSidebarSize: state.maxSidebarSize,
-		collapsedSidebarSize: state.collapsedSidebarSize,
-	}));
-
-	useEffect(() => {
-		setLayout(initialLayout);
-		canPersistLayoutRef.current = true;
-	}, [initialLayout, setLayout]);
-
-	const onLayoutChanged = (layout: Layout) => {
-		const nextLayout = mapPanelLayoutToBuilderLayout(layout);
-		if (!canPersistLayoutRef.current) return;
-		setLayout(nextLayout);
-		setBuilderLayout(nextLayout);
-	};
-
-	useEffect(() => {
-		if (!leftSidebarRef || !rightSidebarRef) return;
-
-		setLeftSidebar(leftSidebarRef);
-		setRightSidebar(rightSidebarRef);
-	}, [leftSidebarRef, rightSidebarRef, setLeftSidebar, setRightSidebar]);
-
-	const sidebarMinSize = isMobile ? "0%" : `${collapsedSidebarSize * 2}px`;
-	const sidebarCollapsedSize = isMobile ? "0%" : `${collapsedSidebarSize}px`;
-	const leftSidebarSize = isMobile ? "0%" : `${initialLayout.left}%`;
-	const rightSidebarSize = isMobile ? "0%" : `${initialLayout.right}%`;
-	const artboardSize = isMobile ? "100%" : `${initialLayout.artboard}%`;
+	const [mobileView, setMobileView] = useState<MobileBuilderView>("editor");
+	const { currentStep, setStep } = useBuilderStep();
 
 	return (
-		<div className="flex h-svh flex-col">
-			<BuilderHeader />
+		<div className="flex h-svh flex-col pt-16">
+			<BuilderHeader compact progress={{ currentStep, onChange: setStep }} />
+			<AiAssistantBanner />
 
-			<ResizableGroup orientation="horizontal" className="mt-14 flex-1" onLayoutChanged={onLayoutChanged}>
-				<ResizablePanel
-					collapsible
-					id="left"
-					panelRef={leftSidebarRef}
-					maxSize={maxSidebarSize}
-					minSize={sidebarMinSize}
-					collapsedSize={sidebarCollapsedSize}
-					defaultSize={leftSidebarSize}
-					className="z-20 h-[calc(100svh-3.5rem)]"
-				>
-					<BuilderSidebarLeft />
-				</ResizablePanel>
-				<ResizableSeparator withHandle className="z-50 border-s" />
-				<ResizablePanel id="artboard" defaultSize={artboardSize} className="h-[calc(100svh-3.5rem)]">
-					<Outlet />
-				</ResizablePanel>
-				<ResizableSeparator withHandle className="z-50 border-e" />
-				<ResizablePanel
-					collapsible
-					id="right"
-					panelRef={rightSidebarRef}
-					maxSize={maxSidebarSize}
-					minSize={sidebarMinSize}
-					collapsedSize={sidebarCollapsedSize}
-					defaultSize={rightSidebarSize}
-					className="z-20 h-[calc(100svh-3.5rem)]"
-				>
-					<BuilderSidebarRight />
-				</ResizablePanel>
-			</ResizableGroup>
+			{isMobile ? (
+				<div className="flex min-h-0 flex-1 flex-col">
+					<MobileViewSwitch value={mobileView} onChange={setMobileView} />
+					<div className="min-h-0 flex-1">{mobileView === "editor" ? <GuidedEditor /> : <Outlet />}</div>
+				</div>
+			) : (
+				<div className="grid min-h-0 flex-1 grid-cols-[minmax(25rem,45%)_minmax(0,1fr)]">
+					<div className="min-h-0 bg-background">
+						<GuidedEditor />
+					</div>
+					<div className="min-h-0 bg-muted/30">
+						<Outlet />
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }
 
-const setBuilderLayout = (data: BuilderLayout) => {
-	const layout = parseBuilderLayoutCookie(JSON.stringify(data));
-	Cookies.set(BUILDER_LAYOUT_COOKIE_NAME, JSON.stringify(layout), { path: "/" });
-};
+function ImportedBuilderShell({
+	tab,
+	section,
+	designSection,
+	isImported,
+}: {
+	tab: WorkspaceTab;
+	section: LeftSidebarSection;
+	designSection: DesignWorkspaceSection;
+	isImported: boolean;
+}) {
+	const navigate = useNavigate({ from: Route.fullPath });
 
-const getBuilderLayout = (): BuilderLayout => {
-	const layout = Cookies.get(BUILDER_LAYOUT_COOKIE_NAME);
-	if (!layout) return DEFAULT_BUILDER_LAYOUT;
-	return parseBuilderLayoutCookie(layout);
-};
+	return (
+		<div className="flex h-svh flex-col pt-[7.5rem] md:pt-16">
+			<BuilderHeader
+				compact
+				workspace={{
+					activeTab: tab,
+					onChange: (nextTab) => {
+						void navigate({ search: (previous: BuilderSearch) => ({ ...previous, tab: nextTab }) });
+					},
+				}}
+			/>
+			<AiAssistantBanner />
+			<ImportedWorkspace
+				tab={tab}
+				section={section}
+				designSection={designSection}
+				isImported={isImported}
+				onSectionChange={(nextSection) => {
+					void navigate({
+						search: (previous: BuilderSearch) => ({ ...previous, tab: "content", section: nextSection }),
+					});
+				}}
+				onDesignSectionChange={(nextSection) => {
+					void navigate({
+						search: (previous: BuilderSearch) => ({
+							...previous,
+							tab: "design",
+							designSection: nextSection,
+						}),
+					});
+				}}
+				preview={<Outlet />}
+			/>
+		</div>
+	);
+}

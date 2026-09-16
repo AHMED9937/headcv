@@ -3,7 +3,7 @@ name: baseline
 on:
   pull_request:
   push:
-    branches: ["chore/upstream-reactive-resume-v5.1.6"]
+    branches: ["chore/upstream-headcv-v5.1.6"]
 
 permissions:
   contents: read
@@ -34,7 +34,7 @@ jobs:
       - name: Fail on forbidden AI/MCP packages in dependency tree
         run: |
           set -euo pipefail
-          for pkg in "@reactive-resume/ai" "@reactive-resume/mcp" openai anthropic "@ai-sdk/anthropic" "@ai-sdk/openai" "@ai-sdk/google" "@ai-sdk/openai-compatible" "@ai-sdk/react" ollama-ai-provider-v2 "@modelcontextprotocol/sdk"; do
+          for pkg in "@headcv/ai" "@headcv/mcp" openai anthropic "@ai-sdk/anthropic" "@ai-sdk/openai" "@ai-sdk/google" "@ai-sdk/openai-compatible" "@ai-sdk/react" ollama-ai-provider-v2 "@modelcontextprotocol/sdk"; do
             if pnpm why "$pkg" 2>/dev/null | grep -q .; then
               echo "Forbidden AI/MCP package found in dependency tree: $pkg"
               exit 1
@@ -44,7 +44,7 @@ jobs:
       - name: Fail on forbidden AI/MCP source references
         run: |
           set -euo pipefail
-          if grep -RIl -E "@reactive-resume/ai|@reactive-resume/mcp" apps packages --include="*.ts" --include="*.tsx" --include="*.json"; then
+          if grep -RIl -E "@headcv/ai|@headcv/mcp" apps packages --include="*.ts" --include="*.tsx" --include="*.json"; then
             echo "Forbidden AI/MCP import or reference found in source."
             exit 1
           fi

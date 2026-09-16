@@ -104,6 +104,10 @@ export const defaultResumeData: ResumeData = {
 	},
 	customSections: [],
 	metadata: {
+		skippedSteps: [],
+		completedSteps: [],
+		targetJobTitleId: "",
+		experienceLevel: "entry",
 		template: "onyx",
 		layout: {
 			sidebarWidth: 35,
@@ -137,16 +141,16 @@ export const defaultResumeData: ResumeData = {
 		},
 		typography: {
 			body: {
-				fontFamily: "IBM Plex Serif",
-				fontWeights: ["400", "500"],
-				fontSize: 10,
-				lineHeight: 1.5,
+				fontFamily: "Inter",
+				fontWeights: ["400", "600"],
+				fontSize: 11,
+				lineHeight: 1.4,
 			},
 			heading: {
-				fontFamily: "IBM Plex Serif",
-				fontWeights: ["600"],
+				fontFamily: "Inter",
+				fontWeights: ["600", "700"],
 				fontSize: 14,
-				lineHeight: 1.5,
+				lineHeight: 1.3,
 			},
 		},
 		notes: "",

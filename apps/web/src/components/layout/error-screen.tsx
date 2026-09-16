@@ -1,9 +1,9 @@
 import type { ErrorComponentProps } from "@tanstack/react-router";
 import { Trans } from "@lingui/react/macro";
 import { ArrowClockwiseIcon, WarningIcon } from "@phosphor-icons/react";
-import { Alert, AlertDescription, AlertTitle } from "@reactive-resume/ui/components/alert";
-import { BrandIcon } from "@reactive-resume/ui/components/brand-icon";
-import { Button } from "@reactive-resume/ui/components/button";
+import { Alert, AlertDescription, AlertTitle } from "@headcv/ui/components/alert";
+import { BrandIcon } from "@headcv/ui/components/brand-icon";
+import { Button } from "@headcv/ui/components/button";
 
 export function ErrorScreen({ error, reset }: ErrorComponentProps) {
 	return (

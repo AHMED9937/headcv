@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { defaultResumeData } from "@reactive-resume/schema/resume/default";
+import { defaultResumeData } from "@headcv/schema/resume/default";
 import { assertCanView, isOwner, redactResumeForViewer, shouldCountForStatistics } from "./access-policy";
 
 describe("isOwner", () => {
@@ -55,7 +55,7 @@ describe("redactResumeForViewer", () => {
 
 	it("strips name to empty for non-owner", () => {
 		const resume = {
-			name: "Senior Eng @ Foo — final draft",
+			name: "Senior Eng @ Foo  final draft",
 			data: defaultResumeData,
 		};
 		const result = redactResumeForViewer(resume, false);

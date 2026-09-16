@@ -1,11 +1,11 @@
-import type { AuthProvider } from "@reactive-resume/auth/types";
+import type { AuthProvider } from "@headcv/auth/types";
 import { Trans } from "@lingui/react/macro";
 import { LinkBreakIcon, LinkIcon } from "@phosphor-icons/react";
 import { m } from "motion/react";
 import { useCallback, useMemo } from "react";
 import { match } from "ts-pattern";
-import { Button } from "@reactive-resume/ui/components/button";
-import { Separator } from "@reactive-resume/ui/components/separator";
+import { Button } from "@headcv/ui/components/button";
+import { Separator } from "@headcv/ui/components/separator";
 import { getProviderIcon, getProviderName, useAuthAccounts, useAuthProviderActions } from "./hooks";
 
 type SocialProviderSectionProps = {

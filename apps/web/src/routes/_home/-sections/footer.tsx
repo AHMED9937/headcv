@@ -1,153 +1,75 @@
-import type { Icon } from "@phosphor-icons/react";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { GithubLogoIcon, LinkedinLogoIcon, XLogoIcon } from "@phosphor-icons/react";
-import { m } from "motion/react";
-import { useState } from "react";
-import { BrandIcon } from "@reactive-resume/ui/components/brand-icon";
-import { Button } from "@reactive-resume/ui/components/button";
 import { Copyright } from "@/components/ui/copyright";
-
-type FooterLinkItem = {
-	url: string;
-	label: string;
-};
-
-type FooterLinkGroupProps = {
-	title: string;
-	links: FooterLinkItem[];
-};
-
-type SocialLink = {
-	url: string;
-	label: string;
-	icon: Icon;
-};
-
-const getResourceLinks = (): FooterLinkItem[] => [
-	{ url: "https://docs.rxresu.me", label: t`Documentation` },
-	{ url: "https://opencollective.com/reactive-resume/donate", label: t`Sponsorships` },
-	{ url: "https://github.com/amruthpillai/reactive-resume", label: t`Source Code` },
-	{ url: "https://docs.rxresu.me/changelog", label: t`Changelog` },
-];
-
-const getCommunityLinks = (): FooterLinkItem[] => [
-	{ url: "https://github.com/amruthpillai/reactive-resume/issues", label: t`Report an issue` },
-	{ url: "https://crowdin.com/project/reactive-resume", label: t`Translations` },
-	{ url: "https://reddit.com/r/reactiveresume", label: t`Subreddit` },
-	{ url: "https://discord.gg/aSyA5ZSxpb", label: t`Discord` },
-];
-
-const socialLinks: SocialLink[] = [
-	{ url: "https://github.com/amruthpillai/reactive-resume", label: t`GitHub`, icon: GithubLogoIcon },
-	{ url: "https://linkedin.com/in/amruthpillai", label: t`LinkedIn`, icon: LinkedinLogoIcon },
-	{ url: "https://x.com/KingOKings", label: t`X (Twitter)`, icon: XLogoIcon },
-];
+import { LandingBrand } from "./landing-brand";
 
 export function Footer() {
+	const groups = [
+		{
+			title: t({ id: "home.footer.product", message: "Product" }),
+			links: [
+				{ href: "/templates", text: t({ id: "home.footer.builder", message: "Resume builder" }) },
+				{ href: "/#templates", text: t({ id: "home.nav.templates", message: "Templates" }) },
+				{ href: "/#pricing", text: t({ id: "home.nav.pricing", message: "Pricing" }) },
+			],
+		},
+		{
+			title: t({ id: "home.footer.explore", message: "Explore" }),
+			links: [
+				{ href: "/#features", text: t({ id: "home.nav.how", message: "How it works" }) },
+				{ href: "/#faq", text: t({ id: "home.nav.faq", message: "FAQ" }) },
+				{ href: "/auth/login", text: t({ id: "home.signIn", message: "Sign in" }) },
+			],
+		},
+	];
 	return (
-		<m.footer
+		<footer
 			id="footer"
-			className="p-4 pb-8 will-change-[opacity] md:p-8 md:pb-12"
-			initial={{ opacity: 0 }}
-			whileInView={{ opacity: 1 }}
-			viewport={{ once: true }}
-			transition={{ duration: 0.45 }}
+			className="border-primary-foreground/20 border-t bg-primary px-4 py-12 text-primary-foreground sm:px-6 lg:px-8"
 		>
-			<div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-				{/* Brand Column */}
-				<div className="space-y-4 sm:col-span-2 lg:col-span-1">
-					<BrandIcon variant="logo" className="size-10" />
-
-					<div className="space-y-2">
-						<h2 className="font-semibold text-lg tracking-tight">Reactive Resume</h2>
-						<p className="max-w-xs text-muted-foreground text-sm leading-relaxed">
-							<Trans>
-								A free and open-source resume builder that simplifies the process of creating, updating, and sharing
-								your resume.
+			<div className="mx-auto max-w-7xl">
+				<div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr]">
+					{/* Brand Column */}
+					<div className="text-start sm:col-span-2 lg:col-span-1">
+						<a
+							href="/"
+							aria-label={t({ id: "home.brand", message: "HeadCV home" })}
+							className="inline-flex min-h-11 items-center gap-3 rounded-lg focus-visible:ring-2 focus-visible:ring-ring"
+						>
+							<span className="rounded-lg bg-card p-1">
+								<LandingBrand />
+							</span>
+						</a>
+						<p className="mt-5 max-w-sm text-sm leading-relaxed">
+							<Trans id="home.footer.text">
+								HeadCV is a guided CV builder that helps you tell your story with clear layouts and a live preview.
 							</Trans>
 						</p>
+						{/* Social Links */}
 					</div>
-
-					{/* Social Links */}
-					<div className="flex items-center gap-2 pt-2">
-						{socialLinks.map((social) => (
-							<Button
-								key={social.label}
-								size="icon-sm"
-								variant="ghost"
-								nativeButton={false}
-								render={
-									<a
-										href={social.url}
-										target="_blank"
-										rel="noopener noreferrer"
-										aria-label={`${social.label} (${t`opens in new tab`})`}
-									>
-										<social.icon aria-hidden="true" size={18} />
-									</a>
-								}
-							/>
-						))}
-					</div>
+					{/* Resources Column */}
+					{/* Community Column */}
+					{groups.map((group) => (
+						<div key={group.title} className="text-start">
+							<h2 className="font-sans font-semibold text-sm rtl:font-arabic">{group.title}</h2>
+							<ul className="mt-3">
+								{group.links.map((link) => (
+									<li key={link.href}>
+										<a
+											href={link.href}
+											className="inline-flex min-h-11 items-center rounded-md text-sm underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+										>
+											{link.text}
+										</a>
+									</li>
+								))}
+							</ul>
+						</div>
+					))}
 				</div>
-
-				{/* Resources Column */}
-				<FooterLinkGroup title={t`Resources`} links={getResourceLinks()} />
-
-				{/* Community Column */}
-				<FooterLinkGroup title={t`Community`} links={getCommunityLinks()} />
-
 				{/* Copyright Column */}
-				<div className="space-y-4 sm:col-span-2 lg:col-span-1">
-					<Copyright />
-				</div>
+				<Copyright className="mt-10 border-primary-foreground/20 border-t pt-8 text-start text-primary-foreground" />
 			</div>
-		</m.footer>
-	);
-}
-
-function FooterLinkGroup({ title, links }: FooterLinkGroupProps) {
-	return (
-		<div className="space-y-4">
-			<h2 className="font-medium text-muted-foreground text-sm tracking-tight">{title}</h2>
-
-			<ul className="space-y-3">
-				{links.map((link) => (
-					<FooterLink key={link.url} url={link.url} label={link.label} />
-				))}
-			</ul>
-		</div>
-	);
-}
-
-function FooterLink({ url, label }: FooterLinkItem) {
-	const [isHovered, setIsHovered] = useState(false);
-
-	return (
-		<li className="relative">
-			<a
-				href={url}
-				target="_blank"
-				rel="noopener"
-				className="relative inline-block text-sm transition-colors hover:text-foreground"
-				onMouseEnter={() => setIsHovered(true)}
-				onMouseLeave={() => setIsHovered(false)}
-			>
-				{label}
-
-				<span className="sr-only">
-					<Trans>(opens in new tab)</Trans>
-				</span>
-
-				<m.div
-					aria-hidden="true"
-					initial={{ width: 0, opacity: 0 }}
-					animate={isHovered ? { width: "100%", opacity: 1 } : { width: 0, opacity: 0 }}
-					transition={{ duration: 0.2, ease: "easeOut" }}
-					className="pointer-events-none absolute inset-s-0 -bottom-0.5 h-px rounded-md bg-primary will-change-[width,opacity]"
-				/>
-			</a>
-		</li>
+		</footer>
 	);
 }

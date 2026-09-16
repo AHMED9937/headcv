@@ -1,14 +1,14 @@
 {
 	"$schema": "https://mintlify.com/docs.json",
 	"theme": "mint",
-	"name": "Reactive Resume",
+	"name": "HeadCV",
 	"favicon": "/favicon.svg",
 	"description": "A privacy-minded resume builder that is customizable, portable, open-source, and free to use.",
 	"seo": {
 		"indexing": "navigable",
 		"metatags": {
-			"canonical": "https://docs.rxresu.me",
-			"og:image": "https://rxresu.me/opengraph/banner.jpg"
+			"canonical": "https://docs.headcv.com",
+			"og:image": "https://headcv.com/opengraph/banner.jpg"
 		}
 	},
 	"fonts": {
@@ -116,13 +116,13 @@
 			"anchors": [
 				{
 					"icon": "link",
-					"anchor": "Reactive Resume",
-					"href": "https://rxresu.me"
+					"anchor": "HeadCV",
+					"href": "https://headcv.com"
 				},
 				{
 					"icon": "github",
 					"anchor": "Source Code",
-					"href": "https://github.com/amruthpillai/reactive-resume"
+					"href": "https://github.com/AHMED9937/headcv"
 				}
 			]
 		}
@@ -135,13 +135,13 @@
 		"links": [
 			{
 				"label": "Support",
-				"href": "https://github.com/amruthpillai/reactive-resume/issues"
+				"href": "https://github.com/AHMED9937/headcv/issues"
 			}
 		],
 		"primary": {
 			"type": "button",
 			"label": "Get Started",
-			"href": "https://rxresu.me"
+			"href": "https://headcv.com"
 		}
 	},
 	"contextual": {
@@ -149,8 +149,8 @@
 	},
 	"footer": {
 		"socials": {
-			"website": "https://rxresu.me",
-			"github": "https://github.com/amruthpillai/reactive-resume"
+			"website": "https://headcv.com",
+			"github": "https://github.com/AHMED9937/headcv"
 		}
 	}
 }

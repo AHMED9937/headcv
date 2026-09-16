@@ -1,6 +1,6 @@
 import type { Icon as IconType } from "@phosphor-icons/react";
-import { SidebarTrigger } from "@reactive-resume/ui/components/sidebar";
-import { cn } from "@reactive-resume/utils/style";
+import { SidebarTrigger } from "@headcv/ui/components/sidebar";
+import { cn } from "@headcv/utils/style";
 
 type Props = {
 	title: string;

@@ -4,7 +4,7 @@
 
 > **Status note:** This implementation plan has been executed and may contain historical intermediate paths. Use `AGENTS.md`, `docs/contributing/architecture.mdx`, `docs/adr/0001-workspace-boundaries.md`, and `docs/superpowers/handoffs/2026-05-14-monorepo-architecture-reorg.md` for current architecture guidance.
 
-**Goal:** Reorganize Reactive Resume into clear domain/package boundaries so server, web, API, MCP, PDF, resume-domain logic, and documentation are easier to debug and enforce.
+**Goal:** Reorganize HeadCV into clear domain/package boundaries so server, web, API, MCP, PDF, resume-domain logic, and documentation are easier to debug and enforce.
 
 **Architecture:** This is one PR with green internal commits. Packages expose role-based explicit public surfaces, web routes become thin shells over domain features, API code is colocated by feature/capability, and boundary rules prevent app-to-app source imports and private package source imports.
 
@@ -37,7 +37,7 @@
 
 ## Task 1: Pure Resume Domain Package
 
-**Goal:** Create `@reactive-resume/resume` for pure resume-domain behavior, keeping `@reactive-resume/schema` validation-only and `@reactive-resume/utils` generic.
+**Goal:** Create `@headcv/resume` for pure resume-domain behavior, keeping `@headcv/schema` validation-only and `@headcv/utils` generic.
 
 **Files:**
 - Create: `packages/resume/package.json`
@@ -47,43 +47,43 @@
 - Move/create: `packages/resume/src/icons.ts`
 - Move tests from `packages/utils/src/resume/patch.test.ts`
 - Move tests for `packages/utils/src/network-icons.test.ts`
-- Modify importers/callers currently using `@reactive-resume/utils/resume/patch`
-- Modify importers/callers currently using `@reactive-resume/utils/network-icons`
+- Modify importers/callers currently using `@headcv/utils/resume/patch`
+- Modify importers/callers currently using `@headcv/utils/network-icons`
 - Modify `packages/utils/package.json`
 - Modify root workspace manifests/lockfile as needed
 
 - [x] Create the new package using the repo's source-consumed package pattern.
-- [x] Move JSON Patch schema/types/application/comparison/error into `@reactive-resume/resume/patch`.
-- [x] Move social network to icon-name mapping into `@reactive-resume/resume/icons`.
+- [x] Move JSON Patch schema/types/application/comparison/error into `@headcv/resume/patch`.
+- [x] Move social network to icon-name mapping into `@headcv/resume/icons`.
 - [x] Update all runtime and test imports.
-- [x] Remove `@reactive-resume/schema` dependency from `@reactive-resume/utils`.
-- [x] Run `pnpm --filter @reactive-resume/resume test`.
-- [x] Run `pnpm --filter @reactive-resume/resume typecheck`.
-- [x] Run targeted typechecks for known consumers: `@reactive-resume/api`, `@reactive-resume/ai`, `web`.
+- [x] Remove `@headcv/schema` dependency from `@headcv/utils`.
+- [x] Run `pnpm --filter @headcv/resume test`.
+- [x] Run `pnpm --filter @headcv/resume typecheck`.
+- [x] Run targeted typechecks for known consumers: `@headcv/api`, `@headcv/ai`, `web`.
 
 ## Task 2: DOCX Package
 
-**Goal:** Create `@reactive-resume/docx` as the dedicated DOCX export package.
+**Goal:** Create `@headcv/docx` as the dedicated DOCX export package.
 
 **Files:**
 - Create: `packages/docx/package.json`
 - Create: `packages/docx/tsconfig.json`
 - Create: `packages/docx/vitest.config.ts`
 - Move: `packages/utils/src/resume/docx/*` to `packages/docx/src/*`
-- Modify web export callers currently using `@reactive-resume/utils/resume/docx`
+- Modify web export callers currently using `@headcv/utils/resume/docx`
 - Modify package dependencies/lockfile
 
-- [x] Create `@reactive-resume/docx` with explicit export `"."` or `"./builder"` as appropriate.
+- [x] Create `@headcv/docx` with explicit export `"."` or `"./builder"` as appropriate.
 - [x] Move DOCX implementation and tests unchanged except import paths.
-- [x] Update web callers to import DOCX export from `@reactive-resume/docx`.
-- [x] Remove DOCX dependencies from `@reactive-resume/utils` if no longer used there.
-- [x] Run `pnpm --filter @reactive-resume/docx test`.
-- [x] Run `pnpm --filter @reactive-resume/docx typecheck`.
+- [x] Update web callers to import DOCX export from `@headcv/docx`.
+- [x] Remove DOCX dependencies from `@headcv/utils` if no longer used there.
+- [x] Run `pnpm --filter @headcv/docx test`.
+- [x] Run `pnpm --filter @headcv/docx typecheck`.
 - [x] Run focused web export tests/typecheck.
 
 ## Task 3: PDF Package Browser/Server Generation Surface
 
-**Goal:** Keep `@reactive-resume/pdf` focused on document/template/font rendering and pure generation adapters. Do not move PDF.js viewer UI into the PDF package.
+**Goal:** Keep `@headcv/pdf` focused on document/template/font rendering and pure generation adapters. Do not move PDF.js viewer UI into the PDF package.
 
 **Files:**
 - Create: `packages/pdf/src/browser.tsx`
@@ -98,12 +98,12 @@
 - [x] Keep Lingui locale loading in `apps/web`; pass `resolveSectionTitle` into PDF helpers.
 - [x] Keep `ResumeDocument` as the underlying render surface.
 - [x] Add/update tests for the browser/server helpers where practical.
-- [x] Run `pnpm --filter @reactive-resume/pdf test`.
-- [x] Run `pnpm --filter @reactive-resume/pdf typecheck`.
+- [x] Run `pnpm --filter @headcv/pdf test`.
+- [x] Run `pnpm --filter @headcv/pdf typecheck`.
 
 ## Task 4: MCP Package and Shared Tool Contracts
 
-**Goal:** Extract MCP implementation from web route helpers into `@reactive-resume/mcp`; share model-facing tool contracts from `@reactive-resume/ai`.
+**Goal:** Extract MCP implementation from web route helpers into `@headcv/mcp`; share model-facing tool contracts from `@headcv/ai`.
 
 **Files:**
 - Create: `packages/mcp/package.json`
@@ -116,14 +116,14 @@
 - Modify: `apps/server/src/handlers/metadata.ts`
 - Remove old web helper imports
 
-- [x] Move MCP tools/prompts/resources/metadata card generation and tests into `@reactive-resume/mcp`.
+- [x] Move MCP tools/prompts/resources/metadata card generation and tests into `@headcv/mcp`.
 - [x] Keep MCP execution through an injected/in-process oRPC `RouterClient`.
 - [x] Rename MCP tools to canonical unprefixed snake_case names such as `list_resumes`, `read_resume`, `apply_resume_patch`.
-- [x] Do not keep old `reactive_resume_*` aliases.
-- [x] Use shared base tool contracts from `@reactive-resume/ai`, with MCP-specific schema extensions for explicit context fields such as `resumeId`.
+- [x] Do not keep old `headcv_*` aliases.
+- [x] Use shared base tool contracts from `@headcv/ai`, with MCP-specific schema extensions for explicit context fields such as `resumeId`.
 - [ ] Update MCP docs/card version and cache-refresh guidance later in documentation tasks.
-- [x] Run `pnpm --filter @reactive-resume/mcp test`.
-- [x] Run `pnpm --filter @reactive-resume/mcp typecheck`.
+- [x] Run `pnpm --filter @headcv/mcp test`.
+- [x] Run `pnpm --filter @headcv/mcp typecheck`.
 - [x] Run `pnpm --filter server typecheck`.
 
 ## Task 5: API Feature Reorganization
@@ -138,13 +138,13 @@
 
 - [x] Split `features/agent` into `threads`, `messages`, `attachments`, `actions`, `runs`, and `tools`.
 - [x] Split `features/resume` by capability: `crud`, `tags`, `statistics`, `analysis`, `access`, `events`, `sharing`, `export`.
-- [x] Move authenticated PDF download procedure into `features/resume/export`; it calls `@reactive-resume/pdf/server`.
+- [x] Move authenticated PDF download procedure into `features/resume/export`; it calls `@headcv/pdf/server`.
 - [x] Keep Drizzle schema centralized in `packages/db`; API features consume schema but do not own table definitions.
 - [x] Remove `./services/*` and `./helpers/*` wildcard exports.
 - [x] Add explicit runtime exports required by `apps/server`.
 - [x] Preserve `apps/web` API imports as type-only.
-- [x] Run `pnpm --filter @reactive-resume/api test`.
-- [x] Run `pnpm --filter @reactive-resume/api typecheck`.
+- [x] Run `pnpm --filter @headcv/api test`.
+- [x] Run `pnpm --filter @headcv/api typecheck`.
 - [x] Run `pnpm --filter server typecheck`.
 - [x] Run `pnpm --filter web typecheck`.
 
@@ -182,7 +182,7 @@
   - `templates`
   - `export`
   - `pdf-viewer`
-- [x] Move PDF.js viewer/canvas UI into web resume feature, not `@reactive-resume/pdf`.
+- [x] Move PDF.js viewer/canvas UI into web resume feature, not `@headcv/pdf`.
 - [x] Keep route files responsible for URL params, loaders, redirects, SSR settings, and composition.
 - [x] Leave `apps/web/src/components` with generic app-level primitives/screens only.
 - [x] Move app shell concerns into separate features: command palette, theme, locale, user.
@@ -194,7 +194,7 @@ Slice 1 notes:
 
 - Moved resume builder draft state, builder preview, PDF.js canvas preview, dashboard thumbnail PDF rendering helpers, public resume PDF viewer, and web-local PDF document wrappers under `apps/web/src/features/resume/*`.
 - Removed `apps/web/src/components/resume` and `apps/web/src/routes/$username/-components`; the public resume route now lazy-loads from `features/resume/public`.
-- Kept PDF.js viewer/canvas code in `apps/web/src/features/resume` and left `@reactive-resume/pdf` limited to PDF generation helpers.
+- Kept PDF.js viewer/canvas code in `apps/web/src/features/resume` and left `@headcv/pdf` limited to PDF generation helpers.
 - Broader Task 7 remains open for non-resume web feature moves and deeper dialog registry work owned by Task 8.
 
 Slice 2 notes:

@@ -4,14 +4,15 @@ import { useRender } from "@base-ui/react/use-render";
 import { SidebarIcon } from "@phosphor-icons/react";
 import { cva } from "class-variance-authority";
 import * as React from "react";
-import { Button } from "@reactive-resume/ui/components/button";
-import { Input } from "@reactive-resume/ui/components/input";
-import { Separator } from "@reactive-resume/ui/components/separator";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@reactive-resume/ui/components/sheet";
-import { Skeleton } from "@reactive-resume/ui/components/skeleton";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@reactive-resume/ui/components/tooltip";
-import { useIsMobile } from "@reactive-resume/ui/hooks/use-mobile";
-import { cn } from "@reactive-resume/utils/style";
+import { Button } from "@headcv/ui/components/button";
+import { useDirection } from "@headcv/ui/components/direction";
+import { Input } from "@headcv/ui/components/input";
+import { Separator } from "@headcv/ui/components/separator";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@headcv/ui/components/sheet";
+import { Skeleton } from "@headcv/ui/components/skeleton";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@headcv/ui/components/tooltip";
+import { useIsMobile } from "@headcv/ui/hooks/use-mobile";
+import { cn } from "@headcv/utils/style";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -143,7 +144,7 @@ function SidebarProvider({
 }
 
 function Sidebar({
-	side = "left",
+	side,
 	variant = "sidebar",
 	collapsible = "offcanvas",
 	className,
@@ -156,6 +157,9 @@ function Sidebar({
 	collapsible?: "offcanvas" | "icon" | "none";
 }) {
 	const { isMobile, state, openMobile, setOpenMobile } = useSidebarState();
+	const contextDirection = useDirection();
+	const direction = dir ?? contextDirection;
+	const resolvedSide = side ?? (direction === "rtl" ? "right" : "left");
 
 	if (collapsible === "none") {
 		return (
@@ -173,7 +177,7 @@ function Sidebar({
 		return (
 			<Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
 				<SheetContent
-					dir={dir}
+					dir={direction}
 					data-sidebar="sidebar"
 					data-slot="sidebar"
 					data-mobile="true"
@@ -183,7 +187,7 @@ function Sidebar({
 							"--sidebar-width": SIDEBAR_WIDTH_MOBILE,
 						} as React.CSSProperties
 					}
-					side={side}
+					side={resolvedSide}
 				>
 					<SheetHeader className="sr-only">
 						<SheetTitle>Sidebar</SheetTitle>
@@ -201,7 +205,7 @@ function Sidebar({
 			data-state={state}
 			data-collapsible={state === "collapsed" ? collapsible : ""}
 			data-variant={variant}
-			data-side={side}
+			data-side={resolvedSide}
 			data-slot="sidebar"
 		>
 			{/* This is what handles the sidebar gap on desktop */}
@@ -218,7 +222,7 @@ function Sidebar({
 			/>
 			<div
 				data-slot="sidebar-container"
-				data-side={side}
+				data-side={resolvedSide}
 				className={cn(
 					"fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear data-[side=right]:right-0 data-[side=left]:left-0 data-[side=right]:group-data-[collapsible=offcanvas]:-right-(--sidebar-width) data-[side=left]:group-data-[collapsible=offcanvas]:-left-(--sidebar-width) md:flex",
 					// Adjust the padding for floating and inset variants.

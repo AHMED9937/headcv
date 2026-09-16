@@ -1,11 +1,11 @@
 import crypto from "node:crypto";
 import { eq } from "drizzle-orm";
-import { auth } from "@reactive-resume/auth/config";
-import { db } from "@reactive-resume/db/client";
-import { oauthClient, verification } from "@reactive-resume/db/schema";
-import { env } from "@reactive-resume/env/server";
-import { generateId } from "@reactive-resume/utils/string";
-import { isAllowedOAuthRedirectUri } from "@reactive-resume/utils/url-security.node";
+import { auth } from "@headcv/auth/config";
+import { db } from "@headcv/db/client";
+import { oauthClient, verification } from "@headcv/db/schema";
+import { env } from "@headcv/env/server";
+import { generateId } from "@headcv/utils/string";
+import { isAllowedOAuthRedirectUri } from "@headcv/utils/url-security.node";
 
 const oauthAuthorizeSanitizedParams = [
 	"prompt",

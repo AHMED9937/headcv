@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { basename, extname, normalize } from "node:path";
-import { getStorageService } from "@reactive-resume/api/features/storage";
-import { env } from "@reactive-resume/env/server";
+import { getStorageService } from "@headcv/api/features/storage";
+import { env } from "@headcv/env/server";
 
 export async function handleUpload(request: Request) {
 	const { userId, filePath } = parseRouteParams(request.url);

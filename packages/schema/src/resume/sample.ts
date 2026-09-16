@@ -519,6 +519,10 @@ export const sampleResumeData: ResumeData = {
 		},
 	],
 	metadata: {
+		skippedSteps: [],
+		completedSteps: [],
+		targetJobTitleId: "",
+		experienceLevel: "entry",
 		template: "azurill",
 		layout: {
 			sidebarWidth: 30,

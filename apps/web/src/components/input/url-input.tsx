@@ -1,19 +1,19 @@
-import type { Website } from "@reactive-resume/schema/resume/data";
+import type { Website } from "@headcv/schema/resume/data";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { TagIcon } from "@phosphor-icons/react";
 import { useCallback, useMemo } from "react";
-import { Input } from "@reactive-resume/ui/components/input";
+import { Input } from "@headcv/ui/components/input";
 import {
 	InputGroup,
 	InputGroupAddon,
 	InputGroupButton,
 	InputGroupInput,
 	InputGroupText,
-} from "@reactive-resume/ui/components/input-group";
-import { Label } from "@reactive-resume/ui/components/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@reactive-resume/ui/components/popover";
-import { cn } from "@reactive-resume/utils/style";
+} from "@headcv/ui/components/input-group";
+import { Label } from "@headcv/ui/components/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@headcv/ui/components/popover";
+import { cn } from "@headcv/utils/style";
 
 const PREFIX = "https://";
 

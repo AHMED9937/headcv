@@ -1,7 +1,7 @@
-import type { ResumeData } from "@reactive-resume/schema/resume/data";
-import type { CSSProperties } from "react";
-import { Spinner } from "@reactive-resume/ui/components/spinner";
-import { cn } from "@reactive-resume/utils/style";
+import type { ResumeData } from "@headcv/schema/resume/data";
+import type { CSSProperties, ReactNode } from "react";
+import { Spinner } from "@headcv/ui/components/spinner";
+import { cn } from "@headcv/utils/style";
 
 export type ResumePreviewProps = {
 	className?: string;
@@ -11,7 +11,19 @@ export type ResumePreviewProps = {
 	pageScale?: number;
 	pageClassName?: string;
 	showPageNumbers?: boolean;
+	renderSectionOverlay?: (marker: ResumePreviewSectionMarker) => ReactNode;
 };
+
+export type ResumePreviewSectionMarker = {
+	sectionId: string;
+	pageNumber: number;
+	left: number;
+	top: number;
+	width: number;
+	height: number;
+};
+
+export const RESUME_PREVIEW_SECTION_MARKER_PREFIX = "https://resume-section.invalid/";
 
 export type ResolvedResumePreviewProps = ResumePreviewProps & {
 	pageLayout: "horizontal" | "vertical";
@@ -31,8 +43,8 @@ type ResumePreviewLoaderProps = Pick<ResumePreviewProps, "pageClassName" | "show
 	pageScale?: number;
 };
 
-const PDF_PAGE_RENDER_SCALE = 4;
-const MAX_PREVIEW_CANVAS_PIXELS = 16_777_216; // 4096 * 4096
+const PDF_PAGE_RENDER_SCALE = 5;
+const MAX_PREVIEW_CANVAS_PIXELS = 24_000_000; // 24 MP preview budget
 export const DEFAULT_PDF_PAGE_SIZE: PreviewPageSize = {
 	height: 841.89,
 	width: 595.28,

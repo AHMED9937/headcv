@@ -1,7 +1,7 @@
 import type React from "react";
 import { m, useMotionTemplate, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useRef } from "react";
-import { cn } from "@reactive-resume/utils/style";
+import { cn } from "@headcv/utils/style";
 
 type Props = {
 	rotateDepth?: number;

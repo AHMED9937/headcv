@@ -1,5 +1,5 @@
+import type { CustomSectionType } from "@headcv/schema/resume/data";
 import type { MessageDescriptor } from "@lingui/core";
-import type { CustomSectionType } from "@reactive-resume/schema/resume/data";
 import type z from "zod";
 import type { DialogProps } from "@/dialogs/store";
 import { msg } from "@lingui/core/macro";
@@ -7,18 +7,18 @@ import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
 import { PencilSimpleLineIcon, PlusIcon } from "@phosphor-icons/react";
 import { useStore } from "@tanstack/react-form";
-import { customSectionSchema } from "@reactive-resume/schema/resume/data";
-import { Button } from "@reactive-resume/ui/components/button";
+import { customSectionSchema } from "@headcv/schema/resume/data";
+import { Button } from "@headcv/ui/components/button";
 import {
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-} from "@reactive-resume/ui/components/dialog";
-import { FormControl, FormItem, FormLabel, FormMessage } from "@reactive-resume/ui/components/form";
-import { Input } from "@reactive-resume/ui/components/input";
-import { generateId } from "@reactive-resume/utils/string";
+} from "@headcv/ui/components/dialog";
+import { FormControl, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
+import { Input } from "@headcv/ui/components/input";
+import { generateId } from "@headcv/utils/string";
 import { Combobox } from "@/components/ui/combobox";
 import { useDialogStore } from "@/dialogs/store";
 import { useUpdateResumeData } from "@/features/resume/builder/draft";

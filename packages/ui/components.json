@@ -12,11 +12,11 @@
 	},
 	"iconLibrary": "phosphor",
 	"aliases": {
-		"components": "@reactive-resume/ui/components",
-		"utils": "@reactive-resume/utils/style",
-		"hooks": "@reactive-resume/ui/hooks",
-		"lib": "@reactive-resume/utils",
-		"ui": "@reactive-resume/ui/components"
+		"components": "@headcv/ui/components",
+		"utils": "@headcv/utils/style",
+		"hooks": "@headcv/ui/hooks",
+		"lib": "@headcv/utils",
+		"ui": "@headcv/ui/components"
 	},
 	"rtl": true,
 	"menuColor": "default-translucent",

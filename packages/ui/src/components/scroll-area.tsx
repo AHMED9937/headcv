@@ -1,5 +1,5 @@
 import { ScrollArea as ScrollAreaPrimitive } from "@base-ui/react/scroll-area";
-import { cn } from "@reactive-resume/utils/style";
+import { cn } from "@headcv/utils/style";
 
 function ScrollArea({ className, children, ...props }: ScrollAreaPrimitive.Root.Props) {
 	return (

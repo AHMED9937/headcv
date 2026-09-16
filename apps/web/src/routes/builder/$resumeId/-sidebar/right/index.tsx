@@ -1,38 +1,13 @@
 import type { RightSidebarSection } from "@/libs/resume/section";
 import { Fragment, useCallback, useRef } from "react";
-import { match } from "ts-pattern";
-import { Button } from "@reactive-resume/ui/components/button";
-import { ScrollArea } from "@reactive-resume/ui/components/scroll-area";
-import { Separator } from "@reactive-resume/ui/components/separator";
+import { Button } from "@headcv/ui/components/button";
+import { ScrollArea } from "@headcv/ui/components/scroll-area";
+import { Separator } from "@headcv/ui/components/separator";
 import { Copyright } from "@/components/ui/copyright";
 import { getSectionIcon, getSectionTitle, rightSidebarSections } from "@/libs/resume/section";
 import { BuilderSidebarEdge } from "../../-components/edge";
 import { useBuilderSidebar } from "../../-store/sidebar";
-import { DesignSectionBuilder } from "./sections/design";
-import { ExportSectionBuilder } from "./sections/export";
-import { InformationSectionBuilder } from "./sections/information";
-import { LayoutSectionBuilder } from "./sections/layout";
-import { NotesSectionBuilder } from "./sections/notes";
-import { PageSectionBuilder } from "./sections/page";
-import { SharingSectionBuilder } from "./sections/sharing";
-import { StatisticsSectionBuilder } from "./sections/statistics";
-import { TemplateSectionBuilder } from "./sections/template";
-import { TypographySectionBuilder } from "./sections/typography";
-
-function getSectionComponent(type: RightSidebarSection) {
-	return match(type)
-		.with("template", () => <TemplateSectionBuilder />)
-		.with("layout", () => <LayoutSectionBuilder />)
-		.with("typography", () => <TypographySectionBuilder />)
-		.with("design", () => <DesignSectionBuilder />)
-		.with("page", () => <PageSectionBuilder />)
-		.with("notes", () => <NotesSectionBuilder />)
-		.with("sharing", () => <SharingSectionBuilder />)
-		.with("statistics", () => <StatisticsSectionBuilder />)
-		.with("export", () => <ExportSectionBuilder />)
-		.with("information", () => <InformationSectionBuilder />)
-		.exhaustive();
-}
+import { getSectionComponent } from "./section-components";
 
 export function BuilderSidebarRight() {
 	const scrollAreaRef = useRef<HTMLDivElement | null>(null);

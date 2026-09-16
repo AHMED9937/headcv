@@ -1,0 +1,74 @@
+[
+	{
+		"id": "general",
+		"title": "سيرة ذاتية عامة",
+		"category": "عام",
+		"experienceLevels": ["entry", "mid", "senior", "executive"]
+	},
+	{
+		"id": "software-engineer",
+		"title": "مهندس برمجيات",
+		"category": "تقنية",
+		"experienceLevels": ["entry", "mid", "senior", "executive"]
+	},
+	{
+		"id": "frontend-developer",
+		"title": "مطور واجهات أمامية",
+		"category": "تقنية",
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "backend-developer",
+		"title": "مطور خلفيات",
+		"category": "تقنية",
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "devops-engineer",
+		"title": "مهندس DevOps",
+		"category": "تقنية",
+		"experienceLevels": ["mid", "senior"]
+	},
+	{
+		"id": "data-analyst",
+		"title": "محلل بيانات",
+		"category": "تقنية",
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "product-manager",
+		"title": "مدير منتج",
+		"category": "منتج",
+		"experienceLevels": ["mid", "senior", "executive"]
+	},
+	{
+		"id": "project-manager",
+		"title": "مدير مشاريع",
+		"category": "عمليات",
+		"experienceLevels": ["mid", "senior", "executive"]
+	},
+	{
+		"id": "ui-ux-designer",
+		"title": "مصمم واجهات وتجربة مستخدم",
+		"category": "تصميم",
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "marketing-manager",
+		"title": "مدير تسويق",
+		"category": "تسويق",
+		"experienceLevels": ["mid", "senior"]
+	},
+	{
+		"id": "sales-representative",
+		"title": "ممثل مبيعات",
+		"category": "مبيعات",
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "customer-support-specialist",
+		"title": "أخصائي دعم العملاء",
+		"category": "دعم",
+		"experienceLevels": ["entry", "mid"]
+	}
+]

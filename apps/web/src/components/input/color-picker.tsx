@@ -4,9 +4,9 @@ import { Trans } from "@lingui/react/macro";
 import { hsvaToRgbaString, rgbaStringToHsva } from "@uiw/color-convert";
 import ReactColorColorful from "@uiw/react-color-colorful";
 import { useMemo } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "@reactive-resume/ui/components/popover";
-import { Separator } from "@reactive-resume/ui/components/separator";
-import { cn } from "@reactive-resume/utils/style";
+import { Popover, PopoverContent, PopoverTrigger } from "@headcv/ui/components/popover";
+import { Separator } from "@headcv/ui/components/separator";
+import { cn } from "@headcv/utils/style";
 import { useControlledState } from "@/hooks/use-controlled-state";
 
 const presetColors = [

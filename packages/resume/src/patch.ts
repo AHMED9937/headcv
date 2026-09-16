@@ -1,7 +1,11 @@
-import type { ResumeData } from "@reactive-resume/schema/resume/data";
-import jsonpatch, { type JsonPatchError, type Operation } from "fast-json-patch";
+import type { ResumeData } from "@headcv/schema/resume/data";
+import type { JsonPatchError, Operation } from "fast-json-patch";
+import jsonpatch from "fast-json-patch";
+
+export type { Operation } from "fast-json-patch";
+
 import z from "zod";
-import { resumeDataSchema } from "@reactive-resume/schema/resume/data";
+import { resumeDataSchema } from "@headcv/schema/resume/data";
 
 /**
  * A Zod schema that models JSON Patch (RFC 6902) operations as a discriminated union on `op`.
@@ -94,7 +98,7 @@ function toResumePatchError(error: JsonPatchError): ResumePatchError {
  *
  * The original `data` object is not mutated; a deep clone is created internally.
  *
- * @see https://docs.rxresu.me/guides/using-the-patch-api - for usage examples and API details.
+ * @see https://docs.headcv.com/guides/using-the-patch-api - for usage examples and API details.
  * @see https://datatracker.ietf.org/doc/html/rfc6902 - JSON Patch specification.
  *
  * @param data - The current resume data to patch.

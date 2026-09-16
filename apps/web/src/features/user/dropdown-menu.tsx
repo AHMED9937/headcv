@@ -1,9 +1,9 @@
-import type { AuthSession } from "@reactive-resume/auth/types";
+import type { AuthSession } from "@headcv/auth/types";
 import { t } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
-import { PaletteIcon, SignOutIcon, TranslateIcon } from "@phosphor-icons/react";
-import { useRouter } from "@tanstack/react-router";
+import { GearSixIcon, PaletteIcon, SignOutIcon, TranslateIcon } from "@phosphor-icons/react";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { useIsClient } from "usehooks-ts";
 import {
@@ -18,7 +18,7 @@ import {
 	DropdownMenuSubContent,
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
-} from "@reactive-resume/ui/components/dropdown-menu";
+} from "@headcv/ui/components/dropdown-menu";
 import { useTheme } from "@/features/theme/provider";
 import { authClient } from "@/libs/auth/client";
 import { getReadableErrorMessage } from "@/libs/error-message";
@@ -31,6 +31,7 @@ type Props = {
 
 export function UserDropdownMenu({ children }: Props) {
 	const isClient = useIsClient();
+	const navigate = useNavigate();
 	const router = useRouter();
 	const { i18n } = useLingui();
 	const { theme, setTheme } = useTheme();
@@ -115,6 +116,11 @@ export function UserDropdownMenu({ children }: Props) {
 						</DropdownMenuSubContent>
 					</DropdownMenuSub>
 				</DropdownMenuGroup>
+
+				<DropdownMenuItem onClick={() => void navigate({ to: "/dashboard/settings/profile" })}>
+					<GearSixIcon />
+					<Trans>Settings</Trans>
+				</DropdownMenuItem>
 
 				<DropdownMenuSeparator />
 

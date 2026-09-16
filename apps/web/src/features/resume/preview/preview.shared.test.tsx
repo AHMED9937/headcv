@@ -2,7 +2,7 @@
 
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { sampleResumeData } from "@reactive-resume/schema/resume/sample";
+import { sampleResumeData } from "@headcv/schema/resume/sample";
 import {
 	DEFAULT_PDF_PAGE_SIZE,
 	getResumePreviewPageCount,

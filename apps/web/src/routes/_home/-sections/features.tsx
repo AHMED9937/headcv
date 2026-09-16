@@ -1,201 +1,140 @@
-import type { Icon } from "@phosphor-icons/react";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
-	CloudArrowUpIcon,
-	CodeSimpleIcon,
-	CurrencyDollarIcon,
-	DatabaseIcon,
-	DotsThreeIcon,
-	FilePdfIcon,
-	FilesIcon,
-	GithubLogoIcon,
-	GlobeIcon,
-	KeyIcon,
+	CheckCircleIcon,
+	DownloadSimpleIcon,
+	FileArrowUpIcon,
+	FileTextIcon,
 	LayoutIcon,
-	LockSimpleIcon,
 	PaletteIcon,
-	ProhibitIcon,
 	ShieldCheckIcon,
-	TranslateIcon,
 } from "@phosphor-icons/react";
-import { m } from "motion/react";
-import { useMemo } from "react";
-import { cn } from "@reactive-resume/utils/style";
+import { cn } from "@headcv/utils/style";
+import { LandingIcon } from "./landing-icon";
+import { landingIconHover, landingSurfaceHover } from "./landing-motion";
 
-type Feature = {
-	id: string;
-	icon: Icon;
-	title: string;
-	description: string;
-};
-
-type FeatureCardProps = Feature;
-
-const getFeatures = (): Feature[] => [
-	{
-		id: "free",
-		icon: CurrencyDollarIcon,
-		title: t`Free`,
-		description: t`Completely free, forever, no hidden costs.`,
-	},
-	{
-		id: "open-source",
-		icon: GithubLogoIcon,
-		title: t`Open Source`,
-		description: t`By the community, for the community.`,
-	},
-	{
-		id: "no-ads",
-		icon: ProhibitIcon,
-		title: t`No Advertising, No Tracking`,
-		description: t`For a secure and distraction-free experience.`,
-	},
-	{
-		id: "instant-generation",
-		icon: FilePdfIcon,
-		title: t`Instant Generation`,
-		description: t`Export your resume to PDF instantly, without any waiting or delays.`,
-	},
-	{
-		id: "data-security",
-		icon: DatabaseIcon,
-		title: t`Data Security`,
-		description: t`Your data is secure, and never shared or sold to anyone.`,
-	},
-	{
-		id: "self-host",
-		icon: CloudArrowUpIcon,
-		title: t`Self-Host with Docker`,
-		description: t`You also have the option to deploy on your own servers using the Docker image.`,
-	},
-	{
-		id: "languages",
-		icon: TranslateIcon,
-		title: t`Multilingual`,
-		description: t`Available in multiple languages. If you would like to contribute, check out Crowdin.`,
-	},
-	{
-		id: "auth",
-		icon: KeyIcon,
-		title: t`One-Click Sign-In`,
-		description: t`Sign in with GitHub, Google or a custom OAuth provider.`,
-	},
-	{
-		id: "2fa",
-		icon: ShieldCheckIcon,
-		title: t`Passkeys & 2FA`,
-		description: t`Enhance the security of your account with additional layers of protection.`,
-	},
-	{
-		id: "unlimited-resumes",
-		icon: FilesIcon,
-		title: t`Unlimited Resumes`,
-		description: t`Create as many resumes as you want, without limits.`,
-	},
-	{
-		id: "design",
-		icon: PaletteIcon,
-		title: t`Flexibility`,
-		description: t`Personalize your resume with any colors, fonts or designs, and make it your own.`,
-	},
-	{
-		id: "templates",
-		icon: LayoutIcon,
-		title: t`12+ Templates`,
-		description: t`Beautiful templates to choose from, with more on the way.`,
-	},
-	{
-		id: "public",
-		icon: GlobeIcon,
-		title: t`Shareable Links`,
-		description: t`Share your resume with a public URL, and let others view it.`,
-	},
-	{
-		id: "password-protection",
-		icon: LockSimpleIcon,
-		title: t`Password Protection`,
-		description: t`Protect your resume with a password, and let only people with the password view it.`,
-	},
-	{
-		id: "api-access",
-		icon: CodeSimpleIcon,
-		title: t`API Access`,
-		description: t`Access your resumes and data programmatically using the API.`,
-	},
-	{
-		id: "more",
-		icon: DotsThreeIcon,
-		title: t`And many more...`,
-		description: t`New features are constantly being added and improved, so be sure to check back often.`,
-	},
-];
-
-function FeatureCard({ icon: Icon, title, description }: FeatureCardProps) {
+export function Features() {
+	const features = [
+		{
+			icon: FileTextIcon,
+			title: t({ id: "home.free.start", message: "Start with a free resume" }),
+			description: t({
+				id: "home.free.startText",
+				message: "Write, edit and preview your resume. No credit card needed to begin.",
+			}),
+		},
+		{
+			icon: ShieldCheckIcon,
+			title: t({ id: "home.free.watermark", message: "Your name. Not our branding." }),
+			description: t({
+				id: "home.free.watermarkText",
+				message: "Your PDF is yours to share, without a HeadCV logo or watermark.",
+			}),
+		},
+		{
+			icon: DownloadSimpleIcon,
+			title: t({ id: "home.free.download", message: "PDFs, whenever you need" }),
+			description: t({
+				id: "home.free.downloadText",
+				message: "Keep your resume current and download a fresh copy for your next application.",
+			}),
+		},
+		{
+			icon: LayoutIcon,
+			title: t({ id: "home.free.templates", message: "Find your format" }),
+			description: t({
+				id: "home.free.templatesText",
+				message: "Choose from our resume templates, with room for your experience and personality.",
+			}),
+		},
+		{
+			icon: FileArrowUpIcon,
+			title: t({ id: "home.free.import", message: "Skip the blank page" }),
+			description: t({
+				id: "home.free.importText",
+				message: "Import an existing resume or build a new one, section by section.",
+			}),
+		},
+		{
+			icon: PaletteIcon,
+			title: t({ id: "home.free.design", message: "Make every detail yours" }),
+			description: t({
+				id: "home.free.designText",
+				message: "Adjust your fonts, colors and spacing for a resume that feels like you.",
+			}),
+		},
+	];
 	return (
-		<m.div
-			className={cn(
-				"group relative flex min-h-48 flex-col gap-4 overflow-hidden border-b bg-background p-6 transition-[background-color] duration-300 will-change-[transform,opacity]",
-				"not-nth-[2n]:border-r xl:not-nth-[4n]:border-r",
-				"hover:bg-secondary/30",
-			)}
-			initial={{ opacity: 0, y: 16 }}
-			whileInView={{ opacity: 1, y: 0 }}
-			viewport={{ once: true, amount: 0.1 }}
-			transition={{ duration: 0.35, ease: "easeOut" }}
-		>
-			{/* Hover gradient overlay */}
-			<div
-				aria-hidden="true"
-				className="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-			/>
-
-			{/* Icon */}
-			<div aria-hidden="true" className="relative">
-				<div className="inline-flex rounded-md bg-primary/5 p-2.5 text-foreground transition-colors group-hover:bg-primary/10 group-hover:text-primary">
-					<Icon size={24} weight="thin" />
+		<section aria-labelledby="included-heading" className="px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+			<div className="mx-auto max-w-7xl">
+				{/* Header */}
+				<div className="mx-auto mb-12 max-w-3xl text-center">
+					<h2 id="included-heading" className="font-bold font-display text-3xl text-primary sm:text-4xl">
+						<Trans id="home.free.heading">Everything you need to get started</Trans>
+					</h2>
+					<p className="mt-4 text-lg text-muted-foreground">
+						<Trans id="home.free.intro">Focus on your next opportunity. We will help with the resume.</Trans>
+					</p>
+				</div>
+				{/* Features Grid */}
+				<div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+					{features.map(({ icon: Icon, title, description }) => (
+						<div
+							key={title}
+							className={cn("group relative rounded-2xl border bg-card p-6 text-start", landingSurfaceHover)}
+						>
+							{/* Hover gradient overlay */}
+							<div
+								aria-hidden="true"
+								className="pointer-events-none absolute inset-0 rounded-2xl bg-linear-to-br from-primary/3 to-transparent"
+							/>
+							{/* Icon */}
+							<div className={cn("mb-5 w-fit", landingIconHover)}>
+								<LandingIcon icon={Icon} size="md" />
+							</div>
+							{/* Content */}
+							<h3 className="font-display font-semibold text-lg">{title}</h3>
+							<p className="mt-3 text-muted-foreground text-sm leading-relaxed">{description}</p>
+						</div>
+					))}
 				</div>
 			</div>
-
-			{/* Content */}
-			<div className="relative flex flex-col gap-y-1.5">
-				<h3 className="font-semibold text-base tracking-tight transition-colors group-hover:text-primary">{title}</h3>
-				<p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
-			</div>
-		</m.div>
+		</section>
 	);
 }
 
-export function Features() {
-	const features = useMemo(() => getFeatures(), []);
-
+export function FreePromise() {
 	return (
-		<section id="features">
-			{/* Header */}
-			<m.div
-				className="space-y-4 p-4 will-change-[transform,opacity] md:p-8 xl:py-16"
-				initial={{ opacity: 0, y: 20 }}
-				whileInView={{ opacity: 1, y: 0 }}
-				viewport={{ once: true }}
-				transition={{ duration: 0.45 }}
-			>
-				<h2 className="font-semibold text-2xl tracking-tight md:text-4xl xl:text-5xl">
-					<Trans>Features</Trans>
-				</h2>
-
-				<p className="max-w-2xl text-muted-foreground leading-relaxed">
-					<Trans>
-						Everything you need to create, customize, and share professional resumes. Built with privacy in mind,
-						powered by open source, and completely free forever.
-					</Trans>
-				</p>
-			</m.div>
-
-			{/* Features Grid */}
-			<div className="grid grid-cols-1 xs:grid-cols-2 border-t xl:grid-cols-4">
-				{features.map((feature) => (
-					<FeatureCard key={feature.id} {...feature} />
-				))}
+		<section aria-labelledby="promise-heading" className="border-y bg-secondary/40 px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+			<div className="mx-auto grid max-w-5xl items-center gap-8 md:grid-cols-2 md:gap-16">
+				<div className="text-start">
+					<p className="mb-3 font-semibold text-primary text-xs uppercase tracking-widest rtl:tracking-normal">
+						<Trans id="home.promise.eyebrow">A clear start</Trans>
+					</p>
+					<h2 id="promise-heading" className="font-bold font-display text-3xl text-primary sm:text-4xl">
+						<Trans id="home.promise.title">Your resume. No surprises.</Trans>
+					</h2>
+					<p className="mt-4 text-muted-foreground leading-relaxed">
+						<Trans id="home.promise.text">
+							Build and download your resume for free today. Pro is coming later, with pricing shown upfront.
+						</Trans>
+					</p>
+				</div>
+				<ul className="rounded-2xl border bg-card p-6 sm:p-8">
+					{[
+						t({ id: "home.promise.export", message: "Free PDF export" }),
+						t({ id: "home.noWatermark", message: "No watermarks" }),
+						t({ id: "home.promise.charge", message: "No automatic charges" }),
+					].map((text) => (
+						<li
+							key={text}
+							className="flex items-center gap-3 border-b py-4 text-start font-medium first:pt-0 last:border-0 last:pb-0"
+						>
+							<CheckCircleIcon aria-hidden="true" className="size-5 shrink-0 text-primary" />
+							{text}
+						</li>
+					))}
+				</ul>
 			</div>
 		</section>
 	);

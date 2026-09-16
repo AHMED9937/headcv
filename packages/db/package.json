@@ -1,5 +1,5 @@
 {
-	"name": "@reactive-resume/db",
+	"name": "@headcv/db",
 	"version": "0.0.0",
 	"type": "module",
 	"private": true,
@@ -22,14 +22,15 @@
 		"test:agent": "vitest run --reporter=agent --reporter=json --outputFile.json=reports/vitest-results.json --passWithNoTests"
 	},
 	"dependencies": {
-		"@reactive-resume/env": "workspace:*",
-		"@reactive-resume/schema": "workspace:*",
-		"@reactive-resume/utils": "workspace:*",
+		"@headcv/env": "workspace:*",
+		"@headcv/schema": "workspace:*",
+		"@headcv/utils": "workspace:*",
+		"@vercel/functions": "3.9.6",
 		"drizzle-orm": "1.0.0-rc.3",
 		"pg": "^8.21.0"
 	},
 	"devDependencies": {
-		"@reactive-resume/config": "workspace:*",
+		"@headcv/config": "workspace:*",
 		"@types/pg": "^8.20.0",
 		"@typescript/native-preview": "7.0.0-dev.20260526.1",
 		"drizzle-kit": "1.0.0-rc.3",

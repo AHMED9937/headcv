@@ -492,6 +492,16 @@ export const typographySchema = z.object({
 });
 
 export const metadataSchema = z.object({
+	skippedSteps: z.array(z.string()).catch([]).describe("Builder step IDs the user chose to skip."),
+	completedSteps: z.array(z.string()).catch([]).describe("Builder step IDs the user explicitly completed."),
+	targetJobTitleId: z
+		.string()
+		.catch("")
+		.describe("The ID of the target job title used for contextual content suggestions in the builder."),
+	experienceLevel: z
+		.enum(["entry", "mid", "senior", "executive"])
+		.catch("entry")
+		.describe("The user's experience level, used to filter phrases and skill suggestions."),
 	template: templateSchema
 		.catch("onyx")
 		.describe("The template to use for the resume. Determines the overall design and appearance of the resume."),

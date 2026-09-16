@@ -26,6 +26,7 @@ export const mergeLinkStyles = (...styles: StyleInput[]): Style => mergeStyles(.
 // At 1.5× heading font size, a lineHeight of 1.2 leaves insufficient room for
 // the descender depth of many fonts, causing letters to appear visually cut off.
 export const headerNameLineHeight = 1.3;
+export const getReadableSmallTextSize = (fontSize: number) => Math.max(10, fontSize);
 
 export type ResolvePlacementColorOptions = {
 	placement: TemplatePlacement;

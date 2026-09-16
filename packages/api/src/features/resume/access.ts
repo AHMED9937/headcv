@@ -1,5 +1,5 @@
 import { createHash, timingSafeEqual } from "node:crypto";
-import { env } from "@reactive-resume/env/server";
+import { env } from "@headcv/env/server";
 
 const RESUME_ACCESS_COOKIE_PREFIX = "resume_access";
 const RESUME_ACCESS_TTL_SECONDS = 60 * 10; // 10 minutes

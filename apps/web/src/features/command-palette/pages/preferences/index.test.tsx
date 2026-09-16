@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
-import { Command } from "@reactive-resume/ui/components/command";
+import { Command } from "@headcv/ui/components/command";
 import { useCommandPaletteStore } from "../../store";
 
 vi.mock("@/features/theme/provider", () => ({

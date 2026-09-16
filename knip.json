@@ -46,5 +46,5 @@
 			]
 		}
 	},
-	"ignoreDependencies": ["@reactive-resume/config", "npm-check-updates"]
+	"ignoreDependencies": ["@headcv/config", "npm-check-updates"]
 }

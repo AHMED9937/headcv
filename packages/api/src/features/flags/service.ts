@@ -1,4 +1,4 @@
-import { env } from "@reactive-resume/env/server";
+import { env } from "@headcv/env/server";
 
 export type FeatureFlags = {
 	disableSignups: boolean;

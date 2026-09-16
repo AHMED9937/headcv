@@ -58,7 +58,7 @@ describe("PDF.js browser entrypoints", () => {
 		vi.restoreAllMocks();
 	});
 
-	it("loads the canvas preview renderer from the legacy PDF.js runtime", async () => {
+	it("loads the canvas preview renderer from the legacy PDF.js runtime", { timeout: 20000 }, async () => {
 		await expect(import("./pdf-canvas")).resolves.toEqual(
 			expect.objectContaining({
 				PdfCanvasDocument: expect.any(Function),

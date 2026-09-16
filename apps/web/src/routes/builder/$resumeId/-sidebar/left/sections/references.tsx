@@ -1,8 +1,8 @@
-import type { referenceItemSchema } from "@reactive-resume/schema/resume/data";
+import type { referenceItemSchema } from "@headcv/schema/resume/data";
 import type z from "zod";
 import { Trans } from "@lingui/react/macro";
 import { AnimatePresence, Reorder } from "motion/react";
-import { cn } from "@reactive-resume/utils/style";
+import { cn } from "@headcv/utils/style";
 import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
 import { SectionBase } from "../shared/section-base";
 import { SectionAddItemButton, SectionItem } from "../shared/section-item";

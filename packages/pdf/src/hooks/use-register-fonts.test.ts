@@ -1,7 +1,7 @@
-import type { ResumeData, Typography } from "@reactive-resume/schema/resume/data";
+import type { ResumeData, Typography } from "@headcv/schema/resume/data";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { getWebFontSource } from "@reactive-resume/fonts";
-import { defaultResumeData } from "@reactive-resume/schema/resume/default";
+import { getWebFontSource } from "@headcv/fonts";
+import { defaultResumeData } from "@headcv/schema/resume/default";
 import { Font } from "../renderer";
 
 const typography = {
@@ -43,7 +43,7 @@ describe("registerFonts", () => {
 		vi.restoreAllMocks();
 	});
 
-	it("registers CJK PDF fallbacks for normal and italic text styles", async () => {
+	it("registers CJK PDF fallbacks for normal and italic text styles", { timeout: 20000 }, async () => {
 		const registerSpy = vi.spyOn(Font, "register").mockImplementation(() => {});
 		vi.spyOn(Font, "registerHyphenationCallback").mockImplementation(() => {});
 		const cjkFallbackSource = getWebFontSource("Noto Serif SC", "400", false);

@@ -1,5 +1,5 @@
 {
-	"name": "@reactive-resume/schema",
+	"name": "@headcv/schema",
 	"version": "0.0.0",
 	"type": "module",
 	"private": true,
@@ -21,7 +21,7 @@
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {
-		"@reactive-resume/config": "workspace:*",
+		"@headcv/config": "workspace:*",
 		"@typescript/native-preview": "7.0.0-dev.20260526.1",
 		"typescript": "^6.0.3"
 	}

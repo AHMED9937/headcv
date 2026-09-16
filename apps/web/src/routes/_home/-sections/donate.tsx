@@ -3,8 +3,8 @@ import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { GithubLogoIcon, HeartIcon, RocketIcon, SparkleIcon, UsersIcon, WrenchIcon } from "@phosphor-icons/react";
 import { m } from "motion/react";
-import { Button } from "@reactive-resume/ui/components/button";
-import { cn } from "@reactive-resume/utils/style";
+import { Button } from "@headcv/ui/components/button";
+import { cn } from "@headcv/utils/style";
 
 type FloatingIconProps = {
 	icon: React.ElementType;
@@ -150,7 +150,7 @@ export const DonationBanner = () => (
 					viewport={{ once: true }}
 					transition={{ duration: 0.6, delay: 0.1 }}
 				>
-					<Trans>Support Reactive Resume</Trans>
+					<Trans>Support HeadCV</Trans>
 				</m.h2>
 
 				<m.p
@@ -161,7 +161,7 @@ export const DonationBanner = () => (
 					transition={{ duration: 0.6, delay: 0.2 }}
 				>
 					<Trans>
-						Reactive Resume is a free and open-source project, built with love and maintained by me and a community of
+						HeadCV is a free and open-source project, built with love and maintained by me and a community of
 						contributors. Your donations help keep the lights on and the code flowing.
 					</Trans>
 				</m.p>
@@ -202,7 +202,7 @@ export const DonationBanner = () => (
 					nativeButton={false}
 					className="h-11 gap-2 px-6"
 					render={
-						<a href="https://opencollective.com/reactive-resume/donate" target="_blank" rel="noopener">
+						<a href="https://opencollective.com/headcv/donate" target="_blank" rel="noopener">
 							<HeartIcon aria-hidden="true" weight="fill" className="text-rose-400 dark:text-rose-600" />
 							Open Collective
 							<span className="sr-only"> ({t`opens in new tab`})</span>
@@ -215,7 +215,7 @@ export const DonationBanner = () => (
 					nativeButton={false}
 					className="h-11 gap-2 px-6"
 					render={
-						<a href="https://github.com/sponsors/AmruthPillai" target="_blank" rel="noopener">
+						<a href="https://github.com/sponsors/AHMED9937" target="_blank" rel="noopener">
 							<GithubLogoIcon aria-hidden="true" weight="fill" className="text-zinc-400 dark:text-zinc-600" />
 							GitHub Sponsors
 							<span className="sr-only"> ({t`opens in new tab`})</span>

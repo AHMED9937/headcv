@@ -2,7 +2,7 @@
 
 import { render, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { sampleResumeData } from "@reactive-resume/schema/resume/sample";
+import { sampleResumeData } from "@headcv/schema/resume/sample";
 
 const pdfViewerMock = vi.hoisted(() => {
 	const pdfDocument = {

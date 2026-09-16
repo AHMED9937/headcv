@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1055" height="1491" viewBox="0 0 1055 1491">
+  <title>Daniel Martinez — Human Resources Business Partner</title>
+  <defs>
+    <clipPath id="portrait"><rect x="27" y="44" width="194" height="236" /></clipPath>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #17212c; font-size: 20px; }
+      .heading { font-family: Georgia, 'Times New Roman', serif; font-size: 32px; fill: #1e3a5f; }
+      .bold { font-weight: 700; }
+      .small { font-size: 18px; }
+      .side text { fill: #cbd5db; }
+      .side .heading, .side .bold { fill: #e7e4dc; }
+      .side path { stroke: #718694; }
+      .side .heading { font-size: 30px; }
+      .rule { stroke: #1e3a5f; stroke-width: 1.5; }
+    </style>
+  </defs>
+  <rect width="1055" height="1491" fill="#fff" />
+  <rect x="688" width="367" height="1491" fill="#243f56" />
+  <image href="{{PORTRAIT_SOURCE}}" x="27" y="44" width="194" height="236" preserveAspectRatio="xMidYMid slice" clip-path="url(#portrait)" />
+  <text x="247" y="80" style="font-family:Georgia,serif;font-size:48px;fill:#101820">Daniel Martinez</text>
+  <text x="247" y="119" style="font-size:25px">Human Resources Business Partner</text>
+  <g fill="none" stroke="#1e3a5f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="251" y="156" width="19" height="14" rx="1" /><path d="m252 157 8.5 7 8.5-7" />
+    <path d="M254 189q-4 3 1 10t11 8l3-4-5-3-2 2q-5-2-6-6l2-2z" />
+    <path d="M260 244s-9-10-9-15a9 9 0 0 1 18 0c0 5-9 15-9 15z" /><circle cx="260" cy="229" r="2" />
+    <rect x="251" y="261" width="19" height="19" rx="2" />
+  </g>
+  <text x="253" y="276" style="font-size:15px;font-weight:bold;fill:#1e3a5f">in</text>
+  <text x="287" y="173">daniel.martinez@example.com</text>
+  <text x="287" y="208">+1 (512) 555-0148</text>
+  <text x="287" y="244">Austin, TX</text>
+  <text x="287" y="279">linkedin.com/in/danielmartinez</text>
+  <text x="27" y="351" class="heading">Professional Summary</text>
+  <path d="M27 367H660" class="rule" />
+  <text x="27" y="405"><tspan x="27">People-focused HR partner with 8 years of experience supporting</tspan><tspan x="27" dy="31">growing teams. Trusted advisor to managers on employee relations,</tspan><tspan x="27" dy="31">talent development and practical people strategies.</tspan></text>
+  <text x="27" y="554" class="heading">Core Expertise</text>
+  <path d="M27 570H660" class="rule" />
+  <text x="27" y="612"><tspan x="27">Employee Relations</tspan><tspan x="27" dy="35">Talent Development</tspan><tspan x="27" dy="35">Workforce Planning</tspan></text>
+  <text x="350" y="612"><tspan x="350">Performance Management</tspan><tspan x="350" dy="35">HR Analytics</tspan><tspan x="350" dy="35">Change Management</tspan></text>
+  <text x="27" y="773" class="heading">Professional Experience</text>
+  <path d="M27 789H660" class="rule" />
+  <text x="27" y="829" class="bold">Senior HR Business Partner</text>
+  <text x="27" y="860">Northstar Technologies | Austin, TX</text>
+  <text x="659" y="860" text-anchor="end" class="small">2022 – Present</text>
+  <text x="37" y="904" class="small"><tspan x="37">•  Partner with 12 managers to support a team of 250 employees.</tspan><tspan x="37" dy="33">•  Redesigned onboarding, improving new-hire satisfaction by 24%.</tspan><tspan x="37" dy="33">•  Built manager training on feedback, coaching and career growth.</tspan></text>
+  <text x="27" y="1048" class="bold">HR Generalist</text>
+  <text x="27" y="1080">Cedar People Group | Austin, TX</text>
+  <text x="659" y="1080" text-anchor="end" class="small">2018 – 2022</text>
+  <text x="37" y="1123" class="small"><tspan x="37">•  Supported recruitment, employee relations and HR operations.</tspan><tspan x="37" dy="33">•  Introduced quarterly engagement surveys and team action plans.</tspan><tspan x="37" dy="33">•  Reduced onboarding administration time by 30%.</tspan></text>
+  <text x="27" y="1290" class="heading">Education</text>
+  <path d="M27 1303H660" class="rule" />
+  <text x="27" y="1344" class="bold">BBA in Human Resource Management</text>
+  <text x="27" y="1375">Texas State University</text>
+  <text x="659" y="1375" text-anchor="end" class="small">2014 – 2018</text>
+  <g class="side">
+    <text x="724" y="321" class="heading">Certifications</text><path d="M724 334H1025" stroke="#ffffff" stroke-width="1.5" />
+    <text x="724" y="371" class="bold">SHRM-CP</text>
+    <text x="724" y="402"><tspan x="724">Society for Human Resource</tspan><tspan x="724" dy="29">Management</tspan><tspan x="724" dy="31">2023</tspan></text>
+    <text x="724" y="510" class="bold">PHR</text>
+    <text x="724" y="543"><tspan x="724">HR Certification Institute</tspan><tspan x="724" dy="32">2021</tspan></text>
+    <text x="724" y="657" class="heading">Selected Achievement</text><path d="M724 670H1025" stroke="#ffffff" stroke-width="1.5" />
+    <text x="724" y="710" class="bold">People First Award</text>
+    <text x="724" y="744" class="small">Northstar Technologies | 2024</text>
+    <text x="724" y="787"><tspan x="724">Recognized for improving the</tspan><tspan x="724" dy="30">employee onboarding</tspan><tspan x="724" dy="30">experience.</tspan></text>
+    <text x="724" y="919" class="heading">Languages</text><path d="M724 932H1025" stroke="#ffffff" stroke-width="1.5" />
+    <text x="724" y="970"><tspan x="724">English – Native</tspan><tspan x="724" dy="33">Spanish – Professional</tspan></text>
+    <text x="724" y="1074" class="heading">Tools</text><path d="M724 1087H1025" stroke="#ffffff" stroke-width="1.5" />
+    <text x="724" y="1126"><tspan x="724">Workday</tspan><tspan x="724" dy="33">BambooHR</tspan><tspan x="724" dy="33">LinkedIn Recruiter</tspan><tspan x="724" dy="33">Excel &amp; Power BI</tspan></text>
+    <text x="724" y="1296" class="heading">Interests</text><path d="M724 1309H1025" stroke="#ffffff" stroke-width="1.5" />
+    <text x="724" y="1348"><tspan x="724">Career mentoring</tspan><tspan x="724" dy="33">Community volunteering</tspan><tspan x="724" dy="33">Travel &amp; culture</tspan></text>
+  </g>
+</svg>

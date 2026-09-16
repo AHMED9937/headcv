@@ -4,7 +4,7 @@ language js(typescript, jsx)
 or {
 	`import $_ from $source` where {
 		$source <: or {
-			r".*@reactive-resume/[^'\"`]+/src(/|$).*",
+			r".*@headcv/[^'\"`]+/src(/|$).*",
 			r".*(apps|packages)/[^'\"`]+/src(/|$).*",
 			r".*(\\.\\./){2,}(apps|packages)/[^'\"`]+/src(/|$).*"
 		},
@@ -12,7 +12,7 @@ or {
 	},
 	`export $_ from $source` where {
 		$source <: or {
-			r".*@reactive-resume/[^'\"`]+/src(/|$).*",
+			r".*@headcv/[^'\"`]+/src(/|$).*",
 			r".*(apps|packages)/[^'\"`]+/src(/|$).*",
 			r".*(\\.\\./){2,}(apps|packages)/[^'\"`]+/src(/|$).*"
 		},
@@ -20,7 +20,7 @@ or {
 	},
 	`import($source)` where {
 		$source <: or {
-			r".*@reactive-resume/[^'\"`]+/src(/|$).*",
+			r".*@headcv/[^'\"`]+/src(/|$).*",
 			r".*(apps|packages)/[^'\"`]+/src(/|$).*",
 			r".*(\\.\\./){2,}(apps|packages)/[^'\"`]+/src(/|$).*"
 		},

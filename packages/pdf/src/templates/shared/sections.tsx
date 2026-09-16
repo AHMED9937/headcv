@@ -14,7 +14,7 @@ import type {
 	SkillItem,
 	SummaryItem,
 	VolunteerItem,
-} from "@reactive-resume/schema/resume/data";
+} from "@headcv/schema/resume/data";
 import type { IconName } from "phosphor-icons-react-pdf/dynamic";
 import type { ReactNode } from "react";
 import type { StyleInput, TemplatePlacement } from "./styles";
@@ -22,7 +22,7 @@ import type { CustomItemSection, ItemSection } from "./types";
 import { Children, createContext, isValidElement, use } from "react";
 import { match } from "ts-pattern";
 import { useRender } from "../../context";
-import { View } from "../../renderer";
+import { Link as PdfLink, View } from "../../renderer";
 import { getResumeSectionTitle } from "../../section-title";
 import { getSectionItemRows, getSectionItemsLayout, shouldUseSectionTimeline } from "./columns";
 import { getWebsiteDisplayText } from "./contact";
@@ -75,6 +75,23 @@ const getVisibleItems = <T extends { hidden: boolean }>(section: ItemSection<T>,
 	return filterItems(section.items, sectionType);
 };
 
+const previewSectionMarkerStyle: Style = {
+	position: "absolute",
+	top: 0,
+	right: 0,
+	bottom: 0,
+	left: 0,
+	color: "transparent",
+	textDecoration: "none",
+};
+
+export const PreviewSectionMarker = ({ sectionId }: { sectionId: string }) => {
+	const { sectionMarkerPrefix } = useRender();
+	if (!sectionMarkerPrefix) return null;
+
+	return <PdfLink src={`${sectionMarkerPrefix}${encodeURIComponent(sectionId)}`} style={previewSectionMarkerStyle} />;
+};
+
 const SectionShell = ({
 	sectionId,
 	title,
@@ -93,6 +110,7 @@ const SectionShell = ({
 
 	return (
 		<View style={composeStyles(sectionStyle)}>
+			<PreviewSectionMarker sectionId={sectionId} />
 			{showHeading && <Heading style={composeStyles(sectionHeadingStyle)}>{sectionTitle}</Heading>}
 			{children}
 		</View>

@@ -14,14 +14,14 @@ import { genericOAuth } from "better-auth/plugins/generic-oauth";
 import { twoFactor } from "better-auth/plugins/two-factor";
 import { username } from "better-auth/plugins/username";
 import { createElement } from "react";
-import { db } from "@reactive-resume/db/client";
-import * as schema from "@reactive-resume/db/schema";
-import { ResetPasswordEmail, VerifyEmail, VerifyEmailChange } from "@reactive-resume/email/templates/auth";
-import { sendEmail } from "@reactive-resume/email/transport";
-import { env } from "@reactive-resume/env/server";
-import { rateLimitConfig, TRUSTED_IP_HEADERS } from "@reactive-resume/utils/rate-limit";
-import { generateId, toUsername } from "@reactive-resume/utils/string";
-import { isAllowedOAuthRedirectUri } from "@reactive-resume/utils/url-security.node";
+import { db } from "@headcv/db/client";
+import * as schema from "@headcv/db/schema";
+import { ResetPasswordEmail, VerifyEmail, VerifyEmailChange } from "@headcv/email/templates/auth";
+import { sendEmail } from "@headcv/email/transport";
+import { env } from "@headcv/env/server";
+import { rateLimitConfig, TRUSTED_IP_HEADERS } from "@headcv/utils/rate-limit";
+import { generateId, toUsername } from "@headcv/utils/string";
+import { isAllowedOAuthRedirectUri } from "@headcv/utils/url-security.node";
 import { createGithubProfileMapper, createProfileMapper } from "./oauth-profile";
 import { getTrustedOrigins } from "./trusted-origins";
 
@@ -91,7 +91,7 @@ const getAuthConfig = () => {
 	}
 
 	return betterAuth({
-		appName: "Reactive Resume",
+		appName: "HeadCV",
 		baseURL: authBaseUrl,
 		secret: env.AUTH_SECRET,
 
@@ -234,7 +234,7 @@ const getAuthConfig = () => {
 			admin(),
 			passkey(),
 			genericOAuth({ config: authConfigs }),
-			twoFactor({ issuer: "Reactive Resume" }),
+			twoFactor({ issuer: "HeadCV" }),
 			apiKey({
 				enableSessionForAPIKeys: true,
 				rateLimit: {

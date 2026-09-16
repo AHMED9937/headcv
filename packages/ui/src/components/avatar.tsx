@@ -1,6 +1,6 @@
 import type * as React from "react";
 import { Avatar as AvatarPrimitive } from "@base-ui/react/avatar";
-import { cn } from "@reactive-resume/utils/style";
+import { cn } from "@headcv/utils/style";
 
 function Avatar({
 	className,

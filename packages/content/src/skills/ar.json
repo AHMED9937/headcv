@@ -1,0 +1,217 @@
+[
+	{
+		"id": "javascript",
+		"nameEn": "JavaScript",
+		"nameAr": "جافا سكريبت",
+		"category": "لغات البرمجة",
+		"jobTitleIds": ["software-engineer", "frontend-developer", "backend-developer"],
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "typescript",
+		"nameEn": "TypeScript",
+		"nameAr": "تايب سكريبت",
+		"category": "لغات البرمجة",
+		"jobTitleIds": ["software-engineer", "frontend-developer", "backend-developer"],
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "react",
+		"nameEn": "React",
+		"nameAr": "رياكت",
+		"category": "إطارات العمل",
+		"jobTitleIds": ["frontend-developer", "software-engineer", "ui-ux-designer"],
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "nextjs",
+		"nameEn": "Next.js",
+		"nameAr": "Next.js",
+		"category": "إطارات العمل",
+		"jobTitleIds": ["frontend-developer", "software-engineer"],
+		"experienceLevels": ["mid", "senior"]
+	},
+	{
+		"id": "nodejs",
+		"nameEn": "Node.js",
+		"nameAr": "Node.js",
+		"category": "إطارات العمل",
+		"jobTitleIds": ["backend-developer", "software-engineer"],
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "python",
+		"nameEn": "Python",
+		"nameAr": "بايثون",
+		"category": "لغات البرمجة",
+		"jobTitleIds": ["data-analyst", "backend-developer", "software-engineer"],
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "sql",
+		"nameEn": "SQL",
+		"nameAr": "SQL",
+		"category": "البيانات",
+		"jobTitleIds": ["data-analyst", "backend-developer", "software-engineer"],
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "aws",
+		"nameEn": "AWS",
+		"nameAr": "AWS",
+		"category": "السحابة",
+		"jobTitleIds": ["devops-engineer", "backend-developer", "software-engineer"],
+		"experienceLevels": ["mid", "senior"]
+	},
+	{
+		"id": "docker",
+		"nameEn": "Docker",
+		"nameAr": "دوكر",
+		"category": "DevOps",
+		"jobTitleIds": ["devops-engineer", "backend-developer", "software-engineer"],
+		"experienceLevels": ["mid", "senior"]
+	},
+	{
+		"id": "kubernetes",
+		"nameEn": "Kubernetes",
+		"nameAr": "كوبيرنيتيس",
+		"category": "DevOps",
+		"jobTitleIds": ["devops-engineer", "software-engineer"],
+		"experienceLevels": ["senior"]
+	},
+	{
+		"id": "git",
+		"nameEn": "Git",
+		"nameAr": "Git",
+		"category": "أدوات",
+		"jobTitleIds": [
+			"general",
+			"software-engineer",
+			"frontend-developer",
+			"backend-developer",
+			"devops-engineer",
+			"data-analyst"
+		],
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "agile",
+		"nameEn": "Agile",
+		"nameAr": "أجايل",
+		"category": "منهجيات",
+		"jobTitleIds": ["software-engineer", "product-manager", "project-manager"],
+		"experienceLevels": ["mid", "senior"]
+	},
+	{
+		"id": "communication",
+		"nameEn": "Communication",
+		"nameAr": "التواصل",
+		"category": "مهارات شخصية",
+		"jobTitleIds": ["general"],
+		"experienceLevels": ["entry", "mid", "senior", "executive"]
+	},
+	{
+		"id": "leadership",
+		"nameEn": "Leadership",
+		"nameAr": "القيادة",
+		"category": "مهارات شخصية",
+		"jobTitleIds": ["general", "project-manager", "product-manager"],
+		"experienceLevels": ["mid", "senior", "executive"]
+	},
+	{
+		"id": "problem-solving",
+		"nameEn": "Problem Solving",
+		"nameAr": "حل المشكلات",
+		"category": "مهارات شخصية",
+		"jobTitleIds": ["general"],
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "teamwork",
+		"nameEn": "Teamwork",
+		"nameAr": "العمل الجماعي",
+		"category": "مهارات شخصية",
+		"jobTitleIds": ["general"],
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "figma",
+		"nameEn": "Figma",
+		"nameAr": "Figma",
+		"category": "تصميم",
+		"jobTitleIds": ["ui-ux-designer"],
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "user-research",
+		"nameEn": "User Research",
+		"nameAr": "بحث المستخدمين",
+		"category": "تصميم",
+		"jobTitleIds": ["ui-ux-designer"],
+		"experienceLevels": ["mid", "senior"]
+	},
+	{
+		"id": "product-strategy",
+		"nameEn": "Product Strategy",
+		"nameAr": "استراتيجية المنتج",
+		"category": "منتج",
+		"jobTitleIds": ["product-manager"],
+		"experienceLevels": ["mid", "senior", "executive"]
+	},
+	{
+		"id": "data-analysis",
+		"nameEn": "Data Analysis",
+		"nameAr": "تحليل البيانات",
+		"category": "البيانات",
+		"jobTitleIds": ["data-analyst", "product-manager"],
+		"experienceLevels": ["entry", "mid", "senior"]
+	},
+	{
+		"id": "digital-marketing",
+		"nameEn": "Digital Marketing",
+		"nameAr": "التسويق الرقمي",
+		"category": "تسويق",
+		"jobTitleIds": ["marketing-manager"],
+		"experienceLevels": ["mid", "senior"]
+	},
+	{
+		"id": "seo",
+		"nameEn": "SEO",
+		"nameAr": "تحسين محركات البحث",
+		"category": "تسويق",
+		"jobTitleIds": ["marketing-manager"],
+		"experienceLevels": ["mid", "senior"]
+	},
+	{
+		"id": "salesforce",
+		"nameEn": "Salesforce",
+		"nameAr": "Salesforce",
+		"category": "مبيعات",
+		"jobTitleIds": ["sales-representative"],
+		"experienceLevels": ["entry", "mid"]
+	},
+	{
+		"id": "negotiation",
+		"nameEn": "Negotiation",
+		"nameAr": "التفاوض",
+		"category": "مبيعات",
+		"jobTitleIds": ["sales-representative", "marketing-manager"],
+		"experienceLevels": ["mid", "senior"]
+	},
+	{
+		"id": "customer-service",
+		"nameEn": "Customer Service",
+		"nameAr": "خدمة العملاء",
+		"category": "دعم",
+		"jobTitleIds": ["customer-support-specialist"],
+		"experienceLevels": ["entry", "mid"]
+	},
+	{
+		"id": "crm",
+		"nameEn": "CRM",
+		"nameAr": "إدارة علاقات العملاء",
+		"category": "أدوات",
+		"jobTitleIds": ["sales-representative", "customer-support-specialist"],
+		"experienceLevels": ["entry", "mid", "senior"]
+	}
+]

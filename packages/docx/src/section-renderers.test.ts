@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 
-import type { CustomSection, ResumeData, SectionType } from "@reactive-resume/schema/resume/data";
+import type { CustomSection, ResumeData, SectionType } from "@headcv/schema/resume/data";
 import { describe, expect, it } from "vitest";
 import { renderBuiltInSection, renderCustomSection, renderSummary, setRenderConfig } from "./section-renderers";
 

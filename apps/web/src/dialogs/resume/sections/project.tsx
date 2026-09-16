@@ -3,17 +3,17 @@ import type { DialogProps } from "@/dialogs/store";
 import { Trans } from "@lingui/react/macro";
 import { PencilSimpleLineIcon, PlusIcon } from "@phosphor-icons/react";
 import { useStore } from "@tanstack/react-form";
-import { projectItemSchema } from "@reactive-resume/schema/resume/data";
-import { Button } from "@reactive-resume/ui/components/button";
+import { projectItemSchema } from "@headcv/schema/resume/data";
+import { Button } from "@headcv/ui/components/button";
 import {
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-} from "@reactive-resume/ui/components/dialog";
-import { FormControl, FormItem, FormLabel, FormMessage } from "@reactive-resume/ui/components/form";
-import { Switch } from "@reactive-resume/ui/components/switch";
+} from "@headcv/ui/components/dialog";
+import { FormControl, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
+import { Switch } from "@headcv/ui/components/switch";
 import { RichInput } from "@/components/input/rich-input";
 import { URLInput } from "@/components/input/url-input";
 import { useDialogStore } from "@/dialogs/store";

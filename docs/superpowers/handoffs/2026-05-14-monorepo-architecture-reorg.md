@@ -1,6 +1,6 @@
 # Monorepo Architecture Reorg Handoff
 
-This handoff is the coordination entrypoint for the Reactive Resume architecture reorganization. It intentionally references the implementation plan instead of duplicating it.
+This handoff is the coordination entrypoint for the HeadCV architecture reorganization. It intentionally references the implementation plan instead of duplicating it.
 
 ## Primary Plan
 
@@ -58,53 +58,53 @@ External agents should be handed exactly one task from the plan plus this handof
 
 ## Architecture Decisions Already Locked
 
-- `@reactive-resume/schema` is Zod/types only.
-- `@reactive-resume/resume` owns pure resume-domain behavior.
-- `@reactive-resume/ai` owns model contracts, not DB-backed agent runtime.
+- `@headcv/schema` is Zod/types only.
+- `@headcv/resume` owns pure resume-domain behavior.
+- `@headcv/ai` owns model contracts, not DB-backed agent runtime.
 - Agent runtime remains in `packages/api/features/agent`.
 - MCP uses an in-process oRPC `RouterClient`.
 - MCP tools move to canonical unprefixed snake_case names, no old aliases.
-- `@reactive-resume/pdf` owns PDF generation helpers but not PDF.js viewer UI.
+- `@headcv/pdf` owns PDF generation helpers but not PDF.js viewer UI.
 - `apps/web` uses domain-first features and generic-only `src/components`.
 - `packages/db` remains centralized.
 
 ## Latest Task 1 Result
 
-- Created `@reactive-resume/resume` with source-consumed exports:
-  - `@reactive-resume/resume/patch`
-  - `@reactive-resume/resume/icons`
-- Moved JSON Patch behavior/tests and social network icon mapping/tests out of `@reactive-resume/utils`.
+- Created `@headcv/resume` with source-consumed exports:
+  - `@headcv/resume/patch`
+  - `@headcv/resume/icons`
+- Moved JSON Patch behavior/tests and social network icon mapping/tests out of `@headcv/utils`.
 - Updated consumers in `packages/ai`, `packages/api`, `packages/db`, `packages/import`, and `apps/web`.
 - Removed old utils exports for `./resume/patch` and `./network-icons`.
-- Removed `fast-json-patch` from `@reactive-resume/utils` and `@reactive-resume/ai`; it now belongs to `@reactive-resume/resume`.
-- Task 2 later removed `@reactive-resume/schema` from `@reactive-resume/utils` after moving DOCX code into `@reactive-resume/docx`.
+- Removed `fast-json-patch` from `@headcv/utils` and `@headcv/ai`; it now belongs to `@headcv/resume`.
+- Task 2 later removed `@headcv/schema` from `@headcv/utils` after moving DOCX code into `@headcv/docx`.
 
 ## Latest Task 2 Result
 
-- Created `@reactive-resume/docx` with source-consumed root export `@reactive-resume/docx`.
+- Created `@headcv/docx` with source-consumed root export `@headcv/docx`.
 - Moved the DOCX builder, HTML conversion, link utilities, section renderers, and colocated tests from `packages/utils/src/resume/docx` to `packages/docx/src`.
-- Updated web DOCX export callers and the export-section test mock to import from `@reactive-resume/docx`.
-- Removed the old `@reactive-resume/utils/resume/docx` export and removed `docx` plus `@reactive-resume/schema` from `@reactive-resume/utils`.
-- Validation passed for `@reactive-resume/docx` tests/typecheck, `@reactive-resume/utils` typecheck, `web` typecheck, focused web export test command, and focused Biome check.
+- Updated web DOCX export callers and the export-section test mock to import from `@headcv/docx`.
+- Removed the old `@headcv/utils/resume/docx` export and removed `docx` plus `@headcv/schema` from `@headcv/utils`.
+- Validation passed for `@headcv/docx` tests/typecheck, `@headcv/utils` typecheck, `web` typecheck, focused web export test command, and focused Biome check.
 
 ## Latest Task 3 Notes
 
-- Added `@reactive-resume/pdf/browser` and `@reactive-resume/pdf/server` exports.
+- Added `@headcv/pdf/browser` and `@headcv/pdf/server` exports.
 - `createResumePdfBlob({ data, template, resolveSectionTitle })` delegates to `pdf(<ResumeDocument ... />).toBlob()`.
 - `createResumePdfFile({ data, filename, template, resolveSectionTitle })` delegates to `renderToBuffer(<ResumeDocument ... />)` and preserves the existing `File` response body shape.
 - Lingui locale loading stays in the web-local wrappers under `apps/web/src/features/resume/export`; those wrappers resolve section titles and pass `resolveSectionTitle` into the package helpers.
 - The PDF.js viewer/canvas components remain in web. `apps/web/src/features/resume/preview/preview.browser.tsx` now calls the web-local blob wrapper instead of importing `@react-pdf/renderer` directly.
-- The authenticated PDF export path now reaches `@reactive-resume/pdf/server` through `packages/api/src/features/resume/export.ts`; `apps/server` consumes the explicit API feature export instead of owning PDF rendering logic directly.
-- Validation passed for `@reactive-resume/pdf` tests/typecheck, `web` typecheck, `server` typecheck, focused web PDF export/viewer tests, and focused Biome check.
+- The authenticated PDF export path now reaches `@headcv/pdf/server` through `packages/api/src/features/resume/export.ts`; `apps/server` consumes the explicit API feature export instead of owning PDF rendering logic directly.
+- Validation passed for `@headcv/pdf` tests/typecheck, `web` typecheck, `server` typecheck, focused web PDF export/viewer tests, and focused Biome check.
 
 ## Latest Task 4 Notes
 
-- Created `@reactive-resume/mcp` with source-consumed exports for the compact public surface plus direct subpaths for server card, tool names, tools, prompts, and resources.
+- Created `@headcv/mcp` with source-consumed exports for the compact public surface plus direct subpaths for server card, tool names, tools, prompts, and resources.
 - Moved MCP tools, prompts, resources, server-card generation, tool annotations, and colocated tests from `apps/web/src/routes/mcp/-helpers` to `packages/mcp/src`.
-- `apps/server/src/mcp/handler.ts` and `apps/server/src/openapi/metadata.ts` now import from `@reactive-resume/mcp`; server-side MCP execution still uses the injected in-process oRPC `RouterClient`.
-- Canonical MCP tool names are unprefixed snake_case. Key renames: `read_resume` replaces the old get-resume tool name, and `apply_resume_patch` replaces the old patch tool name. No `reactive_resume_*` aliases remain.
-- Added `@reactive-resume/ai/tools/resume-tool-contracts` and reused its JSON Patch operations schema from MCP while keeping MCP-specific `id` context in the MCP input schema.
-- Validation passed for `@reactive-resume/mcp` tests/typecheck, `server` typecheck, `@reactive-resume/ai` typecheck, focused Biome check, and the app-to-app import scan.
+- `apps/server/src/mcp/handler.ts` and `apps/server/src/openapi/metadata.ts` now import from `@headcv/mcp`; server-side MCP execution still uses the injected in-process oRPC `RouterClient`.
+- Canonical MCP tool names are unprefixed snake_case. Key renames: `read_resume` replaces the old get-resume tool name, and `apply_resume_patch` replaces the old patch tool name. No `headcv_*` aliases remain.
+- Added `@headcv/ai/tools/resume-tool-contracts` and reused its JSON Patch operations schema from MCP while keeping MCP-specific `id` context in the MCP input schema.
+- Validation passed for `@headcv/mcp` tests/typecheck, `server` typecheck, `@headcv/ai` typecheck, focused Biome check, and the app-to-app import scan.
 
 ## Latest Task 5 Notes
 
@@ -112,8 +112,8 @@ External agents should be handed exactly one task from the plan plus this handof
 - The root router still exports the same top-level API contract from `packages/api/src/routers/index.ts`, but it imports feature routers from `features/*/router`.
 - Agent modules now live under `features/agent`, with separate procedure modules for threads, messages, attachments, and actions; run-state lives in `runs.ts`, tool construction in `tools.ts`, and the remaining shared orchestration stays in `service.ts`.
 - Resume modules now live under `features/resume`, with capability procedure modules for CRUD, tags, statistics, analysis, events, sharing, and export. Access helpers and resume update events are feature-owned.
-- The authenticated PDF download procedure moved to `packages/api/src/features/resume/export.ts` and calls `@reactive-resume/pdf/server`.
-- `@reactive-resume/api` no longer exports `./services/*` or `./helpers/*`; explicit exports now cover routers, context, flags type, resume runtime/export, and storage runtime.
+- The authenticated PDF download procedure moved to `packages/api/src/features/resume/export.ts` and calls `@headcv/pdf/server`.
+- `@headcv/api` no longer exports `./services/*` or `./helpers/*`; explicit exports now cover routers, context, flags type, resume runtime/export, and storage runtime.
 - `apps/server` imports storage and the PDF procedure from explicit API feature exports. `apps/web` API imports remain type-only.
 - Follow-up risk: `features/agent/service.ts` and `features/resume/service.ts` are still large DB-backed facades. They are feature-owned now, but further splitting should be handled as behavior-preserving follow-up work with targeted tests around run lifecycle, patch transactions, notifications, and storage cleanup.
 - Validation passed for API tests/typecheck, server typecheck, web typecheck, MCP typecheck, focused Biome, and old service/helper import/export scans.
@@ -129,7 +129,7 @@ External agents should be handed exactly one task from the plan plus this handof
   - `startup`: database migrations and local-storage path checks
 - `apps/server/src/index.ts` now only re-exports `createApp`, runs startup checks, computes the port, and starts the Hono server.
 - The route order and public paths from the previous `index.ts` were preserved, including `/api/rpc`, `/api/openapi`, `/api/auth/*`, `/api/health`, `/uploads/*`, `/schema.json`, `/auth/oauth`, `/mcp`, `/.well-known/*`, and the web-dist fallback.
-- Server-side API imports remain on explicit runtime exports only; no `@reactive-resume/api/services/*` or `apps/web/src` imports were introduced.
+- Server-side API imports remain on explicit runtime exports only; no `@headcv/api/services/*` or `apps/web/src` imports were introduced.
 - Validation passed for server test/typecheck during implementation. Final Task 6 validation commands should still be listed in the worklog/final response after the executing agent's last run.
 
 ## Latest Task 7 Slice 1 Notes
@@ -137,7 +137,7 @@ External agents should be handed exactly one task from the plan plus this handof
 - Resume-owned web code now starts under `apps/web/src/features/resume`:
   - `builder/draft.ts` owns the builder resume draft store/hooks.
   - `preview/*` owns the builder preview shell, PDF.js canvas renderer, shared preview helpers/tests, and dashboard thumbnail PDF rendering helpers.
-  - `export/pdf-document*.tsx` owns web-local PDF document/blob/file wrappers around `@reactive-resume/pdf`.
+  - `export/pdf-document*.tsx` owns web-local PDF document/blob/file wrappers around `@headcv/pdf`.
   - `public/*` owns the public resume view, public PDF.js viewer, CSS, and tests.
 - The old generic resume component folder and public-route private component folder were removed after their files moved.
 - Direct `pdfjs-dist` imports are expected only under `apps/web/src/features/resume`; do not move them into `packages/pdf`.
@@ -175,11 +175,11 @@ External agents should be handed exactly one task from the plan plus this handof
 - Workspace `turbo.json` files now exist for both apps and every package. Each extends root config with `extends: ["//"]` and declares tags used by the root boundaries.
 - Every workspace `vitest.config.ts` keeps its legitimate root shared config import with `// @boundaries-ignore root shared Vitest config` immediately above `import { createVitestProjectConfig } from "../../vitest.shared";`.
 - `biome.json` now enables `style.noRestrictedImports` for forbidden cross-workspace source/path imports:
-  - `@reactive-resume/*/src/**`
+  - `@headcv/*/src/**`
   - `apps/**`
   - `packages/**`
 - `biome.json` also registers `tooling/grit/no-cross-workspace-src-imports.grit`, which flags import/export/dynamic import sources that reach into another workspace's `src` tree.
-- `apps/web/tsconfig.json` no longer maps `@reactive-resume/ui/*` directly to `../../packages/ui/src/*`; the web app uses `@reactive-resume/ui` package exports instead.
+- `apps/web/tsconfig.json` no longer maps `@headcv/ui/*` directly to `../../packages/ui/src/*`; the web app uses `@headcv/ui` package exports instead.
 - Files changed by Task 9:
   - `turbo.json`
   - `apps/*/turbo.json`
@@ -196,7 +196,7 @@ External agents should be handed exactly one task from the plan plus this handof
   - `pnpm exec turbo boundaries`
   - `pnpm exec biome check biome.json turbo.json tooling/grit/no-cross-workspace-src-imports.grit apps/web/tsconfig.json apps/server/turbo.json apps/web/turbo.json packages/*/turbo.json`
   - `pnpm --filter web typecheck`
-  - `pnpm --filter @reactive-resume/api typecheck`
+  - `pnpm --filter @headcv/api typecheck`
   - `pnpm --filter server typecheck`
 - Remaining risks:
   - The Turbo tag set is intentionally coarse and may need finer per-package rules as future browser/server package classes settle.

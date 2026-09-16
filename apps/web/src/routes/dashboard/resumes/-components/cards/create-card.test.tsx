@@ -1,9 +1,20 @@
 // @vitest-environment happy-dom
 
 import { fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, beforeAll, describe, expect, it } from "vitest";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { i18n } from "@lingui/core";
-import { useDialogStore } from "@/dialogs/store";
+
+const navigate = vi.hoisted(() => vi.fn());
+const openDialog = vi.hoisted(() => vi.fn());
+
+vi.mock("@tanstack/react-router", () => ({
+	useNavigate: () => navigate,
+}));
+
+vi.mock("@/dialogs/store", () => ({
+	useDialogStore: () => ({ openDialog }),
+}));
+
 import { CreateResumeCard } from "./create-card";
 import { ImportResumeCard } from "./import-card";
 
@@ -11,26 +22,24 @@ beforeAll(() => {
 	i18n.loadAndActivate({ locale: "en", messages: {} });
 });
 
-afterEach(() => {
-	useDialogStore.setState({ open: false, activeDialog: null, onBeforeClose: null });
+beforeEach(() => {
+	vi.clearAllMocks();
 });
 
 describe("CreateResumeCard", () => {
 	it("renders the create-resume copy", () => {
 		render(<CreateResumeCard />);
 		expect(screen.getByText("Create a new resume")).toBeInTheDocument();
-		expect(screen.getByText("Start building your resume from scratch")).toBeInTheDocument();
+		expect(screen.getByText("Choose a template and start building")).toBeInTheDocument();
 	});
 
-	it("opens the resume.create dialog when clicked", () => {
+	it("opens template selection when clicked", () => {
 		render(<CreateResumeCard />);
 
 		const card = screen.getByText("Create a new resume").closest("div[class*='aspect-page']") as HTMLElement;
 		fireEvent.click(card);
 
-		const state = useDialogStore.getState();
-		expect(state.open).toBe(true);
-		expect(state.activeDialog?.type).toBe("resume.create");
+		expect(navigate).toHaveBeenCalledWith({ to: "/templates" });
 	});
 });
 
@@ -41,14 +50,12 @@ describe("ImportResumeCard", () => {
 		expect(screen.getByText("Continue where you left off")).toBeInTheDocument();
 	});
 
-	it("opens the resume.import dialog when clicked", () => {
+	it("opens the resume import dialog when clicked", () => {
 		render(<ImportResumeCard />);
 
 		const card = screen.getByText("Import an existing resume").closest("div[class*='aspect-page']") as HTMLElement;
 		fireEvent.click(card);
 
-		const state = useDialogStore.getState();
-		expect(state.open).toBe(true);
-		expect(state.activeDialog?.type).toBe("resume.import");
+		expect(openDialog).toHaveBeenCalledWith("resume.import", undefined);
 	});
 });

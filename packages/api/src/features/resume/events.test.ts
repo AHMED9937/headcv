@@ -5,7 +5,7 @@ const pool = vi.hoisted(() => ({
 	connect: vi.fn(),
 }));
 
-vi.mock("@reactive-resume/db/client", () => ({ getPool: () => pool }));
+vi.mock("@headcv/db/client", () => ({ getPool: () => pool }));
 
 const { publishResumeUpdated, subscribeResumeUpdated } = await import("./events");
 

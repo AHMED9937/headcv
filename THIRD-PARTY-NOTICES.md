@@ -1,16 +1,16 @@
 # Third-Party Notices
 
-This project is a fork of [`amruthpillai/reactive-resume`](https://github.com/amruthpillai/reactive-resume), forked at tag `v5.1.6`.
+This project is a fork of [`AHMED9937/headcv`](https://github.com/AHMED9937/headcv), forked at tag `v5.1.6`.
 
 ## Upstream project
 
-`amruthpillai/reactive-resume` is licensed under the MIT License. The full upstream license text is preserved at the repository root in `LICENSE`. Copyright and license notices from the upstream project are retained.
+`AHMED9937/headcv` is licensed under the MIT License. The full upstream license text is preserved at the repository root in `LICENSE`. Copyright and license notices from the upstream project are retained.
 
 ## AI/MCP features removed for v1
 
 This fork intentionally removes all AI provider integrations and Model Context Protocol (MCP) features present in upstream v5.1.6, including:
 
-- `@reactive-resume/ai` and `@reactive-resume/mcp` (internal workspace packages)
+- `@headcv/ai` and `@headcv/mcp` (internal workspace packages)
 - `@ai-sdk/anthropic`, `@ai-sdk/google`, `@ai-sdk/openai`, `@ai-sdk/openai-compatible`, `@ai-sdk/react`
 - `ai` (Vercel AI SDK)
 - `ollama-ai-provider-v2`

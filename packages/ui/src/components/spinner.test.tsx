@@ -27,7 +27,7 @@ describe("Spinner", () => {
 		render(<Spinner />);
 		const svg = screen.getByRole("status");
 		// Phosphor maps the `color` prop to inline style (fill/stroke), not an attribute.
-		// The hex/RGB or "currentColor" appears somewhere in style/attr — verify presence in serialized output.
+		// The hex/RGB or "currentColor" appears somewhere in style/attr  verify presence in serialized output.
 		expect(svg.outerHTML).toContain("currentColor");
 	});
 

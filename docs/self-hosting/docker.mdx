@@ -1,15 +1,15 @@
 ---
 title: "Self-Hosting with Docker"
-description: "A comprehensive guide to self-host Reactive Resume with Docker (Postgres only), including a detailed environment variable reference and troubleshooting tips."
+description: "A comprehensive guide to self-host HeadCV with Docker (Postgres only), including a detailed environment variable reference and troubleshooting tips."
 ---
 
 <Info>
-  **From v5.1.0 onwards** — PDF generation now runs entirely client-side via `@react-pdf/renderer`. New deployments no longer require Browserless, Chromium, or any external print service as a dependency. The `PRINTER_*` and `BROWSERLESS_*` environment variables are no longer read and can be removed from your `.env`.
+  **From v5.1.0 onwards**  PDF generation now runs entirely client-side via `@react-pdf/renderer`. New deployments no longer require Browserless, Chromium, or any external print service as a dependency. The `PRINTER_*` and `BROWSERLESS_*` environment variables are no longer read and can be removed from your `.env`.
 </Info>
 
 ## Overview
 
-Reactive Resume can be self-hosted using Docker in a matter of minutes, and this guide will walk you through the process. Here are some of the services you'll need to get started:
+HeadCV can be self-hosted using Docker in a matter of minutes, and this guide will walk you through the process. Here are some of the services you'll need to get started:
 
 <CardGroup cols={2}>
   <Card title="PostgreSQL">Stores accounts, resumes, and application data.</Card>
@@ -23,8 +23,8 @@ Reactive Resume can be self-hosted using Docker in a matter of minutes, and this
 
 You can pull the latest app image from:
 
-- Docker Hub: `amruthpillai/reactive-resume:latest`
-- GitHub Container Registry: `ghcr.io/amruthpillai/reactive-resume:latest`
+- Docker Hub: `AHMED9937/headcv:latest`
+- GitHub Container Registry: `ghcr.io/AHMED9937/headcv:latest`
 
 ## Minimum requirements
 
@@ -36,7 +36,7 @@ You can pull the latest app image from:
 
 ## Quickstart using Docker Compose
 
-Create a new folder (for example `reactive-resume/`) with:
+Create a new folder (for example `headcv/`) with:
 
 - `compose.yml`
 - `.env`
@@ -91,7 +91,7 @@ SMTP_HOST=""
 SMTP_PORT="587"
 SMTP_USER=""
 SMTP_PASS=""
-SMTP_FROM="Reactive Resume <noreply@rxresu.me>"
+SMTP_FROM="HeadCV <noreply@headcv.com>"
 SMTP_SECURE="false"
 
 # --- Storage (optional) ---
@@ -108,7 +108,7 @@ S3_FORCE_PATH_STYLE="false"
 
 # --- AI features (optional) ---
 # ENCRYPTION_SECRET is required for saved AI providers. REDIS_URL is also required for the AI Agent workspace.
-# The rest of Reactive Resume can run without these.
+# The rest of HeadCV can run without these.
 REDIS_URL=""
 # Generated using `openssl rand -hex 32`
 ENCRYPTION_SECRET=""
@@ -145,7 +145,7 @@ FLAG_ALLOW_UNSAFE_AI_BASE_URL="false"
   </Step>
 
   <Step title="Create compose.yml">
-    This setup runs Postgres and Reactive Resume on a private Docker network.
+    This setup runs Postgres and HeadCV on a private Docker network.
 
     <CodeGroup>
 
@@ -166,9 +166,9 @@ services:
       timeout: 5s
       retries: 10
 
-  reactive-resume:
-    image: amruthpillai/reactive-resume:latest
-    # image: ghcr.io/amruthpillai/reactive-resume:latest
+  headcv:
+    image: AHMED9937/headcv:latest
+    # image: ghcr.io/AHMED9937/headcv:latest
     restart: unless-stopped
     ports:
       - "3000:3000"
@@ -193,11 +193,11 @@ volumes:
     </CodeGroup>
 
     <Tip>
-      Prefer pulling from Docker Hub? Keep <code>amruthpillai/reactive-resume:latest</code>. Prefer GHCR? Swap it to <code>ghcr.io/amruthpillai/reactive-resume:latest</code>.
+      Prefer pulling from Docker Hub? Keep <code>AHMED9937/headcv:latest</code>. Prefer GHCR? Swap it to <code>ghcr.io/AHMED9937/headcv:latest</code>.
     </Tip>
 
     <Note>
-      In Docker, the Reactive Resume server listens on <code>PORT</code> and serves both the API and the built web app.
+      In Docker, the HeadCV server listens on <code>PORT</code> and serves both the API and the built web app.
       The default image uses <code>PORT=3000</code>, so the example maps <code>3000:3000</code>. If you change
       <code>PORT</code>, update the container-side port mapping and health check to match.
     </Note>
@@ -216,12 +216,12 @@ docker compose ps
 ```
 
 ```bash
-docker compose logs -f reactive-resume
+docker compose logs -f headcv
 ```
 
     </CodeGroup>
 
-    Reactive Resume should now be available at your `APP_URL` (for the example above: `http://localhost:3000`).
+    HeadCV should now be available at your `APP_URL` (for the example above: `http://localhost:3000`).
 
   </Step>
 </Steps>
@@ -313,8 +313,8 @@ openssl rand -hex 32
     - **`OAUTH_SCOPES`**: Space-separated scopes (defaults to `openid profile email`)
 
     Configure endpoints using **one** of these methods:
-    - **Option A — OIDC Discovery (preferred)**: Set `OAUTH_DISCOVERY_URL` to your provider's `.well-known/openid-configuration` URL
-    - **Option B — Manual URLs**: Set all three: `OAUTH_AUTHORIZATION_URL`, `OAUTH_TOKEN_URL`, and `OAUTH_USER_INFO_URL`
+    - **Option A  OIDC Discovery (preferred)**: Set `OAUTH_DISCOVERY_URL` to your provider's `.well-known/openid-configuration` URL
+    - **Option B  Manual URLs**: Set all three: `OAUTH_AUTHORIZATION_URL`, `OAUTH_TOKEN_URL`, and `OAUTH_USER_INFO_URL`
 
   </Accordion>
 
@@ -325,7 +325,7 @@ openssl rand -hex 32
     - **`SMTP_HOST`**: SMTP host (if empty, email sending is disabled).
     - **`SMTP_PORT`**: Defaults to `587` in the app.
     - **`SMTP_USER`** / **`SMTP_PASS`**: SMTP credentials.
-    - **`SMTP_FROM`**: Default from address (for example, `Reactive Resume <noreply@rxresu.me>`).
+    - **`SMTP_FROM`**: Default from address (for example, `HeadCV <noreply@headcv.com>`).
     - **`SMTP_SECURE`**: `"true"` or `"false"` (string). Match your provider settings.
 
   </Accordion>
@@ -343,7 +343,7 @@ openssl rand -hex 32
 </Accordion>
 
 <Accordion title="AI features (optional)">
-  Saved AI provider management is usable only when **`ENCRYPTION_SECRET`** is configured. The AI Agent workspace also requires **`REDIS_URL`**. The rest of Reactive Resume can run without them.
+  Saved AI provider management is usable only when **`ENCRYPTION_SECRET`** is configured. The AI Agent workspace also requires **`REDIS_URL`**. The rest of HeadCV can run without them.
 
   - **`REDIS_URL`**: Redis connection string used by the AI Agent workspace.
   - **`ENCRYPTION_SECRET`**: Secret used to encrypt saved AI provider credentials. Generate with `openssl rand -hex 32`.
@@ -363,7 +363,7 @@ openssl rand -hex 32
 
 ## Updating your installation
 
-To update your Reactive Resume installation to the latest available version, follow these steps:
+To update your HeadCV installation to the latest available version, follow these steps:
 
 1. **Back up your database and uploads first** (highly recommended before every update).
 
@@ -382,7 +382,7 @@ To update your Reactive Resume installation to the latest available version, fol
 4. **Check migration/startup logs** after deploy.
 
    ```bash
-   docker compose logs -f reactive-resume
+   docker compose logs -f headcv
    ```
 
 5. **(Optional) Remove old, unused Docker images** to free up disk space.
@@ -394,7 +394,7 @@ This process updates app services and automatically runs DB migrations on startu
 
 ## Backups (recommended)
 
-Regular backups are essential to protect your data. Reactive Resume stores data in two places: the PostgreSQL database and file uploads (either local storage or S3).
+Regular backups are essential to protect your data. HeadCV stores data in two places: the PostgreSQL database and file uploads (either local storage or S3).
 
 ### Database backups
 
@@ -408,7 +408,7 @@ If you're using S3-compatible storage, consider enabling versioning on your buck
 
 ## Health Checks
 
-Reactive Resume exposes a health check endpoint at `/api/health` that verifies the application and its dependencies. It checks **database** and **storage**; if either is unhealthy, the endpoint returns HTTP `503`.
+HeadCV exposes a health check endpoint at `/api/health` that verifies the application and its dependencies. It checks **database** and **storage**; if either is unhealthy, the endpoint returns HTTP `503`.
 
 ### How it works
 
@@ -431,7 +431,7 @@ Most reverse proxies (such as **Traefik**, **Caddy**, or **nginx** with upstream
 - **Healthy containers** receive traffic as normal
 - **Unhealthy containers** are automatically removed from the load balancer pool
 
-This is particularly useful in high-availability setups where you have multiple instances of Reactive Resume. If one instance becomes unhealthy (for example, it loses database or storage connectivity), the reverse proxy will stop routing traffic to it until it recovers.
+This is particularly useful in high-availability setups where you have multiple instances of HeadCV. If one instance becomes unhealthy (for example, it loses database or storage connectivity), the reverse proxy will stop routing traffic to it until it recovers.
 
 <Tip>
   If you're using **Traefik**, it automatically respects Docker health checks when using the Docker provider. Unhealthy
@@ -440,7 +440,7 @@ This is particularly useful in high-availability setups where you have multiple 
 
 ### Manually checking health
 
-You can manually verify the health of your Reactive Resume instance:
+You can manually verify the health of your HeadCV instance:
 
 ```bash
 # From outside the container
@@ -460,7 +460,7 @@ A healthy response returns HTTP 200. Any other response (or a connection failure
     - **What to do**:
       Check logs for migration errors and database connectivity details:
       ```bash
-      docker compose logs -f reactive-resume
+      docker compose logs -f headcv
       ```
   </Accordion>
 

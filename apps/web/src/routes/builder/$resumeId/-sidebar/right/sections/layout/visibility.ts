@@ -1,4 +1,4 @@
-import type { CustomSectionType, ResumeData, SectionType } from "@reactive-resume/schema/resume/data";
+import type { CustomSectionType, ResumeData, SectionType } from "@headcv/schema/resume/data";
 
 type HiddenItem = {
 	hidden: boolean;

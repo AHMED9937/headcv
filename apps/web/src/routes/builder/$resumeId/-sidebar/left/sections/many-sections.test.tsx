@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 
 //
-// Bulk-cover the small reorderable section components — they all share the same
+// Bulk-cover the small reorderable section components  they all share the same
 // shape: render a SectionItem per data row with title/subtitle mapped to specific
 // fields, plus an "Add a new X" button. Test them together to amortize the mock setup.
 
@@ -123,7 +123,7 @@ beforeAll(() => {
 
 const wrap = (ui: React.ReactNode) => <I18nProvider i18n={i18n}>{ui}</I18nProvider>;
 
-describe("left sidebar section builders — title/subtitle mapping", () => {
+describe("left sidebar section builders  title/subtitle mapping", () => {
 	const cases = [
 		{
 			name: "awards",

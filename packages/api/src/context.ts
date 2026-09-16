@@ -1,10 +1,10 @@
-import type { Locale } from "@reactive-resume/utils/locale";
+import type { Locale } from "@headcv/utils/locale";
 import type { User } from "better-auth";
 import { ORPCError, os } from "@orpc/server";
 import { eq } from "drizzle-orm";
-import { auth, verifyOAuthToken } from "@reactive-resume/auth/config";
-import { db } from "@reactive-resume/db/client";
-import { user } from "@reactive-resume/db/schema";
+import { auth, verifyOAuthToken } from "@headcv/auth/config";
+import { db } from "@headcv/db/client";
+import { user } from "@headcv/db/schema";
 
 interface ORPCContext {
 	locale: Locale;

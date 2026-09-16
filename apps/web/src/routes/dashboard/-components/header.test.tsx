@@ -3,7 +3,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { ListIcon } from "@phosphor-icons/react";
-import { SidebarProvider } from "@reactive-resume/ui/components/sidebar";
+import { SidebarProvider } from "@headcv/ui/components/sidebar";
 import { DashboardHeader } from "./header";
 
 const renderHeader = (props: Partial<React.ComponentProps<typeof DashboardHeader>> = {}) =>

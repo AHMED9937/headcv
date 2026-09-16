@@ -4,15 +4,13 @@ import {
 	ChatCircleDotsIcon,
 	GearIcon,
 	HouseSimpleIcon,
-	KeyIcon,
-	PuzzlePieceIcon,
 	ReadCvLogoIcon,
 	ShieldCheckIcon,
 	UserCircleIcon,
 	WarningIcon,
 } from "@phosphor-icons/react";
 import { useNavigate, useRouteContext } from "@tanstack/react-router";
-import { CommandItem } from "@reactive-resume/ui/components/command";
+import { CommandItem } from "@headcv/ui/components/command";
 import { useCommandPaletteStore } from "../store";
 import { BaseCommandGroup } from "./base";
 
@@ -77,39 +75,12 @@ export function NavigationCommandGroup() {
 				</CommandItem>
 
 				<CommandItem
-					keywords={[t`Preferences`]}
-					value="navigation.settings.preferences"
-					onSelect={() => onNavigate("/dashboard/settings/preferences")}
-				>
-					<GearIcon />
-					<Trans>Preferences</Trans>
-				</CommandItem>
-
-				<CommandItem
 					keywords={[t`Authentication`]}
 					value="navigation.settings.authentication"
 					onSelect={() => onNavigate("/dashboard/settings/authentication")}
 				>
 					<ShieldCheckIcon />
 					<Trans>Authentication</Trans>
-				</CommandItem>
-
-				<CommandItem
-					keywords={[t`API Keys`]}
-					value="navigation.settings.api-keys"
-					onSelect={() => onNavigate("/dashboard/settings/api-keys")}
-				>
-					<KeyIcon />
-					<Trans>API Keys</Trans>
-				</CommandItem>
-
-				<CommandItem
-					keywords={[t`Integrations`]}
-					value="navigation.settings.integrations"
-					onSelect={() => onNavigate("/dashboard/settings/integrations")}
-				>
-					<PuzzlePieceIcon />
-					<Trans>Integrations</Trans>
 				</CommandItem>
 
 				<CommandItem

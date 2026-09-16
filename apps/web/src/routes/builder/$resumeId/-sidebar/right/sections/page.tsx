@@ -1,17 +1,16 @@
 import type z from "zod";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { pageSchema } from "@reactive-resume/schema/resume/data";
-import { FormControl, FormItem, FormLabel, FormMessage } from "@reactive-resume/ui/components/form";
+import { pageSchema } from "@headcv/schema/resume/data";
+import { FormControl, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
 import {
 	InputGroup,
 	InputGroupAddon,
 	InputGroupInput,
 	InputGroupText,
-} from "@reactive-resume/ui/components/input-group";
-import { Switch } from "@reactive-resume/ui/components/switch";
+} from "@headcv/ui/components/input-group";
+import { Switch } from "@headcv/ui/components/switch";
 import { Combobox } from "@/components/ui/combobox";
-import { getLocaleOptions } from "@/features/locale/combobox";
 import { useResume, useUpdateResumeData } from "@/features/resume/builder/draft";
 import { useSyncFormValues } from "@/hooks/use-sync-form-values";
 import { useAppForm } from "@/libs/tanstack-form";
@@ -62,33 +61,6 @@ function PageSectionForm() {
 				void form.handleSubmit();
 			}}
 		>
-			<form.Field name="locale">
-				{(field) => (
-					<FormItem
-						className="col-span-full"
-						hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
-					>
-						<FormLabel>
-							<Trans>Language</Trans>
-						</FormLabel>
-						<FormControl
-							render={
-								<Combobox
-									options={getLocaleOptions()}
-									value={field.state.value}
-									onValueChange={(locale) => {
-										const value = (locale ?? "") as string;
-										field.handleChange(value);
-										handleAutoSave("locale", value);
-									}}
-								/>
-							}
-						/>
-						<FormMessage errors={field.state.meta.errors} />
-					</FormItem>
-				)}
-			</form.Field>
-
 			<form.Field name="format">
 				{(field) => (
 					<FormItem

@@ -1,6 +1,8 @@
-const productionRootUrl = "https://rxresu.me/";
-const appName = "Reactive Resume";
-const repositoryUrl = "https://github.com/amruthpillai/reactive-resume";
+const productionRootUrl = "https://headcv.com/";
+const appName = "HeadCV";
+
+// TODO(Q9): Replace with the final product domain and repository URL once decided.
+const repositoryUrl = "https://github.com/AHMED9937/headcv";
 
 type JsonLd = Record<string, unknown>;
 
@@ -41,82 +43,97 @@ const createStructuredDataScript = (id: string, data: JsonLd) => ({
 	children: serializeJsonLdForScript(data),
 });
 
-export const getRootStructuredData = (canonicalUrl: string): JsonLd[] => [
-	{
-		"@type": "WebSite",
-		name: appName,
-		url: canonicalUrl,
-	},
-	{
-		"@type": ["SoftwareApplication", "WebApplication"],
-		name: appName,
-		url: canonicalUrl,
-		description:
-			"Reactive Resume is a free and open-source resume builder that simplifies the process of creating, updating, and sharing your resume.",
-		applicationCategory: "BusinessApplication",
-		operatingSystem: "Web",
-		isAccessibleForFree: true,
-		offers: {
-			"@type": "Offer",
-			price: "0",
-			priceCurrency: "USD",
+export const getRootStructuredData = (canonicalUrl: string, locale = "en"): JsonLd[] => {
+	const appImage = `${canonicalUrl}opengraph/banner.jpg`;
+	return [
+		{
+			"@context": "https://schema.org",
+			"@type": "WebSite",
+			"@id": `${canonicalUrl}#website`,
+			name: appName,
+			url: canonicalUrl,
+			inLanguage: locale,
 		},
-		codeRepository: repositoryUrl,
-	},
-	{
-		"@type": "Project",
-		name: appName,
-		url: canonicalUrl,
-		sameAs: [repositoryUrl],
-	},
-	{
-		"@type": "FAQPage",
-		mainEntity: homeFaqJsonLdItems.map((item) => ({
-			"@type": "Question",
-			name: item.question,
-			acceptedAnswer: {
-				"@type": "Answer",
-				text: item.answer,
+		{
+			"@context": "https://schema.org",
+			"@type": ["SoftwareApplication", "WebApplication"],
+			"@id": `${canonicalUrl}#software`,
+			name: appName,
+			url: canonicalUrl,
+			description:
+				"HeadCV is a guided CV builder that helps job seekers create ATS-friendly resumes with curated phrasing, expert structure, and a live preview. Free to start; account required only to save multiple CVs.",
+			applicationCategory: "BusinessApplication",
+			operatingSystem: "Web",
+			isAccessibleForFree: true,
+			image: appImage,
+			inLanguage: locale,
+			offers: {
+				"@type": "Offer",
+				price: "0",
+				priceCurrency: "USD",
+				availability: "https://schema.org/InStock",
+				description: "Core CV builder is free to use. Accounts and paid tiers may be introduced later.",
 			},
-		})),
-	},
-];
+			codeRepository: repositoryUrl,
+		},
+		{
+			"@context": "https://schema.org",
+			"@type": "Project",
+			"@id": `${canonicalUrl}#project`,
+			name: appName,
+			url: canonicalUrl,
+			sameAs: [repositoryUrl],
+		},
+		{
+			"@context": "https://schema.org",
+			"@type": "FAQPage",
+			"@id": `${canonicalUrl}#faq`,
+			mainEntity: homeFaqJsonLdItems.map((item) => ({
+				"@type": "Question",
+				name: item.question,
+				acceptedAnswer: {
+					"@type": "Answer",
+					text: item.answer,
+				},
+			})),
+		},
+	];
+};
 
-export const createRootStructuredDataScript = (canonicalUrl: string) =>
-	createStructuredDataScript("reactive-resume-structured-data", {
+export const createRootStructuredDataScript = (canonicalUrl: string, locale = "en") =>
+	createStructuredDataScript("headcv-structured-data", {
 		"@context": "https://schema.org",
-		"@graph": getRootStructuredData(canonicalUrl),
+		"@graph": getRootStructuredData(canonicalUrl, locale),
 	});
 
 const homeFaqJsonLdItems = [
 	{
-		question: "Is Reactive Resume really free?",
+		question: "Is HeadCV free to use?",
 		answer:
-			"Yes! Reactive Resume is completely free to use, with no hidden costs, premium tiers, or subscription fees. It's open-source and will always remain free.",
+			"Yes. You can create and preview a CV for free without creating an account. Saving multiple CVs or syncing across devices will require a free account in the future, and some advanced features may become part of a paid plan.",
 	},
 	{
-		question: "How is my data protected?",
+		question: "Do I need to sign up before building my CV?",
 		answer:
-			"Your data is stored securely and is never shared with third parties. You can also self-host Reactive Resume on your own servers for complete control over your data.",
+			"No. You can start building your CV immediately as a guest. We only ask you to create an account after you have seen the preview or want to save your work.",
 	},
 	{
-		question: "Can I export my resume to PDF?",
+		question: "Is my data safe?",
 		answer:
-			"Absolutely! You can export your resume to PDF with a single click. The exported PDF maintains all your formatting and styling perfectly.",
+			"Yes. Your CV content is stored securely, and we do not sell or share your personal information with third parties. You can delete your account and data at any time.",
 	},
 	{
-		question: "Is Reactive Resume available in multiple languages?",
-		answer:
-			"Yes, Reactive Resume is available in multiple languages. You can choose your preferred language in the settings page, or using the language switcher in the top right corner. If you don't see your language, or you would like to improve the existing translations, you can contribute to the translations on Crowdin.",
+		question: "Can I export my CV to PDF?",
+		answer: "Yes. You can download a professional, ATS-friendly PDF of your CV once you are happy with the preview.",
 	},
 	{
-		question: "What makes Reactive Resume different from other resume builders?",
+		question: "Is HeadCV available in Arabic?",
 		answer:
-			"Reactive Resume is open-source, privacy-focused, and completely free. Unlike other resume builders, it doesn't show ads, track your data, or limit your features behind a paywall.",
+			"Yes. HeadCV supports both English (left-to-right) and Arabic (right-to-left) layouts, with templates designed for each direction.",
 	},
 	{
-		question: "How do I share my resume?",
+		question: "Does HeadCV use AI to write my CV?",
 		answer:
-			"You can share your resume via a unique public URL, protect it with a password, or download it as a PDF to share directly. The choice is yours!",
+			"HeadCV can use AI-assisted tools when you choose to enable and configure them; the core editor and templates remain usable without AI.",
 	},
 ] as const;

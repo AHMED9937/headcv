@@ -1,4 +1,4 @@
-import type { SectionTitleResolver } from "@reactive-resume/pdf/section-title";
+import type { SectionTitleResolver } from "@headcv/pdf/section-title";
 import { setupI18n } from "@lingui/core";
 import { useEffect, useReducer } from "react";
 import { getLocaleMessages, resolveLocale } from "@/libs/locale";

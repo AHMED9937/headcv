@@ -1,5 +1,5 @@
-import { sampleResumeData } from "@reactive-resume/schema/resume/sample";
-import { generateRandomName, slugify } from "@reactive-resume/utils/string";
+import { sampleResumeData } from "@headcv/schema/resume/sample";
+import { generateRandomName, slugify } from "@headcv/utils/string";
 import { protectedProcedure } from "../../context";
 import { resumeDto } from "../../dto/resume";
 import { resumeMutationRateLimit } from "../../middleware/rate-limit";
@@ -69,7 +69,6 @@ export const crudRouter = {
 				name: input.name,
 				slug: input.slug,
 				tags: input.tags,
-				locale: context.locale,
 				userId: context.user.id,
 				...(input.withSampleData ? { data: sampleResumeData } : {}),
 			});
@@ -104,7 +103,6 @@ export const crudRouter = {
 				slug,
 				tags: [],
 				data: input.data,
-				locale: context.locale,
 				userId: context.user.id,
 			});
 		}),
@@ -218,7 +216,6 @@ export const crudRouter = {
 				name: input.name ?? original.name,
 				slug: input.slug ?? original.slug,
 				tags: input.tags ?? original.tags,
-				locale: context.locale,
 				data: original.data,
 			});
 		}),

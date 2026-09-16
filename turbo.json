@@ -49,6 +49,9 @@
 		"SERVER_PORT",
 		"APP_URL",
 		"DATABASE_URL",
+		"DATABASE_URL_UNPOOLED",
+		"DATABASE_POOL_MIN",
+		"DATABASE_POOL_MAX",
 		"AUTH_SECRET",
 		"BETTER_AUTH_API_KEY",
 		"GOOGLE_CLIENT_ID",
@@ -81,10 +84,19 @@
 		"FLAG_DISABLE_SIGNUPS",
 		"FLAG_DISABLE_EMAIL_AUTH",
 		"FLAG_DISABLE_IMAGE_PROCESSING",
+		"FLAG_ALLOW_UNSAFE_AI_BASE_URL",
 		"FLAG_ALLOW_UNSAFE_OAUTH_REDIRECT_URI",
+		"REDIS_URL",
+		"ENCRYPTION_SECRET",
 		"GOOGLE_CLOUD_API_KEY",
 		"CROWDIN_PROJECT_ID",
-		"CROWDIN_API_TOKEN"
+		"CROWDIN_API_TOKEN",
+		"PRERENDER_SERVICE_URL",
+		"PRERENDER_TOKEN",
+		"AI_PROVIDER",
+		"AI_MODEL",
+		"AI_BASE_URL",
+		"AI_API_KEY"
 	],
 	"tasks": {
 		"source": {
@@ -115,7 +127,16 @@
 		},
 		"dev": {
 			"cache": false,
-			"persistent": true
+			"persistent": true,
+			"env": [
+				"REDIS_URL",
+				"ENCRYPTION_SECRET",
+				"FLAG_ALLOW_UNSAFE_AI_BASE_URL",
+				"AI_PROVIDER",
+				"AI_MODEL",
+				"AI_BASE_URL",
+				"AI_API_KEY"
+			]
 		},
 		"start": {
 			"cache": false,

@@ -1,5 +1,5 @@
 {
-	"name": "@reactive-resume/fonts",
+	"name": "@headcv/fonts",
 	"version": "0.0.0",
 	"type": "module",
 	"private": true,
@@ -15,10 +15,10 @@
 		"test:agent": "vitest run --reporter=agent --reporter=json --outputFile.json=reports/vitest-results.json --passWithNoTests"
 	},
 	"dependencies": {
-		"@reactive-resume/utils": "workspace:*"
+		"@headcv/utils": "workspace:*"
 	},
 	"devDependencies": {
-		"@reactive-resume/config": "workspace:*",
+		"@headcv/config": "workspace:*",
 		"@typescript/native-preview": "7.0.0-dev.20260526.1",
 		"typescript": "^6.0.3"
 	}

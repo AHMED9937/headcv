@@ -12,7 +12,7 @@ const envMock = vi.hoisted(() => ({
 const sendMail = vi.hoisted(() => vi.fn().mockResolvedValue({ ok: true }));
 const createTransport = vi.hoisted(() => vi.fn(() => ({ sendMail })));
 
-vi.mock("@reactive-resume/env/server", () => ({ env: envMock }));
+vi.mock("@headcv/env/server", () => ({ env: envMock }));
 vi.mock("nodemailer", () => ({
 	default: { createTransport },
 	createTransport,
@@ -86,10 +86,10 @@ describe("sendEmail", () => {
 		envMock.SMTP_USER = "user";
 		envMock.SMTP_PASS = "pass";
 
-		// SMTP not "enabled" without SMTP_FROM — skipping branch — but options.from is used.
+		// SMTP not "enabled" without SMTP_FROM  skipping branch  but options.from is used.
 		// Manually provide from in options instead.
 		await sendEmail({ to: "a@b.com", from: "explicit@x.com", subject: "hi", text: "body" });
-		// SMTP isn't enabled, so sendMail isn't called — confirm the info-log branch instead.
+		// SMTP isn't enabled, so sendMail isn't called  confirm the info-log branch instead.
 		expect(sendMail).not.toHaveBeenCalled();
 	});
 

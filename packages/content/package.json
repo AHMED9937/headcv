@@ -1,0 +1,29 @@
+{
+	"name": "@headcv/content",
+	"version": "0.0.0",
+	"type": "module",
+	"private": true,
+	"exports": {
+		".": "./src/index.ts",
+		"./job-titles": "./src/job-titles/index.ts",
+		"./phrases": "./src/phrases/index.ts",
+		"./skills": "./src/skills/index.ts",
+		"./summary-formulas": "./src/summary-formulas/index.ts",
+		"./utils": "./src/utils.ts"
+	},
+	"scripts": {
+		"typecheck": "tsgo --noEmit",
+		"test": "vitest run --passWithNoTests",
+		"test:coverage": "vitest run --coverage --passWithNoTests",
+		"test:ci": "vitest run --coverage --reporter=default --reporter=github-actions --reporter=json --reporter=junit --outputFile.json=reports/vitest-results.json --outputFile.junit=reports/vitest-junit.xml --passWithNoTests",
+		"test:agent": "vitest run --reporter=agent --reporter=json --outputFile.json=reports/vitest-results.json --passWithNoTests"
+	},
+	"dependencies": {
+		"fuse.js": "^7.3.0"
+	},
+	"devDependencies": {
+		"@headcv/config": "workspace:*",
+		"@typescript/native-preview": "7.0.0-dev.20260526.1",
+		"typescript": "^6.0.3"
+	}
+}

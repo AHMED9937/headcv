@@ -18,7 +18,7 @@ By default, dynamic OAuth client registration keeps the existing safe behavior: 
 
 ## Architecture
 
-The existing redirect URI policy remains centralized in `@reactive-resume/utils/url-security.node`.
+The existing redirect URI policy remains centralized in `@headcv/utils/url-security.node`.
 
 Introduce a mode-based OAuth redirect validator API, for example:
 
@@ -87,9 +87,9 @@ Update focused tests in the relevant packages:
 Run focused validation after implementation:
 
 ```sh
-pnpm --filter @reactive-resume/utils test -- src/url-security.node.test.ts
+pnpm --filter @headcv/utils test -- src/url-security.node.test.ts
 pnpm --filter server test -- src/http/auth.test.ts
-pnpm --filter @reactive-resume/auth typecheck
+pnpm --filter @headcv/auth typecheck
 pnpm --filter server typecheck
 pnpm exec turbo boundaries
 ```

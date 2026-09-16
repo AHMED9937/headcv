@@ -17,7 +17,18 @@ export function ResumePreview(props: ResumePreviewProps) {
 	const resumeData = resolvedProps.data ?? builderResumeData;
 	const pageCount = getResumePreviewPageCount(resumeData);
 
-	if (!isClient) return null;
+	if (!isClient) {
+		return (
+			<ResumePreviewLoader
+				pageCount={pageCount}
+				pageClassName={resolvedProps.pageClassName}
+				pageGap={resolvedProps.pageGap}
+				pageLayout={resolvedProps.pageLayout}
+				pageScale={resolvedProps.pageScale}
+				showPageNumbers={resolvedProps.showPageNumbers}
+			/>
+		);
+	}
 
 	return (
 		<Suspense

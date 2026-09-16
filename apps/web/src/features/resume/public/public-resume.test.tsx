@@ -1,12 +1,12 @@
 // @vitest-environment happy-dom
 
-import type { ResumeData } from "@reactive-resume/schema/resume/data";
+import type { ResumeData } from "@headcv/schema/resume/data";
 import type { ReactNode } from "react";
 import { render, screen } from "@testing-library/react";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
-import { sampleResumeData } from "@reactive-resume/schema/resume/sample";
+import { sampleResumeData } from "@headcv/schema/resume/sample";
 
 const publicResumeMock = vi.hoisted(() => ({
 	createResumePdfBlob: vi.fn(async () => new Blob(["%PDF"], { type: "application/pdf" })),
@@ -32,7 +32,7 @@ vi.mock("@tanstack/react-router", () => ({
 	}),
 }));
 
-vi.mock("@reactive-resume/utils/file", () => ({
+vi.mock("@headcv/utils/file", () => ({
 	downloadWithAnchor: publicResumeMock.downloadWithAnchor,
 	generateFilename: publicResumeMock.generateFilename,
 }));

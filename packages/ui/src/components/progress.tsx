@@ -1,5 +1,5 @@
 import { Progress as ProgressPrimitive } from "@base-ui/react/progress";
-import { cn } from "@reactive-resume/utils/style";
+import { cn } from "@headcv/utils/style";
 
 function Progress({ className, children, value, ...props }: ProgressPrimitive.Root.Props) {
 	return (

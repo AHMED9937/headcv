@@ -1,6 +1,6 @@
 import { m } from "motion/react";
 import { useRef, useState } from "react";
-import { cn } from "@reactive-resume/utils/style";
+import { cn } from "@headcv/utils/style";
 
 const textClassName = cn("fill-transparent font-bold text-3xl leading-none tracking-tight");
 

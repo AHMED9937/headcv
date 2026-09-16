@@ -1,7 +1,7 @@
 import type { SectionTitleResolver } from "./section-title";
 import { Buffer } from "node:buffer";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { sampleResumeData } from "@reactive-resume/schema/resume/sample";
+import { sampleResumeData } from "@headcv/schema/resume/sample";
 
 const rendererMock = vi.hoisted(() => ({
 	renderToBuffer: vi.fn(async () => Buffer.from("%PDF")),

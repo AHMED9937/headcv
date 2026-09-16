@@ -2,7 +2,7 @@ import type { Style } from "@react-pdf/types";
 import type { TemplatePageProps } from "../../document";
 import type { TemplateColorRoles, TemplateStyleContext, TemplateStyleSlots } from "../shared/types";
 import { Fragment, useMemo } from "react";
-import { parseColorString, rgbaStringToHex } from "@reactive-resume/utils/color";
+import { parseColorString, rgbaStringToHex } from "@headcv/utils/color";
 import { useRender } from "../../context";
 import { Image, Page, StyleSheet, View } from "../../renderer";
 import { CustomFieldContactItem, WebsiteContactItem } from "../shared/contact-item";
@@ -14,7 +14,7 @@ import { getTemplatePageMinHeightStyle, getTemplatePageSize } from "../shared/pa
 import { hasTemplatePicture } from "../shared/picture";
 import { Heading, Icon, Link, Text } from "../shared/primitives";
 import { createRtlStyleHelpers } from "../shared/rtl";
-import { Section } from "../shared/sections";
+import { PreviewSectionMarker, Section } from "../shared/sections";
 import { composeStyles, headerNameLineHeight, resolvePlacementColor } from "../shared/styles";
 
 type GengarStyles = Omit<TemplateStyleSlots, "page"> & {
@@ -105,6 +105,7 @@ const Header = ({ styles, colors }: { styles: GengarStyles; colors: TemplateColo
 
 	return (
 		<View style={styles.header}>
+			<PreviewSectionMarker sectionId="basics" />
 			{hasPicture && <Image src={picture.url} style={styles.picture} />}
 
 			<View style={styles.headerTitle}>

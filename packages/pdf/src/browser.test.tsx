@@ -1,6 +1,6 @@
 import type { SectionTitleResolver } from "./section-title";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { sampleResumeData } from "@reactive-resume/schema/resume/sample";
+import { sampleResumeData } from "@headcv/schema/resume/sample";
 
 const rendererMock = vi.hoisted(() => ({
 	pdf: vi.fn(() => ({

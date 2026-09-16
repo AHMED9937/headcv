@@ -64,7 +64,7 @@ describe("CommandList / CommandGroup", () => {
 	});
 
 	it("CommandEmpty renders without throwing in tree", () => {
-		// CommandEmpty only mounts under specific cmdk states — just verify no crash
+		// CommandEmpty only mounts under specific cmdk states  just verify no crash
 		expect(() =>
 			render(
 				<Command>

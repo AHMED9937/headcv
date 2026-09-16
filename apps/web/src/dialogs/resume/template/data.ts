@@ -1,5 +1,5 @@
+import type { Template } from "@headcv/schema/templates";
 import type { MessageDescriptor } from "@lingui/core";
-import type { Template } from "@reactive-resume/schema/templates";
 import { msg } from "@lingui/core/macro";
 
 export type TemplateMetadata = {
@@ -28,7 +28,7 @@ export const templates = {
 	chikorita: {
 		name: "Chikorita",
 		description: msg`Two-column with a soft header accent and circular profile photo; ideal for marketing, HR, or client-facing roles.`,
-		imageUrl: "/templates/jpg/chikorita.jpg",
+		imageUrl: "/templates/chikorita-hero-vector.svg",
 		tags: ["Two-column", "Soft accent", "Marketing", "HR", "Client-facing"],
 		sidebarPosition: "right",
 	},

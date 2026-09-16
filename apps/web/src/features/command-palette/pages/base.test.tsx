@@ -2,7 +2,7 @@
 
 import { render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
-import { Command } from "@reactive-resume/ui/components/command";
+import { Command } from "@headcv/ui/components/command";
 import { useCommandPaletteStore } from "../store";
 import { BaseCommandGroup } from "./base";
 

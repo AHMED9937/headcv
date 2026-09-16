@@ -3,8 +3,8 @@ import { HandHeartIcon } from "@phosphor-icons/react";
 import { useCallback } from "react";
 import { toast } from "sonner";
 import { useTimeout } from "usehooks-ts";
-import { Button } from "@reactive-resume/ui/components/button";
-import { useCookie } from "@reactive-resume/ui/hooks/use-cookie";
+import { Button } from "@headcv/ui/components/button";
+import { useCookie } from "@headcv/ui/hooks/use-cookie";
 
 const TOAST_ID = "donation-toast";
 const SHOW_TOAST_DELAY_MS = 5 * 60 * 1000; // 5 minutes
@@ -22,7 +22,7 @@ export function DonationToast() {
 		const onDonate = (t: string | number) => {
 			toast.dismiss(t);
 			setDismissed("true", { expires: getDismissedCookieExpiresAt() });
-			window.open("https://opencollective.com/reactive-resume/donate", "_blank", "noopener,noreferrer");
+			window.open("https://opencollective.com/headcv/donate", "_blank", "noopener,noreferrer");
 		};
 
 		const onDismiss = (t: string | number) => {
@@ -61,7 +61,7 @@ function DonationToastCard({ onDismiss, onDonate }: DonationToastCardProps) {
 						<Trans>Please support the project</Trans>
 					</p>
 					<p className="text-pretty text-muted-foreground text-xs">
-						<Trans>Reactive Resume is free and open source. If it has helped you, please consider donating.</Trans>
+						<Trans>HeadCV is free. If it has helped you, please consider supporting us.</Trans>
 					</p>
 				</div>
 			</div>

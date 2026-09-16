@@ -15,10 +15,15 @@ const workspaceRoot = fileURLToPath(new URL("../..", import.meta.url));
 
 const serverPaths = ["/api", "/uploads", "/.well-known", "/schema.json"] as const;
 
+const stripQuotes = (value: string | undefined, fallback: string) => (value ?? fallback).replace(/^["']|["']$/g, "");
+
+const serverPort = stripQuotes(process.env.SERVER_PORT, "3001");
+const port = Number.parseInt(stripQuotes(process.env.PORT, "3000"), 10);
+
 const serverProxy = serverPaths.reduce(
 	(acc, path) => {
 		acc[path] = {
-			target: `http://localhost:${process.env.SERVER_PORT ?? "3001"}`,
+			target: `http://localhost:${serverPort}`,
 			changeOrigin: true,
 		};
 		return acc;
@@ -47,7 +52,7 @@ export default defineConfig({
 	server: {
 		host: true,
 		strictPort: true,
-		port: Number.parseInt(process.env.PORT ?? "3000", 10),
+		port,
 		proxy: serverProxy,
 	},
 

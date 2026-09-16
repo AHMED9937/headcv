@@ -1,151 +1,85 @@
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { ArrowRightIcon, BookIcon, SparkleIcon } from "@phosphor-icons/react";
+import { ArrowRightIcon, FileTextIcon } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
-import { m } from "motion/react";
-import { Badge } from "@reactive-resume/ui/components/badge";
-import { Button } from "@reactive-resume/ui/components/button";
-import { CometCard } from "@/components/animation/comet-card";
-import { Spotlight } from "@/components/animation/spotlight";
+import { Button } from "@headcv/ui/components/button";
+import { LandingIcon } from "./landing-icon";
 
 export function Hero() {
 	return (
 		<section
 			id="hero"
-			className="relative flex min-h-svh w-full flex-col items-center justify-center overflow-hidden border-b py-24"
+			aria-labelledby="hero-heading"
+			className="overflow-hidden px-4 pt-28 pb-16 sm:px-6 sm:pt-32 sm:pb-24 lg:px-8"
 		>
-			<Spotlight />
-
-			<m.div
-				className="will-change-[transform,opacity]"
-				initial={{ opacity: 0, y: 100 }}
-				animate={{ opacity: 1, y: 0 }}
-				transition={{ duration: 1.1, ease: "easeOut" }}
-			>
-				<CometCard glareOpacity={0} className="relative -mb-12 3xl:max-w-7xl max-w-4xl px-8 md:-mb-24 md:px-12 lg:px-0">
-					<video
-						loop
-						muted
-						autoPlay
-						playsInline
-						src="/videos/timelapse.mp4"
-						aria-label={t`Timelapse demonstration of building a resume with Reactive Resume`}
-						className="pointer-events-none size-full rounded-md border object-cover"
-					/>
-
-					<div
-						aria-hidden="true"
-						className="pointer-events-none absolute inset-0 bg-linear-to-b from-transparent via-40% via-transparent to-background"
-					/>
-				</CometCard>
-			</m.div>
-
-			<div className="relative z-10 flex max-w-2xl flex-col items-center gap-y-6 px-4 xs:px-0 text-center">
-				{/* Badge */}
-				<m.a
-					className="will-change-[transform,opacity]"
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.45, delay: 0.55 }}
-					whileHover={{ y: -2, scale: 1.01 }}
-					whileTap={{ scale: 0.985 }}
-					target="_blank"
-					rel="noopener noreferrer"
-					href="https://docs.rxresu.me/getting-started"
-				>
-					<Badge variant="secondary" className="h-auto gap-1.5 px-3 py-0.5">
-						<SparkleIcon aria-hidden="true" className="size-3.5" weight="fill" />
-						<Trans>What's new in the latest version?</Trans>
-					</Badge>
-				</m.a>
-
-				{/* Headline */}
-				<m.div
-					className="will-change-[transform,opacity]"
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.45, delay: 0.7 }}
-				>
-					<Trans>
-						<p className="font-medium text-muted-foreground tracking-tight md:text-lg">Finally,</p>
-						<h1 className="mt-1 font-semibold text-4xl tracking-tight md:text-5xl lg:text-6xl">
-							A free and open-source resume builder
-						</h1>
-					</Trans>
-				</m.div>
-
-				{/* Description */}
-				<m.p
-					className="max-w-xl text-base text-muted-foreground leading-relaxed will-change-[transform,opacity] md:text-lg"
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.45, delay: 0.82 }}
-				>
-					<Trans>
-						Reactive Resume is a free and open-source resume builder that simplifies the process of creating, updating,
-						and sharing your resume.
-					</Trans>
-				</m.p>
-
-				{/* CTA Buttons */}
-				<m.div
-					className="flex flex-col items-center gap-3 will-change-[transform,opacity] sm:flex-row sm:gap-4"
-					initial={{ opacity: 0, y: 20 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 0.45, delay: 0.95 }}
-				>
-					<Button
-						size="lg"
-						nativeButton={false}
-						className="group relative overflow-hidden px-4"
-						render={
-							<Link to="/dashboard">
-								<span className="relative z-10 flex items-center gap-2">
-									<Trans>Get Started</Trans>
-									<ArrowRightIcon
-										aria-hidden="true"
-										className="size-4 transition-transform group-hover:translate-x-0.5"
-									/>
-								</span>
-							</Link>
-						}
-					/>
-
-					<Button
-						size="lg"
-						variant="ghost"
-						className="gap-2 px-4"
-						nativeButton={false}
-						render={
-							<a href="https://docs.rxresu.me" target="_blank" rel="noopener noreferrer">
-								<BookIcon aria-hidden="true" className="size-4" />
-								<Trans>Learn More</Trans>
-								<span className="sr-only">
-									<Trans>(opens in new tab)</Trans>
-								</span>
-							</a>
-						}
-					/>
-				</m.div>
+			<div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
+				<div className="max-w-2xl text-start">
+					{/* Badge */}
+					<p className="mb-4 font-semibold text-primary text-xs uppercase tracking-widest rtl:tracking-normal">
+						<Trans id="home.hero.eyebrow">Free online resume builder</Trans>
+					</p>
+					{/* Headline */}
+					<h1
+						id="hero-heading"
+						className="font-bold font-display text-4xl text-primary leading-tight tracking-tight sm:text-5xl lg:text-6xl rtl:leading-relaxed rtl:tracking-normal"
+					>
+						<Trans id="home.hero.title">Build a job-winning resume for free</Trans>
+					</h1>
+					{/* Description */}
+					<p className="mt-6 max-w-lg text-lg text-muted-foreground leading-relaxed">
+						<Trans id="home.hero.description">
+							Your next chapter starts with a great resume. Choose a template, tell your story, and download a polished
+							PDF. No credit card required.
+						</Trans>
+					</p>
+					{/* CTA Buttons */}
+					<div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+						<Button
+							nativeButton={false}
+							className="h-auto min-h-12 gap-2 whitespace-normal px-7 py-3 font-semibold text-base"
+							render={<Link to="/templates" search={{}} />}
+						>
+							<Trans id="home.create">Create my CV</Trans>
+							<ArrowRightIcon aria-hidden="true" className="rtl-flip size-5" />
+						</Button>
+						<Button
+							nativeButton={false}
+							variant="outline"
+							className="h-auto min-h-12 whitespace-normal bg-card px-7 py-3 text-base"
+							render={<a href="#templates">{t({ id: "home.browse", message: "Browse templates" })}</a>}
+						>
+							<Trans id="home.browse">Browse templates</Trans>
+						</Button>
+					</div>
+				</div>
+				<div className="relative mx-auto w-full max-w-[380px] pb-5">
+					<Link
+						to="/templates"
+						search={{ template: "chikorita" }}
+						aria-label={t({
+							id: "home.hero.fullPreview",
+							message: "Choose the Chikorita resume template",
+						})}
+						className="block cursor-pointer rounded-xl focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-4"
+					>
+						<img
+							src="/templates/chikorita-hero-vector.svg"
+							alt={t({ id: "home.hero.preview", message: "Resume preview with HeadCV navy accents" })}
+							width={1055}
+							height={1491}
+							fetchPriority="high"
+							className="h-auto w-full rounded-xl border bg-white shadow-xl"
+						/>
+					</Link>
+					{/* Scroll indicator - decorative */}
+					<div className="absolute inset-e-2 bottom-0 flex items-center gap-2 rounded-full border bg-card px-4 py-2 text-primary shadow-md">
+						<LandingIcon icon={FileTextIcon} />
+						<span className="font-medium text-sm">
+							<Trans id="home.ready">Resume ready</Trans>
+						</span>
+					</div>
+				</div>
 			</div>
-
-			{/* Scroll indicator - decorative */}
-			<m.div
-				aria-hidden="true"
-				role="presentation"
-				className="absolute inset-s-1/2 bottom-8 -translate-x-1/2"
-				initial={{ opacity: 0 }}
-				animate={{ opacity: 1 }}
-				transition={{ delay: 1.25, duration: 0.7 }}
-			>
-				<m.div
-					className="flex h-8 w-5 items-start justify-center rounded-full border border-muted-foreground/30 p-1.5 will-change-transform"
-					animate={{ y: [0, 5, 0] }}
-					transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-				>
-					<m.div className="h-1.5 w-1 rounded-full bg-muted-foreground/50" />
-				</m.div>
-			</m.div>
 		</section>
 	);
 }

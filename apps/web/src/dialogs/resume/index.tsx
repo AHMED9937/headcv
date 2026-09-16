@@ -9,30 +9,25 @@ import { useNavigate, useParams } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import z from "zod";
-import { Button } from "@reactive-resume/ui/components/button";
-import { ButtonGroup } from "@reactive-resume/ui/components/button-group";
+import { Button } from "@headcv/ui/components/button";
+import { ButtonGroup } from "@headcv/ui/components/button-group";
 import {
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
-} from "@reactive-resume/ui/components/dialog";
+} from "@headcv/ui/components/dialog";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from "@reactive-resume/ui/components/dropdown-menu";
-import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "@reactive-resume/ui/components/form";
-import { Input } from "@reactive-resume/ui/components/input";
-import {
-	InputGroup,
-	InputGroupAddon,
-	InputGroupInput,
-	InputGroupText,
-} from "@reactive-resume/ui/components/input-group";
-import { generateId, generateRandomName, slugify } from "@reactive-resume/utils/string";
+} from "@headcv/ui/components/dropdown-menu";
+import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
+import { Input } from "@headcv/ui/components/input";
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from "@headcv/ui/components/input-group";
+import { generateId, generateRandomName, slugify } from "@headcv/utils/string";
 import { ChipInput } from "@/components/input/chip-input";
 import { usePatchResume } from "@/features/resume/builder/draft";
 import { useFormBlocker } from "@/hooks/use-form-blocker";

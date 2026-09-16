@@ -2,7 +2,7 @@ import type { Style } from "@react-pdf/types";
 import type { TemplatePageProps } from "../../document";
 import type { TemplateColorRoles, TemplateFeatures, TemplateStyleContext, TemplateStyleSlots } from "../shared/types";
 import { useMemo } from "react";
-import { rgbaStringToHex } from "@reactive-resume/utils/color";
+import { rgbaStringToHex } from "@headcv/utils/color";
 import { useRender } from "../../context";
 import { Image, Page, StyleSheet, View } from "../../renderer";
 import { CustomFieldContactItem, WebsiteContactItem } from "../shared/contact-item";
@@ -13,7 +13,7 @@ import { getTemplatePageMinHeightStyle, getTemplatePageSize } from "../shared/pa
 import { hasTemplatePicture } from "../shared/picture";
 import { Heading, Icon, Link, Text } from "../shared/primitives";
 import { createRtlStyleHelpers } from "../shared/rtl";
-import { Section } from "../shared/sections";
+import { PreviewSectionMarker, Section } from "../shared/sections";
 import { composeStyles, headerNameLineHeight, resolvePlacementColor } from "../shared/styles";
 
 type PikachuStyles = Omit<TemplateStyleSlots, "page"> & {
@@ -101,6 +101,7 @@ const Header = ({ styles, colors }: { styles: PikachuStyles; colors: TemplateCol
 
 	return (
 		<View style={styles.header}>
+			<PreviewSectionMarker sectionId="basics" />
 			<View style={styles.headerDivider}>
 				<View style={styles.headerIdentity}>
 					<Heading style={styles.headerName}>{basics.name}</Heading>

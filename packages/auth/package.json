@@ -1,5 +1,5 @@
 {
-	"name": "@reactive-resume/auth",
+	"name": "@headcv/auth",
 	"version": "0.0.0",
 	"type": "module",
 	"private": true,
@@ -21,10 +21,10 @@
 		"@better-auth/infra": "^0.2.8",
 		"@better-auth/oauth-provider": "^1.6.11",
 		"@better-auth/passkey": "^1.6.11",
-		"@reactive-resume/db": "workspace:*",
-		"@reactive-resume/email": "workspace:*",
-		"@reactive-resume/env": "workspace:*",
-		"@reactive-resume/utils": "workspace:*",
+		"@headcv/db": "workspace:*",
+		"@headcv/email": "workspace:*",
+		"@headcv/env": "workspace:*",
+		"@headcv/utils": "workspace:*",
 		"bcrypt": "^6.0.0",
 		"better-auth": "1.6.11",
 		"drizzle-orm": "1.0.0-rc.3",
@@ -33,7 +33,7 @@
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {
-		"@reactive-resume/config": "workspace:*",
+		"@headcv/config": "workspace:*",
 		"@types/bcrypt": "^6.0.0",
 		"@types/react": "^19.2.15",
 		"@typescript/native-preview": "7.0.0-dev.20260526.1",

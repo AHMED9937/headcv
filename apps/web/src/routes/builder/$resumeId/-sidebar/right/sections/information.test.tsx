@@ -26,13 +26,13 @@ describe("InformationSectionBuilder", () => {
 	it("renders the donation prompt and CTA", () => {
 		renderInfo();
 		expect(screen.getByText("Support the app by doing what you can!")).toBeInTheDocument();
-		expect(screen.getByText("Donate to Reactive Resume")).toBeInTheDocument();
+		expect(screen.getByText("Donate to HeadCV")).toBeInTheDocument();
 	});
 
 	it("links to the OpenCollective donation page", () => {
 		renderInfo();
-		const donateLink = screen.getByText("Donate to Reactive Resume").closest("a");
-		expect(donateLink?.getAttribute("href")).toBe("http://opencollective.com/reactive-resume");
+		const donateLink = screen.getByText("Donate to HeadCV").closest("a");
+		expect(donateLink?.getAttribute("href")).toBe("http://opencollective.com/headcv");
 	});
 
 	it("includes external resource links (docs, source, bugs, translations, sponsors)", () => {

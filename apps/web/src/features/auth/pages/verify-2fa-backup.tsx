@@ -4,9 +4,9 @@ import { ArrowLeftIcon, CheckIcon } from "@phosphor-icons/react";
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 import z from "zod";
-import { Button } from "@reactive-resume/ui/components/button";
-import { FormControl, FormItem, FormMessage } from "@reactive-resume/ui/components/form";
-import { Input } from "@reactive-resume/ui/components/input";
+import { Button } from "@headcv/ui/components/button";
+import { FormControl, FormItem, FormMessage } from "@headcv/ui/components/form";
+import { Input } from "@headcv/ui/components/input";
 import { authClient } from "@/libs/auth/client";
 import { useAppForm } from "@/libs/tanstack-form";
 

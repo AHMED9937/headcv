@@ -2,7 +2,7 @@ import type {
 	CustomSection,
 	CustomSectionItem as CustomSectionItemType,
 	CustomSectionType,
-} from "@reactive-resume/schema/resume/data";
+} from "@headcv/schema/resume/data";
 import { t } from "@lingui/core/macro";
 import { Plural, Trans } from "@lingui/react/macro";
 import {
@@ -16,7 +16,7 @@ import {
 } from "@phosphor-icons/react";
 import { AnimatePresence, Reorder } from "motion/react";
 import { match } from "ts-pattern";
-import { Badge } from "@reactive-resume/ui/components/badge";
+import { Badge } from "@headcv/ui/components/badge";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -29,10 +29,12 @@ import {
 	DropdownMenuSubContent,
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
-} from "@reactive-resume/ui/components/dropdown-menu";
-import { stripHtml } from "@reactive-resume/utils/string";
-import { cn } from "@reactive-resume/utils/style";
+} from "@headcv/ui/components/dropdown-menu";
+import { stripHtml } from "@headcv/utils/string";
+import { cn } from "@headcv/utils/style";
 import { useDialogStore } from "@/dialogs/store";
+import { AdditionalSections } from "@/features/builder/additional-sections";
+import { useBuilderStep } from "@/features/builder/use-builder-step";
 import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
 import { useConfirm } from "@/hooks/use-confirm";
 import { getSectionTitle } from "@/libs/resume/section";
@@ -116,9 +118,13 @@ function getItemSubtitle(type: CustomSectionType, item: CustomSectionItemType): 
 export function CustomSectionBuilder() {
 	const resume = useCurrentResume();
 	const customSections = resume.data.customSections;
+	const { currentStep } = useBuilderStep();
+	const showAdditionalSections = currentStep === "additional-sections";
 
 	return (
 		<SectionBase type="custom" className={cn("space-y-4", customSections.length === 0 && "border-dashed")}>
+			{showAdditionalSections && <AdditionalSections />}
+
 			<AnimatePresence>
 				{customSections.map((section) => (
 					<CustomSectionContainer key={section.id} section={section} />

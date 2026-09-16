@@ -40,8 +40,9 @@ describe("defaultResumeData", () => {
 		expect(page?.sidebar).toContain("skills");
 	});
 
-	it("uses serif font family for body", () => {
-		expect(defaultResumeData.metadata.typography.body.fontFamily).toBe("IBM Plex Serif");
+	it("uses a screen-readable font and body size", () => {
+		expect(defaultResumeData.metadata.typography.body.fontFamily).toBe("Inter");
+		expect(defaultResumeData.metadata.typography.body.fontSize).toBeGreaterThanOrEqual(10);
 	});
 
 	it("default sidebar width is 35%", () => {

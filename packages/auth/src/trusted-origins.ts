@@ -1,6 +1,11 @@
 export function getTrustedOrigins(appUrl: string): string[] {
 	const normalizeOrigin = (origin: string): string => origin.replace(/\/$/, "");
-	const trustedOrigins = new Set<string>(["http://localhost:3000", "http://127.0.0.1:3000"]);
+	const trustedOrigins = new Set<string>([
+		"http://localhost:3000",
+		"http://127.0.0.1:3000",
+		"http://localhost:3001",
+		"http://127.0.0.1:3001",
+	]);
 
 	const configuredUrl = new URL(appUrl);
 	trustedOrigins.add(normalizeOrigin(configuredUrl.origin));

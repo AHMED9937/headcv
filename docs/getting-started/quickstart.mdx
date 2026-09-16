@@ -1,11 +1,11 @@
 ---
 title: "Quickstart"
-description: "Get started with Reactive Resume in minutes — use our hosted version or deploy your own instance"
+description: "Get started with HeadCV in minutes  use our hosted version or deploy your own instance"
 ---
 
 ## Options
 
-Reactive Resume offers flexibility in how you want to use it. Choose the option that best fits your needs:
+HeadCV offers flexibility in how you want to use it. Choose the option that best fits your needs:
 
 <CardGroup cols={2}>
   <Card title="Use the Cloud Version" icon="cloud" href="#use-the-cloud-version">
@@ -20,11 +20,11 @@ Reactive Resume offers flexibility in how you want to use it. Choose the option 
 
 ## Using the Cloud Version
 
-The easiest way to use Reactive Resume is through our cloud version at [rxresu.me](https://rxresu.me). **This service is completely free and will always remain free.**
+The easiest way to use HeadCV is through our cloud version at [headcv.com](https://headcv.com). **This service is completely free and will always remain free.**
 
 <Steps>
 	<Step title="Create an Account">
-		Visit [rxresu.me](https://rxresu.me) and sign up for free using your email, or sign in with your GitHub or Google
+		Visit [headcv.com](https://headcv.com) and sign up for free using your email, or sign in with your GitHub or Google
 		account.
 	</Step>
 
@@ -49,10 +49,10 @@ The easiest way to use Reactive Resume is through our cloud version at [rxresu.m
 
 ## Self-Host with Docker
 
-For users who prefer complete control over their data, you can deploy Reactive Resume on your own infrastructure using Docker.
+For users who prefer complete control over their data, you can deploy HeadCV on your own infrastructure using Docker.
 
 <Info>
-  **From v5.1.0 onwards** — PDF generation now runs entirely client-side via `@react-pdf/renderer`. Self-hosted deployments no longer require Browserless, Chromium, or any external print service as a dependency. The `PRINTER_*` and `BROWSERLESS_*` environment variables are no longer read and can be removed from your `.env`.
+  **From v5.1.0 onwards**  PDF generation now runs entirely client-side via `@react-pdf/renderer`. Self-hosted deployments no longer require Browserless, Chromium, or any external print service as a dependency. The `PRINTER_*` and `BROWSERLESS_*` environment variables are no longer read and can be removed from your `.env`.
 </Info>
 
 ### Prerequisites
@@ -72,8 +72,8 @@ Before you begin, ensure you have the following installed:
 <Steps>
 	<Step title="Clone the Repository">
 		```bash
-		git clone https://github.com/amruthpillai/reactive-resume.git
-		cd reactive-resume
+		git clone https://github.com/AHMED9937/headcv.git
+		cd headcv
 		```
 	</Step>
 
@@ -94,7 +94,7 @@ AUTH_SECRET=your-secure-secret-key-here
 S3_ACCESS_KEY_ID=seaweedfs
 S3_SECRET_ACCESS_KEY=seaweedfs
 S3_ENDPOINT=http://seaweedfs:8333
-S3_BUCKET=reactive-resume
+S3_BUCKET=headcv
 S3_FORCE_PATH_STYLE=true
 
 # AI features (optional; ENCRYPTION_SECRET for saved providers, plus REDIS_URL for the agent)
@@ -114,14 +114,14 @@ ENCRYPTION_SECRET=your-secure-encryption-secret-here
     	```
 
     	This starts:
-    	- **PostgreSQL** — Database for storing user data and resumes
-	- **Redis** — Required for the AI Agent workspace
-    	- **SeaweedFS** — S3-compatible storage for file uploads
-    	- **Reactive Resume** — The main application
+    	- **PostgreSQL**  Database for storing user data and resumes
+	- **Redis**  Required for the AI Agent workspace
+    	- **SeaweedFS**  S3-compatible storage for file uploads
+    	- **HeadCV**  The main application
     </Step>
 
     <Step title="Access Your Instance">
-    	Once all services are running, access your Reactive Resume instance at:
+    	Once all services are running, access your HeadCV instance at:
 
     	```text
     	http://localhost:3000
@@ -139,11 +139,11 @@ Here's what each service in the stack does:
 | `postgres`        | 5432 | PostgreSQL database for storing all application data |
 | `redis`           | 6379 | Redis instance required by the AI Agent workspace    |
 | `seaweedfs`       | 8333 | S3-compatible object storage for file uploads        |
-| `reactive_resume` | 3000 | The main Reactive Resume application                 |
+| `headcv` | 3000 | The main HeadCV application                 |
 
 <Note>
   Saved AI provider management requires `ENCRYPTION_SECRET`, and the AI Agent workspace requires both `REDIS_URL` and
-  `ENCRYPTION_SECRET`. Other Reactive Resume features can run without them. Agent attachments and other private objects
+  `ENCRYPTION_SECRET`. Other HeadCV features can run without them. Agent attachments and other private objects
   require S3-compatible storage; local storage rejects private objects.
 </Note>
 
@@ -169,41 +169,41 @@ Here's a complete list of environment variables you can configure:
 | -------------- | ------------------------------ | ------------------------------------- |
 | `DATABASE_URL` | PostgreSQL connection string   | `postgresql://user:pass@host:5432/db` |
 | `AUTH_SECRET`  | Secret key for authentication  | Generate with `openssl rand -hex 32`  |
-| `APP_URL`      | Public URL of your Application | `https://rxresu.me`                   |
+| `APP_URL`      | Public URL of your Application | `https://headcv.com`                   |
 
 ### Optional Variables
 
 | Variable                              | Description                                                 | Default                |
 | ------------------------------------- | ----------------------------------------------------------- | ---------------------- |
-| `GOOGLE_CLIENT_ID`                    | Google OAuth Client ID                                      | —                      |
-| `GOOGLE_CLIENT_SECRET`                | Google OAuth Client Secret                                  | —                      |
-| `GITHUB_CLIENT_ID`                    | GitHub OAuth Client ID                                      | —                      |
-| `GITHUB_CLIENT_SECRET`                | GitHub OAuth Client Secret                                  | —                      |
-| `LINKEDIN_CLIENT_ID`                  | LinkedIn OAuth Client ID                                    | —                      |
-| `LINKEDIN_CLIENT_SECRET`              | LinkedIn OAuth Client Secret                                | —                      |
-| `OAUTH_PROVIDER_NAME`                 | Custom OAuth Provider Name                                  | —                      |
-| `OAUTH_CLIENT_ID`                     | Custom OAuth Client ID                                      | —                      |
-| `OAUTH_CLIENT_SECRET`                 | Custom OAuth Client Secret                                  | —                      |
-| `OAUTH_DISCOVERY_URL`                 | OIDC Discovery URL (use this OR manual URLs below)          | —                      |
-| `OAUTH_AUTHORIZATION_URL`             | OAuth Authorization URL (manual config)                     | —                      |
-| `OAUTH_TOKEN_URL`                     | OAuth Token URL (manual config)                             | —                      |
-| `OAUTH_USER_INFO_URL`                 | OAuth User Info URL (manual config)                         | —                      |
+| `GOOGLE_CLIENT_ID`                    | Google OAuth Client ID                                      |                       |
+| `GOOGLE_CLIENT_SECRET`                | Google OAuth Client Secret                                  |                       |
+| `GITHUB_CLIENT_ID`                    | GitHub OAuth Client ID                                      |                       |
+| `GITHUB_CLIENT_SECRET`                | GitHub OAuth Client Secret                                  |                       |
+| `LINKEDIN_CLIENT_ID`                  | LinkedIn OAuth Client ID                                    |                       |
+| `LINKEDIN_CLIENT_SECRET`              | LinkedIn OAuth Client Secret                                |                       |
+| `OAUTH_PROVIDER_NAME`                 | Custom OAuth Provider Name                                  |                       |
+| `OAUTH_CLIENT_ID`                     | Custom OAuth Client ID                                      |                       |
+| `OAUTH_CLIENT_SECRET`                 | Custom OAuth Client Secret                                  |                       |
+| `OAUTH_DISCOVERY_URL`                 | OIDC Discovery URL (use this OR manual URLs below)          |                       |
+| `OAUTH_AUTHORIZATION_URL`             | OAuth Authorization URL (manual config)                     |                       |
+| `OAUTH_TOKEN_URL`                     | OAuth Token URL (manual config)                             |                       |
+| `OAUTH_USER_INFO_URL`                 | OAuth User Info URL (manual config)                         |                       |
 | `OAUTH_SCOPES`                        | OAuth Scopes (space-separated)                              | `openid profile email` |
-| `BETTER_AUTH_API_KEY`                 | Better Auth dashboard API key                               | —                      |
-| `SMTP_HOST`                           | SMTP Server Host (for email features)                       | —                      |
+| `BETTER_AUTH_API_KEY`                 | Better Auth dashboard API key                               |                       |
+| `SMTP_HOST`                           | SMTP Server Host (for email features)                       |                       |
 | `SMTP_PORT`                           | SMTP Server Port                                            | `587`                  |
-| `SMTP_USER`                           | SMTP Username                                               | —                      |
-| `SMTP_PASS`                           | SMTP Password                                               | —                      |
-| `SMTP_FROM`                           | Default FROM address for emails                             | —                      |
+| `SMTP_USER`                           | SMTP Username                                               |                       |
+| `SMTP_PASS`                           | SMTP Password                                               |                       |
+| `SMTP_FROM`                           | Default FROM address for emails                             |                       |
 | `SMTP_SECURE`                         | Use secure SMTP connection (`true` or `false`)              | `false`                |
-| `S3_ACCESS_KEY_ID`                    | S3 Access Key                                               | —                      |
-| `S3_SECRET_ACCESS_KEY`                | S3 Secret Key                                               | —                      |
+| `S3_ACCESS_KEY_ID`                    | S3 Access Key                                               |                       |
+| `S3_SECRET_ACCESS_KEY`                | S3 Secret Key                                               |                       |
 | `S3_REGION`                           | S3 Region                                                   | `us-east-1`            |
-| `S3_ENDPOINT`                         | S3-compatible Endpoint URL                                  | —                      |
-| `S3_BUCKET`                           | S3 Bucket Name                                              | —                      |
+| `S3_ENDPOINT`                         | S3-compatible Endpoint URL                                  |                       |
+| `S3_BUCKET`                           | S3 Bucket Name                                              |                       |
 | `S3_FORCE_PATH_STYLE`                 | Use path-style URLs for S3 (set `true` for MinIO/SeaweedFS) | `false`                |
-| `REDIS_URL`                           | Redis connection string for the AI Agent workspace          | —                      |
-| `ENCRYPTION_SECRET`                   | Encryption secret for saved AI provider credentials         | —                      |
+| `REDIS_URL`                           | Redis connection string for the AI Agent workspace          |                       |
+| `ENCRYPTION_SECRET`                   | Encryption secret for saved AI provider credentials         |                       |
 | `FLAG_DISABLE_SIGNUPS`                | Disables new user signups                                   | `false`                |
 | `FLAG_DISABLE_EMAIL_AUTH`             | Disables email/password login (SSO only)                    | `false`                |
 | `FLAG_DISABLE_IMAGE_PROCESSING`       | Disables image processing                                   | `false`                |
@@ -224,7 +224,7 @@ Here's a complete list of environment variables you can configure:
 
 <CardGroup cols={2}>
   <Card title="Development Setup" icon="code" href="/contributing/development">
-    Set up a development environment to contribute or customize Reactive Resume.
+    Set up a development environment to contribute or customize HeadCV.
   </Card>
   <Card title="Project Architecture" icon="folder-open" href="/contributing/architecture">
     Learn about the project structure and architecture.
@@ -232,6 +232,6 @@ Here's a complete list of environment variables you can configure:
 </CardGroup>
 
 <Note>
-  **Having trouble?** Check our [GitHub Issues](https://github.com/amruthpillai/reactive-resume/issues) or reach out via
-  [email](mailto:hello@amruthpillai.com).
+  **Having trouble?** Check our [GitHub Issues](https://github.com/AHMED9937/headcv/issues) or reach out via
+  [email](mailto:hello@headcv.com).
 </Note>

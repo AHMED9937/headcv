@@ -6,10 +6,10 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, stripSearchParams, useNavigate } from "@tanstack/react-router";
 import { useMemo } from "react";
 import z from "zod";
-import { Label } from "@reactive-resume/ui/components/label";
-import { Separator } from "@reactive-resume/ui/components/separator";
-import { Tabs, TabsList, TabsTrigger } from "@reactive-resume/ui/components/tabs";
-import { cn } from "@reactive-resume/utils/style";
+import { Label } from "@headcv/ui/components/label";
+import { Separator } from "@headcv/ui/components/separator";
+import { Tabs, TabsList, TabsTrigger } from "@headcv/ui/components/tabs";
+import { cn } from "@headcv/utils/style";
 import { Combobox } from "@/components/ui/combobox";
 import { orpc } from "@/libs/orpc/client";
 import { DashboardHeader } from "../-components/header";
@@ -99,7 +99,7 @@ function RouteComponent() {
 						<TabsTrigger
 							value="grid"
 							nativeButton={false}
-							className="rounded-r-none"
+							className="rounded-e-none"
 							render={<Link to="." search={(prev: Search) => ({ ...prev, view: "grid" })} />}
 						>
 							<GridFourIcon />
@@ -109,7 +109,7 @@ function RouteComponent() {
 						<TabsTrigger
 							value="list"
 							nativeButton={false}
-							className="rounded-l-none"
+							className="rounded-s-none"
 							render={<Link to="." search={(prev: Search) => ({ ...prev, view: "list" })} />}
 						>
 							<ListIcon />

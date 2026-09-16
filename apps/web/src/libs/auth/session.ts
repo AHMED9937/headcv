@@ -1,6 +1,6 @@
-// SPA session lookup. This stays in apps/web because @reactive-resume/auth is server-only.
+// SPA session lookup. This stays in apps/web because @headcv/auth is server-only.
 
-import type { AuthSession } from "@reactive-resume/auth/types";
+import type { AuthSession } from "@headcv/auth/types";
 import { authClient } from "./client";
 
 export const getSession = async (): Promise<AuthSession | null> => {

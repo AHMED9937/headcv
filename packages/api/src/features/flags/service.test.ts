@@ -5,7 +5,7 @@ const envMock = vi.hoisted(() => ({
 	FLAG_DISABLE_EMAIL_AUTH: false,
 }));
 
-vi.mock("@reactive-resume/env/server", () => ({ env: envMock }));
+vi.mock("@headcv/env/server", () => ({ env: envMock }));
 
 const { flagsService } = await import("./service");
 

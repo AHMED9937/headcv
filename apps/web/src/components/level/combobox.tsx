@@ -3,7 +3,7 @@ import type { SingleComboboxProps } from "@/components/ui/combobox";
 import { t } from "@lingui/core/macro";
 import { useMemo } from "react";
 import { match } from "ts-pattern";
-import { levelDesignSchema } from "@reactive-resume/schema/resume/data";
+import { levelDesignSchema } from "@headcv/schema/resume/data";
 import { Combobox } from "@/components/ui/combobox";
 
 type LevelType = z.infer<typeof levelDesignSchema>["type"];

@@ -1,12 +1,15 @@
 import { Hono } from "hono";
+import { handleMcp } from "../mcp/handler";
 import { handleOpenApi } from "../openapi/handler";
 import {
+	handleMcpServerCard,
 	handleOAuthAuthorizationServer,
 	handleOAuthProtectedResource,
 	handleOpenIdConfiguration,
 	handleWellKnownFallback,
 } from "../openapi/metadata";
 import { handleRpc } from "../rpc/handler";
+import { handlePrerender } from "../static/prerender";
 import { handleSchemaJson } from "../static/schema";
 import { handleLlms, handleRobots, handleSitemap } from "../static/seo";
 import { handleUpload } from "../static/uploads";
@@ -27,7 +30,10 @@ export function createApp() {
 	app.get("/api/uploads/*", (c) => handleUpload(c.req.raw));
 	app.get("/uploads/*", (c) => handleUpload(c.req.raw));
 	app.get("/schema.json", () => handleSchemaJson());
+	app.all("/mcp", (c) => handleMcp(c.req.raw));
+	app.all("/mcp/*", (c) => handleMcp(c.req.raw));
 
+	app.get("/.well-known/mcp/server-card.json", () => handleMcpServerCard());
 	app.get("/.well-known/oauth-authorization-server", (c) => handleOAuthAuthorizationServer(c.req.raw));
 	app.get("/.well-known/oauth-authorization-server/*", (c) => handleOAuthAuthorizationServer(c.req.raw));
 	app.get("/.well-known/openid-configuration", (c) => handleOpenIdConfiguration(c.req.raw));
@@ -38,6 +44,12 @@ export function createApp() {
 	app.on(["GET", "HEAD"], "/robots.txt", (c) => handleRobots({ head: c.req.method === "HEAD" }));
 	app.on(["GET", "HEAD"], "/sitemap.xml", (c) => handleSitemap({ head: c.req.method === "HEAD" }));
 	app.on(["GET", "HEAD"], "/llms.txt", (c) => handleLlms({ head: c.req.method === "HEAD" }));
+
+	app.on(["GET", "HEAD"], "/*", async (c, next) => {
+		const prerendered = await handlePrerender(c.req.raw);
+		if (prerendered) return prerendered;
+		await next();
+	});
 
 	app.use("/*", serveWebDistStatic);
 	app.on(["GET"], "/*", (c) => handleWebApp(c.req.raw));

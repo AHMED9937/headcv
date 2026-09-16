@@ -7,9 +7,8 @@ import { I18nProvider } from "@lingui/react";
 
 vi.stubGlobal("__APP_VERSION__", "9.9.9");
 
-// The footer module evaluates `socialLinks = [{ label: t`...`, ... }]` at module
-// scope. That `t` call needs an activated locale BEFORE the import, so do that
-// here instead of in beforeAll.
+// The footer module evaluates translated strings at module scope, so activate a
+// locale before importing the component.
 i18n.loadAndActivate({ locale: "en", messages: {} });
 
 const { Footer } = await import("./footer");
@@ -22,38 +21,38 @@ const renderFooter = () =>
 	);
 
 describe("Footer", () => {
-	it("renders Resources and Community link group headings", () => {
+	it("renders the HeadCV brand and tagline", () => {
+		const { container } = renderFooter();
+		const logos = Array.from(container.querySelectorAll("img")).filter((img) => img.alt === "HeadCV");
+		expect(logos.length).toBeGreaterThan(0);
+		expect(container.textContent).toContain("HeadCV is a guided CV builder");
+	});
+
+	it("renders Support and Legal link group headings", () => {
 		renderFooter();
-		expect(screen.getByText("Resources")).toBeInTheDocument();
-		expect(screen.getByText("Community")).toBeInTheDocument();
+		expect(screen.getByText("Support")).toBeInTheDocument();
+		expect(screen.getByText("Legal")).toBeInTheDocument();
 	});
 
-	it("renders the documented resource links", () => {
+	it("renders support and legal links", () => {
 		const { container } = renderFooter();
 		const text = container.textContent ?? "";
-		for (const label of ["Documentation", "Sponsorships", "Source Code", "Changelog"]) {
+		for (const label of ["Help Center", "Contact Support", "Privacy Policy", "Terms of Service"]) {
 			expect(text, label).toContain(label);
 		}
 	});
 
-	it("renders the documented community links", () => {
-		const { container } = renderFooter();
-		const text = container.textContent ?? "";
-		for (const label of ["Report an issue", "Translations", "Subreddit", "Discord"]) {
-			expect(text, label).toContain(label);
-		}
-	});
-
-	it("renders social media icon links to GitHub, LinkedIn, and X", () => {
+	it("does not render upstream social links or source code references", () => {
 		const { container } = renderFooter();
 		const hrefs = Array.from(container.querySelectorAll<HTMLAnchorElement>("a")).map((a) => a.href);
-		expect(hrefs.some((h) => h.includes("github.com/amruthpillai/reactive-resume"))).toBe(true);
-		expect(hrefs.some((h) => h.includes("linkedin.com/in/amruthpillai"))).toBe(true);
-		expect(hrefs.some((h) => h.includes("x.com/KingOKings"))).toBe(true);
+		expect(hrefs.some((h) => h.includes("github.com/AHMED9937"))).toBe(false);
+		expect(hrefs.some((h) => h.includes("x.com/KingOKings"))).toBe(false);
+		expect(hrefs.some((h) => h.includes("linkedin.com/in/AHMED9937"))).toBe(false);
 	});
 
-	it("includes Reactive Resume version copy via Copyright", () => {
-		renderFooter();
-		expect(screen.getByText(/v9\.9\.9/)).toBeInTheDocument();
+	it("includes the HeadCV copyright notice", () => {
+		const { container } = renderFooter();
+		const text = container.textContent ?? "";
+		expect(text).toMatch(/© \d{4} HeadCV\. All rights reserved\./);
 	});
 });

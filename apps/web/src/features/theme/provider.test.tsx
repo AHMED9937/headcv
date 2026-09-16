@@ -3,7 +3,7 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-// ThemeProvider depends on TanStack Start helpers + server fn — stub them.
+// ThemeProvider depends on TanStack Start helpers + server fn  stub them.
 vi.mock("@tanstack/react-router", () => ({
 	useRouter: () => ({ invalidate: vi.fn() }),
 }));

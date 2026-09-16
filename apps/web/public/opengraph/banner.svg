@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <title>HeadCV — Build a professional CV in minutes</title>
+  <rect width="1200" height="630" fill="#F5EFE6"/>
+  <circle cx="1080" cy="80" r="260" fill="#E8D9B7" opacity=".65"/>
+  <circle cx="80" cy="610" r="220" fill="#DCE5EC" opacity=".8"/>
+  <rect x="94" y="104" width="116" height="122" rx="28" fill="#1E3A5F"/>
+  <path d="M126 140v54M126 167h44M170 140v54" stroke="#F8FAFC" stroke-width="12" stroke-linecap="round"/>
+  <path d="M181 104h29v29l-29-29Z" fill="#F4E9C9"/>
+  <path d="m166 198 9 9 20-24" stroke="#D6B65B" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="242" y="188" font-family="Inter, Arial, sans-serif" font-size="76" font-weight="800" fill="#1E3A5F">Head<tspan fill="#AD8428">CV</tspan></text>
+  <text x="94" y="330" font-family="Inter, Arial, sans-serif" font-size="54" font-weight="750" fill="#152642">Build a professional CV</text>
+  <text x="94" y="397" font-family="Inter, Arial, sans-serif" font-size="54" font-weight="750" fill="#152642">in minutes.</text>
+  <text x="96" y="474" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="450" fill="#52657B">ATS-friendly templates · Guided writing · Live preview</text>
+  <rect x="94" y="521" width="202" height="54" rx="27" fill="#1E3A5F"/>
+  <text x="126" y="557" font-family="Inter, Arial, sans-serif" font-size="23" font-weight="700" fill="#FFFFFF">headcv.com</text>
+  <g transform="translate(850 148) rotate(6)">
+    <rect width="250" height="340" rx="18" fill="#FFFFFF" stroke="#D8C9A5" stroke-width="4"/>
+    <circle cx="56" cy="67" r="27" fill="#DCE5EC"/>
+    <rect x="98" y="48" width="104" height="12" rx="6" fill="#1E3A5F"/>
+    <rect x="98" y="72" width="72" height="9" rx="4.5" fill="#AD8428"/>
+    <rect x="34" y="118" width="182" height="8" rx="4" fill="#C6D0D9"/>
+    <rect x="34" y="141" width="156" height="8" rx="4" fill="#D7DEE4"/>
+    <rect x="34" y="184" width="88" height="11" rx="5.5" fill="#1E3A5F"/>
+    <rect x="34" y="213" width="182" height="7" rx="3.5" fill="#C6D0D9"/>
+    <rect x="34" y="233" width="166" height="7" rx="3.5" fill="#D7DEE4"/>
+    <rect x="34" y="273" width="72" height="11" rx="5.5" fill="#1E3A5F"/>
+    <rect x="34" y="302" width="152" height="7" rx="3.5" fill="#C6D0D9"/>
+  </g>
+</svg>

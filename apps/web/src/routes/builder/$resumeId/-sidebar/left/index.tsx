@@ -1,70 +1,58 @@
 import type { LeftSidebarSection } from "@/libs/resume/section";
-import { Fragment, useCallback, useRef } from "react";
-import { match } from "ts-pattern";
-import { Avatar, AvatarFallback, AvatarImage } from "@reactive-resume/ui/components/avatar";
-import { Button } from "@reactive-resume/ui/components/button";
-import { ScrollArea } from "@reactive-resume/ui/components/scroll-area";
-import { Separator } from "@reactive-resume/ui/components/separator";
-import { getInitials } from "@reactive-resume/utils/string";
+import { Fragment, useCallback, useEffect, useRef } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@headcv/ui/components/avatar";
+import { Button } from "@headcv/ui/components/button";
+import { ScrollArea } from "@headcv/ui/components/scroll-area";
+import { Separator } from "@headcv/ui/components/separator";
+import { getInitials } from "@headcv/utils/string";
+import { cn } from "@headcv/utils/style";
+import { BuilderStepActions } from "@/features/builder/step-actions";
+import { getStepSectionId, useBuilderStep } from "@/features/builder/use-builder-step";
 import { UserDropdownMenu } from "@/features/user/dropdown-menu";
 import { getSectionIcon, getSectionTitle, leftSidebarSections } from "@/libs/resume/section";
 import { BuilderSidebarEdge } from "../../-components/edge";
+import { useSectionStore } from "../../-store/section";
 import { useBuilderSidebar } from "../../-store/sidebar";
-import { AwardsSectionBuilder } from "./sections/awards";
-import { BasicsSectionBuilder } from "./sections/basics";
-import { CertificationsSectionBuilder } from "./sections/certifications";
-import { CustomSectionBuilder } from "./sections/custom";
-import { EducationSectionBuilder } from "./sections/education";
-import { ExperienceSectionBuilder } from "./sections/experience";
-import { InterestsSectionBuilder } from "./sections/interests";
-import { LanguagesSectionBuilder } from "./sections/languages";
-import { PictureSectionBuilder } from "./sections/picture";
-import { ProfilesSectionBuilder } from "./sections/profiles";
-import { ProjectsSectionBuilder } from "./sections/projects";
-import { PublicationsSectionBuilder } from "./sections/publications";
-import { ReferencesSectionBuilder } from "./sections/references";
-import { SkillsSectionBuilder } from "./sections/skills";
-import { SummarySectionBuilder } from "./sections/summary";
-import { VolunteerSectionBuilder } from "./sections/volunteer";
+import { getSectionComponent } from "./section-components";
 
-function getSectionComponent(type: LeftSidebarSection) {
-	return match(type)
-		.with("picture", () => <PictureSectionBuilder />)
-		.with("basics", () => <BasicsSectionBuilder />)
-		.with("summary", () => <SummarySectionBuilder />)
-		.with("profiles", () => <ProfilesSectionBuilder />)
-		.with("experience", () => <ExperienceSectionBuilder />)
-		.with("education", () => <EducationSectionBuilder />)
-		.with("projects", () => <ProjectsSectionBuilder />)
-		.with("skills", () => <SkillsSectionBuilder />)
-		.with("languages", () => <LanguagesSectionBuilder />)
-		.with("interests", () => <InterestsSectionBuilder />)
-		.with("awards", () => <AwardsSectionBuilder />)
-		.with("certifications", () => <CertificationsSectionBuilder />)
-		.with("publications", () => <PublicationsSectionBuilder />)
-		.with("volunteer", () => <VolunteerSectionBuilder />)
-		.with("references", () => <ReferencesSectionBuilder />)
-		.with("custom", () => <CustomSectionBuilder />)
-		.exhaustive();
-}
-
-export function BuilderSidebarLeft() {
+export function BuilderSidebarLeft({ guided = false }: { guided?: boolean }) {
 	const scrollAreaRef = useRef<HTMLDivElement | null>(null);
+	const { currentStep } = useBuilderStep();
+	const setCollapsed = useSectionStore((state) => state.setCollapsed);
+	const guidedSection = getStepSectionId(currentStep);
+	const sections = guided
+		? guidedSection
+			? [guidedSection]
+			: []
+		: leftSidebarSections.filter((section) => section !== "ai-review");
+
+	useEffect(() => {
+		const sectionId = getStepSectionId(currentStep);
+		if (!sectionId || !scrollAreaRef.current) return;
+
+		setCollapsed(sectionId, false);
+
+		const sectionElement = scrollAreaRef.current.querySelector(`#sidebar-${sectionId}`);
+		sectionElement?.scrollIntoView({ block: "start", inline: "nearest", behavior: "smooth" });
+	}, [currentStep, setCollapsed]);
 
 	return (
 		<>
-			<SidebarEdge scrollAreaRef={scrollAreaRef} />
+			{!guided && <SidebarEdge scrollAreaRef={scrollAreaRef} />}
 
-			<ScrollArea ref={scrollAreaRef} className="@container h-[calc(100svh-3.5rem)] bg-background sm:ms-12">
-				<div className="space-y-4 p-4">
-					{leftSidebarSections.map((section) => (
-						<Fragment key={section}>
-							{getSectionComponent(section)}
-							<Separator />
-						</Fragment>
-					))}
-				</div>
-			</ScrollArea>
+			<div className={cn("flex h-full flex-col bg-background", !guided && "sm:ms-12")}>
+				<ScrollArea ref={scrollAreaRef} className="@container flex-1 bg-background">
+					<div className="space-y-4 p-4">
+						{sections.map((section) => (
+							<Fragment key={section}>
+								{getSectionComponent(section)}
+								<Separator />
+							</Fragment>
+						))}
+					</div>
+				</ScrollArea>
+				<BuilderStepActions />
+			</div>
 		</>
 	);
 }
@@ -92,17 +80,19 @@ function SidebarEdge({ scrollAreaRef }: SidebarEdgeProps) {
 			<div className="flex min-h-0 w-full flex-1 flex-col items-center gap-y-2 overflow-hidden">
 				<div className="no-scrollbar min-h-0 w-full flex-1 overflow-y-auto overflow-x-hidden">
 					<div className="flex min-h-full flex-col items-center justify-center gap-y-2">
-						{leftSidebarSections.map((section) => (
-							<Button
-								key={section}
-								size="icon"
-								variant="ghost"
-								title={getSectionTitle(section)}
-								onClick={() => scrollToSection(section)}
-							>
-								{getSectionIcon(section)}
-							</Button>
-						))}
+						{leftSidebarSections
+							.filter((section) => section !== "ai-review")
+							.map((section) => (
+								<Button
+									key={section}
+									size="icon"
+									variant="ghost"
+									title={getSectionTitle(section)}
+									onClick={() => scrollToSection(section)}
+								>
+									{getSectionIcon(section)}
+								</Button>
+							))}
 					</div>
 				</div>
 

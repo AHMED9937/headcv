@@ -1,14 +1,14 @@
 import { Combobox as ComboboxPrimitive } from "@base-ui/react";
 import { CaretDownIcon, CheckIcon, XIcon } from "@phosphor-icons/react";
 import * as React from "react";
-import { Button } from "@reactive-resume/ui/components/button";
+import { Button } from "@headcv/ui/components/button";
 import {
 	InputGroup,
 	InputGroupAddon,
 	InputGroupButton,
 	InputGroupInput,
-} from "@reactive-resume/ui/components/input-group";
-import { cn } from "@reactive-resume/utils/style";
+} from "@headcv/ui/components/input-group";
+import { cn } from "@headcv/utils/style";
 
 const ComboboxRoot = ComboboxPrimitive.Root;
 

@@ -1,19 +1,49 @@
-import type { ColorResult } from "@uiw/color-convert";
-import { hsvaToHex, rgbaStringToHsva } from "@uiw/color-convert";
+type RgbaColor = {
+	r: number;
+	g: number;
+	b: number;
+	a: number;
+};
 
 export function rgbaStringToHex(rgba: string): string {
 	const color = parseColorString(rgba);
 	if (color) return `#${toHexComponent(color.r)}${toHexComponent(color.g)}${toHexComponent(color.b)}`;
 
-	const hsva = rgbaStringToHsva(rgba);
-	return hsvaToHex(hsva);
+	const fallback = parseRgbaString(rgba);
+	if (fallback) return `#${toHexComponent(fallback.r)}${toHexComponent(fallback.g)}${toHexComponent(fallback.b)}`;
+
+	// Match the previous fallback behavior: unparseable strings become black.
+	return "#000000";
 }
 
 function toHexComponent(value: number): string {
 	return Math.max(0, Math.min(255, value)).toString(16).padStart(2, "0");
 }
 
-export function parseColorString(value: string): ColorResult["rgba"] | null {
+function parseComponent(value: string, isPercent: boolean | undefined): number {
+	const num = Number(value);
+	if (isPercent) return Math.round(num * (255 / 100));
+	return num;
+}
+
+function parseRgbaString(value: string): RgbaColor | null {
+	// Permissive rgb/rgba parser supporting comma/space separators,
+	// optional parentheses, percentage values, and alpha as a number or percent.
+	const match = value.match(
+		/^rgba?\(?\s*(-?\d*\.?\d+)(%?)[,\s]+(-?\d*\.?\d+)(%?)[,\s]+(-?\d*\.?\d+)(%?),?\s*[/\s]*(-?\d*\.?\d+)?(%?)\s*\)?$/i,
+	);
+
+	if (!match) return null;
+
+	return {
+		r: parseComponent(match[1] ?? "0", !!match[2]),
+		g: parseComponent(match[3] ?? "0", !!match[4]),
+		b: parseComponent(match[5] ?? "0", !!match[6]),
+		a: match[7] === undefined ? 1 : parseComponent(match[7], !!match[8]),
+	};
+}
+
+export function parseColorString(value: string): RgbaColor | null {
 	const trimmed = value.trim();
 
 	// Parse rgb/rgba colors
