@@ -52,21 +52,30 @@ describe("getRootStructuredData", () => {
 	it("describes only conservative visible product facts", () => {
 		const schemas = getRootStructuredData(canonicalUrl);
 
-		expect(schemas).toHaveLength(4);
+		expect(schemas).toHaveLength(5);
 		expect(schemas[0]).toMatchObject({
+			"@type": "Organization",
+			name: "HeadCV",
+			url: canonicalUrl,
+			logo: `${canonicalUrl}brand/headcv-mark.png`,
+		});
+		expect(schemas[1]).toMatchObject({
 			"@type": "WebSite",
 			name: "HeadCV",
 			url: canonicalUrl,
+			publisher: { "@id": `${canonicalUrl}#organization` },
 		});
-		expect(schemas[1]).toMatchObject({
+		expect(schemas[2]).toMatchObject({
 			"@type": ["SoftwareApplication", "WebApplication"],
 			name: "HeadCV",
 			applicationCategory: "BusinessApplication",
 			operatingSystem: "Web",
 			isAccessibleForFree: true,
+			image: `${canonicalUrl}brand/headcv-mark.png`,
+			screenshot: `${canonicalUrl}opengraph/banner.jpg`,
 			offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
 		});
-		expect(schemas[3]).toMatchObject({
+		expect(schemas[4]).toMatchObject({
 			"@type": "FAQPage",
 			mainEntity: expect.arrayContaining([
 				expect.objectContaining({

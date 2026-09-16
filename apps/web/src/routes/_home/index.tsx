@@ -24,6 +24,11 @@ const landingDescription = msg({
 		"Create a professional, ATS-friendly resume for free with HeadCV. Choose a template, customize your design, and download your CV as a PDF. No credit card required.",
 });
 
+const landingOgImageAlt = msg({
+	id: "home.seo.ogImageAlt",
+	message: "HeadCV — Build a professional ATS-friendly CV in minutes with AI assistance and live preview.",
+});
+
 export const Route = createFileRoute("/_home/")({
 	component: RouteComponent,
 	head: () => {
@@ -45,11 +50,15 @@ export const Route = createFileRoute("/_home/")({
 				{ property: "og:type", content: "website" },
 				{ property: "og:url", content: canonicalUrl },
 				{ property: "og:image", content: ogImage },
+				{ property: "og:image:width", content: "1200" },
+				{ property: "og:image:height", content: "630" },
+				{ property: "og:image:alt", content: i18n._(landingOgImageAlt) },
 				{ property: "og:site_name", content: "HeadCV" },
 				{ property: "og:locale", content: ogLocale },
 				{ property: "twitter:title", content: title },
-				{ property: "twitter:description", content: description },
 				{ property: "twitter:image", content: ogImage },
+				{ name: "twitter:image:alt", content: i18n._(landingOgImageAlt) },
+				{ property: "twitter:description", content: description },
 				{ property: "twitter:card", content: "summary_large_image" },
 			],
 			scripts: [createRootStructuredDataScript(canonicalUrl, i18n.locale)],

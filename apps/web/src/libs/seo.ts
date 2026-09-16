@@ -44,8 +44,21 @@ const createStructuredDataScript = (id: string, data: JsonLd) => ({
 });
 
 export const getRootStructuredData = (canonicalUrl: string, locale = "en"): JsonLd[] => {
-	const appImage = `${canonicalUrl}opengraph/banner.jpg`;
+	const appLogo = `${canonicalUrl}brand/headcv-mark.png`;
+	const appBanner = `${canonicalUrl}opengraph/banner.jpg`;
+	const organizationId = `${canonicalUrl}#organization`;
+
 	return [
+		{
+			"@context": "https://schema.org",
+			"@type": "Organization",
+			"@id": organizationId,
+			name: appName,
+			url: canonicalUrl,
+			logo: appLogo,
+			image: appLogo,
+			sameAs: [repositoryUrl],
+		},
 		{
 			"@context": "https://schema.org",
 			"@type": "WebSite",
@@ -53,6 +66,7 @@ export const getRootStructuredData = (canonicalUrl: string, locale = "en"): Json
 			name: appName,
 			url: canonicalUrl,
 			inLanguage: locale,
+			publisher: { "@id": organizationId },
 		},
 		{
 			"@context": "https://schema.org",
@@ -65,7 +79,8 @@ export const getRootStructuredData = (canonicalUrl: string, locale = "en"): Json
 			applicationCategory: "BusinessApplication",
 			operatingSystem: "Web",
 			isAccessibleForFree: true,
-			image: appImage,
+			image: appLogo,
+			screenshot: appBanner,
 			inLanguage: locale,
 			offers: {
 				"@type": "Offer",
@@ -82,6 +97,7 @@ export const getRootStructuredData = (canonicalUrl: string, locale = "en"): Json
 			"@id": `${canonicalUrl}#project`,
 			name: appName,
 			url: canonicalUrl,
+			image: appLogo,
 			sameAs: [repositoryUrl],
 		},
 		{

@@ -40,6 +40,7 @@ type RouterContext = {
 const appName = msg`HeadCV`;
 const tagline = msg`Build a Professional CV in Minutes`;
 const description = msg`HeadCV is a guided CV builder that helps you create an ATS-friendly resume in minutes. Free to start; no credit card required.`;
+const ogImageAlt = msg`HeadCV — Build a professional ATS-friendly CV in minutes with AI assistance and live preview.`;
 
 export const Route = createRootRouteWithContext<RouterContext>()({
 	component: RootComponent,
@@ -73,6 +74,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 				{ property: "twitter:title", content: title },
 				{ property: "twitter:description", content: i18n._(description) },
 				{ property: "twitter:image", content: `${appUrl}/opengraph/banner.jpg` },
+				{ name: "twitter:image:alt", content: i18n._(ogImageAlt) },
 				// OpenGraph Tags
 				{ property: "og:type", content: "website" },
 				{ property: "og:site_name", content: i18n._(appName) },
@@ -80,6 +82,9 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 				{ property: "og:description", content: i18n._(description) },
 				{ property: "og:url", content: appUrl },
 				{ property: "og:image", content: `${appUrl}/opengraph/banner.jpg` },
+				{ property: "og:image:width", content: "1200" },
+				{ property: "og:image:height", content: "630" },
+				{ property: "og:image:alt", content: i18n._(ogImageAlt) },
 			],
 		};
 	},
