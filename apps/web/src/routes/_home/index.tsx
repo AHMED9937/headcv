@@ -1,6 +1,7 @@
 import { i18n } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 import { createFileRoute } from "@tanstack/react-router";
+import { LoadingScreen } from "@/components/layout/loading-screen";
 import { createRootStructuredDataScript, getCanonicalRootUrl } from "@/libs/seo";
 import { CounterBar } from "./-sections/counter-bar";
 import { FAQ } from "./-sections/faq";
@@ -31,6 +32,7 @@ const landingOgImageAlt = msg({
 
 export const Route = createFileRoute("/_home/")({
 	component: RouteComponent,
+	pendingComponent: LoadingScreen,
 	head: () => {
 		const appUrl = "https://headcv.com";
 		const canonicalUrl = getCanonicalRootUrl(appUrl);
