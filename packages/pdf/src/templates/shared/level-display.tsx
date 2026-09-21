@@ -9,9 +9,17 @@ import { composeStyles } from "./styles";
 
 const LEVEL_ITEM_KEYS = ["level-1", "level-2", "level-3", "level-4", "level-5"] as const;
 
-export const LevelDisplay = ({ level }: { level: number }) => {
+export const LevelDisplay = ({
+	level,
+	type,
+	compact = false,
+}: {
+	level: number;
+	type?: "circle" | undefined;
+	compact?: boolean;
+}) => {
 	const data = useRender();
-	const levelDesign = data.metadata.design.level;
+	const levelDesign = type ? { ...data.metadata.design.level, type } : data.metadata.design.level;
 	const iconSize = data.metadata.typography.body.fontSize - 2;
 	const metrics = getTemplateMetrics(data.metadata.page);
 	const iconProps = useTemplateIconSlot("icon");
@@ -40,6 +48,7 @@ export const LevelDisplay = ({ level }: { level: number }) => {
 			style={composeStyles(
 				{ flexDirection: "row", alignItems: "center", marginTop: 2, columnGap: gap },
 				levelContainerStyle,
+				compact ? { width: "auto", flexShrink: 0, marginTop: 0 } : undefined,
 			)}
 		>
 			{LEVEL_ITEM_KEYS.map((itemKey, index) => {

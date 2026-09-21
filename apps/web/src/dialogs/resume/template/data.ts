@@ -110,10 +110,10 @@ export const templates = {
 		sidebarPosition: "none",
 	},
 	scizor: {
-		name: "Scizor",
-		description: msg`Single-column with uppercase section headings and a primary-color top rule on every page; polished for executive, consulting, or startup resumes.`,
+		name: "Scizor — Executive Line",
+		description: msg`Premium single-column layout with a strong identity header, precise section rules, and disciplined date alignment; ideal for executive, consulting, academic, or senior technical resumes.`,
 		imageUrl: "/templates/jpg/scizor.jpg",
-		tags: ["Single-column", "ATS friendly", "Uppercase headings", "Executive", "Consulting", "Startup"],
+		tags: ["Single-column", "ATS friendly", "Executive", "Consulting", "Academic", "Senior technical"],
 		sidebarPosition: "none",
 	},
 } as const satisfies Record<Template, TemplateMetadata>;

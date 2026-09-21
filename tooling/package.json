@@ -6,16 +6,23 @@
 	"scripts": {
 		"db:reset": "tsx database/reset.ts",
 		"fonts:generate": "tsx fonts/generate.ts",
+		"templates:preview": "tsx templates/render-preview.ts",
 		"typecheck": "tsgo --noEmit"
 	},
 	"devDependencies": {
+		"@napi-rs/canvas": "^0.1.80",
 		"@headcv/config": "workspace:*",
 		"@headcv/db": "workspace:*",
 		"@headcv/env": "workspace:*",
+		"@headcv/pdf": "workspace:*",
+		"@headcv/schema": "workspace:*",
 		"@types/pg": "^8.20.0",
+		"@types/react": "^19.2.15",
 		"@typescript/native-preview": "7.0.0-dev.20260526.1",
 		"drizzle-orm": "1.0.0-rc.3",
+		"pdfjs-dist": "5.7.284",
 		"pg": "^8.21.0",
+		"react": "^19.2.6",
 		"tsx": "^4.22.3"
 	}
 }

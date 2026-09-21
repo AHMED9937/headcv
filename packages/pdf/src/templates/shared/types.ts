@@ -25,6 +25,13 @@ export type TemplateIconSlot =
 	| ((context: TemplateStyleContext) => Partial<TemplateIconProps>);
 
 export type TemplateFeatures = {
+	dateRailItemLayout?: boolean;
+	executiveSectionGrids?: boolean;
+	executiveCompactSections?: boolean;
+	forceCircleLevelDisplay?: boolean;
+	keepSectionItemsTogether?: boolean;
+	sectionHeadingRuleBelow?: boolean;
+	sectionHeadingRule?: boolean;
 	sectionTimeline?: boolean;
 	inlineItemHeader?: boolean;
 	stackSidebarItemHeader?: boolean;
@@ -64,8 +71,16 @@ export type TemplateStyleSlots = {
 	inlineItemHeaderMiddle?: TemplateStyleSlot;
 	inlineItemHeaderTrailing?: TemplateStyleSlot;
 	sectionItemHeader?: TemplateStyleSlot;
+	dateRailRow?: TemplateStyleSlot;
+	dateRailMeta?: TemplateStyleSlot;
+	dateRailContent?: TemplateStyleSlot;
+	dateRailSecondary?: TemplateStyleSlot;
+	compactItemRow?: TemplateStyleSlot;
+	compactItemLabel?: TemplateStyleSlot;
 	section?: TemplateStyleSlot;
+	sectionHeadingContainer?: TemplateStyleSlot;
 	sectionHeading?: TemplateStyleSlot;
+	sectionHeadingRule?: TemplateStyleSlot;
 	sectionItems?: TemplateStyleSlot;
 	item?: TemplateStyleSlot;
 	levelContainer?: TemplateStyleSlot;

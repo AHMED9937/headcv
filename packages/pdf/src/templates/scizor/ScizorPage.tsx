@@ -14,14 +14,15 @@ import { hasTemplatePicture } from "../shared/picture";
 import { Heading, Icon, Link, Text } from "../shared/primitives";
 import { createRtlStyleHelpers } from "../shared/rtl";
 import { PreviewSectionMarker, Section } from "../shared/sections";
-import { composeStyles, headerNameLineHeight } from "../shared/styles";
+import { composeStyles, getReadableSmallTextSize, headerNameLineHeight } from "../shared/styles";
+import { SCIZOR_VISUAL_CONTRACT } from "./visual-contract";
 
 type ScizorStyles = Omit<TemplateStyleSlots, "page"> & {
 	page: Style;
 	header: Style;
 	headerIdentity: Style;
+	headerTitleRow: Style;
 	headerName: Style;
-	headerNameRule: Style;
 	headerHeadline: Style;
 	headerContactRow: Style;
 	headerContactItem: Style;
@@ -48,10 +49,21 @@ export const ScizorPage = ({ page, pageIndex }: TemplatePageProps) => {
 
 	return (
 		<Page size={pageSize} style={composeStyles(styles.page, pageMinHeightStyle)}>
-			<TemplateProvider styles={styles} colors={colors}>
+			<TemplateProvider
+				styles={styles}
+				colors={colors}
+				features={{
+					dateRailItemLayout: true,
+					executiveCompactSections: true,
+					executiveSectionGrids: true,
+					forceCircleLevelDisplay: true,
+					keepSectionItemsTogether: true,
+					sectionHeadingRuleBelow: true,
+				}}
+			>
 				{showHeader && <Header styles={styles} />}
 
-				<View style={composeStyles(styles.sections, { rowGap: metrics.sectionGap })}>
+				<View style={composeStyles(styles.sections, { rowGap: metrics.gapY(1.1) })}>
 					{sections.map((section) => (
 						<Section key={section} section={section} placement="main" />
 					))}
@@ -69,9 +81,10 @@ const Header = ({ styles }: { styles: ScizorStyles }) => {
 		<View style={styles.header}>
 			<PreviewSectionMarker sectionId="basics" />
 			<View style={styles.headerIdentity}>
-				<Heading style={styles.headerName}>{basics.name}</Heading>
-				<View style={styles.headerNameRule} />
-				{basics.headline && <Text style={styles.headerHeadline}>{basics.headline}</Text>}
+				<View style={styles.headerTitleRow}>
+					<Heading style={styles.headerName}>{basics.name}</Heading>
+					{basics.headline && <Text style={styles.headerHeadline}>{basics.headline}</Text>}
+				</View>
 
 				<View style={styles.headerContactRow}>
 					{basics.location && (
@@ -112,9 +125,11 @@ const useScizorTemplate = (): ScizorTemplate => {
 		const foreground = rgbaStringToHex(metadata.design.colors.text);
 		const background = rgbaStringToHex(metadata.design.colors.background);
 		const primary = rgbaStringToHex(metadata.design.colors.primary);
-		const divider = "#D8DCE2";
 		const colors: TemplateColorRoles = { foreground, background, primary };
 		const metrics = getTemplateMetrics(metadata.page);
+		const contactFontSize = getReadableSmallTextSize(
+			metadata.typography.body.fontSize * SCIZOR_VISUAL_CONTRACT.contactTextScale,
+		);
 		const bodyText = {
 			fontFamily: metadata.typography.body.fontFamily,
 			fontSize: metadata.typography.body.fontSize,
@@ -128,8 +143,6 @@ const useScizorTemplate = (): ScizorTemplate => {
 			page: {
 				color: foreground,
 				backgroundColor: background,
-				borderTopWidth: metrics.gapY(0.45),
-				borderTopColor: primary,
 				paddingHorizontal: metrics.page.paddingHorizontal,
 				paddingVertical: metrics.page.paddingVertical,
 				rowGap: metrics.sectionGap,
@@ -193,27 +206,32 @@ const useScizorTemplate = (): ScizorTemplate => {
 				justifyContent: "space-between",
 				columnGap: metrics.gapX(2 / 3),
 			},
-			alignEnd: {
-				...r.alignEnd,
-			},
 			section: {
 				flexDirection: "column",
-				rowGap: metrics.gapY(0.25),
-				borderTopWidth: 1,
-				borderTopColor: divider,
-				paddingTop: metrics.gapY(0.65),
+				rowGap: metrics.gapY(0.35),
+			},
+			sectionHeadingContainer: {
+				flexDirection: "column",
+				alignItems: "stretch",
+				paddingBottom: metrics.gapY(0.08),
+				borderBottomWidth: SCIZOR_VISUAL_CONTRACT.sectionRuleWidth,
+				borderBottomColor: foreground,
 			},
 			sectionHeading: {
 				color: foreground,
-				fontSize: metadata.typography.heading.fontSize * 0.9,
+				fontSize: metadata.typography.heading.fontSize * SCIZOR_VISUAL_CONTRACT.sectionHeadingScale,
 				fontWeight: metadata.typography.heading.fontWeights.at(-1) ?? "700",
-				textTransform: "uppercase",
+			},
+			sectionHeadingRule: {
+				width: "100%",
+				borderBottomWidth: SCIZOR_VISUAL_CONTRACT.sectionRuleWidth,
+				borderBottomColor: foreground,
 			},
 			sectionItems: {
 				rowGap: metrics.itemGapY,
 			},
 			item: {
-				rowGap: metrics.gapY(0.125),
+				rowGap: metrics.gapY(0.2),
 			},
 			levelContainer: {
 				width: "100%",
@@ -228,37 +246,44 @@ const useScizorTemplate = (): ScizorTemplate => {
 				flexDirection: r.row,
 				alignItems: "flex-start",
 				columnGap: metrics.gapX(1),
-				paddingBottom: metrics.gapY(0.35),
 			},
 			headerIdentity: {
 				flex: 1,
 				...r.headerIdentity,
-				rowGap: metrics.gapY(0.45),
+				rowGap: metrics.gapY(0.35),
+			},
+			headerTitleRow: {
+				flexDirection: r.row,
+				alignItems: "baseline",
+				flexWrap: "wrap",
+				columnGap: metrics.gapX(1),
+				rowGap: metrics.gapY(0.1),
 			},
 			headerName: {
 				color: foreground,
-				fontSize: metadata.typography.heading.fontSize * 1.85,
+				fontSize: metadata.typography.heading.fontSize * SCIZOR_VISUAL_CONTRACT.headerNameScale,
 				lineHeight: headerNameLineHeight,
-			},
-			headerNameRule: {
-				width: "72%",
-				borderBottomWidth: 2,
-				borderBottomColor: divider,
 			},
 			headerHeadline: {
 				color: foreground,
+				fontFamily: metadata.typography.heading.fontFamily,
+				fontSize: metadata.typography.body.fontSize * SCIZOR_VISUAL_CONTRACT.headerHeadlineScale,
+				fontStyle: "italic",
 			},
 			headerContactRow: {
 				flexDirection: r.row,
 				flexWrap: "wrap",
-				rowGap: metrics.gapY(0.125),
-				columnGap: metrics.gapX(0.55),
+				rowGap: metrics.gapY(0.2),
+				columnGap: metrics.gapX(0.75),
+				marginTop: metrics.gapY(0.2),
 			},
 			headerContactItem: {
 				flexDirection: r.row,
 				alignItems: "center",
-				columnGap: metrics.gapX(1 / 6),
+				width: "48%",
+				columnGap: metrics.gapX(0.2),
 				color: foreground,
+				fontSize: contactFontSize,
 			},
 			picture: {
 				width: picture.size,
@@ -275,18 +300,48 @@ const useScizorTemplate = (): ScizorTemplate => {
 			sections: {
 				flexDirection: "column",
 			},
+			dateRailRow: {
+				flexDirection: r.row,
+				alignItems: "flex-start",
+				columnGap: metrics.gapX(1),
+			},
+			dateRailMeta: {
+				width: SCIZOR_VISUAL_CONTRACT.dateRailWidth,
+				flexShrink: 0,
+				rowGap: metrics.gapY(0.1),
+			},
+			dateRailContent: {
+				flex: 1,
+				rowGap: metrics.gapY(0.2),
+			},
+			dateRailSecondary: {
+				fontFamily: metadata.typography.heading.fontFamily,
+				fontStyle: "italic",
+			},
+			compactItemRow: {
+				flexDirection: r.row,
+				alignItems: "center",
+				justifyContent: "space-between",
+				columnGap: metrics.gapX(0.5),
+			},
+			compactItemLabel: {
+				flex: 1,
+				minWidth: 0,
+			},
+			alignEnd: {
+				...r.alignEnd,
+				maxWidth: "34%",
+				fontSize: contactFontSize,
+			},
 		});
 
-		const accentFor = ({ colors }: TemplateStyleContext) => colors.primary;
+		const accentFor = ({ colors }: TemplateStyleContext) => colors.foreground;
 
 		return {
 			colors,
 			styles: {
 				...baseStyles,
-				page: {
-					...baseStyles.page,
-					borderTopColor: primary,
-				},
+				page: baseStyles.page,
 				levelItem: (context) => ({ borderColor: accentFor(context) }),
 				levelItemActive: (context) => ({ backgroundColor: accentFor(context) }),
 				icon: (context) => ({

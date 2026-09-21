@@ -48,6 +48,22 @@ describe("resolveSectionTitle", () => {
 		expect(result).toBe("Experience");
 	});
 
+	it("ignores a blank legacy fallback and uses the default title", () => {
+		const result = resolveSectionTitle(
+			"",
+			{
+				sectionId: "experience",
+				locale: "en-US",
+				sectionKind: "builtin",
+				defaultEnglishTitle: "Experience",
+			},
+			undefined,
+			"",
+		);
+
+		expect(result).toBe("Experience");
+	});
+
 	it("falls through to sectionId as last resort", () => {
 		const result = resolveSectionTitle("", {
 			sectionId: "experience",

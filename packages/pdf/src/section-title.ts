@@ -41,7 +41,7 @@ export const resolveSectionTitle = (
 	const resolvedTitle = resolver?.(input);
 	if (resolvedTitle?.trim()) return resolvedTitle;
 
-	if (legacyFallback !== undefined) return legacyFallback;
+	if (legacyFallback?.trim()) return legacyFallback;
 
 	return input.defaultEnglishTitle ?? input.sectionId;
 };

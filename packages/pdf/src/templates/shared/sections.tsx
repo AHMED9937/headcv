@@ -1,4 +1,3 @@
-import type { Style } from "@react-pdf/types";
 import type {
 	AwardItem,
 	CertificationItem,
@@ -15,6 +14,7 @@ import type {
 	SummaryItem,
 	VolunteerItem,
 } from "@headcv/schema/resume/data";
+import type { Style } from "@react-pdf/types";
 import type { IconName } from "phosphor-icons-react-pdf/dynamic";
 import type { ReactNode } from "react";
 import type { StyleInput, TemplatePlacement } from "./styles";
@@ -104,14 +104,31 @@ const SectionShell = ({
 	children: ReactNode;
 }) => {
 	const data = useRender();
+	const sectionHeadingRule = useTemplateFeature("sectionHeadingRule");
+	const sectionHeadingRuleBelow = useTemplateFeature("sectionHeadingRuleBelow");
 	const sectionStyle = useTemplateStyle("section");
+	const sectionHeadingContainerStyle = useTemplateStyle("sectionHeadingContainer");
 	const sectionHeadingStyle = useTemplateStyle("sectionHeading");
+	const sectionHeadingRuleStyle = useTemplateStyle("sectionHeadingRule");
 	const sectionTitle = getResumeSectionTitle(data, sectionId, title);
 
 	return (
 		<View style={composeStyles(sectionStyle)}>
 			<PreviewSectionMarker sectionId={sectionId} />
-			{showHeading && <Heading style={composeStyles(sectionHeadingStyle)}>{sectionTitle}</Heading>}
+			{showHeading && sectionHeadingRule && !sectionHeadingRuleBelow && (
+				<View style={composeStyles(sectionHeadingContainerStyle)}>
+					<Heading style={composeStyles(sectionHeadingStyle)}>{sectionTitle}</Heading>
+					<View style={composeStyles(sectionHeadingRuleStyle)} />
+				</View>
+			)}
+			{showHeading && sectionHeadingRuleBelow && (
+				<View minPresenceAhead={24} style={composeStyles(sectionHeadingContainerStyle)}>
+					<Heading style={composeStyles(sectionHeadingStyle)}>{sectionTitle}</Heading>
+				</View>
+			)}
+			{showHeading && !sectionHeadingRule && !sectionHeadingRuleBelow && (
+				<Heading style={composeStyles(sectionHeadingStyle)}>{sectionTitle}</Heading>
+			)}
 			{children}
 		</View>
 	);
@@ -177,6 +194,7 @@ const SectionItems = ({ children, columns = 1 }: { children: ReactNode; columns?
 
 const SectionItem = ({ children, style }: { children: ReactNode; style?: StyleInput }) => {
 	const { itemStyle: sectionItemStyle, useTimeline } = useSectionItemsContext();
+	const keepSectionItemsTogether = useTemplateFeature("keepSectionItemsTogether");
 	const itemStyle = useTemplateStyle("item");
 	const timelineItemStyle = useTemplateFeatureStyle("sectionTimeline", "item");
 	const timelineMarkerStyle = useTemplateFeatureStyle("sectionTimeline", "marker");
@@ -184,7 +202,11 @@ const SectionItem = ({ children, style }: { children: ReactNode; style?: StyleIn
 	const timelineContentStyle = useTemplateFeatureStyle("sectionTimeline", "content");
 
 	if (!useTimeline) {
-		return <Div style={composeStyles(itemStyle, sectionItemStyle, style)}>{children}</Div>;
+		return (
+			<Div wrap={!keepSectionItemsTogether} style={composeStyles(itemStyle, sectionItemStyle, style)}>
+				{children}
+			</Div>
+		);
 	}
 
 	return (
@@ -359,6 +381,11 @@ const ExperienceSection = ({
 	const splitRowStyle = useSectionSplitRowStyle();
 	const alignEndStyle = useTemplateStyle("alignEnd");
 	const inlineItemHeader = useTemplateFeature("inlineItemHeader");
+	const dateRailItemLayout = useTemplateFeature("dateRailItemLayout");
+	const dateRailRowStyle = useTemplateStyle("dateRailRow");
+	const dateRailMetaStyle = useTemplateStyle("dateRailMeta");
+	const dateRailContentStyle = useTemplateStyle("dateRailContent");
+	const dateRailSecondaryStyle = useTemplateStyle("dateRailSecondary");
 
 	if (items.length === 0) return null;
 
@@ -405,6 +432,38 @@ const ExperienceSection = ({
 						</>
 					);
 
+					if (dateRailItemLayout) {
+						return (
+							<SectionItem key={item.id}>
+								<View style={composeStyles(dateRailRowStyle)}>
+									<View style={composeStyles(dateRailMetaStyle)}>
+										{item.period && <Text>{item.period}</Text>}
+										{hasLocation && <Text>{item.location}</Text>}
+									</View>
+									<View style={composeStyles(dateRailContentStyle)}>
+										<SectionItemHeader>
+											<ItemTitle website={item.website}>{hasPosition ? item.position : item.company}</ItemTitle>
+											{hasPosition && <Text style={composeStyles(dateRailSecondaryStyle)}>{item.company}</Text>}
+										</SectionItemHeader>
+
+										{item.roles.map((role) => (
+											<View key={role.id}>
+												<View style={composeStyles(splitRowStyle)}>
+													<Text style={composeStyles(dateRailSecondaryStyle)}>{role.position}</Text>
+													<Text style={composeStyles(alignEndStyle)}>{role.period}</Text>
+												</View>
+												<RichText>{role.description}</RichText>
+											</View>
+										))}
+
+										{item.roles.length === 0 && <RichText>{item.description}</RichText>}
+										<ItemWebsiteLink website={item.website} />
+									</View>
+								</View>
+							</SectionItem>
+						);
+					}
+
 					return (
 						<SectionItem key={item.id}>
 							<SectionItemHeader>{inlineItemHeader ? renderInlineHeader() : renderSplitHeader()}</SectionItemHeader>
@@ -445,6 +504,11 @@ const EducationSection = ({
 	const splitRowStyle = useSectionSplitRowStyle();
 	const alignEndStyle = useTemplateStyle("alignEnd");
 	const inlineItemHeader = useTemplateFeature("inlineItemHeader");
+	const dateRailItemLayout = useTemplateFeature("dateRailItemLayout");
+	const dateRailRowStyle = useTemplateStyle("dateRailRow");
+	const dateRailMetaStyle = useTemplateStyle("dateRailMeta");
+	const dateRailContentStyle = useTemplateStyle("dateRailContent");
+	const dateRailSecondaryStyle = useTemplateStyle("dateRailSecondary");
 
 	if (items.length === 0) return null;
 
@@ -500,6 +564,32 @@ const EducationSection = ({
 							)}
 						</>
 					);
+
+					if (dateRailItemLayout) {
+						return (
+							<SectionItem key={item.id}>
+								<View style={composeStyles(dateRailRowStyle)}>
+									<View style={composeStyles(dateRailMetaStyle)}>
+										{item.period && <Text>{item.period}</Text>}
+										{item.location && <Text>{item.location}</Text>}
+									</View>
+									<View style={composeStyles(dateRailContentStyle)}>
+										<SectionItemHeader>
+											<ItemTitle website={item.website}>
+												{[item.degree, item.area].filter(Boolean).join(" in ") || item.school}
+											</ItemTitle>
+											{(hasArea || hasDegree) && (
+												<Text style={composeStyles(dateRailSecondaryStyle)}>{item.school}</Text>
+											)}
+											{item.grade && <Text>{item.grade}</Text>}
+										</SectionItemHeader>
+										<RichText>{item.description}</RichText>
+										<ItemWebsiteLink website={item.website} />
+									</View>
+								</View>
+							</SectionItem>
+						);
+					}
 
 					return (
 						<SectionItem key={item.id}>
@@ -565,27 +655,41 @@ const SkillsSection = ({
 	const items = getVisibleItems(skills, "skills");
 	const inlineStyle = useTemplateStyle("inline");
 	const metrics = getTemplateMetrics(data.metadata.page);
+	const executiveSectionGrids = useTemplateFeature("executiveSectionGrids");
+	const executiveCompactSections = useTemplateFeature("executiveCompactSections");
+	const forceCircleLevelDisplay = useTemplateFeature("forceCircleLevelDisplay");
+	const compactItemRowStyle = useTemplateStyle("compactItemRow");
+	const compactItemLabelStyle = useTemplateStyle("compactItemLabel");
 
 	if (items.length === 0) return null;
 
 	return (
 		<SectionShell sectionId={sectionId} title={skills.title}>
-			<SectionItems columns={skills.columns}>
+			<SectionItems columns={executiveSectionGrids ? 2 : skills.columns}>
 				{items.map((item) => (
 					<SectionItem key={item.id} style={{ rowGap: metrics.gapY(0.25) }}>
-						<SectionItemHeader>
-							<View style={composeStyles(inlineStyle)}>
-								<Icon name={item.icon as IconName} />
-								<Bold>{item.name}</Bold>
+						{executiveCompactSections ? (
+							<View style={composeStyles(compactItemRowStyle)}>
+								<Text style={composeStyles(compactItemLabelStyle)}>{item.name}</Text>
+								<LevelDisplay compact level={item.level} type="circle" />
 							</View>
-						</SectionItemHeader>
+						) : (
+							<>
+								<SectionItemHeader>
+									<View style={composeStyles(inlineStyle)}>
+										<Icon name={item.icon as IconName} />
+										<Bold>{item.name}</Bold>
+									</View>
+								</SectionItemHeader>
 
-						<View>
-							<Text>{item.proficiency}</Text>
-							<Small>{item.keywords.join(", ")}</Small>
-						</View>
+								<View>
+									<Text>{item.proficiency}</Text>
+									<Small>{item.keywords.join(", ")}</Small>
+								</View>
 
-						<LevelDisplay level={item.level} />
+								<LevelDisplay level={item.level} type={forceCircleLevelDisplay ? "circle" : undefined} />
+							</>
+						)}
 					</SectionItem>
 				))}
 			</SectionItems>
@@ -603,19 +707,28 @@ const LanguagesSection = ({
 	const data = useRender();
 	const languages = sectionData ?? data.sections.languages;
 	const items = getVisibleItems(languages, "languages");
+	const executiveSectionGrids = useTemplateFeature("executiveSectionGrids");
+	const executiveCompactSections = useTemplateFeature("executiveCompactSections");
+	const forceCircleLevelDisplay = useTemplateFeature("forceCircleLevelDisplay");
 
 	if (items.length === 0) return null;
 
 	return (
 		<SectionShell sectionId={sectionId} title={languages.title}>
-			<SectionItems columns={languages.columns}>
+			<SectionItems columns={executiveSectionGrids ? 3 : languages.columns}>
 				{items.map((item) => (
 					<SectionItem key={item.id}>
-						<SectionItemHeader>
-							<Bold>{item.language}</Bold>
-							<Text>{item.fluency}</Text>
-						</SectionItemHeader>
-						<LevelDisplay level={item.level} />
+						{executiveCompactSections ? (
+							<Text>{`• ${item.language}`}</Text>
+						) : (
+							<>
+								<SectionItemHeader>
+									<Bold>{item.language}</Bold>
+									<Text>{item.fluency}</Text>
+								</SectionItemHeader>
+								<LevelDisplay level={item.level} type={forceCircleLevelDisplay ? "circle" : undefined} />
+							</>
+						)}
 					</SectionItem>
 				))}
 			</SectionItems>
