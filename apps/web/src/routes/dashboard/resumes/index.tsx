@@ -6,13 +6,10 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, stripSearchParams, useNavigate } from "@tanstack/react-router";
 import { useMemo } from "react";
 import z from "zod";
-import { Label } from "@headcv/ui/components/label";
-import { Separator } from "@headcv/ui/components/separator";
 import { Tabs, TabsList, TabsTrigger } from "@headcv/ui/components/tabs";
 import { cn } from "@headcv/utils/style";
 import { Combobox } from "@/components/ui/combobox";
 import { orpc } from "@/libs/orpc/client";
-import { DashboardHeader } from "../-components/header";
 import { GridView } from "./-components/grid-view";
 import { ListView } from "./-components/list-view";
 
@@ -58,65 +55,60 @@ function RouteComponent() {
 	}, [i18n]);
 
 	return (
-		<div className="space-y-4">
-			<DashboardHeader icon={ReadCvLogoIcon} title={t`Resumes`} />
+		<div className="space-y-6">
+			<div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border bg-card p-2 shadow-sm">
+				<div className="flex items-center gap-2.5 px-2">
+					<ReadCvLogoIcon className="size-6" />
+					<span className="font-semibold text-lg">
+						<Trans>Resumes</Trans>
+					</span>
+				</div>
 
-			<Separator />
-
-			<div className="flex items-center gap-x-4">
-				<div className="flex gap-2">
-					<Label>
-						<Trans>Sort by</Trans>
-					</Label>
+				<div className="flex flex-wrap items-center gap-2">
 					<Combobox
 						value={sort}
 						options={sortOptions}
-						placeholder={t`Sort by`}
+						placeholder={t`Sort`}
 						onValueChange={(value) => {
 							if (!value) return;
 							void navigate({ search: (prev: Search) => ({ ...prev, sort: value as SortOption }) });
 						}}
 					/>
+
+					<div className={cn("flex", { hidden: tagOptions.length === 0 })}>
+						<Combobox
+							multiple
+							value={tags}
+							options={tagOptions}
+							placeholder={t`Filter`}
+							onValueChange={(value) => {
+								void navigate({ search: (prev: Search) => ({ ...prev, tags: value ?? [] }) });
+							}}
+						/>
+					</div>
+
+					<Tabs value={view}>
+						<TabsList>
+							<TabsTrigger
+								value="grid"
+								nativeButton={false}
+								className="rounded-e-none"
+								render={<Link to="." search={(prev: Search) => ({ ...prev, view: "grid" })} />}
+							>
+								<GridFourIcon />
+							</TabsTrigger>
+
+							<TabsTrigger
+								value="list"
+								nativeButton={false}
+								className="rounded-s-none"
+								render={<Link to="." search={(prev: Search) => ({ ...prev, view: "list" })} />}
+							>
+								<ListIcon />
+							</TabsTrigger>
+						</TabsList>
+					</Tabs>
 				</div>
-
-				<div className={cn("flex gap-2", { hidden: tagOptions.length === 0 })}>
-					<Label>
-						<Trans>Filter by</Trans>
-					</Label>
-					<Combobox
-						multiple
-						value={tags}
-						options={tagOptions}
-						placeholder={t`Filter by`}
-						onValueChange={(value) => {
-							void navigate({ search: (prev: Search) => ({ ...prev, tags: value ?? [] }) });
-						}}
-					/>
-				</div>
-
-				<Tabs className="ltr:ms-auto rtl:me-auto" value={view}>
-					<TabsList>
-						<TabsTrigger
-							value="grid"
-							nativeButton={false}
-							className="rounded-e-none"
-							render={<Link to="." search={(prev: Search) => ({ ...prev, view: "grid" })} />}
-						>
-							<GridFourIcon />
-							<Trans>Grid</Trans>
-						</TabsTrigger>
-
-						<TabsTrigger
-							value="list"
-							nativeButton={false}
-							className="rounded-s-none"
-							render={<Link to="." search={(prev: Search) => ({ ...prev, view: "list" })} />}
-						>
-							<ListIcon />
-							<Trans>List</Trans>
-						</TabsTrigger>
-					</TabsList>
-				</Tabs>
 			</div>
 
 			{view === "list" ? <ListView resumes={resumes ?? []} /> : <GridView resumes={resumes ?? []} />}

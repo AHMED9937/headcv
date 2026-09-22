@@ -1,9 +1,8 @@
 import { t } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react";
-import { GearSixIcon, ShieldCheckIcon, UserCircleIcon, WarningIcon } from "@phosphor-icons/react";
+import { ShieldCheckIcon, UserCircleIcon, WarningIcon } from "@phosphor-icons/react";
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { cn } from "@headcv/utils/style";
-import { DashboardHeader } from "../-components/header";
 
 type SettingsTab = {
 	to: string;
@@ -37,8 +36,11 @@ function RouteComponent() {
 	const { i18n } = useLingui();
 
 	return (
-		<div className="space-y-4">
-			<DashboardHeader icon={GearSixIcon} title={t`Settings`} />
+		<div className="space-y-6">
+			<div className="space-y-1">
+				<h1 className="font-semibold text-2xl tracking-tight">{t`Settings`}</h1>
+				<p className="text-muted-foreground text-sm">{t`Manage your account and preferences.`}</p>
+			</div>
 
 			<nav className="flex flex-wrap gap-2 border-b pb-2">
 				{tabs.map((tab) => (
