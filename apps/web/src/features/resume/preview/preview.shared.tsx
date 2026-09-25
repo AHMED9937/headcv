@@ -1,5 +1,5 @@
 import type { ResumeData } from "@headcv/schema/resume/data";
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, ReactNode, RefObject } from "react";
 import { Spinner } from "@headcv/ui/components/spinner";
 import { cn } from "@headcv/utils/style";
 
@@ -8,10 +8,11 @@ export type ResumePreviewProps = {
 	data?: ResumeData;
 	pageGap?: CSSProperties["gap"];
 	pageLayout?: "horizontal" | "vertical";
-	pageScale?: number;
+	pageScale?: number | "page-width";
 	pageClassName?: string;
 	showPageNumbers?: boolean;
 	renderSectionOverlay?: (marker: ResumePreviewSectionMarker) => ReactNode;
+	scrollContainerRef?: RefObject<HTMLElement | null>;
 };
 
 export type ResumePreviewSectionMarker = {
@@ -27,7 +28,7 @@ export const RESUME_PREVIEW_SECTION_MARKER_PREFIX = "https://resume-section.inva
 
 export type ResolvedResumePreviewProps = ResumePreviewProps & {
 	pageLayout: "horizontal" | "vertical";
-	pageScale: number;
+	pageScale: number | "page-width";
 	showPageNumbers: boolean;
 };
 
@@ -40,11 +41,9 @@ type ResumePreviewLoaderProps = Pick<ResumePreviewProps, "pageClassName" | "show
 	pageCount?: number;
 	pageGap?: CSSProperties["gap"];
 	pageLayout?: "horizontal" | "vertical";
-	pageScale?: number;
+	pageScale?: number | "page-width";
 };
 
-const PDF_PAGE_RENDER_SCALE = 5;
-const MAX_PREVIEW_CANVAS_PIXELS = 24_000_000; // 24 MP preview budget
 export const DEFAULT_PDF_PAGE_SIZE: PreviewPageSize = {
 	height: 841.89,
 	width: 595.28,
@@ -64,16 +63,6 @@ export const normalizeResumePreviewProps = ({
 	showPageNumbers,
 });
 
-export const getPreviewCanvasScale = (width: number, height: number) => {
-	const devicePixelRatio = typeof window === "undefined" ? 1 : window.devicePixelRatio || 1;
-	const desiredScale = Math.max(PDF_PAGE_RENDER_SCALE, devicePixelRatio);
-	const desiredPixels = width * height * desiredScale * desiredScale;
-
-	if (desiredPixels <= MAX_PREVIEW_CANVAS_PIXELS) return desiredScale;
-
-	return Math.sqrt(MAX_PREVIEW_CANVAS_PIXELS / (width * height));
-};
-
 export const getScaledPreviewPageSize = (pageSize: PreviewPageSize, pageScale: number): PreviewPageSize => ({
 	height: pageSize.height * pageScale,
 	width: pageSize.width * pageScale,
@@ -92,7 +81,8 @@ export function ResumePreviewLoader({
 	pageScale = 1,
 	showPageNumbers = false,
 }: ResumePreviewLoaderProps) {
-	const pageSize = getScaledPreviewPageSize(DEFAULT_PDF_PAGE_SIZE, pageScale);
+	const numericPageScale = typeof pageScale === "number" ? pageScale : 1;
+	const pageSize = getScaledPreviewPageSize(DEFAULT_PDF_PAGE_SIZE, numericPageScale);
 	const resolvedPageGap = getResumePreviewGapValue(pageGap);
 
 	return (

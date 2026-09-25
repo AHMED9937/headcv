@@ -1,6 +1,7 @@
 import type { CustomSection, CustomSectionType, ResumeData, SectionType } from "@headcv/schema/resume/data";
 import type { HtmlStyleConfig } from "./html-to-docx";
 import { BorderStyle, ExternalHyperlink, HeadingLevel, Paragraph, TabStopPosition, TabStopType, TextRun } from "docx";
+import { formatDateRange } from "@headcv/utils/date";
 import { htmlToParagraphs } from "./html-to-docx";
 import { toSafeDocxLink } from "./link-utils";
 
@@ -159,19 +160,21 @@ function renderExperience(section: Sections["experience"], colorHex: string): Pa
 	};
 
 	for (const item of items) {
+		const itemPeriod = formatDateRange(item);
 		if (item.roles && item.roles.length > 0) {
-			paragraphs.push(titleAndSubtitle(item.company, "", item.period));
+			paragraphs.push(titleAndSubtitle(item.company, "", itemPeriod));
 
 			const loc = locationAndPeriod(item.location, "");
 			if (loc) paragraphs.push(loc);
 
 			for (const role of item.roles) {
+				const rolePeriod = formatDateRange(role);
 				paragraphs.push(
 					new Paragraph({
 						spacing: { before: 80 },
 						children: [
 							new TextRun({ text: role.position, bold: true, italics: true, ...baseRun }),
-							...(role.period ? [new TextRun({ text: `  ${role.period}`, italics: true, ...baseRun })] : []),
+							...(rolePeriod ? [new TextRun({ text: `  ${rolePeriod}`, italics: true, ...baseRun })] : []),
 						],
 					}),
 				);
@@ -180,7 +183,7 @@ function renderExperience(section: Sections["experience"], colorHex: string): Pa
 				}
 			}
 		} else {
-			paragraphs.push(titleAndSubtitle(item.company, item.position, item.period));
+			paragraphs.push(titleAndSubtitle(item.company, item.position, itemPeriod));
 
 			const loc = locationAndPeriod(item.location, "");
 			if (loc) paragraphs.push(loc);
@@ -209,8 +212,9 @@ function renderEducation(section: Sections["education"], colorHex: string): Para
 	};
 
 	for (const item of items) {
+		const itemPeriod = formatDateRange(item);
 		const degreeArea = [item.degree, item.area].filter(Boolean).join(", ");
-		paragraphs.push(titleAndSubtitle(item.school, degreeArea, item.period));
+		paragraphs.push(titleAndSubtitle(item.school, degreeArea, itemPeriod));
 
 		if (item.grade) {
 			paragraphs.push(
@@ -241,7 +245,7 @@ function renderProjects(section: Sections["projects"], colorHex: string): Paragr
 	const paragraphs: Paragraph[] = [sectionHeading(section.title, colorHex)];
 
 	for (const item of items) {
-		paragraphs.push(titleAndSubtitle(item.name, "", item.period));
+		paragraphs.push(titleAndSubtitle(item.name, "", formatDateRange(item)));
 
 		if (item.description) {
 			paragraphs.push(...htmlToParagraphs(item.description, getHtmlStyle()));
@@ -397,7 +401,7 @@ function renderVolunteer(section: Sections["volunteer"], colorHex: string): Para
 	const paragraphs: Paragraph[] = [sectionHeading(section.title, colorHex)];
 
 	for (const item of items) {
-		paragraphs.push(titleAndSubtitle(item.organization, "", item.period));
+		paragraphs.push(titleAndSubtitle(item.organization, "", formatDateRange(item)));
 
 		const loc = locationAndPeriod(item.location, "");
 		if (loc) paragraphs.push(loc);

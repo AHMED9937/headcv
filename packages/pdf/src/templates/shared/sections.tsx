@@ -21,6 +21,7 @@ import type { StyleInput, TemplatePlacement } from "./styles";
 import type { CustomItemSection, ItemSection } from "./types";
 import { Children, createContext, isValidElement, use } from "react";
 import { match } from "ts-pattern";
+import { formatDateRange } from "@headcv/utils/date";
 import { useRender } from "../../context";
 import { Link as PdfLink, View } from "../../renderer";
 import { getResumeSectionTitle } from "../../section-title";
@@ -393,11 +394,13 @@ const ExperienceSection = ({
 		<SectionShell sectionId={sectionId} title={experience.title}>
 			<SectionItems columns={experience.columns}>
 				{items.map((item) => {
+					const roles = item.roles ?? [];
+					const itemPeriod = formatDateRange(item);
 					const hasPosition = Boolean(item.position.trim());
 					const hasLocation = Boolean(item.location.trim());
 					const { top: headerLocation, bottom: headerPeriod } = promoteSplitRowRight({
 						top: item.location,
-						bottom: item.period,
+						bottom: itemPeriod,
 					});
 
 					const renderInlineHeader = () => (
@@ -412,7 +415,7 @@ const ExperienceSection = ({
 								) : null
 							}
 							middle={<ItemTitle website={item.website}>{item.company}</ItemTitle>}
-							trailing={<Text style={composeStyles(alignEndStyle)}>{item.period}</Text>}
+							trailing={<Text style={composeStyles(alignEndStyle)}>{itemPeriod}</Text>}
 						/>
 					);
 
@@ -423,7 +426,7 @@ const ExperienceSection = ({
 								{hasSplitRowText(headerLocation) && <Text style={composeStyles(alignEndStyle)}>{headerLocation}</Text>}
 							</View>
 
-							{item.roles.length === 0 && (hasPosition || hasSplitRowText(headerPeriod)) && (
+							{roles.length === 0 && (hasPosition || hasSplitRowText(headerPeriod)) && (
 								<View style={composeStyles(splitRowStyle)}>
 									{hasPosition && <Text>{item.position}</Text>}
 									{hasSplitRowText(headerPeriod) && <Text style={composeStyles(alignEndStyle)}>{headerPeriod}</Text>}
@@ -437,7 +440,7 @@ const ExperienceSection = ({
 							<SectionItem key={item.id}>
 								<View style={composeStyles(dateRailRowStyle)}>
 									<View style={composeStyles(dateRailMetaStyle)}>
-										{item.period && <Text>{item.period}</Text>}
+										{itemPeriod && <Text>{itemPeriod}</Text>}
 										{hasLocation && <Text>{item.location}</Text>}
 									</View>
 									<View style={composeStyles(dateRailContentStyle)}>
@@ -446,17 +449,17 @@ const ExperienceSection = ({
 											{hasPosition && <Text style={composeStyles(dateRailSecondaryStyle)}>{item.company}</Text>}
 										</SectionItemHeader>
 
-										{item.roles.map((role) => (
+										{roles.map((role) => (
 											<View key={role.id}>
 												<View style={composeStyles(splitRowStyle)}>
 													<Text style={composeStyles(dateRailSecondaryStyle)}>{role.position}</Text>
-													<Text style={composeStyles(alignEndStyle)}>{role.period}</Text>
+													<Text style={composeStyles(alignEndStyle)}>{formatDateRange(role)}</Text>
 												</View>
 												<RichText>{role.description}</RichText>
 											</View>
 										))}
 
-										{item.roles.length === 0 && <RichText>{item.description}</RichText>}
+										{roles.length === 0 && <RichText>{item.description}</RichText>}
 										<ItemWebsiteLink website={item.website} />
 									</View>
 								</View>
@@ -468,19 +471,19 @@ const ExperienceSection = ({
 						<SectionItem key={item.id}>
 							<SectionItemHeader>{inlineItemHeader ? renderInlineHeader() : renderSplitHeader()}</SectionItemHeader>
 
-							{item.roles.length > 0 && <Text>{item.period}</Text>}
+							{roles.length > 0 && <Text>{itemPeriod}</Text>}
 
-							{item.roles.map((role) => (
+							{roles.map((role) => (
 								<View key={role.id}>
 									<View style={composeStyles(splitRowStyle)}>
 										<Text>{role.position}</Text>
-										<Text style={composeStyles(alignEndStyle)}>{role.period}</Text>
+										<Text style={composeStyles(alignEndStyle)}>{formatDateRange(role)}</Text>
 									</View>
 									<RichText>{role.description}</RichText>
 								</View>
 							))}
 
-							{item.roles.length === 0 && <RichText>{item.description}</RichText>}
+							{roles.length === 0 && <RichText>{item.description}</RichText>}
 
 							<ItemWebsiteLink website={item.website} />
 						</SectionItem>
@@ -516,8 +519,9 @@ const EducationSection = ({
 		<SectionShell sectionId={sectionId} title={education.title}>
 			<SectionItems columns={education.columns}>
 				{items.map((item) => {
+					const itemPeriod = formatDateRange(item);
 					const degreeAndGrade = [item.degree, item.grade].filter(Boolean).join(" • ");
-					const locationAndPeriod = [item.location, item.period].filter(Boolean).join(" • ");
+					const locationAndPeriod = [item.location, itemPeriod].filter(Boolean).join(" • ");
 					const gradeAndLocation = [item.grade, item.location].filter(Boolean).join(" • ");
 					const hasArea = Boolean(item.area.trim());
 					const hasDegree = Boolean(item.degree.trim());
@@ -539,7 +543,7 @@ const EducationSection = ({
 									) : null
 								}
 								middle={<ItemTitle website={item.website}>{item.school}</ItemTitle>}
-								trailing={<Text style={composeStyles(alignEndStyle)}>{item.period}</Text>}
+								trailing={<Text style={composeStyles(alignEndStyle)}>{itemPeriod}</Text>}
 							/>
 							{gradeAndLocation && <Text>{gradeAndLocation}</Text>}
 						</>
@@ -570,7 +574,7 @@ const EducationSection = ({
 							<SectionItem key={item.id}>
 								<View style={composeStyles(dateRailRowStyle)}>
 									<View style={composeStyles(dateRailMetaStyle)}>
-										{item.period && <Text>{item.period}</Text>}
+										{itemPeriod && <Text>{itemPeriod}</Text>}
 										{item.location && <Text>{item.location}</Text>}
 									</View>
 									<View style={composeStyles(dateRailContentStyle)}>
@@ -629,7 +633,7 @@ const ProjectsSection = ({
 						<SectionItemHeader>
 							<View style={composeStyles(splitRowStyle)}>
 								<ItemTitle website={item.website}>{item.name}</ItemTitle>
-								<Text style={composeStyles(alignEndStyle)}>{item.period}</Text>
+								<Text style={composeStyles(alignEndStyle)}>{formatDateRange(item)}</Text>
 							</View>
 						</SectionItemHeader>
 
@@ -904,6 +908,7 @@ const VolunteerSection = ({
 		<SectionShell sectionId={sectionId} title={volunteer.title}>
 			<SectionItems columns={volunteer.columns}>
 				{items.map((item) => {
+					const itemPeriod = formatDateRange(item);
 					return (
 						<SectionItem key={item.id}>
 							<SectionItemHeader>
@@ -911,13 +916,13 @@ const VolunteerSection = ({
 									<InlineItemHeader
 										leading={hasSplitRowText(item.location) ? <Text>{item.location}</Text> : null}
 										middle={<ItemTitle website={item.website}>{item.organization}</ItemTitle>}
-										trailing={<Text style={composeStyles(alignEndStyle)}>{item.period}</Text>}
+										trailing={<Text style={composeStyles(alignEndStyle)}>{itemPeriod}</Text>}
 									/>
 								) : (
 									<>
 										<View style={composeStyles(splitRowStyle)}>
 											<ItemTitle website={item.website}>{item.organization}</ItemTitle>
-											{hasSplitRowText(item.period) && <Text style={composeStyles(alignEndStyle)}>{item.period}</Text>}
+											{hasSplitRowText(itemPeriod) && <Text style={composeStyles(alignEndStyle)}>{itemPeriod}</Text>}
 										</View>
 
 										<Text>{item.location}</Text>

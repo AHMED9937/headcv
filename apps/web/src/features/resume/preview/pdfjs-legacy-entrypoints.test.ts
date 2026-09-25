@@ -27,7 +27,6 @@ const pdfjsMock = vi.hoisted(() => {
 			AnnotationMode: { DISABLE: 0 },
 			getDocument: vi.fn(() => loadingTask),
 			GlobalWorkerOptions: {} as { workerSrc?: string },
-			RenderingCancelledException: class RenderingCancelledException extends Error {},
 		},
 		loadingTask,
 		page,
@@ -56,19 +55,6 @@ describe("PDF.js browser entrypoints", () => {
 
 	afterEach(() => {
 		vi.restoreAllMocks();
-	});
-
-	it("loads the canvas preview renderer from the legacy PDF.js runtime", { timeout: 20000 }, async () => {
-		await expect(import("./pdf-canvas")).resolves.toEqual(
-			expect.objectContaining({
-				PdfCanvasDocument: expect.any(Function),
-				PdfCanvasPage: expect.any(Function),
-			}),
-		);
-
-		expect(pdfjsMock.legacyModule.GlobalWorkerOptions.workerSrc).toContain(
-			"pdfjs-dist/legacy/build/pdf.worker.min.mjs",
-		);
 	});
 
 	it("creates thumbnails with the legacy PDF.js runtime", async () => {

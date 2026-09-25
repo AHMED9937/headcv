@@ -136,6 +136,20 @@ describe("registerFonts", () => {
 		expect(registerSpy).not.toHaveBeenCalledWith(expect.objectContaining({ family: "Noto Serif SC" }));
 	});
 
+	it("allows long unbroken Latin text to wrap without changing normal words", async () => {
+		const registerHyphenationSpy = vi.spyOn(Font, "registerHyphenationCallback").mockImplementation(() => {});
+		const { registerFonts } = await import("./use-register-fonts");
+
+		registerFonts(typography, "en-US");
+
+		const hyphenationCallback = registerHyphenationSpy.mock.calls.at(-1)?.[0];
+		expect(hyphenationCallback?.("Professional")).toEqual(["Professional"]);
+		const longToken = "a".repeat(40);
+		const breaks = hyphenationCallback?.(longToken);
+		expect(breaks?.filter(Boolean).join("")).toBe(longToken);
+		expect(breaks?.length).toBe(80);
+	});
+
 	it("registers CJK PDF fallbacks for Latin locale when resume content contains CJK text", async () => {
 		const registerSpy = vi.spyOn(Font, "register").mockImplementation(() => {});
 		vi.spyOn(Font, "registerHyphenationCallback").mockImplementation(() => {});

@@ -1,0 +1,53 @@
+.resume-pdf-viewer .pdfViewer {
+	padding-block: 0;
+	overflow: visible;
+}
+
+.resume-preview-scroll,
+.builder-sections-scroll {
+	scrollbar-width: none !important;
+	-ms-overflow-style: none !important;
+	scrollbar-gutter: stable;
+}
+
+.resume-preview-scroll::-webkit-scrollbar,
+.builder-sections-scroll::-webkit-scrollbar {
+	display: none !important;
+	width: 0;
+	height: 0;
+}
+
+.resume-pdf-viewer--page-numbers .pdfViewer {
+	padding-top: 1.25rem;
+}
+
+.resume-pdf-viewer .pdfViewer.removePageBorders .page {
+	margin: 0 auto var(--resume-preview-page-gap);
+	border-radius: 0.375rem;
+}
+
+.resume-pdf-viewer .pdfViewer.removePageBorders .page:last-child {
+	margin-bottom: 0;
+}
+
+.resume-pdf-viewer .pdfViewer .canvasWrapper {
+	border-radius: inherit;
+}
+
+.resume-pdf-viewer .resume-pdf-page-label {
+	position: absolute;
+	top: -1.125rem;
+	left: 0;
+	color: var(--muted-foreground);
+	font-weight: 500;
+	font-size: 0.625rem;
+	line-height: 1rem;
+}
+
+.resume-pdf-viewer--horizontal .pdfViewer.removePageBorders .page {
+	margin: 0 var(--resume-preview-page-gap) 0 0;
+}
+
+.resume-pdf-viewer--horizontal .pdfViewer.removePageBorders .page:last-child {
+	margin-right: 0;
+}

@@ -80,6 +80,30 @@ describe("renderBuiltInSection", () => {
 		expect(renderBuiltInSection("experience", section, HEX)).toEqual([]);
 	});
 
+	it("excludes hidden items while keeping them in the source section", () => {
+		const section = {
+			...emptySection("experience"),
+			items: [
+				{
+					id: "exp-1",
+					hidden: true,
+					company: "Acme",
+					position: "Engineer",
+					location: "",
+					startDate: "2022-01",
+					endDate: "",
+
+					website: { url: "", label: "", inlineLink: false },
+					description: "",
+					roles: [],
+				},
+			],
+		};
+		expect(renderBuiltInSection("experience", section as never, HEX)).toEqual([]);
+		expect(section.items).toHaveLength(1);
+		expect(section.items[0]?.hidden).toBe(true);
+	});
+
 	it("returns [] for an unknown section type", () => {
 		expect(renderBuiltInSection("not-a-section" as never, emptySection("experience"), HEX)).toEqual([]);
 	});

@@ -21,6 +21,14 @@ type FontWeightRange = {
 const registeredFontVariants = new Set<string>();
 const fallbackFontFamily = "IBM Plex Serif";
 const cjkLetterRegex = cjkLetters().toRegExp();
+const LONG_UNBROKEN_TOKEN_LENGTH = 24;
+
+const createCharacterBreaks = (word: string) => [...word].flatMap((character) => [character, ""]);
+
+export const getPdfWordBreaks = (word: string, useCharacterBreaking: boolean): string[] => {
+	if (useCharacterBreaking || [...word].length > LONG_UNBROKEN_TOKEN_LENGTH) return createCharacterBreaks(word);
+	return [word];
+};
 
 // `fontFamily` is widened to `string | string[]` so react-pdf can do
 // glyph-level font fallback for CJK characters (#2986).
@@ -115,10 +123,10 @@ export const registerFonts = (typography: Typography, locale: Locale, hasCjkCont
 	Font.registerHyphenationCallback((word) => {
 		if (needsCjkTextSupport) {
 			if (word === " ") return ["\u200C "];
-			return [...word].flatMap((l) => [l, ""]);
+			return getPdfWordBreaks(word, true);
 		}
 
-		return [word];
+		return getPdfWordBreaks(word, false);
 	});
 
 	const pdfTypography = resolvePdfTypography(typography);

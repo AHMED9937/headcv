@@ -10,6 +10,7 @@ import { RESUME_PREVIEW_SECTION_MARKER_PREFIX } from "./preview.shared";
 const previewMock = vi.hoisted(() => ({
 	builderResumeData: undefined as ResumeData | undefined,
 	toBlob: vi.fn(async () => new Blob(["%PDF"], { type: "application/pdf" })),
+	viewerProps: vi.fn(),
 }));
 
 const resumeDataWithPageCount = (pageCount: number): ResumeData => ({
@@ -27,39 +28,21 @@ vi.mock("@/features/resume/export/pdf-document", () => ({
 	createResumePdfBlob: previewMock.toBlob,
 }));
 
-vi.mock("../builder/draft", () => ({
+vi.mock("@/features/resume/builder/draft", () => ({
 	useResumeData: () => previewMock.builderResumeData,
 }));
 
-vi.mock("./pdf-canvas", async () => {
+vi.mock("./pdf-viewer", async () => {
 	const React = await import("react");
-	const pdfDocument = { numPages: 1 };
 
 	return {
-		PdfCanvasDocument: ({
-			children,
-			onLoadSuccess,
-		}: {
-			children: (document: typeof pdfDocument) => React.ReactNode;
-			onLoadSuccess: (document: typeof pdfDocument) => void;
-		}) => {
-			React.useEffect(() => {
-				onLoadSuccess(pdfDocument);
-			}, [onLoadSuccess]);
-
-			return React.createElement(React.Fragment, null, children(pdfDocument));
-		},
-		PdfCanvasPage: ({
-			onLoadSuccess,
+		PdfDocumentViewer: ({
 			onRenderSuccess,
-			pageNumber,
-			totalPages,
+			pageScale,
 			renderSectionOverlay,
 		}: {
-			onLoadSuccess: (pageNumber: number, pageSize: { height: number; width: number }) => void;
 			onRenderSuccess?: () => void;
-			pageNumber: number;
-			totalPages: number;
+			pageScale?: number | "page-width";
 			renderSectionOverlay?: (marker: {
 				sectionId: string;
 				pageNumber: number;
@@ -69,18 +52,18 @@ vi.mock("./pdf-canvas", async () => {
 				height: number;
 			}) => React.ReactNode;
 		}) => {
+			previewMock.viewerProps({ pageScale });
 			React.useEffect(() => {
-				onLoadSuccess(pageNumber, { height: 200, width: 100 });
 				onRenderSuccess?.();
-			}, [onLoadSuccess, onRenderSuccess, pageNumber]);
+			}, [onRenderSuccess]);
 
 			return React.createElement(
 				"div",
-				{ role: "img", "aria-label": `Resume page ${pageNumber} of ${totalPages}` },
+				{ role: "img", "aria-label": "Resume page 1 of 1" },
 				"Rendered page",
 				renderSectionOverlay?.({
 					sectionId: "summary",
-					pageNumber,
+					pageNumber: 1,
 					left: 10,
 					top: 20,
 					width: 80,
@@ -96,6 +79,7 @@ describe("ResumePreviewClient", () => {
 		previewMock.builderResumeData = undefined;
 		previewMock.toBlob.mockReset();
 		previewMock.toBlob.mockImplementation(async () => new Blob(["%PDF"], { type: "application/pdf" }));
+		previewMock.viewerProps.mockReset();
 	});
 
 	it("renders a loading placeholder for each builder layout page while the PDF is generated", () => {
@@ -119,9 +103,15 @@ describe("ResumePreviewClient", () => {
 			expect(previewMock.toBlob).toHaveBeenCalledTimes(1);
 		});
 
-		expect(previewMock.toBlob).toHaveBeenCalledWith(sampleResumeData, undefined, {
-			sectionMarkerPrefix: RESUME_PREVIEW_SECTION_MARKER_PREFIX,
-		});
+		expect(previewMock.toBlob).toHaveBeenCalledWith(
+			sampleResumeData,
+			undefined,
+			expect.objectContaining({
+				purpose: "preview",
+				sectionMarkerPrefix: RESUME_PREVIEW_SECTION_MARKER_PREFIX,
+				signal: expect.any(AbortSignal),
+			}),
+		);
 	});
 
 	it("renders section overlay content when renderSectionOverlay is provided", async () => {
@@ -141,5 +131,18 @@ describe("ResumePreviewClient", () => {
 		});
 
 		expect(screen.getByTestId("section-overlay")).toBeInTheDocument();
+	});
+
+	it("forwards native page-width scaling to the PDF.js viewer", async () => {
+		render(
+			<ResumePreviewClient
+				data={sampleResumeData}
+				pageLayout="vertical"
+				pageScale="page-width"
+				showPageNumbers={false}
+			/>,
+		);
+
+		await waitFor(() => expect(previewMock.viewerProps).toHaveBeenCalledWith({ pageScale: "page-width" }));
 	});
 });
