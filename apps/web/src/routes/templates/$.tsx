@@ -3,7 +3,7 @@ import { lazy, Suspense } from "react";
 import { useIsClient } from "usehooks-ts";
 import { sampleResumeData } from "@headcv/schema/resume/sample";
 import { templateSchema } from "@headcv/schema/templates";
-import { useLocalizedResumeDocument } from "@/features/resume/export/pdf-document";
+import { useLocalizedResumeDocument } from "@/features/resume/export/localized-resume-document";
 import { createNoindexFollowMeta } from "@/libs/seo";
 
 const PDFViewer = lazy(async () => {

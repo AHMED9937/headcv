@@ -17,7 +17,6 @@ import { useEffect, useMemo } from "react";
 import { DirectionProvider } from "@headcv/ui/components/direction";
 import { Toaster } from "@headcv/ui/components/sonner";
 import { TooltipProvider } from "@headcv/ui/components/tooltip";
-import { DonationToast } from "@/components/ui/donation-toast";
 import { DialogManager } from "@/dialogs/manager";
 import { CommandPalette } from "@/features/command-palette";
 import { ThemeProvider } from "@/features/theme/provider";
@@ -131,7 +130,6 @@ function RootComponent() {
 													<PromptDialogProvider>
 														<Outlet />
 
-														<DonationToast />
 														<DialogManager />
 														<CommandPalette />
 														<Toaster richColors position="bottom-right" />

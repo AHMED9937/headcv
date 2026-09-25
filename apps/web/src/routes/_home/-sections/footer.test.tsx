@@ -28,16 +28,16 @@ describe("Footer", () => {
 		expect(container.textContent).toContain("HeadCV is a guided CV builder");
 	});
 
-	it("renders Support and Legal link group headings", () => {
+	it("renders Product and Explore link group headings", () => {
 		renderFooter();
-		expect(screen.getByText("Support")).toBeInTheDocument();
-		expect(screen.getByText("Legal")).toBeInTheDocument();
+		expect(screen.getByText("Product")).toBeInTheDocument();
+		expect(screen.getByText("Explore")).toBeInTheDocument();
 	});
 
-	it("renders support and legal links", () => {
+	it("renders product and explore links", () => {
 		const { container } = renderFooter();
 		const text = container.textContent ?? "";
-		for (const label of ["Help Center", "Contact Support", "Privacy Policy", "Terms of Service"]) {
+		for (const label of ["Resume builder", "Templates", "Pricing", "How it works", "FAQ", "Sign in"]) {
 			expect(text, label).toContain(label);
 		}
 	});

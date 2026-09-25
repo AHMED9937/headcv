@@ -11,9 +11,11 @@ vi.mock("@tanstack/react-router", async () => {
 	const actual = await vi.importActual<typeof import("@tanstack/react-router")>("@tanstack/react-router");
 	return {
 		...actual,
-		useNavigate: () => (options: { to: string }) => {
-			mockNavigate(options.to);
-		},
+		Link: ({ children, to }: React.PropsWithChildren<{ to?: string }>) => (
+			<button type="button" onClick={() => mockNavigate(to ?? "")}>
+				{children}
+			</button>
+		),
 	};
 });
 
@@ -46,10 +48,9 @@ describe("Landing page CTA", () => {
 		expect(screen.getByRole("button", { name: /Create my CV/i })).toBeInTheDocument();
 	});
 
-	it("shows the honest commercial disclosure", () => {
+	it("renders the browse templates CTA", () => {
 		renderHero();
-		expect(screen.getByText(/Free to build and preview/i)).toBeInTheDocument();
-		expect(screen.getByText(/Paid tiers may be introduced later/i)).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: /Browse templates/i })).toBeInTheDocument();
 	});
 
 	it("navigates to template selection when the primary CTA is clicked", () => {
