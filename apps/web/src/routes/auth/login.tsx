@@ -1,8 +1,14 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import z from "zod";
 import { LoginPage } from "@/features/auth/pages/login";
+
+const planSchema = z.enum(["monthly", "yearly", "trial"]).optional().catch(undefined);
 
 export const Route = createFileRoute("/auth/login")({
 	component: RouteComponent,
+	validateSearch: (search: Record<string, unknown>) => ({
+		plan: planSchema.parse(search.plan),
+	}),
 	beforeLoad: async ({ context }) => {
 		if (context.session) throw redirect({ to: "/dashboard", replace: true });
 		return { session: null };
@@ -11,6 +17,9 @@ export const Route = createFileRoute("/auth/login")({
 
 function RouteComponent() {
 	const { flags } = Route.useRouteContext();
+	const { plan } = Route.useSearch();
 
-	return <LoginPage disableEmailAuth={flags.disableEmailAuth} disableSignups={flags.disableSignups} />;
+	return (
+		<LoginPage disableEmailAuth={flags.disableEmailAuth} disableSignups={flags.disableSignups} pendingPlan={plan} />
+	);
 }

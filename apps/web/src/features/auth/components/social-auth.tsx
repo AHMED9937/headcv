@@ -11,8 +11,14 @@ import { cn } from "@headcv/utils/style";
 import { authClient } from "@/libs/auth/client";
 import { orpc } from "@/libs/orpc/client";
 
+type PendingPlan = "monthly" | "yearly" | "trial";
+
+/** Session-storage key used to persist plan intent across OAuth redirects. */
+const PENDING_PLAN_KEY = "headcv_pending_plan";
+
 type SocialAuthProps = {
 	requestSignUp?: boolean;
+	pendingPlan?: PendingPlan;
 };
 
 type SocialSignInOptions = {
@@ -21,13 +27,18 @@ type SocialSignInOptions = {
 	requestSignUp?: true;
 };
 
-function getSocialSignInOptions(provider: string, requestSignUp: boolean): SocialSignInOptions {
-	const options: SocialSignInOptions = { provider, callbackURL: "/dashboard" };
+function getSocialSignInOptions(
+	provider: string,
+	requestSignUp: boolean,
+	pendingPlan?: PendingPlan,
+): SocialSignInOptions {
+	const callbackURL = pendingPlan ? `/dashboard?checkoutPlan=${pendingPlan}` : "/dashboard";
+	const options: SocialSignInOptions = { provider, callbackURL };
 	if (requestSignUp) options.requestSignUp = true;
 	return options;
 }
 
-export function SocialAuth({ requestSignUp = false }: SocialAuthProps) {
+export function SocialAuth({ requestSignUp = false, pendingPlan }: SocialAuthProps) {
 	const { data: providers = {}, isLoading } = useQuery(orpc.auth.providers.list.queryOptions());
 
 	return (
@@ -42,7 +53,11 @@ export function SocialAuth({ requestSignUp = false }: SocialAuthProps) {
 				<hr className="flex-1" />
 			</div>
 
-			{isLoading ? <SocialAuthSkeleton /> : <SocialAuthButtons providers={providers} requestSignUp={requestSignUp} />}
+			{isLoading ? (
+				<SocialAuthSkeleton />
+			) : (
+				<SocialAuthButtons providers={providers} requestSignUp={requestSignUp} pendingPlan={pendingPlan} />
+			)}
 		</>
 	);
 }
@@ -61,15 +76,21 @@ function SocialAuthSkeleton() {
 type SocialAuthButtonsProps = {
 	providers: RouterOutput["auth"]["providers"]["list"];
 	requestSignUp: boolean;
+	pendingPlan?: PendingPlan;
 };
 
-function SocialAuthButtons({ providers, requestSignUp }: SocialAuthButtonsProps) {
+function SocialAuthButtons({ providers, requestSignUp, pendingPlan }: SocialAuthButtonsProps) {
 	const router = useRouter();
 
 	const handleSocialLogin = async (provider: string) => {
 		const toastId = toast.loading(t`Signing in...`);
 
-		const { error } = await authClient.signIn.social(getSocialSignInOptions(provider, requestSignUp));
+		// Persist plan intent in sessionStorage as a backup for OAuth redirect
+		if (pendingPlan) {
+			sessionStorage.setItem(PENDING_PLAN_KEY, pendingPlan);
+		}
+
+		const { error } = await authClient.signIn.social(getSocialSignInOptions(provider, requestSignUp, pendingPlan));
 
 		if (error) {
 			toast.error(
@@ -90,9 +111,16 @@ function SocialAuthButtons({ providers, requestSignUp }: SocialAuthButtonsProps)
 	const handleOAuthLogin = async () => {
 		const toastId = toast.loading(t`Signing in...`);
 
+		// Persist plan intent in sessionStorage as a backup for OAuth redirect
+		if (pendingPlan) {
+			sessionStorage.setItem(PENDING_PLAN_KEY, pendingPlan);
+		}
+
+		const callbackURL = pendingPlan ? `/dashboard?checkoutPlan=${pendingPlan}` : "/dashboard";
+
 		const { error } = await authClient.signIn.oauth2({
 			providerId: "custom",
-			callbackURL: "/dashboard",
+			callbackURL,
 		});
 
 		if (error) {

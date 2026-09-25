@@ -139,14 +139,18 @@ const getAuthConfig = () => {
 			autoSignIn: true,
 			minPasswordLength: 8,
 			maxPasswordLength: 64,
-			requireEmailVerification: false,
+			requireEmailVerification: true,
 			disableSignUp: env.FLAG_DISABLE_SIGNUPS || env.FLAG_DISABLE_EMAIL_AUTH,
 			sendResetPassword: async ({ user, url }) => {
-				await sendEmail({
-					to: user.email,
-					subject: "Reset your password",
-					react: createElement(ResetPasswordEmail, { url }),
-				});
+				try {
+					await sendEmail({
+						to: user.email,
+						subject: "Reset your password",
+						react: createElement(ResetPasswordEmail, { url }),
+					});
+				} catch (error) {
+					console.error("Failed to send reset password email", error);
+				}
 			},
 			password: {
 				hash: (password) => hash(password, 10),
@@ -156,13 +160,18 @@ const getAuthConfig = () => {
 
 		emailVerification: {
 			sendOnSignUp: true,
+			sendOnSignIn: true,
 			autoSignInAfterVerification: true,
 			sendVerificationEmail: async ({ user, url }) => {
-				await sendEmail({
-					to: user.email,
-					subject: "Verify your email",
-					react: createElement(VerifyEmail, { url }),
-				});
+				try {
+					await sendEmail({
+						to: user.email,
+						subject: "Verify your email",
+						react: createElement(VerifyEmail, { url }),
+					});
+				} catch (error) {
+					console.error("Failed to send verification email", error);
+				}
 			},
 		},
 
@@ -170,11 +179,15 @@ const getAuthConfig = () => {
 			changeEmail: {
 				enabled: true,
 				sendChangeEmailConfirmation: async ({ user, newEmail, url }) => {
-					await sendEmail({
-						to: newEmail,
-						subject: "Verify your new email",
-						react: createElement(VerifyEmailChange, { url, previousEmail: user.email, newEmail }),
-					});
+					try {
+						await sendEmail({
+							to: newEmail,
+							subject: "Verify your new email",
+							react: createElement(VerifyEmailChange, { url, previousEmail: user.email, newEmail }),
+						});
+					} catch (error) {
+						console.error("Failed to send change email confirmation", error);
+					}
 				},
 			},
 			additionalFields: {

@@ -1,4 +1,7 @@
+import * as React from "react";
 import { ResetPasswordEmail } from "./auth";
+
+void React;
 
 interface ResetPasswordTemplateProps {
 	url: string;

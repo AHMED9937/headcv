@@ -14,6 +14,11 @@ import { authClient } from "@/libs/auth/client";
 import { useAppForm } from "@/libs/tanstack-form";
 import { SocialAuth } from "../components/social-auth";
 
+type PendingPlan = "monthly" | "yearly" | "trial";
+
+/** Session-storage key used to persist plan intent across email verification redirects. */
+const PENDING_PLAN_KEY = "headcv_pending_plan";
+
 const formSchema = z.object({
 	name: z.string().min(3).max(64),
 	username: z
@@ -31,9 +36,10 @@ const formSchema = z.object({
 
 type Props = {
 	disableEmailAuth: boolean;
+	pendingPlan?: PendingPlan;
 };
 
-export function RegisterPage({ disableEmailAuth }: Props) {
+export function RegisterPage({ disableEmailAuth, pendingPlan }: Props) {
 	const [submitted, setSubmitted] = useState(false);
 	const [showPassword, toggleShowPassword] = useToggle(false);
 
@@ -43,13 +49,20 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 		onSubmit: async ({ value }) => {
 			const toastId = toast.loading(t`Signing up...`);
 
+			// Persist plan intent so it survives email-verification redirect
+			if (pendingPlan) {
+				sessionStorage.setItem(PENDING_PLAN_KEY, pendingPlan);
+			}
+
+			const callbackURL = pendingPlan ? `/dashboard?checkoutPlan=${pendingPlan}` : "/dashboard";
+
 			const { error } = await authClient.signUp.email({
 				name: value.name,
 				email: value.email,
 				password: value.password,
 				username: value.username,
 				displayUsername: value.username,
-				callbackURL: "/dashboard",
+				callbackURL,
 			});
 
 			if (error) {
@@ -69,7 +82,7 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 		},
 	});
 
-	if (submitted) return <PostSignupScreen />;
+	if (submitted) return <PostSignupScreen pendingPlan={pendingPlan} />;
 
 	return (
 		<>
@@ -86,7 +99,7 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 							nativeButton={false}
 							className="h-auto gap-1.5 px-1! py-0"
 							render={
-								<Link to="/auth/login">
+								<Link to="/auth/login" search={pendingPlan ? { plan: pendingPlan } : {}}>
 									<Trans comment="Call-to-action link from registration page to login page">Sign in now</Trans>{" "}
 									<ArrowRightIcon />
 								</Link>
@@ -242,12 +255,14 @@ export function RegisterPage({ disableEmailAuth }: Props) {
 				</form>
 			)}
 
-			<SocialAuth requestSignUp />
+			<SocialAuth requestSignUp pendingPlan={pendingPlan} />
 		</>
 	);
 }
 
-function PostSignupScreen() {
+function PostSignupScreen({ pendingPlan }: { pendingPlan?: PendingPlan }) {
+	const continueUrl = pendingPlan ? `/dashboard?checkoutPlan=${pendingPlan}` : "/dashboard";
+
 	return (
 		<>
 			<div className="space-y-1 text-center">
@@ -271,7 +286,7 @@ function PostSignupScreen() {
 			<Button
 				nativeButton={false}
 				render={
-					<Link to="/dashboard">
+					<Link to={continueUrl}>
 						<Trans comment="Button label to continue to dashboard after successful registration">Continue</Trans>{" "}
 						<ArrowRightIcon />
 					</Link>

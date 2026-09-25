@@ -1,3 +1,4 @@
+import * as React from "react";
 import {
 	Body,
 	Button,
@@ -16,11 +17,25 @@ import {
 	Text,
 } from "react-email";
 
+void React;
+
 const appName = "HeadCV";
-const logoUrl = "https://headcv.com/icon/light.svg";
+const logoUrl = "https://headcv.com/icon/dark.svg";
+
+const colors = {
+	bg: "#f5efe6",
+	card: "#ffffff",
+	border: "#d9d0c3",
+	primary: "#1e3a5f",
+	primaryDark: "#152642",
+	accent: "#c9a227",
+	text: "#1e293b",
+	muted: "#5c6a7a",
+};
 
 interface AuthEmailLayoutProps {
 	preview: string;
+	eyebrow: string;
 	heading: string;
 	intro: string;
 	details?: string;
@@ -29,7 +44,16 @@ interface AuthEmailLayoutProps {
 	outro: string;
 }
 
-function AuthEmailLayout({ preview, heading, intro, details, actionLabel, actionUrl, outro }: AuthEmailLayoutProps) {
+function AuthEmailLayout({
+	preview,
+	eyebrow,
+	heading,
+	intro,
+	details,
+	actionLabel,
+	actionUrl,
+	outro,
+}: AuthEmailLayoutProps) {
 	return (
 		<Html lang="en">
 			<Tailwind
@@ -37,80 +61,108 @@ function AuthEmailLayout({ preview, heading, intro, details, actionLabel, action
 					presets: [pixelBasedPreset],
 					theme: {
 						fontFamily: {
-							body: ["IBM Plex Sans", "sans-serif"],
-							heading: ["IBM Plex Sans Condensed", "sans-serif"],
+							body: ["Inter", "-apple-system", "Segoe UI", "Arial", "sans-serif"],
+							heading: ["Playfair Display", "Georgia", "Times New Roman", "serif"],
 						},
 					},
 				}}
 			>
 				<Head>
 					<Font
-						fontFamily="IBM Plex Sans Condensed"
-						fallbackFontFamily="sans-serif"
-						fontWeight={500}
+						fontFamily="Inter"
+						fallbackFontFamily={["Arial", "sans-serif"]}
+						fontWeight={400}
 						fontStyle="normal"
 						webFont={{
-							url: "https://fonts.gstatic.com/s/ibmplexsans/v23/zYXGKVElMYYaJe8bpLHnCwDKr932-G7dytD-DmvrswZSAXcomDVmadSD2FlDB6g4tIOm6_De.woff2",
+							url: "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
 							format: "woff2",
 						}}
 					/>
 					<Font
-						fontFamily="IBM Plex Sans"
-						fallbackFontFamily="sans-serif"
-						fontWeight={400}
+						fontFamily="Inter"
+						fallbackFontFamily={["Arial", "sans-serif"]}
+						fontWeight={600}
 						fontStyle="normal"
 						webFont={{
-							url: "https://fonts.gstatic.com/s/ibmplexsans/v23/zYXGKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1swZSAXcomDVmadSD6llDB6g4tIOm6_De.woff2",
+							url: "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+							format: "woff2",
+						}}
+					/>
+					<Font
+						fontFamily="Playfair Display"
+						fallbackFontFamily={["Georgia", "serif"]}
+						fontWeight={600}
+						fontStyle="normal"
+						webFont={{
+							url: "https://fonts.gstatic.com/s/playfairdisplay/v40/nuFiD-vYSZviVYUb_rj3ij__anPXDTzYgA.woff2",
 							format: "woff2",
 						}}
 					/>
 				</Head>
 
-				<Body className="m-0 bg-zinc-950 p-0 font-body text-sm text-zinc-50">
+				<Body className="m-0 p-0 font-body text-[#1e293b] text-[15px] leading-6" style={{ backgroundColor: colors.bg }}>
 					<Preview>{preview}</Preview>
-					<Container className="mx-auto w-full max-w-xl bg-zinc-900 p-6 text-zinc-50">
-						<Section>
-							<Img src={logoUrl} alt={appName} width="48" height="48" className="block" />
+					<Container className="mx-auto w-full max-w-[560px] px-4 py-10">
+						<Section className="text-center">
+							<Img src={logoUrl} alt={appName} width="44" height="44" className="mx-auto rounded-xl" />
+							<Text className="mt-3 mb-0 font-heading font-semibold text-[#1e3a5f] text-[22px] leading-7 tracking-tight">
+								{appName}
+							</Text>
 						</Section>
 
-						<Section className="mt-6">
-							<Heading className="whitespace-break-spaces font-heading font-medium text-2xl leading-0 tracking-tighter md:text-5xl">
+						<Section
+							className="mt-6 rounded-xl border border-solid px-8 py-10"
+							style={{ backgroundColor: colors.card, borderColor: colors.border }}
+						>
+							<Text className="m-0 font-body font-semibold text-[#5c6a7a] text-[11px] uppercase leading-4 tracking-[0.16em]">
+								{eyebrow}
+							</Text>
+
+							<Heading className="mt-3 mb-0 font-heading font-semibold text-[#152642] text-[30px] leading-9 tracking-tight">
 								{heading}
 							</Heading>
 
-							<Section className="mt-6 md:mt-12">
-								<Text>{intro}</Text>
+							<Hr className="mx-0 my-5 w-12 border-solid" style={{ borderColor: colors.accent, borderWidth: 2 }} />
 
-								{details ? <Text className="opacity-60">{details}</Text> : null}
-							</Section>
+							<Text className="m-0 text-[#1e293b] text-[15px] leading-6">{intro}</Text>
+
+							{details ? <Text className="mt-3 mb-0 text-[#5c6a7a] text-[14px] leading-6">{details}</Text> : null}
 
 							<Button
 								target="_blank"
 								href={actionUrl}
-								className="mt-6 box-border inline-block bg-zinc-200 px-6 py-3 text-center text-zinc-900 no-underline"
+								className="mt-8 box-border inline-block rounded-lg px-8 py-3.5 text-center font-body font-semibold text-[15px] text-white no-underline"
+								style={{ backgroundColor: colors.primary }}
 							>
 								{actionLabel}
 							</Button>
 
-							<Section className="mt-8">
-								<Text className="leading-0">
+							<Section
+								className="mt-8 rounded-lg border border-solid px-4 py-3"
+								style={{ backgroundColor: colors.bg, borderColor: colors.border }}
+							>
+								<Text className="m-0 text-[#5c6a7a] text-[12px] leading-5">
 									If the button does not work, copy and paste this link into your browser:
 								</Text>
-								<Link className="text-zinc-200/60 leading-0 underline underline-offset-2" href={actionUrl}>
+								<Link
+									className="break-all text-[12px] leading-5 underline underline-offset-2"
+									style={{ color: colors.primary }}
+									href={actionUrl}
+								>
 									{actionUrl}
 								</Link>
 							</Section>
 
-							<Section className="mt-4">
-								<Text className="opacity-60">{outro}</Text>
-							</Section>
+							<Text className="mt-6 mb-0 text-[#5c6a7a] text-[13px] leading-5">{outro}</Text>
+						</Section>
 
-							<Hr className="my-10 border-zinc-700" />
-
-							<Text className="mt-8 text-xs leading-1 opacity-40">
-								This is an automated account-security email from HeadCV. Please do not reply.
+						<Section className="mt-8 text-center">
+							<Text className="m-0 text-[#5c6a7a] text-[12px] leading-5">
+								This is an automated account-security email from {appName}. Please do not reply.
 							</Text>
-							<Text className="mt-8 font-heading font-medium text-base tracking-tight opacity-80">HeadCV</Text>
+							<Text className="mt-2 mb-0 text-[#5c6a7a] text-[12px] leading-5">
+								<span style={{ color: colors.accent }}>●</span> {appName} · Craft a resume that gets you hired
+							</Text>
 						</Section>
 					</Container>
 				</Body>
@@ -127,7 +179,8 @@ export function ResetPasswordEmail({ url }: ResetPasswordEmailProps) {
 	return (
 		<AuthEmailLayout
 			preview={`Reset your ${appName} password`}
-			heading="Password Reset"
+			eyebrow="Account Security"
+			heading="Reset your password"
 			intro={`We received a request to reset your ${appName} password.`}
 			details="If this was not you, you can ignore this message and your password will remain unchanged."
 			actionLabel="Create New Password"
@@ -145,7 +198,8 @@ export function VerifyEmail({ url }: VerifyEmailProps) {
 	return (
 		<AuthEmailLayout
 			preview={`Verify your email for ${appName}`}
-			heading="Verify Email"
+			eyebrow="Account Verification"
+			heading="Verify your email"
 			intro={`Thanks for signing up for ${appName}. Please verify your email address to continue.`}
 			details="Verification helps us protect your account and keep your sign-in secure."
 			actionLabel="Verify Email"
@@ -165,7 +219,8 @@ export function VerifyEmailChange({ url, previousEmail, newEmail }: VerifyEmailC
 	return (
 		<AuthEmailLayout
 			preview={`Confirm your new ${appName} email address`}
-			heading="Confirm Email Change"
+			eyebrow="Account Security"
+			heading="Confirm email change"
 			intro={`You requested to change your ${appName} email from ${previousEmail} to ${newEmail}.`}
 			details="Confirm this change to complete the update and keep your account access uninterrupted."
 			actionLabel="Verify New Email"

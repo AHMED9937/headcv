@@ -1,4 +1,7 @@
+import * as React from "react";
 import { VerifyEmailChange } from "./auth";
+
+void React;
 
 interface VerifyEmailChangeTemplateProps {
 	url: string;

@@ -11,9 +11,11 @@ import { Button } from "@headcv/ui/components/button";
 import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
 import { Input } from "@headcv/ui/components/input";
 import { authClient } from "@/libs/auth/client";
-import { orpc } from "@/libs/orpc/client";
+import { client, orpc } from "@/libs/orpc/client";
 import { useAppForm } from "@/libs/tanstack-form";
 import { SocialAuth } from "../components/social-auth";
+
+type PendingPlan = "monthly" | "yearly" | "trial";
 
 const formSchema = z.object({
 	identifier: z.string().trim().toLowerCase(),
@@ -23,9 +25,10 @@ const formSchema = z.object({
 type Props = {
 	disableEmailAuth: boolean;
 	disableSignups: boolean;
+	pendingPlan?: PendingPlan;
 };
 
-export function LoginPage({ disableEmailAuth, disableSignups }: Props) {
+export function LoginPage({ disableEmailAuth, disableSignups, pendingPlan }: Props) {
 	const router = useRouter();
 	const navigate = useNavigate();
 
@@ -48,6 +51,27 @@ export function LoginPage({ disableEmailAuth, disableSignups }: Props) {
 					: await authClient.signIn.username({ username: value.identifier, password: value.password });
 
 				if (result.error) {
+					if (result.error.code === "EMAIL_NOT_VERIFIED") {
+						toast.error(
+							result.error.message ||
+								t({
+									comment: "Error toast shown when a sign-in fails due to unverified email",
+									message: "Email not verified",
+								}),
+							{
+								id: toastId,
+								action: isEmail
+									? {
+											label: t`Resend verification email`,
+											onClick: () => {
+												void authClient.sendVerificationEmail({ email: value.identifier });
+											},
+										}
+									: undefined,
+							},
+						);
+						return;
+					}
 					toast.error(
 						result.error.message ||
 							t({
@@ -73,6 +97,18 @@ export function LoginPage({ disableEmailAuth, disableSignups }: Props) {
 
 				toast.dismiss(toastId);
 				await router.invalidate();
+
+				// If the user arrived with a plan intent, start checkout immediately
+				if (pendingPlan) {
+					try {
+						const checkout = await client.billing.createCheckoutSession({ plan: pendingPlan });
+						window.location.href = checkout.checkoutUrl;
+						return;
+					} catch {
+						toast.error(t`Could not start checkout. You can try again from your billing settings.`);
+					}
+				}
+
 				void navigate({ to: "/dashboard", replace: true });
 			} catch {
 				toast.error(t`Failed to sign in. Please try again.`, { id: toastId });
@@ -115,7 +151,7 @@ export function LoginPage({ disableEmailAuth, disableSignups }: Props) {
 								nativeButton={false}
 								className="h-auto gap-1.5 px-1! py-0"
 								render={
-									<Link to="/auth/register">
+									<Link to="/auth/register" search={pendingPlan ? { plan: pendingPlan } : {}}>
 										<Trans comment="Call-to-action link from login page to account registration page">
 											Create one now
 										</Trans>{" "}
@@ -233,7 +269,7 @@ export function LoginPage({ disableEmailAuth, disableSignups }: Props) {
 				</form>
 			)}
 
-			<SocialAuth />
+			<SocialAuth pendingPlan={pendingPlan} />
 		</>
 	);
 }
