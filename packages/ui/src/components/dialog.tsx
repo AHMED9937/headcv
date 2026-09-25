@@ -1,8 +1,15 @@
 import type * as React from "react";
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { XIcon } from "@phosphor-icons/react";
+import { createContext, useContext } from "react";
 import { Button } from "@headcv/ui/components/button";
 import { cn } from "@headcv/utils/style";
+
+const InlineDialogContext = createContext(false);
+
+function InlineDialogProvider({ children }: { children: React.ReactNode }) {
+	return <InlineDialogContext.Provider value>{children}</InlineDialogContext.Provider>;
+}
 
 function Dialog({ ...props }: DialogPrimitive.Root.Props) {
 	return <DialogPrimitive.Root data-slot="dialog" {...props} />;
@@ -37,13 +44,30 @@ function DialogContent({
 	className,
 	children,
 	showCloseButton = true,
+	overlayClassName,
+	closeButtonClassName,
 	...props
 }: DialogPrimitive.Popup.Props & {
 	showCloseButton?: boolean;
+	overlayClassName?: string;
+	closeButtonClassName?: string;
 }) {
+	const inline = useContext(InlineDialogContext);
+
+	if (inline) {
+		return (
+			<div
+				data-slot="dialog-content"
+				className={cn("grid min-h-0 gap-4 rounded-2xl border bg-background p-4 text-sm shadow-sm", className)}
+			>
+				{children}
+			</div>
+		);
+	}
+
 	return (
 		<DialogPortal>
-			<DialogOverlay />
+			<DialogOverlay className={overlayClassName} />
 			<DialogPrimitive.Popup
 				data-slot="dialog-content"
 				className={cn(
@@ -56,7 +80,9 @@ function DialogContent({
 				{showCloseButton && (
 					<DialogPrimitive.Close
 						data-slot="dialog-close"
-						render={<Button variant="ghost" className="absolute inset-e-2 top-2" size="icon-sm" />}
+						render={
+							<Button variant="ghost" className={cn("absolute inset-e-2 top-2", closeButtonClassName)} size="icon-sm" />
+						}
 					>
 						<XIcon />
 						<span className="sr-only">Close</span>
@@ -79,11 +105,15 @@ function DialogFooter({
 }: React.ComponentProps<"div"> & {
 	showCloseButton?: boolean;
 }) {
+	const inline = useContext(InlineDialogContext);
+
 	return (
 		<div
 			data-slot="dialog-footer"
 			className={cn(
-				"-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 sm:flex-row sm:justify-end",
+				inline
+					? "mt-2 flex flex-col-reverse gap-2 border-t pt-4 sm:flex-row sm:justify-end"
+					: "-mx-4 -mb-4 flex flex-col-reverse gap-2 rounded-b-xl border-t bg-muted/50 p-4 sm:flex-row sm:justify-end",
 				className,
 			)}
 			{...props}
@@ -95,6 +125,15 @@ function DialogFooter({
 }
 
 function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
+	const inline = useContext(InlineDialogContext);
+	if (inline)
+		return (
+			<h2
+				data-slot="dialog-title"
+				className={cn("font-heading font-semibold text-lg", className)}
+				{...(props as React.ComponentProps<"h2">)}
+			/>
+		);
 	return (
 		<DialogPrimitive.Title
 			data-slot="dialog-title"
@@ -105,6 +144,15 @@ function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
 }
 
 function DialogDescription({ className, ...props }: DialogPrimitive.Description.Props) {
+	const inline = useContext(InlineDialogContext);
+	if (inline)
+		return (
+			<p
+				data-slot="dialog-description"
+				className={cn("text-muted-foreground text-sm", className)}
+				{...(props as React.ComponentProps<"p">)}
+			/>
+		);
 	return (
 		<DialogPrimitive.Description
 			data-slot="dialog-description"
@@ -128,4 +176,5 @@ export {
 	DialogPortal,
 	DialogTitle,
 	DialogTrigger,
+	InlineDialogProvider,
 };

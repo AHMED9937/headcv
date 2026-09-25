@@ -54,7 +54,7 @@ const getBuiltInSection = (sectionId: string, data: ResumeData): ItemSectionLike
 	return data.sections[sectionId as SectionType] as ItemSectionLike;
 };
 
-const isVisibleLayoutSection = (sectionId: string, data: ResumeData): boolean => {
+export const isVisibleLayoutSection = (sectionId: string, data: ResumeData): boolean => {
 	if (sectionId === "summary") return !data.summary.hidden && data.summary.content.trim().length > 0;
 
 	const builtInSection = getBuiltInSection(sectionId, data);
@@ -62,6 +62,22 @@ const isVisibleLayoutSection = (sectionId: string, data: ResumeData): boolean =>
 
 	const customSection = data.customSections.find((section) => section.id === sectionId);
 	if (customSection) return hasVisibleItems(customSection as ItemSectionLike, customSection.type);
+
+	return false;
+};
+
+const hasItems = (section: ItemSectionLike): boolean => {
+	return !section.hidden && section.items.length > 0;
+};
+
+export const isVisibleEditorSection = (sectionId: string, data: ResumeData): boolean => {
+	if (sectionId === "summary") return !data.summary.hidden && data.summary.content.trim().length > 0;
+
+	const builtInSection = getBuiltInSection(sectionId, data);
+	if (builtInSection) return hasItems(builtInSection);
+
+	const customSection = data.customSections.find((section) => section.id === sectionId);
+	if (customSection) return hasItems(customSection as ItemSectionLike);
 
 	return false;
 };

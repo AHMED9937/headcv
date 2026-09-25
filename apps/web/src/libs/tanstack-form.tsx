@@ -3,6 +3,7 @@ import { createFormHook, createFormHookContexts } from "@tanstack/react-form";
 import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
 import { Input } from "@headcv/ui/components/input";
 import { InputGroupInput } from "@headcv/ui/components/input-group";
+import { useInlineResumeFormAutoSync } from "./use-inline-resume-form-auto-sync";
 
 type FieldFrameProps = {
 	label?: React.ReactNode;
@@ -103,9 +104,17 @@ function NumberField({ label, description, formItemClassName, ...props }: Number
 	);
 }
 
-export const { useAppForm, withForm } = createFormHook({
+const { useAppForm, withForm } = createFormHook({
 	fieldComponents: { InputGroupTextField, NumberField, TextField },
 	fieldContext,
 	formComponents: {},
 	formContext,
 });
+
+const useInlineAppForm: typeof useAppForm = (options) => {
+	const form = useAppForm(options);
+	useInlineResumeFormAutoSync(form);
+	return form;
+};
+
+export { useAppForm, useInlineAppForm, withForm };

@@ -3,7 +3,6 @@ import type z from "zod";
 import { plural } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { AnimatePresence, Reorder } from "motion/react";
-import { cn } from "@headcv/utils/style";
 import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
 import { SectionBase } from "../shared/section-base";
 import { SectionAddItemButton, SectionItem } from "../shared/section-item";
@@ -20,7 +19,7 @@ export function ExperienceSectionBuilder() {
 	};
 
 	return (
-		<SectionBase type="experience" className={cn("rounded-md border", section.items.length === 0 && "border-dashed")}>
+		<SectionBase type="experience">
 			<Reorder.Group axis="y" values={section.items} onReorder={handleReorder}>
 				<AnimatePresence initial={false} mode="popLayout">
 					{section.items.map((item) => {
@@ -30,7 +29,7 @@ export function ExperienceSectionBuilder() {
 								type="experience"
 								item={item}
 								title={item.company}
-								subtitle={item.position || plural(item.roles.length, { one: "# role", other: "# roles" })}
+								subtitle={item.position || plural((item.roles ?? []).length, { one: "# role", other: "# roles" })}
 							/>
 						);
 					})}

@@ -14,6 +14,7 @@ type SectionStoreState = {
 
 type SectionStoreActions = {
 	setCollapsed: (id: SidebarSection, collapsed: boolean) => void;
+	expandLeftSection: (id: SidebarSection) => void;
 	toggleCollapsed: (id: SidebarSection) => void;
 	toggleAll: () => void;
 };
@@ -27,6 +28,13 @@ export const useSectionStore = create<SectionStore>()(
 			setCollapsed: (id, collapsed) => {
 				set((state) => {
 					state.sections[id] = { collapsed };
+				});
+			},
+			expandLeftSection: (id) => {
+				set((state) => {
+					leftSidebarSections.forEach((sectionId) => {
+						state.sections[sectionId] = { collapsed: sectionId !== id };
+					});
 				});
 			},
 			toggleCollapsed: (id) => {

@@ -4,12 +4,7 @@ import { Trans } from "@lingui/react/macro";
 import { useStore } from "@tanstack/react-form";
 import { typographySchema } from "@headcv/schema/resume/data";
 import { FormControl, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
-import {
-	InputGroup,
-	InputGroupAddon,
-	InputGroupInput,
-	InputGroupText,
-} from "@headcv/ui/components/input-group";
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from "@headcv/ui/components/input-group";
 import { Separator } from "@headcv/ui/components/separator";
 import { FontFamilyCombobox, FontWeightCombobox, getNextWeights } from "@/components/typography/combobox";
 import { useResume, useUpdateResumeData } from "@/features/resume/builder/draft";

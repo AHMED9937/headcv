@@ -26,6 +26,15 @@ describe("useSectionStore", () => {
 		expect(useSectionStore.getState().sections.skills).toEqual({ collapsed: false });
 	});
 
+	it("expandLeftSection opens one left section and collapses the others", () => {
+		const { expandLeftSection } = useSectionStore.getState();
+		expandLeftSection("experience");
+		expandLeftSection("skills");
+
+		expect(useSectionStore.getState().sections.experience).toEqual({ collapsed: true });
+		expect(useSectionStore.getState().sections.skills).toEqual({ collapsed: false });
+	});
+
 	it("toggleCollapsed flips from undefined → true → false", () => {
 		const { toggleCollapsed } = useSectionStore.getState();
 

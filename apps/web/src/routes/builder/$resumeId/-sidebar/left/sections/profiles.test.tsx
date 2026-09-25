@@ -81,14 +81,13 @@ describe("ProfilesSectionBuilder", () => {
 		expect(screen.getByRole("button", { name: "Add a new profile" })).toBeInTheDocument();
 	});
 
-	it("uses non-dashed border when items are present", () => {
+	it("leaves card borders to the shared section shell", () => {
 		render(
 			<I18nProvider i18n={i18n}>
 				<ProfilesSectionBuilder />
 			</I18nProvider>,
 		);
 		const wrapper = screen.getByTestId("section-base");
-		expect(wrapper.className).toContain("border");
-		expect(wrapper.className).not.toContain("border-dashed");
+		expect(wrapper.className).toBe("");
 	});
 });

@@ -59,6 +59,17 @@ const experienceItems = vi.hoisted(() => [
 		website: { url: "", label: "", inlineLink: false },
 		roles: [{ position: "Intern", period: "" }],
 	},
+	// Legacy experience item without a roles field
+	{
+		id: "x4",
+		company: "Delta",
+		position: "",
+		location: "",
+		period: "2012",
+		description: "",
+		hidden: false,
+		website: { url: "", label: "", inlineLink: false },
+	},
 ]);
 
 vi.mock("@/features/resume/builder/draft", () => ({
@@ -129,5 +140,11 @@ describe("ExperienceSectionBuilder", () => {
 	it("renders the Add a new experience affordance", () => {
 		render(wrap(<ExperienceSectionBuilder />));
 		expect(screen.getByRole("button", { name: "Add a new experience" })).toBeInTheDocument();
+	});
+
+	it("does not crash when the roles field is missing from legacy data", () => {
+		render(wrap(<ExperienceSectionBuilder />));
+		const subtitles = screen.getAllByTestId("item-subtitle").map((el) => el.textContent);
+		expect(subtitles[3]).toBe("0 roles");
 	});
 });

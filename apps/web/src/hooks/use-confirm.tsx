@@ -17,14 +17,24 @@ interface ConfirmOptions {
 	cancelText?: string;
 }
 
+interface ChoiceOptions extends ConfirmOptions {
+	/** Label of the secondary, non-cancelling action (e.g. "Discard"). */
+	alternativeText: string;
+}
+
+/** `cancel` covers the cancel button, Escape and clicking outside. */
+export type ConfirmChoice = "confirm" | "alternative" | "cancel";
+
 interface ConfirmState extends ConfirmOptions {
 	open: boolean;
 	title: string;
-	resolve: ((value: boolean) => void) | null;
+	alternativeText?: string;
+	resolve: ((value: ConfirmChoice) => void) | null;
 }
 
 type ConfirmContextType = {
 	confirm: (title: string, options?: ConfirmOptions) => Promise<boolean>;
+	choose: (title: string, options: ChoiceOptions) => Promise<ConfirmChoice>;
 };
 
 const ConfirmContext = React.createContext<ConfirmContextType | null>(null);
@@ -39,8 +49,8 @@ export function ConfirmDialogProvider({ children }: { children: React.ReactNode 
 		cancelText: undefined,
 	});
 
-	const confirm = React.useCallback(async (title: string, options?: ConfirmOptions): Promise<boolean> => {
-		return new Promise<boolean>((resolve) => {
+	const choose = React.useCallback(async (title: string, options?: Partial<ChoiceOptions>): Promise<ConfirmChoice> => {
+		return new Promise<ConfirmChoice>((resolve) => {
 			setState({
 				open: true,
 				resolve,
@@ -48,24 +58,29 @@ export function ConfirmDialogProvider({ children }: { children: React.ReactNode 
 				description: options?.description,
 				confirmText: options?.confirmText,
 				cancelText: options?.cancelText,
+				alternativeText: options?.alternativeText,
 			});
 		});
 	}, []);
 
-	const handleConfirm = React.useCallback(() => {
-		if (state.resolve) state.resolve(true);
+	const confirm = React.useCallback(
+		async (title: string, options?: ConfirmOptions) => (await choose(title, options)) === "confirm",
+		[choose],
+	);
 
-		setState((prev) => ({ ...prev, open: false, resolve: null }));
-	}, [state.resolve]);
+	const settle = React.useCallback(
+		(choice: ConfirmChoice) => {
+			if (state.resolve) state.resolve(choice);
 
-	const handleCancel = React.useCallback(() => {
-		if (state.resolve) state.resolve(false);
+			setState((prev) => ({ ...prev, open: false, resolve: null }));
+		},
+		[state.resolve],
+	);
 
-		setState((prev) => ({ ...prev, open: false, resolve: null }));
-	}, [state.resolve]);
+	const handleCancel = React.useCallback(() => settle("cancel"), [settle]);
 
 	return (
-		<ConfirmContext.Provider value={{ confirm }}>
+		<ConfirmContext.Provider value={{ confirm, choose }}>
 			{children}
 
 			<AlertDialog open={state.open} onOpenChange={(open) => !open && handleCancel()}>
@@ -79,7 +94,12 @@ export function ConfirmDialogProvider({ children }: { children: React.ReactNode 
 
 					<AlertDialogFooter>
 						<AlertDialogCancel onClick={handleCancel}>{state.cancelText ?? "Cancel"}</AlertDialogCancel>
-						<AlertDialogAction onClick={handleConfirm}>{state.confirmText ?? "Confirm"}</AlertDialogAction>
+						{state.alternativeText && (
+							<AlertDialogCancel variant="destructive" onClick={() => settle("alternative")}>
+								{state.alternativeText}
+							</AlertDialogCancel>
+						)}
+						<AlertDialogAction onClick={() => settle("confirm")}>{state.confirmText ?? "Confirm"}</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>
 			</AlertDialog>
@@ -95,4 +115,14 @@ export function useConfirm() {
 	}
 
 	return context.confirm;
+}
+
+export function useChoice() {
+	const context = React.use(ConfirmContext);
+
+	if (!context) {
+		throw new Error("useChoice must be used within a <ConfirmDialogProvider />.");
+	}
+
+	return context.choose;
 }

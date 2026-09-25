@@ -23,7 +23,8 @@ import { Combobox } from "@/components/ui/combobox";
 import { useDialogStore } from "@/dialogs/store";
 import { useUpdateResumeData } from "@/features/resume/builder/draft";
 import { useFormBlocker } from "@/hooks/use-form-blocker";
-import { useAppForm, withForm } from "@/libs/tanstack-form";
+import { appendCustomSectionToEnd } from "@/libs/resume/section-actions";
+import { useInlineAppForm, withForm } from "@/libs/tanstack-form";
 
 const formSchema = customSectionSchema;
 
@@ -63,7 +64,7 @@ export function CreateCustomSectionDialog({ data }: DialogProps<"resume.sections
 	const closeDialog = useDialogStore((state) => state.closeDialog);
 	const updateResumeData = useUpdateResumeData();
 
-	const form = useAppForm({
+	const form = useInlineAppForm({
 		defaultValues: {
 			id: generateId(),
 			title: data?.title ?? "",
@@ -75,10 +76,7 @@ export function CreateCustomSectionDialog({ data }: DialogProps<"resume.sections
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {
 			updateResumeData((draft) => {
-				draft.customSections.push(value);
-				const lastPageIndex = draft.metadata.layout.pages.length - 1;
-				if (lastPageIndex < 0) return;
-				draft.metadata.layout.pages[lastPageIndex].main.push(value.id);
+				appendCustomSectionToEnd(draft, value);
 			});
 			closeDialog();
 		},
@@ -125,7 +123,7 @@ export function UpdateCustomSectionDialog({ data }: DialogProps<"resume.sections
 	const closeDialog = useDialogStore((state) => state.closeDialog);
 	const updateResumeData = useUpdateResumeData();
 
-	const form = useAppForm({
+	const form = useInlineAppForm({
 		defaultValues: data,
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {

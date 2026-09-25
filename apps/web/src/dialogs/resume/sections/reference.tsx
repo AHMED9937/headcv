@@ -21,7 +21,7 @@ import { useUpdateResumeData } from "@/features/resume/builder/draft";
 import { useFormBlocker } from "@/hooks/use-form-blocker";
 import { makeSectionItem } from "@/libs/resume/make-section-item";
 import { createSectionItem, updateSectionItem } from "@/libs/resume/section-actions";
-import { useAppForm, withForm } from "@/libs/tanstack-form";
+import { useInlineAppForm, withForm } from "@/libs/tanstack-form";
 
 const formSchema = referenceItemSchema;
 
@@ -41,7 +41,7 @@ export function CreateReferenceDialog({ data }: DialogProps<"resume.sections.ref
 	const closeDialog = useDialogStore((state) => state.closeDialog);
 	const updateResumeData = useUpdateResumeData();
 
-	const form = useAppForm({
+	const form = useInlineAppForm({
 		defaultValues: makeSectionItem(defaultValues, data?.item),
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {
@@ -93,7 +93,7 @@ export function UpdateReferenceDialog({ data }: DialogProps<"resume.sections.ref
 	const closeDialog = useDialogStore((state) => state.closeDialog);
 	const updateResumeData = useUpdateResumeData();
 
-	const form = useAppForm({
+	const form = useInlineAppForm({
 		defaultValues: data.item,
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {

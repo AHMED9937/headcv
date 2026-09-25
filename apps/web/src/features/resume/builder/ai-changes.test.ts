@@ -302,7 +302,7 @@ describe("getSectionReviewGroups", () => {
 				company: "Acme",
 				position: "Dev",
 				location: "",
-				period: "",
+
 				website: { url: "", label: "", inlineLink: false },
 				description: "Built things",
 				roles: [],
@@ -325,7 +325,7 @@ describe("buildSectionInversePatch", () => {
 				company: "Acme",
 				position: "Dev",
 				location: "",
-				period: "",
+
 				website: { url: "", label: "", inlineLink: false },
 				description: "Before",
 				roles: [],

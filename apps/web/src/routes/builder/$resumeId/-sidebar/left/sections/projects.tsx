@@ -2,7 +2,7 @@ import type { projectItemSchema } from "@headcv/schema/resume/data";
 import type z from "zod";
 import { Trans } from "@lingui/react/macro";
 import { AnimatePresence, Reorder } from "motion/react";
-import { cn } from "@headcv/utils/style";
+import { formatDateRange } from "@headcv/utils/date";
 import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
 import { SectionBase } from "../shared/section-base";
 import { SectionAddItemButton, SectionItem } from "../shared/section-item";
@@ -19,12 +19,12 @@ export function ProjectsSectionBuilder() {
 	};
 
 	const buildSubtitle = (item: z.infer<typeof projectItemSchema>) => {
-		const parts = [item.period, item.website.label].filter((part) => part && part.trim().length > 0);
+		const parts = [formatDateRange(item), item.website.label].filter((part) => part && part.trim().length > 0);
 		return parts.length > 0 ? parts.join(" • ") : undefined;
 	};
 
 	return (
-		<SectionBase type="projects" className={cn("rounded-md border", section.items.length === 0 && "border-dashed")}>
+		<SectionBase type="projects">
 			<Reorder.Group axis="y" values={section.items} onReorder={handleReorder}>
 				<AnimatePresence>
 					{section.items.map((item) => (

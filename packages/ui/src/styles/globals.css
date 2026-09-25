@@ -98,9 +98,25 @@
 .dark {
 	--background: #152642;
 	--foreground: #f1f5f9;
+	--bg: #152642;
+	--surface: #232b3a;
+	--text: #f1f5f9;
+	--text-muted: #94a3b8;
+	--text-on-primary: #152642;
 	--muted: #1e3a5f;
 	--muted-foreground: #94a3b8;
 	--border-default: #475569;
+	--primary-dark: #d9d0c3;
+	--primary-light: #2e4a6f;
+	--accent-light: #3a3524;
+	--success: #34d399;
+	--success-light: #064e3b;
+	--success-dark: #a7f3d0;
+	--danger: #f87171;
+	--danger-light: #451a1a;
+	--danger-dark: #fca5a5;
+	--warning: #fbbf24;
+	--warning-dark: #fde68a;
 	--card: #232b3a;
 	--card-foreground: #f1f5f9;
 	--popover: #232b3a;
@@ -257,6 +273,55 @@
 
 	.wysiwyg {
 		@apply prose prose-sm prose-zinc dark:prose-invert max-w-none prose-p:my-3! prose-li:my-3! prose-ul:my-3! prose-ol:my-3!;
+		white-space: pre-wrap;
+		overflow-wrap: anywhere;
+		word-break: break-word;
+	}
+
+	.wysiwyg :where(p, li, a, span, strong, em, code, pre, td, th) {
+		min-width: 0;
+		max-width: 100%;
+		overflow-wrap: anywhere;
+		word-break: break-word;
+	}
+
+	.wysiwyg :where(pre, code) {
+		white-space: pre-wrap;
+	}
+
+	.wysiwyg table {
+		width: 100%;
+		table-layout: fixed;
+	}
+
+	/* Brand scrollbar: thin, quiet until hovered */
+	* {
+		scrollbar-width: thin;
+		scrollbar-color: color-mix(in oklab, var(--muted-foreground) 40%, transparent) transparent;
+	}
+
+	::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background-color: color-mix(in oklab, var(--muted-foreground) 40%, transparent);
+		border: 3px solid transparent;
+		border-radius: 9999px;
+		background-clip: content-box;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background-color: color-mix(in oklab, var(--primary) 65%, transparent);
+	}
+
+	::-webkit-scrollbar-corner {
+		background: transparent;
 	}
 }
 

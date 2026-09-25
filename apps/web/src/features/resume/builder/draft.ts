@@ -39,6 +39,7 @@ type ResumeStoreActions = {
 	replaceResumeDraft: (resume: Resume) => void;
 	replaceResumeFromServer: (resume: Resume) => void;
 	updateResumeData: (fn: (draft: WritableDraft<ResumeData>) => void) => void;
+	updateResumeDataLocal: (fn: (draft: WritableDraft<ResumeData>) => void) => void;
 	patchResume: (fn: (draft: WritableDraft<Resume>) => void) => void;
 	mergeResumeMetadata: (resume: Resume) => void;
 };
@@ -277,6 +278,24 @@ export const useResumeStore = create<ResumeStore>()(
 			getRuntime(currentResume.id).hasPendingLocalChanges = true;
 			syncCurrentResume(currentResume.id);
 		},
+
+		updateResumeDataLocal: (fn) => {
+			const currentResume = get().resume;
+			if (!currentResume) return;
+
+			if (currentResume.isLocked) {
+				lockedToastId = toast.error(t`This resume is locked and cannot be updated.`, {
+					id: lockedToastId,
+				});
+				return;
+			}
+
+			set((state) => {
+				if (!state.resume) return;
+				fn(state.resume.data as WritableDraft<ResumeData>);
+				state.resume.data.metadata.page.locale = RESUME_LOCALE;
+			});
+		},
 	})),
 );
 
@@ -340,6 +359,10 @@ export function useUpdateResumeData() {
 		},
 		[queryClient, resumeId, updateResumeData],
 	);
+}
+
+export function useUpdateResumeDataLocal() {
+	return useResumeStore((state) => state.updateResumeDataLocal);
 }
 
 export function useResumeUpdateSubscription() {

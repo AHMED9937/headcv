@@ -32,6 +32,7 @@ import {
 } from "@headcv/ui/components/dropdown-menu";
 import { cn } from "@headcv/utils/style";
 import { useDialogStore } from "@/dialogs/store";
+import { PlanBadge } from "@/features/billing/plan-badge";
 import { BUILDER_STEPS, getStepLabel, isStepComplete, isStepSkipped } from "@/features/builder/steps";
 import { useAiAssistant } from "@/features/resume/builder/ai-assistant";
 import { useCurrentResume, usePatchResume } from "@/features/resume/builder/draft";
@@ -112,6 +113,7 @@ export function BuilderHeader({ compact = false, workspace, progress }: BuilderH
 					</h2>
 				</div>
 				{isLocked && <LockSimpleIcon className="ms-2 text-muted-foreground" />}
+				<PlanBadge compact className="ms-1" />
 			</div>
 
 			{workspace && (

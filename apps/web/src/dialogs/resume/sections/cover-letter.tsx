@@ -18,7 +18,7 @@ import { useDialogStore } from "@/dialogs/store";
 import { useUpdateResumeData } from "@/features/resume/builder/draft";
 import { useFormBlocker } from "@/hooks/use-form-blocker";
 import { makeSectionItem } from "@/libs/resume/make-section-item";
-import { useAppForm, withForm } from "@/libs/tanstack-form";
+import { useInlineAppForm, withForm } from "@/libs/tanstack-form";
 
 const formSchema = coverLetterItemSchema;
 
@@ -35,7 +35,7 @@ export function CreateCoverLetterDialog({ data }: DialogProps<"resume.sections.c
 	const closeDialog = useDialogStore((state) => state.closeDialog);
 	const updateResumeData = useUpdateResumeData();
 
-	const form = useAppForm({
+	const form = useInlineAppForm({
 		defaultValues: makeSectionItem(defaultValues, data?.item),
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {
@@ -90,7 +90,7 @@ export function UpdateCoverLetterDialog({ data }: DialogProps<"resume.sections.c
 	const closeDialog = useDialogStore((state) => state.closeDialog);
 	const updateResumeData = useUpdateResumeData();
 
-	const form = useAppForm({
+	const form = useInlineAppForm({
 		defaultValues: data.item,
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {

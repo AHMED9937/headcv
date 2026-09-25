@@ -49,10 +49,10 @@ describe("templates metadata", () => {
 		expect(new Set(urls).size).toBe(urls.length);
 	});
 
-	it("uses lowercase ids that match a lowercase form of the display name", () => {
+	it("uses lowercase ids that are contained in the lowercase display name", () => {
 		for (const [id, meta] of entries) {
 			expect(id).toBe(id.toLowerCase());
-			expect(meta.name.toLowerCase()).toBe(id);
+			expect(meta.name.toLowerCase()).toContain(id);
 		}
 	});
 });

@@ -3,8 +3,6 @@ import { t } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
 import {
-	ArrowsInSimpleIcon,
-	ArrowsOutSimpleIcon,
 	CodeBlockIcon,
 	CodeSimpleIcon,
 	ColumnsPlusLeftIcon,
@@ -46,12 +44,11 @@ import TextAlign from "@tiptap/extension-text-align";
 import { TextStyle } from "@tiptap/extension-text-style";
 import { EditorContent, EditorContext, useEditor, useEditorState } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import { match } from "ts-pattern";
 import z from "zod";
 import { Button } from "@headcv/ui/components/button";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@headcv/ui/components/dialog";
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -102,7 +99,6 @@ type Props = UseEditorOptions & {
 export function RichInput({ value, onChange, style, className, editorClassName, ...options }: Props) {
 	const { i18n } = useLingui();
 	const textDirection = isRTL(i18n.locale) ? "rtl" : undefined;
-	const [isFullscreen, setIsFullscreen] = useState(false);
 
 	const editor = useEditor({
 		...options,
@@ -115,13 +111,11 @@ export function RichInput({ value, onChange, style, className, editorClassName, 
 			attributes: {
 				spellcheck: "false",
 				"data-editor": "true",
-				"data-fullscreen": isFullscreen ? "true" : "false",
 				class: cn(
-					"wysiwyg group/editor overflow-y-auto p-3 pb-4",
+					"wysiwyg group/editor min-w-0 max-w-full overflow-y-auto overflow-x-hidden p-4",
 					"rounded-md rounded-t-none border outline-none focus-visible:border-ring",
 					"[td:has(.selectedCell)]:bg-primary",
-					"data-[fullscreen=false]:max-h-[400px] data-[fullscreen=false]:min-h-[100px]",
-					"data-[fullscreen=true]:max-h-none data-[fullscreen=true]:min-h-full",
+					"max-h-[min(60vh,640px)] min-h-[220px]",
 					editorClassName,
 				),
 			},
@@ -140,57 +134,11 @@ export function RichInput({ value, onChange, style, className, editorClassName, 
 
 	if (!editor) return null;
 
-	const editorElement = (
-		<div className="relative">
-			<EditorToolbar editor={editor} isFullscreen={isFullscreen} />
-
-			<EditorContent editor={editor} />
-
-			<Button
-				size="icon"
-				variant="secondary"
-				className="absolute right-2 bottom-2 size-7"
-				title={isFullscreen ? t`Exit Fullscreen` : t`Fullscreen`}
-				onClick={() => setIsFullscreen(!isFullscreen)}
-			>
-				{isFullscreen ? <ArrowsInSimpleIcon className="size-4" /> : <ArrowsOutSimpleIcon className="size-4" />}
-			</Button>
-		</div>
-	);
-
-	if (isFullscreen) {
-		return (
-			<EditorContext value={providerValue}>
-				<div className={cn("rounded-md", className)} style={style}>
-					{/* Placeholder to maintain layout */}
-					<div className="h-[200px] rounded-md border border-dashed" />
-				</div>
-
-				<Dialog open={isFullscreen} onOpenChange={setIsFullscreen}>
-					<DialogContent className="flex h-[95svh] max-h-none! w-[95svw] max-w-none! flex-col p-4 sm:max-w-none! 2xl:max-w-none!">
-						<div className="sr-only">
-							<DialogTitle>
-								<Trans comment="Screen reader title for the fullscreen rich-text editor dialog">
-									Fullscreen Editor
-								</Trans>
-							</DialogTitle>
-							<DialogDescription>
-								<Trans comment="Screen reader description for the fullscreen rich-text editor dialog">
-									Edit content in fullscreen mode
-								</Trans>
-							</DialogDescription>
-						</div>
-						{editorElement}
-					</DialogContent>
-				</Dialog>
-			</EditorContext>
-		);
-	}
-
 	return (
 		<EditorContext value={providerValue}>
-			<div className={cn("rounded-md", className)} style={style}>
-				{editorElement}
+			<div className={cn("min-w-0 max-w-full rounded-md", className)} style={style}>
+				<EditorToolbar editor={editor} isFullscreen={false} />
+				<EditorContent editor={editor} />
 			</div>
 		</EditorContext>
 	);

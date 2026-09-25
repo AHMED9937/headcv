@@ -41,7 +41,7 @@ function PicturePreviewControls({
 	fileInputRef: React.RefObject<HTMLInputElement | null>;
 	form: PictureSettingsForm;
 	normalizedPictureUrl: string;
-	picture: PictureValues;
+	picture: PictureFormValues;
 	pictureSrc: string;
 	onAutoSave: () => void;
 	onDeletePicture: () => void;
@@ -327,7 +327,7 @@ function PictureGeometryFields({ form, onAutoSave }: { form: PictureSettingsForm
 	);
 }
 
-type PictureValues = z.infer<typeof pictureSchema>;
+export type PictureFormValues = z.infer<typeof pictureSchema>;
 
 function normalizePictureUrl(url: string, origin: string): string {
 	if (!url) return url;
@@ -354,7 +354,7 @@ async function createPicturePreviewUrl(url: string, signal: AbortSignal) {
 	return URL.createObjectURL(blob);
 }
 
-function usePictureSettingsForm(picture: PictureValues, persist: (data: PictureValues) => void) {
+function usePictureSettingsForm(picture: PictureFormValues, persist: (data: PictureFormValues) => void) {
 	const form = useAppForm({
 		defaultValues: picture,
 		validators: { onChange: pictureSchema },
@@ -369,12 +369,18 @@ function usePictureSettingsForm(picture: PictureValues, persist: (data: PictureV
 
 type PictureSettingsForm = ReturnType<typeof usePictureSettingsForm>;
 
-function PictureSectionForm() {
+type PictureSectionFormProps = {
+	value?: PictureFormValues;
+	onChange?: (value: PictureFormValues) => void;
+	advancedCollapsible?: boolean;
+};
+
+export function PictureSectionForm({ value, onChange, advancedCollapsible = false }: PictureSectionFormProps = {}) {
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const appOrigin = typeof window === "undefined" ? "" : window.location.origin;
 
 	const resume = useCurrentResume();
-	const picture = resume.data.picture;
+	const picture = value ?? resume.data.picture;
 	const normalizedPictureUrl = normalizePictureUrl(picture.url, appOrigin);
 	const picturePreviewQuery = useQuery({
 		queryKey: ["resume-picture-preview", normalizedPictureUrl],
@@ -388,7 +394,11 @@ function PictureSectionForm() {
 	const { mutate: uploadFile } = useMutation(orpc.storage.uploadFile.mutationOptions({ meta: { noInvalidate: true } }));
 	const { mutate: deleteFile } = useMutation(orpc.storage.deleteFile.mutationOptions({ meta: { noInvalidate: true } }));
 
-	const persist = (data: PictureValues) => {
+	const persist = (data: PictureFormValues) => {
+		if (onChange) {
+			onChange(data);
+			return;
+		}
 		updateResumeData((draft) => {
 			draft.picture = data;
 		});
@@ -415,8 +425,8 @@ function PictureSectionForm() {
 		const filename = pictureUrl.pathname.split("/").pop();
 		if (!filename) return;
 
-		// If the picture is from the same origin, attempt to delete it
-		if (pictureOrigin === appOrigin) deleteFile({ filename });
+		// Defer storage deletion while editing a draft so Cancel remains non-destructive.
+		if (!onChange && pictureOrigin === appOrigin) deleteFile({ filename });
 
 		form.setFieldValue("url", "");
 		handleAutoSave();
@@ -479,121 +489,146 @@ function PictureSectionForm() {
 				onUploadPicture={onUploadPicture}
 			/>
 
-			<div className="grid @md:grid-cols-2 grid-cols-1 gap-4">
-				<PictureGeometryFields form={form} onAutoSave={handleAutoSave} />
-
-				<div className="flex items-end gap-x-3">
-					<form.Field name="borderColor">
-						{(field) => (
-							<FormItem
-								className="mb-1.5 shrink-0"
-								hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
-							>
-								<FormControl
-									render={
-										<ColorPicker
-											defaultValue={field.state.value}
-											onChange={(color) => {
-												field.handleChange(color);
-												handleAutoSave();
-											}}
-										/>
-									}
-								/>
-							</FormItem>
-						)}
-					</form.Field>
-
-					<form.Field name="borderWidth">
-						{(field) => (
-							<FormItem className="flex-1" hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
-								<FormLabel>
-									<Trans>Border Width</Trans>
-								</FormLabel>
-								<InputGroup>
-									<FormControl
-										render={
-											<InputGroupInput
-												name={field.name}
-												value={field.state.value}
-												type="number"
-												min={0}
-												step={1}
-												onBlur={field.handleBlur}
-												onChange={(e) => {
-													const value = e.target.value;
-													if (value === "") field.handleChange("" as unknown as number);
-													else field.handleChange(Number(value));
-													handleAutoSave();
-												}}
-											/>
-										}
-									/>
-									<InputGroupAddon align="inline-end">
-										<InputGroupText>pt</InputGroupText>
-									</InputGroupAddon>
-								</InputGroup>
-							</FormItem>
-						)}
-					</form.Field>
+			{advancedCollapsible ? (
+				<details className="rounded-xl border px-4 py-3">
+					<summary className="cursor-pointer font-medium">
+						<Trans>Photo customizations</Trans>
+					</summary>
+					<div className="mt-4 grid @md:grid-cols-2 grid-cols-1 gap-4">
+						<PictureAdvancedFields form={form} onAutoSave={handleAutoSave} />
+					</div>
+				</details>
+			) : (
+				<div className="grid @md:grid-cols-2 grid-cols-1 gap-4">
+					<PictureAdvancedFields form={form} onAutoSave={handleAutoSave} />
 				</div>
-
-				<div className="flex items-end gap-x-3">
-					<form.Field name="shadowColor">
-						{(field) => (
-							<FormItem
-								className="mb-1.5 shrink-0"
-								hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
-							>
-								<FormControl
-									render={
-										<ColorPicker
-											defaultValue={field.state.value}
-											onChange={(color) => {
-												field.handleChange(color);
-												handleAutoSave();
-											}}
-										/>
-									}
-								/>
-							</FormItem>
-						)}
-					</form.Field>
-
-					<form.Field name="shadowWidth">
-						{(field) => (
-							<FormItem className="flex-1" hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
-								<FormLabel>
-									<Trans>Shadow Width</Trans>
-								</FormLabel>
-								<InputGroup>
-									<FormControl
-										render={
-											<InputGroupInput
-												name={field.name}
-												value={field.state.value}
-												type="number"
-												min={0}
-												step={0.5}
-												onBlur={field.handleBlur}
-												onChange={(e) => {
-													const value = e.target.value;
-													if (value === "") field.handleChange("" as unknown as number);
-													else field.handleChange(Number(value));
-													handleAutoSave();
-												}}
-											/>
-										}
-									/>
-									<InputGroupAddon align="inline-end">
-										<InputGroupText>pt</InputGroupText>
-									</InputGroupAddon>
-								</InputGroup>
-							</FormItem>
-						)}
-					</form.Field>
-				</div>
-			</div>
+			)}
 		</form>
+	);
+}
+
+function PictureAdvancedFields({
+	form,
+	onAutoSave: handleAutoSave,
+}: {
+	form: PictureSettingsForm;
+	onAutoSave: () => void;
+}) {
+	return (
+		<>
+			<PictureGeometryFields form={form} onAutoSave={handleAutoSave} />
+
+			<div className="flex items-end gap-x-3">
+				<form.Field name="borderColor">
+					{(field) => (
+						<FormItem
+							className="mb-1.5 shrink-0"
+							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
+						>
+							<FormControl
+								render={
+									<ColorPicker
+										defaultValue={field.state.value}
+										onChange={(color) => {
+											field.handleChange(color);
+											handleAutoSave();
+										}}
+									/>
+								}
+							/>
+						</FormItem>
+					)}
+				</form.Field>
+
+				<form.Field name="borderWidth">
+					{(field) => (
+						<FormItem className="flex-1" hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
+							<FormLabel>
+								<Trans>Border Width</Trans>
+							</FormLabel>
+							<InputGroup>
+								<FormControl
+									render={
+										<InputGroupInput
+											name={field.name}
+											value={field.state.value}
+											type="number"
+											min={0}
+											step={1}
+											onBlur={field.handleBlur}
+											onChange={(e) => {
+												const value = e.target.value;
+												if (value === "") field.handleChange("" as unknown as number);
+												else field.handleChange(Number(value));
+												handleAutoSave();
+											}}
+										/>
+									}
+								/>
+								<InputGroupAddon align="inline-end">
+									<InputGroupText>pt</InputGroupText>
+								</InputGroupAddon>
+							</InputGroup>
+						</FormItem>
+					)}
+				</form.Field>
+			</div>
+
+			<div className="flex items-end gap-x-3">
+				<form.Field name="shadowColor">
+					{(field) => (
+						<FormItem
+							className="mb-1.5 shrink-0"
+							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
+						>
+							<FormControl
+								render={
+									<ColorPicker
+										defaultValue={field.state.value}
+										onChange={(color) => {
+											field.handleChange(color);
+											handleAutoSave();
+										}}
+									/>
+								}
+							/>
+						</FormItem>
+					)}
+				</form.Field>
+
+				<form.Field name="shadowWidth">
+					{(field) => (
+						<FormItem className="flex-1" hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
+							<FormLabel>
+								<Trans>Shadow Width</Trans>
+							</FormLabel>
+							<InputGroup>
+								<FormControl
+									render={
+										<InputGroupInput
+											name={field.name}
+											value={field.state.value}
+											type="number"
+											min={0}
+											step={0.5}
+											onBlur={field.handleBlur}
+											onChange={(e) => {
+												const value = e.target.value;
+												if (value === "") field.handleChange("" as unknown as number);
+												else field.handleChange(Number(value));
+												handleAutoSave();
+											}}
+										/>
+									}
+								/>
+								<InputGroupAddon align="inline-end">
+									<InputGroupText>pt</InputGroupText>
+								</InputGroupAddon>
+							</InputGroup>
+						</FormItem>
+					)}
+				</form.Field>
+			</div>
+		</>
 	);
 }

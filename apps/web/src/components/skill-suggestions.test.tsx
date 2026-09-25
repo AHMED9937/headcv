@@ -42,7 +42,8 @@ describe("SkillSuggestions", () => {
 		const checkbox = screen.getAllByRole("checkbox")[0];
 		expect(checkbox).toBeTruthy();
 		if (!checkbox) throw new Error("Checkbox not found");
-		await userEvent.click(checkbox);
+		// Click the wrapping label to ensure the checkbox state toggles in Base UI.
+		await userEvent.click(checkbox.parentElement ?? checkbox);
 		await userEvent.click(screen.getByRole("button", { name: /Add selected/i }));
 
 		expect(updateResumeData).toHaveBeenCalled();

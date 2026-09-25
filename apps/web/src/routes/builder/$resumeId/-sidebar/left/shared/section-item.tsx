@@ -47,6 +47,9 @@ import {
 	getSourceSectionTitle,
 	removeItemFromSource,
 } from "@/libs/resume/move-item";
+import { deleteSectionItem, toggleSectionItemHidden } from "@/libs/resume/section-actions";
+import { SectionDropdownMenu } from "./section-menu";
+import { useSectionActions } from "./use-section-actions";
 
 // ============================================================================
 // MoveItemSubmenu Component
@@ -166,6 +169,7 @@ type Props<T extends CustomSectionItem | SectionItemType> = {
 	title: string;
 	subtitle?: string;
 	customSectionId?: string;
+	canMove?: boolean;
 };
 
 export function SectionItem<T extends CustomSectionItem | SectionItemType>({
@@ -174,39 +178,25 @@ export function SectionItem<T extends CustomSectionItem | SectionItemType>({
 	title,
 	subtitle,
 	customSectionId,
+	canMove = true,
 }: Props<T>) {
 	const confirm = useConfirm();
 	const controls = useDragControls();
-	const { openDialog } = useDialogStore();
+	const { openInlineDialog } = useDialogStore();
 	const updateResumeData = useUpdateResumeData();
 
 	const onToggleVisibility = () => {
-		updateResumeData((draft) => {
-			if (customSectionId) {
-				const section = draft.customSections.find((s) => s.id === customSectionId);
-				if (!section) return;
-				const index = section.items.findIndex((_item) => _item.id === item.id);
-				if (index === -1) return;
-				section.items[index].hidden = !section.items[index].hidden;
-			} else {
-				// Type assertion: when customSectionId is not provided, type is always a built-in SectionType
-				const section = draft.sections[type as SectionType];
-				if (!("items" in section)) return;
-				const index = section.items.findIndex((_item) => _item.id === item.id);
-				if (index === -1) return;
-				section.items[index].hidden = !section.items[index].hidden;
-			}
-		});
+		updateResumeData((draft) => toggleSectionItemHidden(draft, type as SectionType, item.id, customSectionId));
 	};
 
 	const onUpdate = () => {
 		// Type assertion needed because TypeScript can't narrow the union type through template literals
-		openDialog(`resume.sections.${type}.update`, { item, customSectionId } as never);
+		openInlineDialog(`resume.sections.${type}.update`, { item, customSectionId } as never);
 	};
 
 	const onDuplicate = () => {
 		// Type assertion needed because TypeScript can't narrow the union type through template literals
-		openDialog(`resume.sections.${type}.create`, { item, customSectionId } as never);
+		openInlineDialog(`resume.sections.${type}.create`, { item, customSectionId } as never);
 	};
 
 	const onDelete = async () => {
@@ -223,22 +213,7 @@ export function SectionItem<T extends CustomSectionItem | SectionItemType>({
 
 		if (!confirmed) return;
 
-		updateResumeData((draft) => {
-			if (customSectionId) {
-				const section = draft.customSections.find((s) => s.id === customSectionId);
-				if (!section) return;
-				const index = section.items.findIndex((_item) => _item.id === item.id);
-				if (index === -1) return;
-				section.items.splice(index, 1);
-			} else {
-				// Type assertion: when customSectionId is not provided, type is always a built-in SectionType
-				const section = draft.sections[type as SectionType];
-				if (!("items" in section)) return;
-				const index = section.items.findIndex((_item) => _item.id === item.id);
-				if (index === -1) return;
-				section.items.splice(index, 1);
-			}
-		});
+		updateResumeData((draft) => deleteSectionItem(draft, type as SectionType, item.id, customSectionId));
 	};
 
 	return (
@@ -251,23 +226,23 @@ export function SectionItem<T extends CustomSectionItem | SectionItemType>({
 			animate={{ opacity: 1, y: 0 }}
 			exit={{ opacity: 0, y: -8 }}
 			transition={{ duration: 0.16, ease: "easeOut" }}
-			className="group relative flex h-18 select-none border-b will-change-[transform,opacity]"
+			className="group relative flex min-h-16 select-none border-b bg-background will-change-[transform,opacity]"
 		>
 			<div
-				className="flex cursor-ns-resize touch-none items-center px-1.5 opacity-40 transition-[background-color,opacity] hover:bg-secondary/40 group-hover:opacity-100"
+				className="flex w-10 cursor-ns-resize touch-none items-center justify-center text-muted-foreground/60 transition-colors hover:bg-muted/60 hover:text-foreground"
 				onPointerDown={(e) => {
 					e.preventDefault();
 					controls.start(e);
 				}}
 			>
-				<DotsSixVerticalIcon />
+				<DotsSixVerticalIcon className="size-5" aria-hidden="true" />
 			</div>
 
 			<button
 				type="button"
 				onClick={onUpdate}
 				className={cn(
-					"flex flex-1 flex-col items-start justify-center space-y-0.5 ps-1.5 text-start opacity-100 transition-opacity hover:bg-secondary/40 focus:outline-none focus-visible:ring-1",
+					"flex min-w-0 flex-1 flex-col items-start justify-center space-y-0.5 px-2 py-3 text-start opacity-100 transition-colors hover:bg-muted/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
 					item.hidden && "opacity-50",
 				)}
 			>
@@ -275,21 +250,25 @@ export function SectionItem<T extends CustomSectionItem | SectionItemType>({
 				{subtitle && <div className="line-clamp-1 text-muted-foreground text-xs">{subtitle}</div>}
 			</button>
 
+			<Button
+				variant="ghost"
+				size="icon-sm"
+				className="my-auto me-1 bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
+				onClick={onToggleVisibility}
+				aria-label={item.hidden ? t`Show entry` : t`Hide entry`}
+			>
+				{item.hidden ? <EyeIcon aria-hidden="true" /> : <EyeClosedIcon aria-hidden="true" />}
+			</Button>
+
 			<DropdownMenu>
-				<DropdownMenuTrigger className="flex cursor-context-menu items-center px-1.5 opacity-40 transition-[background-color,opacity] hover:bg-secondary/40 focus:outline-none focus-visible:ring-1 group-hover:opacity-100">
-					<DotsThreeVerticalIcon />
+				<DropdownMenuTrigger
+					className="my-auto me-2 flex size-8 cursor-context-menu items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+					aria-label={t`More entry actions`}
+				>
+					<DotsThreeVerticalIcon aria-hidden="true" />
 				</DropdownMenuTrigger>
 
 				<DropdownMenuContent align="end">
-					<DropdownMenuGroup>
-						<DropdownMenuItem onClick={onToggleVisibility}>
-							{item.hidden ? <EyeIcon /> : <EyeClosedIcon />}
-							{item.hidden ? <Trans>Show</Trans> : <Trans>Hide</Trans>}
-						</DropdownMenuItem>
-					</DropdownMenuGroup>
-
-					<DropdownMenuSeparator />
-
 					<DropdownMenuGroup>
 						<DropdownMenuItem onClick={onUpdate}>
 							<PencilSimpleLineIcon />
@@ -301,7 +280,7 @@ export function SectionItem<T extends CustomSectionItem | SectionItemType>({
 							<Trans>Duplicate</Trans>
 						</DropdownMenuItem>
 
-						<MoveItemSubmenu type={type} item={item} customSectionId={customSectionId} />
+						{canMove && <MoveItemSubmenu type={type} item={item} customSectionId={customSectionId} />}
 					</DropdownMenuGroup>
 
 					<DropdownMenuSeparator />
@@ -321,28 +300,66 @@ export function SectionItem<T extends CustomSectionItem | SectionItemType>({
 type AddButtonProps = Omit<ButtonProps, "type"> & {
 	type: CustomSectionType | "custom";
 	customSectionId?: string;
+	onAdd?: () => void;
 };
 
-export function SectionAddItemButton({ type, customSectionId, className, children, ...props }: AddButtonProps) {
-	const { openDialog } = useDialogStore();
+export function SectionAddItemButton({
+	type,
+	customSectionId,
+	onAdd,
+	className,
+	children,
+	variant = "outline",
+	size = "sm",
+	...props
+}: AddButtonProps) {
+	const { openInlineDialog } = useDialogStore();
+	const actions = useSectionActions(type === "custom" ? "custom" : (type as SectionType));
 
 	const handleAdd = () => {
+		if (onAdd) {
+			onAdd();
+			return;
+		}
 		if (type === "custom") {
-			openDialog("resume.sections.custom.create", undefined);
+			openInlineDialog("resume.sections.custom.create", undefined);
 		} else {
-			openDialog(`resume.sections.${type}.create`, customSectionId ? { customSectionId } : undefined);
+			openInlineDialog(`resume.sections.${type}.create`, customSectionId ? { customSectionId } : undefined);
 		}
 	};
 
 	return (
-		<Button
-			variant="ghost"
-			onClick={handleAdd}
-			className={cn("h-12 w-full justify-start rounded-t-none", className)}
-			{...props}
-		>
-			<PlusIcon />
-			{children}
-		</Button>
+		<div className="grid min-h-14 grid-cols-[2.5rem_minmax(0,1fr)_2.5rem] items-center border-t px-3 py-2">
+			<div className="justify-self-start">
+				{type !== "custom" && (actions.canHide || actions.canSetColumns || actions.canReset) && (
+					<SectionDropdownMenu type={type as "summary" | SectionType} />
+				)}
+			</div>
+			<div className="justify-self-center">
+				<Button
+					variant={variant}
+					size={size}
+					onClick={handleAdd}
+					className={cn("min-w-30 bg-background px-4 shadow-none", className)}
+					{...props}
+				>
+					<PlusIcon aria-hidden="true" />
+					{type === "custom" ? children : <Trans>Add Entry</Trans>}
+				</Button>
+			</div>
+			{type !== "custom" ? (
+				<Button
+					variant="ghost"
+					size="icon"
+					className="justify-self-end text-destructive hover:bg-destructive/10 hover:text-destructive"
+					onClick={() => void actions.onReset()}
+					aria-label={t`Delete all entries`}
+				>
+					<TrashSimpleIcon aria-hidden="true" />
+				</Button>
+			) : (
+				<div />
+			)}
+		</div>
 	);
 }

@@ -14,14 +14,17 @@ import {
 } from "@headcv/ui/components/dialog";
 import { FormControl, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
 import { Switch } from "@headcv/ui/components/switch";
+import { hydrateDateRange, prepareDateRangeForSave } from "@headcv/utils/date";
+import { MonthInput } from "@/components/input/month-input";
 import { RichInput } from "@/components/input/rich-input";
 import { URLInput } from "@/components/input/url-input";
+import { SectionTips } from "@/components/section-tips";
 import { useDialogStore } from "@/dialogs/store";
 import { useUpdateResumeData } from "@/features/resume/builder/draft";
 import { useFormBlocker } from "@/hooks/use-form-blocker";
 import { makeSectionItem } from "@/libs/resume/make-section-item";
 import { createSectionItem, updateSectionItem } from "@/libs/resume/section-actions";
-import { useAppForm, withForm } from "@/libs/tanstack-form";
+import { useInlineAppForm, withForm } from "@/libs/tanstack-form";
 
 const formSchema = volunteerItemSchema;
 
@@ -32,7 +35,9 @@ const defaultValues: FormValues = {
 	hidden: false,
 	organization: "",
 	location: "",
-	period: "",
+	startDate: "",
+	endDate: "",
+
 	website: { url: "", label: "", inlineLink: false },
 	description: "",
 };
@@ -40,13 +45,15 @@ const defaultValues: FormValues = {
 export function CreateVolunteerDialog({ data }: DialogProps<"resume.sections.volunteer.create">) {
 	const closeDialog = useDialogStore((state) => state.closeDialog);
 	const updateResumeData = useUpdateResumeData();
+	const initialValues: FormValues = hydrateDateRange(makeSectionItem(defaultValues, data?.item));
 
-	const form = useAppForm({
-		defaultValues: makeSectionItem(defaultValues, data?.item),
+	const form = useInlineAppForm({
+		defaultValues: initialValues,
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {
+			const canonicalValue = prepareDateRangeForSave(value, initialValues);
 			updateResumeData((draft) => {
-				createSectionItem(draft, "volunteer", value, data?.customSectionId);
+				createSectionItem(draft, "volunteer", canonicalValue, data?.customSectionId);
 			});
 			closeDialog();
 		},
@@ -92,13 +99,15 @@ export function CreateVolunteerDialog({ data }: DialogProps<"resume.sections.vol
 export function UpdateVolunteerDialog({ data }: DialogProps<"resume.sections.volunteer.update">) {
 	const closeDialog = useDialogStore((state) => state.closeDialog);
 	const updateResumeData = useUpdateResumeData();
+	const initialValues: FormValues = hydrateDateRange(data.item);
 
-	const form = useAppForm({
-		defaultValues: data.item,
+	const form = useInlineAppForm({
+		defaultValues: initialValues,
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {
+			const canonicalValue = prepareDateRangeForSave(value, initialValues);
 			updateResumeData((draft) => {
-				updateSectionItem(draft, "volunteer", value, data?.customSectionId);
+				updateSectionItem(draft, "volunteer", canonicalValue, data?.customSectionId);
 			});
 			closeDialog();
 		},
@@ -154,7 +163,47 @@ const VolunteerForm = withForm({
 
 				<form.AppField name="location">{(field) => <field.TextField label={<Trans>Location</Trans>} />}</form.AppField>
 
-				<form.AppField name="period">{(field) => <field.TextField label={<Trans>Period</Trans>} />}</form.AppField>
+				<form.Field name="startDate">
+					{(field) => (
+						<FormItem>
+							<FormLabel>
+								<Trans>Start Date</Trans>
+							</FormLabel>
+							<FormControl
+								render={
+									<MonthInput
+										name={field.name}
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(event) => field.handleChange(event.target.value)}
+									/>
+								}
+							/>
+							<FormMessage errors={field.state.meta.errors} />
+						</FormItem>
+					)}
+				</form.Field>
+
+				<form.Field name="endDate">
+					{(field) => (
+						<FormItem>
+							<FormLabel>
+								<Trans>End Date</Trans>
+							</FormLabel>
+							<FormControl
+								render={
+									<MonthInput
+										name={field.name}
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(event) => field.handleChange(event.target.value)}
+									/>
+								}
+							/>
+							<FormMessage errors={field.state.meta.errors} />
+						</FormItem>
+					)}
+				</form.Field>
 
 				<form.Field name="website">
 					{(field) => (
@@ -206,6 +255,15 @@ const VolunteerForm = withForm({
 						</FormItem>
 					)}
 				</form.Field>
+
+				<details className="space-y-3 pt-2 sm:col-span-full" data-inline-customizations>
+					<summary className="cursor-pointer font-medium text-muted-foreground text-sm">
+						<Trans>Show customizations for this section</Trans>
+					</summary>
+					<div className="space-y-3 rounded-md border bg-muted/20 p-3">
+						<SectionTips type="volunteer" />
+					</div>
+				</details>
 			</>
 		);
 	},

@@ -20,13 +20,23 @@ export function BasicsSectionBuilder() {
 
 const formSchema = basicsSchema;
 
-type FormValues = z.infer<typeof formSchema>;
+export type BasicsFormValues = z.infer<typeof formSchema>;
 
-function BasicsSectionForm() {
-	const basics = useCurrentBuilderResumeSelector((resume) => resume.data.basics);
+type BasicsSectionFormProps = {
+	value?: BasicsFormValues;
+	onChange?: (value: BasicsFormValues) => void;
+};
+
+export function BasicsSectionForm({ value, onChange }: BasicsSectionFormProps = {}) {
+	const storedBasics = useCurrentBuilderResumeSelector((resume) => resume.data.basics);
+	const basics = value ?? storedBasics;
 	const updateResumeData = useUpdateResumeData();
 
-	const persist = (data: FormValues) => {
+	const persist = (data: BasicsFormValues) => {
+		if (onChange) {
+			onChange(data);
+			return;
+		}
 		updateResumeData((draft) => {
 			draft.basics = data;
 		});

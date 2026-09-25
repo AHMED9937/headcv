@@ -1,6 +1,6 @@
 import type { LeftSidebarSection } from "@/libs/resume/section";
 import { match } from "ts-pattern";
-import { AiReviewWorkspace } from "@/features/resume/builder/ai-review";
+import { AiReviewSectionBuilder } from "./sections/ai-review";
 import { AwardsSectionBuilder } from "./sections/awards";
 import { BasicsSectionBuilder } from "./sections/basics";
 import { CertificationsSectionBuilder } from "./sections/certifications";
@@ -36,6 +36,6 @@ export function getSectionComponent(type: LeftSidebarSection) {
 		.with("volunteer", () => <VolunteerSectionBuilder />)
 		.with("references", () => <ReferencesSectionBuilder />)
 		.with("custom", () => <CustomSectionBuilder />)
-		.with("ai-review", () => <AiReviewWorkspace />)
+		.with("ai-review", () => <AiReviewSectionBuilder />)
 		.exhaustive();
 }

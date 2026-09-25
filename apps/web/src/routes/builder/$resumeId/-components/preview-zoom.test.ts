@@ -13,6 +13,14 @@ describe("preview zoom", () => {
 		expect(getFitWidthScale(648, 600, 48)).toBe(1);
 	});
 
+	it("does not enlarge the page above its natural size in fit-width mode", () => {
+		expect(getFitWidthScale(1248, 600, 48)).toBe(1);
+	});
+
+	it("supports an explicit larger cap for full-size previews", () => {
+		expect(getFitWidthScale(768, 600, 48, 1.5)).toBe(1.2);
+	});
+
 	it("clamps invalid fit widths and custom scales", () => {
 		expect(getFitWidthScale(40, 600, 48)).toBe(MIN_PREVIEW_SCALE);
 		expect(clampPreviewScale(0.1)).toBe(MIN_PREVIEW_SCALE);

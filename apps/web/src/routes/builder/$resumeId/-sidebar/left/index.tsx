@@ -2,12 +2,12 @@ import type { LeftSidebarSection } from "@/libs/resume/section";
 import { Fragment, useCallback, useEffect, useRef } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@headcv/ui/components/avatar";
 import { Button } from "@headcv/ui/components/button";
-import { ScrollArea } from "@headcv/ui/components/scroll-area";
 import { Separator } from "@headcv/ui/components/separator";
 import { getInitials } from "@headcv/utils/string";
 import { cn } from "@headcv/utils/style";
 import { BuilderStepActions } from "@/features/builder/step-actions";
 import { getStepSectionId, useBuilderStep } from "@/features/builder/use-builder-step";
+import { getResumePreviewSectionId, requestResumePreviewSection } from "@/features/resume/preview/preview-navigation";
 import { UserDropdownMenu } from "@/features/user/dropdown-menu";
 import { getSectionIcon, getSectionTitle, leftSidebarSections } from "@/libs/resume/section";
 import { BuilderSidebarEdge } from "../../-components/edge";
@@ -18,7 +18,7 @@ import { getSectionComponent } from "./section-components";
 export function BuilderSidebarLeft({ guided = false }: { guided?: boolean }) {
 	const scrollAreaRef = useRef<HTMLDivElement | null>(null);
 	const { currentStep } = useBuilderStep();
-	const setCollapsed = useSectionStore((state) => state.setCollapsed);
+	const expandLeftSection = useSectionStore((state) => state.expandLeftSection);
 	const guidedSection = getStepSectionId(currentStep);
 	const sections = guided
 		? guidedSection
@@ -30,18 +30,21 @@ export function BuilderSidebarLeft({ guided = false }: { guided?: boolean }) {
 		const sectionId = getStepSectionId(currentStep);
 		if (!sectionId || !scrollAreaRef.current) return;
 
-		setCollapsed(sectionId, false);
+		expandLeftSection(sectionId);
 
 		const sectionElement = scrollAreaRef.current.querySelector(`#sidebar-${sectionId}`);
 		sectionElement?.scrollIntoView({ block: "start", inline: "nearest", behavior: "smooth" });
-	}, [currentStep, setCollapsed]);
+	}, [currentStep, expandLeftSection]);
 
 	return (
 		<>
 			{!guided && <SidebarEdge scrollAreaRef={scrollAreaRef} />}
 
 			<div className={cn("flex h-full flex-col bg-background", !guided && "sm:ms-12")}>
-				<ScrollArea ref={scrollAreaRef} className="@container flex-1 bg-background">
+				<div
+					ref={scrollAreaRef}
+					className="builder-sections-scroll @container flex-1 overflow-y-auto overscroll-contain bg-background"
+				>
 					<div className="space-y-4 p-4">
 						{sections.map((section) => (
 							<Fragment key={section}>
@@ -50,7 +53,7 @@ export function BuilderSidebarLeft({ guided = false }: { guided?: boolean }) {
 							</Fragment>
 						))}
 					</div>
-				</ScrollArea>
+				</div>
 				<BuilderStepActions />
 			</div>
 		</>
@@ -68,6 +71,9 @@ function SidebarEdge({ scrollAreaRef }: SidebarEdgeProps) {
 		(section: LeftSidebarSection) => {
 			if (!scrollAreaRef.current) return;
 			toggleSidebar("left", true);
+			if (section !== "custom" && section !== "ai-review") {
+				requestResumePreviewSection(getResumePreviewSectionId(section));
+			}
 
 			const sectionElement = scrollAreaRef.current.querySelector(`#sidebar-${section}`);
 			sectionElement?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });

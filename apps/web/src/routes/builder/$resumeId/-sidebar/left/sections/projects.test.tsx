@@ -28,7 +28,7 @@ const items = vi.hoisted(() => [
 	{
 		id: "p3",
 		name: "Drafts",
-		period: "",
+
 		hidden: false,
 		description: "",
 		website: { url: "", label: "   ", inlineLink: false },

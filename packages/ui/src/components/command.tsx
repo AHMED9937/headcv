@@ -1,13 +1,7 @@
 import type * as React from "react";
 import { CheckIcon, MagnifyingGlassIcon } from "@phosphor-icons/react";
 import { Command as CommandPrimitive } from "cmdk";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-} from "@headcv/ui/components/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@headcv/ui/components/dialog";
 import { InputGroup, InputGroupAddon } from "@headcv/ui/components/input-group";
 import { cn } from "@headcv/utils/style";
 

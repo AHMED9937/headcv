@@ -2,7 +2,6 @@ import type { profileItemSchema } from "@headcv/schema/resume/data";
 import type z from "zod";
 import { Trans } from "@lingui/react/macro";
 import { AnimatePresence, Reorder } from "motion/react";
-import { cn } from "@headcv/utils/style";
 import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
 import { SectionBase } from "../shared/section-base";
 import { SectionAddItemButton, SectionItem } from "../shared/section-item";
@@ -19,7 +18,7 @@ export function ProfilesSectionBuilder() {
 	};
 
 	return (
-		<SectionBase type="profiles" className={cn("rounded-md border", section.items.length === 0 && "border-dashed")}>
+		<SectionBase type="profiles">
 			<Reorder.Group axis="y" values={section.items} onReorder={handleReorder}>
 				<AnimatePresence>
 					{section.items.map((item) => (

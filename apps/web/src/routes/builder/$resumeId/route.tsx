@@ -109,7 +109,7 @@ function GuidedBuilderShell() {
 	const { currentStep, setStep } = useBuilderStep();
 
 	return (
-		<div className="flex h-svh flex-col pt-16">
+		<div className="flex h-svh min-h-0 flex-col overflow-hidden pt-16">
 			<BuilderHeader compact progress={{ currentStep, onChange: setStep }} />
 			<AiAssistantBanner />
 
@@ -119,7 +119,7 @@ function GuidedBuilderShell() {
 					<div className="min-h-0 flex-1">{mobileView === "editor" ? <GuidedEditor /> : <Outlet />}</div>
 				</div>
 			) : (
-				<div className="grid min-h-0 flex-1 grid-cols-[minmax(25rem,45%)_minmax(0,1fr)]">
+				<div className="grid min-h-0 flex-1 grid-cols-[minmax(25rem,45%)_minmax(0,1fr)] overflow-hidden">
 					<div className="min-h-0 bg-background">
 						<GuidedEditor />
 					</div>
@@ -146,7 +146,7 @@ function ImportedBuilderShell({
 	const navigate = useNavigate({ from: Route.fullPath });
 
 	return (
-		<div className="flex h-svh flex-col pt-[7.5rem] md:pt-16">
+		<div className="flex h-svh min-h-0 flex-col overflow-hidden pt-[7.5rem] md:pt-16">
 			<BuilderHeader
 				compact
 				workspace={{

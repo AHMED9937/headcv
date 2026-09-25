@@ -1,7 +1,6 @@
 import type { RoleItem } from "@headcv/schema/resume/data";
 import type z from "zod";
 import type { DialogProps } from "@/dialogs/store";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { PencilSimpleLineIcon, PlusIcon, RowsIcon, TrashSimpleIcon } from "@phosphor-icons/react";
 import { useStore } from "@tanstack/react-form";
@@ -16,19 +15,20 @@ import {
 	DialogTitle,
 } from "@headcv/ui/components/dialog";
 import { FormControl, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
-import { Input } from "@headcv/ui/components/input";
 import { Switch } from "@headcv/ui/components/switch";
+import { hydrateDateRange, prepareDateRangeForSave } from "@headcv/utils/date";
 import { generateId } from "@headcv/utils/string";
+import { MonthInput } from "@/components/input/month-input";
 import { RichInput } from "@/components/input/rich-input";
 import { URLInput } from "@/components/input/url-input";
 import { PhrasePicker } from "@/components/phrase-picker";
-import { TipPopover } from "@/components/tip-popover";
+import { SectionTips } from "@/components/section-tips";
 import { useDialogStore } from "@/dialogs/store";
 import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
 import { useFormBlocker } from "@/hooks/use-form-blocker";
 import { makeSectionItem } from "@/libs/resume/make-section-item";
 import { createSectionItem, updateSectionItem } from "@/libs/resume/section-actions";
-import { useAppForm, withForm } from "@/libs/tanstack-form";
+import { useInlineAppForm, withForm } from "@/libs/tanstack-form";
 
 const formSchema = experienceItemSchema;
 
@@ -40,22 +40,34 @@ const defaultValues: FormValues = {
 	company: "",
 	position: "",
 	location: "",
-	period: "",
+	startDate: "",
+	endDate: "",
+
 	website: { url: "", label: "", inlineLink: false },
 	description: "",
 	roles: [] as RoleItem[],
 };
 
+function withStructuredDates(item: FormValues): FormValues {
+	const hydratedItem = hydrateDateRange(item);
+	return {
+		...hydratedItem,
+		roles: item.roles.map((role) => hydrateDateRange(role)),
+	};
+}
+
 export function CreateExperienceDialog({ data }: DialogProps<"resume.sections.experience.create">) {
 	const closeDialog = useDialogStore((state) => state.closeDialog);
 	const updateResumeData = useUpdateResumeData();
 
-	const form = useAppForm({
-		defaultValues: makeSectionItem(defaultValues, data?.item),
+	const form = useInlineAppForm({
+		defaultValues: withStructuredDates(makeSectionItem(defaultValues, data?.item)),
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {
+			const canonicalValue = prepareDateRangeForSave(value);
+			canonicalValue.roles = value.roles.map((role) => prepareDateRangeForSave(role));
 			updateResumeData((draft) => {
-				createSectionItem(draft, "experience", value, data?.customSectionId);
+				createSectionItem(draft, "experience", canonicalValue, data?.customSectionId);
 			});
 			closeDialog();
 		},
@@ -101,13 +113,19 @@ export function CreateExperienceDialog({ data }: DialogProps<"resume.sections.ex
 export function UpdateExperienceDialog({ data }: DialogProps<"resume.sections.experience.update">) {
 	const closeDialog = useDialogStore((state) => state.closeDialog);
 	const updateResumeData = useUpdateResumeData();
+	const initialValues = withStructuredDates(data.item);
 
-	const form = useAppForm({
-		defaultValues: data.item,
+	const form = useInlineAppForm({
+		defaultValues: initialValues,
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {
+			const canonicalValue = prepareDateRangeForSave(value, initialValues);
+			canonicalValue.roles = value.roles.map((role) => {
+				const initialRole = initialValues.roles.find((candidate) => candidate.id === role.id);
+				return prepareDateRangeForSave(role, initialRole);
+			});
 			updateResumeData((draft) => {
-				updateSectionItem(draft, "experience", value, data?.customSectionId);
+				updateSectionItem(draft, "experience", canonicalValue, data?.customSectionId);
 			});
 			closeDialog();
 		},
@@ -121,7 +139,7 @@ export function UpdateExperienceDialog({ data }: DialogProps<"resume.sections.ex
 			<DialogHeader>
 				<DialogTitle className="flex items-center gap-x-2">
 					<PencilSimpleLineIcon />
-					<Trans>Update an existing experience</Trans>
+					<Trans>Edit Entry</Trans>
 				</DialogTitle>
 				<DialogDescription />
 			</DialogHeader>
@@ -169,7 +187,47 @@ const ExperienceForm = withForm({
 
 				<form.AppField name="position">{(field) => <field.TextField label={<Trans>Position</Trans>} />}</form.AppField>
 
-				<form.AppField name="period">{(field) => <field.TextField label={<Trans>Period</Trans>} />}</form.AppField>
+				<form.Field name="startDate">
+					{(field) => (
+						<FormItem>
+							<FormLabel>
+								<Trans>Start Date</Trans>
+							</FormLabel>
+							<FormControl
+								render={
+									<MonthInput
+										name={field.name}
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(event) => field.handleChange(event.target.value)}
+									/>
+								}
+							/>
+							<FormMessage errors={field.state.meta.errors} />
+						</FormItem>
+					)}
+				</form.Field>
+
+				<form.Field name="endDate">
+					{(field) => (
+						<FormItem>
+							<FormLabel>
+								<Trans>End Date</Trans>
+							</FormLabel>
+							<FormControl
+								render={
+									<MonthInput
+										name={field.name}
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(event) => field.handleChange(event.target.value)}
+									/>
+								}
+							/>
+							<FormMessage errors={field.state.meta.errors} />
+						</FormItem>
+					)}
+				</form.Field>
 
 				<form.Field name="website">
 					{(field) => (
@@ -229,7 +287,9 @@ const ExperienceForm = withForm({
 							form.pushFieldValue("roles", {
 								id: generateId(),
 								position: "",
-								period: "",
+
+								startDate: "",
+								endDate: "",
 								description: "",
 							});
 						}}
@@ -295,7 +355,9 @@ const RoleFields = withForm({
 		role: {
 			id: "",
 			position: "",
-			period: "",
+
+			startDate: "",
+			endDate: "",
 			description: "",
 		} as RoleItem,
 		index: 0,
@@ -335,15 +397,19 @@ const RoleFields = withForm({
 				</div>
 
 				<div className="grid gap-4 p-4 sm:col-span-full sm:grid-cols-2">
-					<form.Field name={`roles[${index}].position`}>
+					<form.AppField name={`roles[${index}].position`}>
+						{(field) => <field.TextField label={<Trans>Position</Trans>} />}
+					</form.AppField>
+
+					<form.Field name={`roles[${index}].startDate`}>
 						{(field) => (
 							<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
 								<FormLabel>
-									<Trans>Position</Trans>
+									<Trans>Start Date</Trans>
 								</FormLabel>
 								<FormControl
 									render={
-										<Input
+										<MonthInput
 											name={field.name}
 											value={field.state.value}
 											onBlur={field.handleBlur}
@@ -356,15 +422,15 @@ const RoleFields = withForm({
 						)}
 					</form.Field>
 
-					<form.Field name={`roles[${index}].period`}>
+					<form.Field name={`roles[${index}].endDate`}>
 						{(field) => (
-							<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
+							<FormItem>
 								<FormLabel>
-									<Trans>Period</Trans>
+									<Trans>End Date</Trans>
 								</FormLabel>
 								<FormControl
 									render={
-										<Input
+										<MonthInput
 											name={field.name}
 											value={field.state.value}
 											onBlur={field.handleBlur}
@@ -403,29 +469,26 @@ function ExperienceTipsAndPhrases({ value, onChange }: { value: string; onChange
 	const experienceLevel = resume.data.metadata.experienceLevel ?? "entry";
 	const locale = "en";
 
-	const tips = [
-		jobTitleId
-			? t`Tailor each bullet to skills commonly expected for this role.`
-			: t`Include measurable results so recruiters can quickly grasp your impact.`,
-		t`Start each point with a strong action verb, e.g., "Led", "Built", "Improved".`,
-		t`Quantify achievements with numbers, percentages, or time saved whenever possible.`,
-	];
-
 	const handleInsert = (text: string) => {
 		onChange(value ? `${value} <p>${text}</p>` : `<p>${text}</p>`);
 	};
 
 	return (
-		<div className="space-y-3 pt-2">
-			<div className="flex items-center justify-end">
-				<PhrasePicker
-					jobTitleId={jobTitleId}
-					experienceLevel={experienceLevel}
-					locale={locale}
-					onInsert={handleInsert}
-				/>
+		<details className="space-y-3 pt-2" data-inline-customizations>
+			<summary className="cursor-pointer font-medium text-muted-foreground text-sm">
+				<Trans>Show customizations for this section</Trans>
+			</summary>
+			<div className="space-y-3 rounded-md border bg-muted/20 p-3">
+				<div className="flex items-center justify-end">
+					<PhrasePicker
+						jobTitleId={jobTitleId}
+						experienceLevel={experienceLevel}
+						locale={locale}
+						onInsert={handleInsert}
+					/>
+				</div>
+				<SectionTips type="experience" />
 			</div>
-			<TipPopover tips={tips} />
-		</div>
+		</details>
 	);
 }

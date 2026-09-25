@@ -3,12 +3,7 @@ import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { pageSchema } from "@headcv/schema/resume/data";
 import { FormControl, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
-import {
-	InputGroup,
-	InputGroupAddon,
-	InputGroupInput,
-	InputGroupText,
-} from "@headcv/ui/components/input-group";
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from "@headcv/ui/components/input-group";
 import { Switch } from "@headcv/ui/components/switch";
 import { Combobox } from "@/components/ui/combobox";
 import { useResume, useUpdateResumeData } from "@/features/resume/builder/draft";

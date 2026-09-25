@@ -6,16 +6,26 @@ import userEvent from "@testing-library/user-event";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
+import { useBuilderSectionNavigation } from "./section-navigation-context";
 
 const aiAssistantMock = vi.hoisted(() => ({ hasReviewableChanges: false }));
 
-const { getContentSectionComponent, getDesignSectionComponent, mobileState, setCollapsed } = vi.hoisted(() => ({
+const {
+	expandLeftSection,
+	getContentSectionComponent,
+	getDesignSectionComponent,
+	isVisibleEditorSection,
+	mobileState,
+	setCollapsed,
+} = vi.hoisted(() => ({
 	getContentSectionComponent: vi.fn((section: string) => (
 		<div data-testid={`content-section-${section}`}>{section}</div>
 	)),
 	getDesignSectionComponent: vi.fn((section: string) => <div data-testid={`design-section-${section}`}>{section}</div>),
+	isVisibleEditorSection: vi.fn((sectionId: string) => sectionId !== "projects" && sectionId !== "interests"),
 	mobileState: { value: false },
 	setCollapsed: vi.fn(),
+	expandLeftSection: vi.fn(),
 }));
 
 vi.mock("@headcv/ui/components/scroll-area", () => ({
@@ -26,8 +36,31 @@ vi.mock("@headcv/ui/components/scroll-area", () => ({
 vi.mock("@/features/resume/builder/draft", () => ({
 	useCurrentResume: () => ({
 		data: {
-			basics: { name: "", headline: "", email: "" },
+			basics: {
+				name: "John Doe",
+				headline: "Engineer",
+				email: "john@example.com",
+				phone: "+123",
+				location: "Remote",
+				website: { url: "https://example.com", label: "Portfolio" },
+				customFields: [],
+			},
+			picture: {
+				hidden: false,
+				url: "",
+				size: 64,
+				rotation: 0,
+				aspectRatio: 1,
+				borderRadius: 0,
+				borderColor: "",
+				borderWidth: 0,
+				shadowColor: "",
+				shadowWidth: 0,
+			},
+			summary: { title: "Summary", columns: 1, hidden: false, content: "" },
 			sections: { experience: { items: [] }, education: { items: [] } },
+			customSections: [],
+			metadata: {},
 		},
 	}),
 }));
@@ -40,14 +73,36 @@ vi.mock("@/features/resume/builder/ai-assistant", () => ({
 vi.mock("../-sidebar/left/section-components", () => ({
 	getSectionComponent: getContentSectionComponent,
 }));
+vi.mock("../-sidebar/left/sections/custom", () => ({
+	CustomSectionBuilder: ({ showAdditionalSections }: { showAdditionalSections?: boolean }) => (
+		<div data-testid="custom-section-builder" data-show-additional={String(showAdditionalSections)}>
+			Custom Sections
+		</div>
+	),
+}));
+vi.mock("../-sidebar/left/sections/personal-details", () => ({
+	PersonalDetailsSectionBuilder: () => {
+		const { navigateToSection } = useBuilderSectionNavigation();
+		return (
+			<button type="button" data-testid="personal-details-section" onClick={() => navigateToSection?.("basics")}>
+				Personal Details
+			</button>
+		);
+	},
+}));
 vi.mock("../-sidebar/right/section-components", () => ({
 	getSectionComponent: getDesignSectionComponent,
 }));
 vi.mock("../-sidebar/right/sections/export", () => ({
 	ExportSectionBuilder: () => <div data-testid="export-section" />,
 }));
+vi.mock("../-sidebar/right/sections/layout/visibility", () => ({
+	isVisibleEditorSection,
+}));
 vi.mock("../-store/section", () => ({
-	useSectionStore: (selector: (state: { setCollapsed: typeof setCollapsed }) => unknown) => selector({ setCollapsed }),
+	useSectionStore: (
+		selector: (state: { setCollapsed: typeof setCollapsed; expandLeftSection: typeof expandLeftSection }) => unknown,
+	) => selector({ setCollapsed, expandLeftSection }),
 }));
 
 const { ImportedWorkspace } = await import("./imported-workspace");
@@ -60,8 +115,10 @@ beforeEach(() => {
 	mobileState.value = false;
 	aiAssistantMock.hasReviewableChanges = false;
 	setCollapsed.mockClear();
+	expandLeftSection.mockClear();
 	getContentSectionComponent.mockClear();
 	getDesignSectionComponent.mockClear();
+	isVisibleEditorSection.mockClear();
 });
 
 const renderWorkspace = (overrides: Partial<ComponentProps<typeof ImportedWorkspace>> = {}) => {
@@ -87,7 +144,7 @@ const renderWorkspace = (overrides: Partial<ComponentProps<typeof ImportedWorksp
 };
 
 describe("ImportedWorkspace", () => {
-	it("renders Design with the same section-navigation pattern as Content", async () => {
+	it("renders Design with the same section-navigation pattern", async () => {
 		const { props } = renderWorkspace({ isImported: true });
 		const navigation = screen.getByRole("navigation", { name: "Design your resume" });
 		const sectionButtons = within(navigation).getAllByRole("button");
@@ -101,7 +158,7 @@ describe("ImportedWorkspace", () => {
 			"Notes",
 		]);
 		expect(within(navigation).getByRole("button", { name: "Typography" })).toHaveAttribute("aria-current", "page");
-		expect(within(navigation).getByText("Imported")).toBeInTheDocument();
+		expect(screen.getByText("Imported")).toBeInTheDocument();
 		expect(screen.getByTestId("design-section-typography")).toBeInTheDocument();
 		expect(screen.queryByTestId("design-section-template")).not.toBeInTheDocument();
 		expect(getDesignSectionComponent).toHaveBeenCalledTimes(1);
@@ -111,28 +168,56 @@ describe("ImportedWorkspace", () => {
 		expect(props.onDesignSectionChange).toHaveBeenCalledWith("layout");
 	});
 
-	it("keeps Content on the shared navigation and mounts only its selected section", () => {
+	it("renders Content as stacked sections in CV order with a Personal Details card", () => {
 		renderWorkspace({ tab: "content", section: "experience" });
 
-		expect(screen.getByRole("navigation", { name: "Resume content" })).toBeInTheDocument();
-		expect(screen.getByTestId("content-section-experience")).toBeInTheDocument();
-		expect(screen.queryByTestId("design-section-typography")).not.toBeInTheDocument();
-		expect(getContentSectionComponent).toHaveBeenCalledTimes(1);
-		expect(getContentSectionComponent).toHaveBeenCalledWith("experience");
+		expect(screen.getByTestId("personal-details-section")).toBeInTheDocument();
+
+		const visibleSections = [
+			"summary",
+			"profiles",
+			"experience",
+			"education",
+			"skills",
+			"languages",
+			"awards",
+			"certifications",
+			"publications",
+			"volunteer",
+			"references",
+		];
+		for (const sectionId of visibleSections) {
+			expect(screen.getByTestId(`content-section-${sectionId}`)).toBeInTheDocument();
+		}
+
+		expect(screen.queryByTestId("content-section-picture")).not.toBeInTheDocument();
+		expect(screen.queryByTestId("content-section-basics")).not.toBeInTheDocument();
+		expect(screen.queryByTestId("content-section-projects")).not.toBeInTheDocument();
+		expect(screen.queryByTestId("content-section-interests")).not.toBeInTheDocument();
+		expect(screen.getByTestId("custom-section-builder")).toBeInTheDocument();
+		expect(screen.getByTestId("custom-section-builder")).toHaveAttribute("data-show-additional", "true");
+		expect(screen.queryByTestId("content-section-ai-review")).not.toBeInTheDocument();
 	});
 
-	it("expands the selected section whenever the active workspace changes", async () => {
-		const view = renderWorkspace({ tab: "content", section: "summary" });
+	it("navigates to basics from the Personal Details header", async () => {
+		const { props } = renderWorkspace({ tab: "content", section: "summary" });
 
-		await waitFor(() => expect(setCollapsed).toHaveBeenCalledWith("summary", false));
+		await userEvent.click(screen.getByTestId("personal-details-section"));
 
-		view.rerender(
-			<I18nProvider i18n={i18n}>
-				<ImportedWorkspace {...view.props} tab="design" designSection="page" />
-			</I18nProvider>,
-		);
+		expect(props.onSectionChange).toHaveBeenCalledWith("basics");
+	});
 
-		await waitFor(() => expect(setCollapsed).toHaveBeenCalledWith("page", false));
+	it("expands the active Content section and scrolls to it", async () => {
+		renderWorkspace({ tab: "content", section: "summary" });
+
+		await waitFor(() => expect(expandLeftSection).toHaveBeenCalledWith("summary"));
+	});
+
+	it("shows the AI Review section when there are reviewable changes", () => {
+		aiAssistantMock.hasReviewableChanges = true;
+		renderWorkspace({ tab: "content", section: "experience" });
+
+		expect(screen.getByTestId("content-section-ai-review")).toBeInTheDocument();
 	});
 
 	it("changes Design categories through the compact selector", async () => {
@@ -157,13 +242,5 @@ describe("ImportedWorkspace", () => {
 
 		await userEvent.click(screen.getByRole("button", { name: "Editor" }));
 		expect(screen.getByTestId("design-section-typography")).toBeInTheDocument();
-	});
-
-	it("shows the AI Review section in the content navigator when there are reviewable changes", () => {
-		aiAssistantMock.hasReviewableChanges = true;
-		renderWorkspace({ tab: "content", section: "experience" });
-
-		const navigation = screen.getByRole("navigation", { name: "Resume content" });
-		expect(within(navigation).getByRole("button", { name: "AI Review" })).toBeInTheDocument();
 	});
 });

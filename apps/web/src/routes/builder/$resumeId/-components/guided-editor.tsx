@@ -1,5 +1,6 @@
 import { Trans } from "@lingui/react/macro";
 import { ScrollArea } from "@headcv/ui/components/scroll-area";
+import { useDialogStore } from "@/dialogs/store";
 import { BuilderStepActions } from "@/features/builder/step-actions";
 import { getStepSectionId, useBuilderStep } from "@/features/builder/use-builder-step";
 import { useCurrentResume } from "@/features/resume/builder/draft";
@@ -9,11 +10,18 @@ import { ExportSectionBuilder } from "../-sidebar/right/sections/export";
 import { PageSectionBuilder } from "../-sidebar/right/sections/page";
 import { TemplateSectionBuilder } from "../-sidebar/right/sections/template";
 import { TypographySectionBuilder } from "../-sidebar/right/sections/typography";
+import { InlineSectionEditor } from "./inline-section-editor";
 
 export function GuidedEditor() {
 	const { currentStep } = useBuilderStep();
 	const sectionId = getStepSectionId(currentStep);
+	const showingInlineEditor = useDialogStore(
+		(state) =>
+			state.presentation === "inline" &&
+			/^resume\.sections\.[^.]+\.(create|update)$/.test(state.activeDialog?.type ?? ""),
+	);
 
+	if (showingInlineEditor) return <InlineSectionEditor />;
 	if (sectionId) return <BuilderSidebarLeft guided />;
 
 	return (

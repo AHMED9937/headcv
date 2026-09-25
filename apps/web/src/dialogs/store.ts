@@ -5,6 +5,7 @@ export type { DialogProps };
 
 interface DialogStoreState {
 	open: boolean;
+	presentation: "modal" | "inline";
 	activeDialog: DialogSchema | null;
 	onBeforeClose: (() => boolean | Promise<boolean>) | null;
 }
@@ -12,6 +13,7 @@ interface DialogStoreState {
 interface DialogStoreActions {
 	onOpenChange: (open: boolean, eventDetails?: { cancel?: () => void }) => void;
 	openDialog: <T extends DialogType>(type: T, data: DialogData<T>) => void;
+	openInlineDialog: <T extends DialogType>(type: T, data: DialogData<T>) => void;
 	closeDialog: () => void;
 	setOnBeforeClose: (handler: (() => boolean | Promise<boolean>) | null) => void;
 }
@@ -20,6 +22,7 @@ type DialogStore = DialogStoreState & DialogStoreActions;
 
 export const useDialogStore = create<DialogStore>((set) => ({
 	open: false,
+	presentation: "modal",
 	activeDialog: null,
 	onBeforeClose: null,
 	onOpenChange: (open, eventDetails) => {
@@ -36,13 +39,21 @@ export const useDialogStore = create<DialogStore>((set) => ({
 	openDialog: (type, data) =>
 		set({
 			open: true,
+			presentation: "modal",
+			activeDialog: { type, data } as DialogSchema,
+			onBeforeClose: null,
+		}),
+	openInlineDialog: (type, data) =>
+		set({
+			open: false,
+			presentation: "inline",
 			activeDialog: { type, data } as DialogSchema,
 			onBeforeClose: null,
 		}),
 	closeDialog: () => {
 		set({ open: false });
 		setTimeout(() => {
-			set({ activeDialog: null, onBeforeClose: null });
+			set({ activeDialog: null, onBeforeClose: null, presentation: "modal" });
 		}, 300);
 	},
 	setOnBeforeClose: (handler) => set({ onBeforeClose: handler }),

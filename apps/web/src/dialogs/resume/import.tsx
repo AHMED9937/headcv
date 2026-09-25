@@ -112,7 +112,7 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 			setIsImporting(true);
 
 			const toastId = toast.loading(t`Importing your resume...`, {
-				description: t`This may take a few minutes, depending on the response of the AI provider. Please do not close the window or refresh the page.`,
+				description: t`loading....`,
 			});
 
 			try {

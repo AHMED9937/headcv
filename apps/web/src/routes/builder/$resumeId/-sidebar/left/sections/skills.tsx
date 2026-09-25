@@ -2,7 +2,6 @@ import type { skillItemSchema } from "@headcv/schema/resume/data";
 import type z from "zod";
 import { Trans } from "@lingui/react/macro";
 import { AnimatePresence, Reorder } from "motion/react";
-import { cn } from "@headcv/utils/style";
 import { SkillSuggestions } from "@/components/skill-suggestions";
 import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
 import { SectionBase } from "../shared/section-base";
@@ -21,12 +20,14 @@ export function SkillsSectionBuilder() {
 	};
 
 	return (
-		<SectionBase type="skills" className={cn("rounded-md border", section.items.length === 0 && "border-dashed")}>
-			<SkillSuggestions
-				jobTitleId={resume.data.metadata?.targetJobTitleId || undefined}
-				experienceLevel={resume.data.metadata?.experienceLevel}
-				locale={locale}
-			/>
+		<SectionBase type="skills">
+			<div className="p-4">
+				<SkillSuggestions
+					jobTitleId={resume.data.metadata?.targetJobTitleId || undefined}
+					experienceLevel={resume.data.metadata?.experienceLevel}
+					locale={locale}
+				/>
+			</div>
 
 			<Reorder.Group axis="y" values={section.items} onReorder={handleReorder}>
 				<AnimatePresence initial={false} mode="popLayout">

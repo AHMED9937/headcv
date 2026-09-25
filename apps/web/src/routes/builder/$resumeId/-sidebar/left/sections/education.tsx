@@ -5,7 +5,6 @@ import { Trans } from "@lingui/react/macro";
 import { AnimatePresence, Reorder } from "motion/react";
 import { useState } from "react";
 import { Button } from "@headcv/ui/components/button";
-import { cn } from "@headcv/utils/style";
 import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
 import { SectionBase } from "../shared/section-base";
 import { SectionAddItemButton, SectionItem } from "../shared/section-item";
@@ -45,9 +44,9 @@ export function EducationSectionBuilder() {
 	};
 
 	return (
-		<SectionBase type="education" className={cn("rounded-md border", section.items.length === 0 && "border-dashed")}>
+		<SectionBase type="education">
 			{showReorderPrompt && (
-				<div className="rounded-md border border-primary/20 border-l-4 bg-primary/5 p-3 text-sm">
+				<div className="m-4 rounded-md border border-primary/20 border-l-4 bg-primary/5 p-3 text-sm">
 					<p className="mb-2 font-medium text-primary">{t`Education before experience?`}</p>
 					<p className="mb-3 text-muted-foreground">
 						<Trans>

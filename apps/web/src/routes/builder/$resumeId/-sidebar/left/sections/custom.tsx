@@ -30,6 +30,7 @@ import {
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from "@headcv/ui/components/dropdown-menu";
+import { formatDateRange } from "@headcv/utils/date";
 import { stripHtml } from "@headcv/utils/string";
 import { cn } from "@headcv/utils/style";
 import { useDialogStore } from "@/dialogs/store";
@@ -38,6 +39,7 @@ import { useBuilderStep } from "@/features/builder/use-builder-step";
 import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
 import { useConfirm } from "@/hooks/use-confirm";
 import { getSectionTitle } from "@/libs/resume/section";
+import { deleteCustomSection, toggleCustomSectionHidden } from "@/libs/resume/section-actions";
 import { SectionBase } from "../shared/section-base";
 import { SectionAddItemButton, SectionItem } from "../shared/section-item";
 
@@ -96,14 +98,14 @@ function getItemSubtitle(type: CustomSectionType, item: CustomSectionItemType): 
 		.with("profiles", () => ("username" in item ? item.username : undefined))
 		.with("experience", () => ("position" in item ? item.position : undefined))
 		.with("education", () => ("degree" in item ? item.degree : undefined))
-		.with("projects", () => ("period" in item ? item.period : undefined))
+		.with("projects", () => ("startDate" in item || "period" in item ? formatDateRange(item) : undefined))
 		.with("skills", () => ("proficiency" in item ? item.proficiency : undefined))
 		.with("languages", () => ("fluency" in item ? item.fluency : undefined))
 		.with("interests", () => undefined)
 		.with("awards", () => ("awarder" in item ? item.awarder : undefined))
 		.with("certifications", () => ("issuer" in item ? item.issuer : undefined))
 		.with("publications", () => ("publisher" in item ? item.publisher : undefined))
-		.with("volunteer", () => ("period" in item ? item.period : undefined))
+		.with("volunteer", () => ("startDate" in item || "period" in item ? formatDateRange(item) : undefined))
 		.with("references", () => undefined)
 		.with("cover-letter", () => {
 			if ("content" in item) {
@@ -115,15 +117,15 @@ function getItemSubtitle(type: CustomSectionType, item: CustomSectionItemType): 
 		.exhaustive();
 }
 
-export function CustomSectionBuilder() {
+export function CustomSectionBuilder({ showAdditionalSections }: { showAdditionalSections?: boolean } = {}) {
 	const resume = useCurrentResume();
 	const customSections = resume.data.customSections;
 	const { currentStep } = useBuilderStep();
-	const showAdditionalSections = currentStep === "additional-sections";
+	const shouldShowAdditional = showAdditionalSections ?? currentStep === "additional-sections";
 
 	return (
 		<SectionBase type="custom" className={cn("space-y-4", customSections.length === 0 && "border-dashed")}>
-			{showAdditionalSections && <AdditionalSections />}
+			{shouldShowAdditional && <AdditionalSections />}
 
 			<AnimatePresence>
 				{customSections.map((section) => (
@@ -140,11 +142,11 @@ export function CustomSectionBuilder() {
 }
 
 function CustomSectionContainer({ section }: { section: CustomSection }) {
-	const { openDialog } = useDialogStore();
+	const { openInlineDialog } = useDialogStore();
 	const updateResumeData = useUpdateResumeData();
 
 	const onUpdateSection = () => {
-		openDialog("resume.sections.custom.update", section);
+		openInlineDialog("resume.sections.custom.update", section);
 	};
 
 	const handleReorder = (items: CustomSectionItemType[]) => {
@@ -211,23 +213,21 @@ function CustomSectionContainer({ section }: { section: CustomSection }) {
 
 function CustomSectionDropdownMenu({ section }: { section: CustomSection }) {
 	const confirm = useConfirm();
-	const { openDialog } = useDialogStore();
+	const { openInlineDialog } = useDialogStore();
 	const updateResumeData = useUpdateResumeData();
 
 	const onToggleSectionVisibility = () => {
 		updateResumeData((draft) => {
-			const sectionIndex = draft.customSections.findIndex((_section) => _section.id === section.id);
-			if (sectionIndex === -1) return;
-			draft.customSections[sectionIndex].hidden = !draft.customSections[sectionIndex].hidden;
+			toggleCustomSectionHidden(draft, section.id);
 		});
 	};
 
 	const onUpdateSection = () => {
-		openDialog("resume.sections.custom.update", section);
+		openInlineDialog("resume.sections.custom.update", section);
 	};
 
 	const onDuplicateSection = () => {
-		openDialog("resume.sections.custom.create", section);
+		openInlineDialog("resume.sections.custom.create", section);
 	};
 
 	const onSetColumns = (value: string) => {
@@ -253,12 +253,7 @@ function CustomSectionDropdownMenu({ section }: { section: CustomSection }) {
 		if (!confirmed) return;
 
 		updateResumeData((draft) => {
-			draft.customSections = draft.customSections.filter((_section) => _section.id !== section.id);
-			draft.metadata.layout.pages = draft.metadata.layout.pages.map((page) => ({
-				...page,
-				main: page.main.filter((id) => id !== section.id),
-				sidebar: page.sidebar.filter((id) => id !== section.id),
-			}));
+			deleteCustomSection(draft, section.id);
 		});
 	};
 

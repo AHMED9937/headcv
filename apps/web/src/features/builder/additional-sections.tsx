@@ -21,19 +21,16 @@ const OPTIONAL_SECTIONS: SectionType[] = [
 export function AdditionalSections() {
 	const resume = useCurrentResume();
 	const updateResumeData = useUpdateResumeData();
-	const { openDialog } = useDialogStore();
+	const { openInlineDialog } = useDialogStore();
 
 	const handleAdd = (type: SectionType | "custom") => {
 		if (type === "custom") {
-			openDialog("resume.sections.custom.create", undefined);
+			openInlineDialog("resume.sections.custom.create", undefined);
 			return;
 		}
 
-		updateResumeData((draft) => {
-			draft.sections[type].hidden = false;
-		});
-
-		openDialog(`resume.sections.${type}.create` as const, undefined);
+		// The section is un-hidden and placed on the layout when the first entry is saved.
+		openInlineDialog(`resume.sections.${type}.create` as const, undefined);
 	};
 
 	const handleSkip = (type: SectionType | "custom") => {

@@ -18,7 +18,7 @@ import { useDialogStore } from "@/dialogs/store";
 import { useUpdateResumeData } from "@/features/resume/builder/draft";
 import { useFormBlocker } from "@/hooks/use-form-blocker";
 import { makeSectionItem } from "@/libs/resume/make-section-item";
-import { useAppForm, withForm } from "@/libs/tanstack-form";
+import { useInlineAppForm, withForm } from "@/libs/tanstack-form";
 
 const formSchema = summaryItemSchema;
 
@@ -34,7 +34,7 @@ export function CreateSummaryItemDialog({ data }: DialogProps<"resume.sections.s
 	const closeDialog = useDialogStore((state) => state.closeDialog);
 	const updateResumeData = useUpdateResumeData();
 
-	const form = useAppForm({
+	const form = useInlineAppForm({
 		defaultValues: makeSectionItem(defaultValues, data?.item),
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {
@@ -42,6 +42,9 @@ export function CreateSummaryItemDialog({ data }: DialogProps<"resume.sections.s
 				if (data?.customSectionId) {
 					const section = draft.customSections.find((s) => s.id === data.customSectionId);
 					if (section) section.items.push(value);
+				} else {
+					draft.summary.content = value.content;
+					draft.summary.hidden = value.hidden;
 				}
 			});
 			closeDialog();
@@ -89,7 +92,7 @@ export function UpdateSummaryItemDialog({ data }: DialogProps<"resume.sections.s
 	const closeDialog = useDialogStore((state) => state.closeDialog);
 	const updateResumeStore = useUpdateResumeData();
 
-	const form = useAppForm({
+	const form = useInlineAppForm({
 		defaultValues: data.item,
 		validators: { onSubmit: formSchema },
 		onSubmit: async ({ value }) => {
@@ -99,6 +102,9 @@ export function UpdateSummaryItemDialog({ data }: DialogProps<"resume.sections.s
 					if (!section) return;
 					const index = section.items.findIndex((item) => item.id === value.id);
 					if (index !== -1) section.items[index] = value;
+				} else {
+					draft.summary.content = value.content;
+					draft.summary.hidden = value.hidden;
 				}
 			});
 			closeDialog();

@@ -1,9 +1,33 @@
 import type { ResumeData } from "@headcv/schema/resume/data";
 import { describe, expect, it } from "vitest";
 import { defaultResumeData } from "@headcv/schema/resume/default";
-import { filterVisibleLayoutSectionIds } from "./visibility";
+import { filterVisibleLayoutSectionIds, isVisibleEditorSection } from "./visibility";
 
 const createResumeData = (): ResumeData => structuredClone(defaultResumeData);
+
+describe("isVisibleEditorSection", () => {
+	it("keeps item-backed sections visible when every item is hidden", () => {
+		const data = createResumeData();
+		data.sections.experience.items = [{ hidden: true, company: "HeadCV" }] as never;
+		data.sections.references.items = [{ hidden: true, name: "Hidden Reference" }] as never;
+
+		expect(isVisibleEditorSection("experience", data)).toBe(true);
+		expect(isVisibleEditorSection("references", data)).toBe(true);
+	});
+
+	it("still hides sections with no items at all", () => {
+		const data = createResumeData();
+		data.sections.experience.items = [];
+		expect(isVisibleEditorSection("experience", data)).toBe(false);
+	});
+
+	it("still hides explicitly hidden sections", () => {
+		const data = createResumeData();
+		data.sections.experience.hidden = true;
+		data.sections.experience.items = [{ hidden: false, company: "HeadCV" }] as never;
+		expect(isVisibleEditorSection("experience", data)).toBe(false);
+	});
+});
 
 describe("filterVisibleLayoutSectionIds", () => {
 	it("removes item-backed sections with no visible items", () => {
