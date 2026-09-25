@@ -1,0 +1,6 @@
+.devin/
+.tmp-*
+docs/slices/
+packages/**/.tmp-*
+packages/auth/test-ai-config.mjs
+apps/web/public/brand/facebook-cover-*

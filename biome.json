@@ -16,7 +16,8 @@
 			"!**/.wrangler",
 			"!**/coverage",
 			"!**/reports",
-			"!**/routeTree.gen.ts"
+			"!**/routeTree.gen.ts",
+			"!headcv-landing-prototype.html"
 		]
 	},
 	"plugins": ["./tooling/grit/workspace-boundaries.grit"],

@@ -65,3 +65,11 @@ temp
 
 # Git Hooks
 .vite-hooks/
+
+.vercel
+.env*
+
+# Local debug scratch files
+.tmp-*
+packages/*/.tmp-*
+packages/auth/check-neon.mjs
