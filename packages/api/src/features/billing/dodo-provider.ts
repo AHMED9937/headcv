@@ -6,6 +6,7 @@
  * uses `client.webhooks.unwrap()` on the raw body — never re-serialized JSON.
  */
 
+import type { CheckoutTheme } from "./checkout-theme";
 import type {
 	CheckoutSessionDetails,
 	CheckoutSessionResult,
@@ -16,6 +17,7 @@ import type {
 } from "./provider";
 import DodoPayments from "dodopayments";
 import { env } from "@headcv/env/server";
+import { CHECKOUT_THEME_CONFIG } from "./checkout-theme";
 
 // ---------------------------------------------------------------------------
 // Plan → Dodo product ID mapping
@@ -82,6 +84,7 @@ export class DodoPaymentsProvider implements PaymentProvider {
 		customerId?: string;
 		returnUrl: string;
 		metadata?: Record<string, string>;
+		theme?: CheckoutTheme;
 	}): Promise<CheckoutSessionResult> {
 		const client = getClient();
 		const productId = getProductId(params.plan);
@@ -95,6 +98,10 @@ export class DodoPaymentsProvider implements PaymentProvider {
 			},
 			return_url: params.returnUrl,
 			...(params.metadata ? { metadata: params.metadata } : {}),
+			customization: {
+				theme: params.theme ?? "light",
+				theme_config: CHECKOUT_THEME_CONFIG,
+			},
 		});
 
 		return {

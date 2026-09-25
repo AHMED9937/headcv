@@ -1,8 +1,10 @@
 import type { PlanSlug } from "./service";
 import { ORPCError } from "@orpc/client";
+import { parseCookies } from "better-auth/cookies";
 import { z } from "zod";
 import { env } from "@headcv/env/server";
 import { protectedProcedure, publicProcedure } from "../../context";
+import { checkoutThemeFromCookie } from "./checkout-theme";
 import { getPaymentProvider } from "./provider.js";
 import { billingService, entitlementService, getEffectiveAccess, getPlanLimits, hasUsedTrial } from "./service";
 
@@ -127,6 +129,7 @@ export const billingRouter = {
 					customerName: context.user.name,
 					returnUrl,
 					metadata: { userId: context.user.id },
+					theme: checkoutThemeFromCookie(parseCookies(context.reqHeaders.get("cookie") ?? "").get("theme")),
 				});
 
 				// Persist the provider customer association so webhooks can map back

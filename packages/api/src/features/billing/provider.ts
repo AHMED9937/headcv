@@ -5,6 +5,8 @@
  * Feature code consumes these interfaces — never provider-specific APIs directly.
  */
 
+import type { CheckoutTheme } from "./checkout-theme";
+
 // ---------------------------------------------------------------------------
 // Normalized types
 // ---------------------------------------------------------------------------
@@ -47,6 +49,8 @@ export interface PaymentProvider {
 		customerId?: string;
 		returnUrl: string;
 		metadata?: Record<string, string>;
+		/** The app theme the user is on, so hosted checkout can match it. */
+		theme?: CheckoutTheme;
 	}): Promise<CheckoutSessionResult>;
 
 	getCustomerPortalUrl(params: { customerId: string; returnUrl: string }): Promise<CustomerPortalResult>;
