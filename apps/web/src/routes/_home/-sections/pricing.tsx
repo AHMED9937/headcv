@@ -2,10 +2,12 @@ import { t } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
 import { CheckIcon } from "@phosphor-icons/react";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouteContext } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@headcv/ui/components/button";
 import { cn } from "@headcv/utils/style";
+import { getProFeatures } from "@/features/billing/plan-picker";
+import { useCheckout, useSubscription } from "@/features/billing/use-subscription";
 
 function Benefits({ items, pro = false }: { items: string[]; pro?: boolean }) {
 	return (
@@ -30,6 +32,10 @@ export function Pricing() {
 	const [billing, setBilling] = useState<"monthly" | "yearly">("yearly");
 	const { i18n } = useLingui();
 	const money = (value: number) => i18n.number(value, { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+
+	const { checkout: handleCheckout, isLoading: checkoutLoading } = useCheckout();
+	const { session } = useRouteContext({ strict: false });
+	const { trialEligible } = useSubscription({ enabled: !!session });
 	const freeFeatures = [
 		t({ id: "home.plan.resume", message: "Create and edit your resume" }),
 		t({ id: "home.plan.pdf", message: "Download your PDF" }),
@@ -37,13 +43,7 @@ export function Pricing() {
 		t({ id: "home.plan.templates", message: "Every resume template included" }),
 		t({ id: "home.plan.design", message: "Your fonts, colors and layout" }),
 	];
-	const proFeatures = [
-		t({ id: "home.pro.resumes", message: "Unlimited resumes for every opportunity" }),
-		t({ id: "home.pro.letters", message: "Unlimited matching cover letters" }),
-		t({ id: "home.pro.imports", message: "Import without limits" }),
-		t({ id: "home.pro.tracker", message: "Your applications, organized" }),
-		t({ id: "home.pro.ai", message: "AI assistance for your next draft" }),
-	];
+	const proFeatures = getProFeatures();
 	return (
 		<section
 			id="pricing"
@@ -61,8 +61,7 @@ export function Pricing() {
 				</h2>
 				<p className="mx-auto mt-5 max-w-2xl text-center text-muted-foreground leading-relaxed">
 					<Trans id="home.pricing.disclosure">
-						The free builder is available now. Paid plans are coming soon; the prices below are planned, and no payment
-						is taken.
+						The free builder is available now. Upgrade to Pro for unlimited imports and AI assistance.
 					</Trans>
 				</p>
 				<div className="mt-10 grid gap-6 md:grid-cols-2">
@@ -94,9 +93,6 @@ export function Pricing() {
 					<div className="rounded-2xl bg-primary p-6 text-start text-primary-foreground shadow-lg sm:p-8">
 						<div className="flex flex-wrap items-center justify-between gap-3">
 							<h3 className="font-display font-semibold text-2xl">Pro</h3>
-							<span className="rounded-full border border-primary-foreground/30 px-3 py-1 font-medium text-xs">
-								<Trans id="home.comingSoon">Coming soon</Trans>
-							</span>
 						</div>
 						{/* Billing toggle */}
 						<fieldset
@@ -158,47 +154,59 @@ export function Pricing() {
 							</p>
 						</div>
 						<Button
-							disabled
-							className="mt-4 h-auto min-h-12 w-full whitespace-normal bg-accent py-3 text-accent-foreground disabled:opacity-100"
+							disabled={checkoutLoading}
+							onClick={() => handleCheckout(billing)}
+							className="mt-4 h-auto min-h-12 w-full whitespace-normal bg-accent py-3 text-accent-foreground"
 						>
-							<Trans id="home.pricing.proSoon">Pro is coming soon</Trans>
+							{checkoutLoading ? (
+								<Trans id="home.pricing.loading">Redirecting to checkout...</Trans>
+							) : (
+								<Trans id="home.pricing.getPro">Get Pro</Trans>
+							)}
 						</Button>
 						<Benefits items={proFeatures} pro />
 					</div>
 				</div>
-				{/* Trial follows the subscription plans. */}
-				<section
-					aria-labelledby="trial-heading"
-					className="mx-auto mt-6 grid max-w-4xl grid-cols-[auto_minmax(0,1fr)] items-center gap-5 rounded-2xl border border-[#c9a227] bg-linear-to-r from-[#f5e8bf] to-[#fffaf0] p-5 text-start text-[#152642] sm:p-6 lg:grid-cols-[auto_minmax(0,1fr)_auto]"
-				>
-					<div className="border-[#b39235] border-e border-dashed pe-5">
-						<bdi className="font-bold font-display text-5xl tracking-tight">
-							{i18n.number(3, {
-								style: "currency",
-								currency: "USD",
-								currencyDisplay: "narrowSymbol",
-								maximumFractionDigits: 0,
-							})}
-						</bdi>
-					</div>
-					<div className="min-w-0">
-						<p className="inline-block rounded-lg bg-[#152642] px-4 py-2 font-bold text-sm text-white uppercase tracking-widest rtl:tracking-normal">
-							<Trans id="home.offer.label">7-day trial</Trans>
-						</p>
-						<h3 id="trial-heading" className="mt-2 font-display font-semibold text-xl sm:text-2xl">
-							<Trans id="home.offer.title">Try all of Pro.</Trans>
-						</h3>
-						<p className="mt-1 text-sm leading-relaxed">
-							<Trans id="home.offer.description">Every Pro tool. Unlimited resumes.</Trans>
-						</p>
-					</div>
-					<Button
-						disabled
-						className="col-span-2 h-auto min-h-11 whitespace-normal bg-[#152642] px-5 py-3 text-white disabled:opacity-100 lg:col-span-1"
+				{/* Trial follows the subscription plans; shown once per user. */}
+				{trialEligible && (
+					<section
+						aria-labelledby="trial-heading"
+						className="mx-auto mt-6 grid max-w-4xl grid-cols-[auto_minmax(0,1fr)] items-center gap-5 rounded-2xl border border-[#c9a227] bg-linear-to-r from-[#f5e8bf] to-[#fffaf0] p-5 text-start text-[#152642] sm:p-6 lg:grid-cols-[auto_minmax(0,1fr)_auto]"
 					>
-						<Trans id="home.comingSoon">Coming soon</Trans>
-					</Button>
-				</section>
+						<div className="border-[#b39235] border-e border-dashed pe-5">
+							<bdi className="font-bold font-display text-5xl tracking-tight">
+								{i18n.number(3, {
+									style: "currency",
+									currency: "USD",
+									currencyDisplay: "narrowSymbol",
+									maximumFractionDigits: 0,
+								})}
+							</bdi>
+						</div>
+						<div className="min-w-0">
+							<p className="inline-block rounded-lg bg-[#152642] px-4 py-2 font-bold text-sm text-white uppercase tracking-widest rtl:tracking-normal">
+								<Trans id="home.offer.label">7-day trial</Trans>
+							</p>
+							<h3 id="trial-heading" className="mt-2 font-display font-semibold text-xl sm:text-2xl">
+								<Trans id="home.offer.title">Try all of Pro.</Trans>
+							</h3>
+							<p className="mt-1 text-sm leading-relaxed">
+								<Trans id="home.offer.description">Every Pro tool. Unlimited resumes.</Trans>
+							</p>
+						</div>
+						<Button
+							disabled={checkoutLoading}
+							onClick={() => handleCheckout("trial")}
+							className="col-span-2 h-auto min-h-11 whitespace-normal bg-[#152642] px-5 py-3 text-white lg:col-span-1"
+						>
+							{checkoutLoading ? (
+								<Trans id="home.pricing.loading">Redirecting to checkout...</Trans>
+							) : (
+								<Trans id="home.pricing.startTrial">Start 7-day trial</Trans>
+							)}
+						</Button>
+					</section>
+				)}
 			</div>
 		</section>
 	);

@@ -15,6 +15,7 @@ import { handleLlms, handleRobots, handleSitemap } from "../static/seo";
 import { handleUpload } from "../static/uploads";
 import { handleWebApp, handleWebAppHead, serveWebDistStatic } from "../static/web";
 import { handleAuth, handleOAuth } from "./auth";
+import { handleDodoWebhook } from "./billing-webhook";
 import { handleHealth } from "./health";
 
 export function createApp() {
@@ -27,6 +28,7 @@ export function createApp() {
 	app.get("/api/auth/oauth", (c) => handleOAuth(c.req.raw));
 	app.all("/api/auth/*", (c) => handleAuth(c.req.raw));
 	app.get("/api/health", () => handleHealth());
+	app.post("/api/webhooks/dodo", (c) => handleDodoWebhook(c));
 	app.get("/api/uploads/*", (c) => handleUpload(c.req.raw));
 	app.get("/uploads/*", (c) => handleUpload(c.req.raw));
 	app.get("/schema.json", () => handleSchemaJson());

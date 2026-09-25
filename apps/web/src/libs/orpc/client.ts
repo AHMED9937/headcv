@@ -1,9 +1,17 @@
 import type router from "@headcv/api/routers";
 import type { InferRouterInputs, InferRouterOutputs, RouterClient } from "@orpc/server";
-import { createORPCClient, onError } from "@orpc/client";
+import { createORPCClient, ORPCError, onError } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
 import { BatchLinkPlugin } from "@orpc/client/plugins";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
+import { useDialogStore } from "@/dialogs/store";
+
+/** Quota errors open the upgrade dialog at the moment of need instead of a dead-end error. */
+export const openUpgradeOnLimit = (error: unknown) => {
+	if (typeof window === "undefined" || !(error instanceof ORPCError) || error.code !== "UPGRADE_REQUIRED") return;
+	const reason = /resume limit/i.test(error.message) ? "resume-limit" : "ai-limit";
+	useDialogStore.getState().openDialog("billing.upgrade", { reason });
+};
 
 const getRpcUrl = () => {
 	if (typeof window === "undefined") return "http://localhost:3000/api/rpc";
@@ -23,6 +31,7 @@ const createRpcClient = (): RouterClient<typeof router> => {
 		interceptors: [
 			onError((error) => {
 				if (error instanceof DOMException && error.name === "AbortError") return;
+				openUpgradeOnLimit(error);
 				console.warn("[oRPC client]", error);
 			}),
 		],
@@ -40,6 +49,7 @@ const createStreamClient = (): RouterClient<typeof router> => {
 		interceptors: [
 			onError((error) => {
 				if (error instanceof DOMException && error.name === "AbortError") return;
+				openUpgradeOnLimit(error);
 				console.warn("[oRPC stream client]", error);
 			}),
 		],

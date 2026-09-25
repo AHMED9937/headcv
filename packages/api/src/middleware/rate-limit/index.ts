@@ -65,9 +65,12 @@ function getInputKeyPart(input: unknown): string {
 const resumePasswordLimiter = new MemoryRatelimiter(rateLimitConfig.orpc.resumePassword);
 const pdfLimiter = new MemoryRatelimiter(rateLimitConfig.orpc.pdfExport);
 const aiLimiter = new MemoryRatelimiter(rateLimitConfig.orpc.aiRequest);
+const aiPaidLimiter = new MemoryRatelimiter(rateLimitConfig.orpcPaid.aiRequest);
 const storageUploadLimiter = new MemoryRatelimiter(rateLimitConfig.orpc.storageUpload);
+const storageUploadPaidLimiter = new MemoryRatelimiter(rateLimitConfig.orpcPaid.storageUpload);
 const storageDeleteLimiter = new MemoryRatelimiter(rateLimitConfig.orpc.storageDelete);
 const resumeMutationLimiter = new MemoryRatelimiter(rateLimitConfig.orpc.resumeMutations);
+const resumeMutationPaidLimiter = new MemoryRatelimiter(rateLimitConfig.orpcPaid.resumeMutations);
 const disabledLimiter = {
 	limit: async () => ({
 		success: true,
@@ -77,6 +80,28 @@ const disabledLimiter = {
 };
 
 const productionLimiter = (limiter: MemoryRatelimiter) => (isRateLimitEnabled ? limiter : disabledLimiter);
+
+/**
+ * Selects the right limiter based on whether the user has a paid plan.
+ * Plan info is looked up lazily at request time via the billing service.
+ * Both tiers enforce rate limits — "unlimited" entitlements don't mean unlimited requests/sec.
+ */
+async function selectLimiter(
+	context: ContextWithHeaders,
+	freeLimiter: MemoryRatelimiter,
+	paidLimiterInstance: MemoryRatelimiter,
+) {
+	if (!context.user?.id) return productionLimiter(freeLimiter);
+	try {
+		// Lazy import to avoid circular dependency & eager env/db initialization
+		const { billingService, getEffectiveAccess } = await import("../../features/billing/service.js");
+		const sub = await billingService.getSubscription(context.user.id);
+		const access = getEffectiveAccess(sub);
+		return productionLimiter(access === "paid" ? paidLimiterInstance : freeLimiter);
+	} catch {
+		return productionLimiter(freeLimiter);
+	}
+}
 
 export const resumePasswordRateLimit = createRatelimitMiddleware<
 	ContextWithHeaders,
@@ -92,12 +117,12 @@ export const pdfExportRateLimit = createRatelimitMiddleware<ContextWithHeaders, 
 });
 
 export const aiRequestRateLimit = createRatelimitMiddleware<ContextWithHeaders, unknown>({
-	limiter: productionLimiter(aiLimiter),
+	limiter: ({ context }) => selectLimiter(context, aiLimiter, aiPaidLimiter),
 	key: ({ context }, input) => `ai-request:${getUserKey(context)}:${getInputKeyPart(input)}`,
 });
 
 export const storageUploadRateLimit = createRatelimitMiddleware<ContextWithHeaders, unknown>({
-	limiter: productionLimiter(storageUploadLimiter),
+	limiter: ({ context }) => selectLimiter(context, storageUploadLimiter, storageUploadPaidLimiter),
 	key: ({ context }) => `storage-upload:${getUserKey(context)}`,
 });
 
@@ -107,6 +132,6 @@ export const storageDeleteRateLimit = createRatelimitMiddleware<ContextWithHeade
 });
 
 export const resumeMutationRateLimit = createRatelimitMiddleware<ContextWithHeaders, unknown>({
-	limiter: productionLimiter(resumeMutationLimiter),
+	limiter: ({ context }) => selectLimiter(context, resumeMutationLimiter, resumeMutationPaidLimiter),
 	key: ({ context }, input) => `resume-mutation:${getUserKey(context)}:${getInputKeyPart(input)}`,
 });

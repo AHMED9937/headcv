@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@headcv/ui/components/avatar";
 import { BrandIcon } from "@headcv/ui/components/brand-icon";
 import { getInitials } from "@headcv/utils/string";
+import { PlanBadge } from "@/features/billing/plan-badge";
 import { UserDropdownMenu } from "@/features/user/dropdown-menu";
 import { client } from "@/libs/orpc/client";
 import { createNoindexFollowMeta } from "@/libs/seo";
@@ -82,21 +83,27 @@ function RouteComponent() {
 					<BrandIcon variant="logo" className="h-8 w-auto" />
 				</Link>
 
-				<UserDropdownMenu>
-					{({ session }) => (
-						<button type="button" className="flex items-center gap-2 rounded-md p-1 transition-colors hover:bg-accent">
-							<Avatar className="size-7">
-								<AvatarImage src={session.user.image ?? undefined} />
-								<AvatarFallback>{getInitials(session.user.name)}</AvatarFallback>
-							</Avatar>
+				<div className="flex items-center gap-3">
+					<PlanBadge />
+					<UserDropdownMenu>
+						{({ session }) => (
+							<button
+								type="button"
+								className="flex items-center gap-2 rounded-md p-1 transition-colors hover:bg-accent"
+							>
+								<Avatar className="size-7">
+									<AvatarImage src={session.user.image ?? undefined} />
+									<AvatarFallback>{getInitials(session.user.name)}</AvatarFallback>
+								</Avatar>
 
-							<div className="hidden text-start md:block">
-								<p className="font-medium text-sm leading-none">{session.user.name}</p>
-								<p className="text-muted-foreground text-xs">{session.user.email}</p>
-							</div>
-						</button>
-					)}
-				</UserDropdownMenu>
+								<div className="hidden text-start md:block">
+									<p className="font-medium text-sm leading-none">{session.user.name}</p>
+									<p className="text-muted-foreground text-xs">{session.user.email}</p>
+								</div>
+							</button>
+						)}
+					</UserDropdownMenu>
+				</div>
 			</header>
 
 			<main className="@container flex-1 p-4 sm:p-6">

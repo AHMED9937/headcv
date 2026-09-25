@@ -15,6 +15,7 @@ import { applyResumePatches, ResumePatchError } from "@headcv/resume/patch";
 import { upgradeLegacyResumeTypography } from "@headcv/resume/readability";
 import { defaultResumeData } from "@headcv/schema/resume/default";
 import { generateId } from "@headcv/utils/string";
+import { entitlementService, RESUME_LIMIT_MESSAGE } from "../billing/service";
 import { getStorageService } from "../storage/service";
 import { grantResumeAccess, hasResumeAccess } from "./access";
 import { assertCanView, isOwner, redactResumeForViewer, shouldCountForStatistics } from "./access-policy";
@@ -335,6 +336,9 @@ export const resumeService = {
 		locale?: Locale;
 		data?: ResumeData;
 	}) => {
+		const { canCreate } = await entitlementService.getResumeAllowance(input.userId);
+		if (!canCreate) throw new ORPCError("UPGRADE_REQUIRED", { message: RESUME_LIMIT_MESSAGE });
+
 		const id = generateId();
 		const baseData = input.data ?? defaultResumeData;
 		const data = normalizeResumeData(

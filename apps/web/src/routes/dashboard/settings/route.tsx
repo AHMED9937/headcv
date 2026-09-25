@@ -1,6 +1,6 @@
 import { t } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react";
-import { ShieldCheckIcon, UserCircleIcon, WarningIcon } from "@phosphor-icons/react";
+import { CrownSimpleIcon, ShieldCheckIcon, UserCircleIcon, WarningIcon } from "@phosphor-icons/react";
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { cn } from "@headcv/utils/style";
 
@@ -20,6 +20,11 @@ const tabs: SettingsTab[] = [
 		to: "/dashboard/settings/authentication",
 		icon: ShieldCheckIcon,
 		label: t`Authentication`,
+	},
+	{
+		to: "/dashboard/settings/billing",
+		icon: CrownSimpleIcon,
+		label: t`Plans & Billing`,
 	},
 	{
 		to: "/dashboard/settings/danger-zone",

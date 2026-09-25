@@ -18,6 +18,14 @@ export const relations = defineRelations(schema, (r) => ({
 		oauthRefreshTokens: r.many.oauthRefreshToken(),
 		oauthAccessTokens: r.many.oauthAccessToken(),
 		oauthConsents: r.many.oauthConsent(),
+		subscription: r.one.userSubscription({
+			from: r.user.id,
+			to: r.userSubscription.userId,
+		}),
+		usage: r.one.userUsage({
+			from: r.user.id,
+			to: r.userUsage.userId,
+		}),
 	},
 	session: {
 		user: r.one.user({
@@ -215,6 +223,18 @@ export const relations = defineRelations(schema, (r) => ({
 	oauthConsent: {
 		user: r.one.user({
 			from: r.oauthConsent.userId,
+			to: r.user.id,
+		}),
+	},
+	userSubscription: {
+		user: r.one.user({
+			from: r.userSubscription.userId,
+			to: r.user.id,
+		}),
+	},
+	userUsage: {
+		user: r.one.user({
+			from: r.userUsage.userId,
 			to: r.user.id,
 		}),
 	},

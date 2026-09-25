@@ -1,7 +1,9 @@
 import type { UIMessage } from "ai";
+import { ORPCError } from "@orpc/client";
 import z from "zod";
 import { protectedProcedure } from "../../context";
 import { aiRequestRateLimit } from "../../middleware/rate-limit";
+import { entitlementService } from "../billing/service";
 import { isAgentEnvironmentUnavailable, isUiMessage, throwUnavailable } from "./routing";
 import { agentService } from "./service";
 
@@ -22,7 +24,17 @@ export const messagesRouter = {
 			}),
 		)
 		.use(aiRequestRateLimit)
+		.errors({
+			UPGRADE_REQUIRED: { message: "AI chat limit reached. Upgrade your plan.", status: 403 },
+		})
 		.handler(async ({ context, input }) => {
+			const reserved = await entitlementService.reserveAiChat(context.user.id);
+			if (!reserved) {
+				throw new ORPCError("UPGRADE_REQUIRED", {
+					message: "AI chat limit reached. Upgrade your plan for unlimited AI chats.",
+				});
+			}
+
 			try {
 				return await agentService.messages.send({
 					userId: context.user.id,

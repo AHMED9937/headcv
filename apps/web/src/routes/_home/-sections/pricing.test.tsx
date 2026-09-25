@@ -7,15 +7,37 @@ import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { Pricing } from "./pricing";
 
+const navigateMock = vi.fn();
+
 vi.mock("@tanstack/react-router", () => ({
 	Link: ({ children, to, ...props }: { children: ReactNode; to: string }) => (
 		<a {...props} href={to}>
 			{children}
 		</a>
 	),
+	useNavigate: () => navigateMock,
+	useRouteContext: () => ({ session: null }),
 }));
 
-afterEach(cleanup);
+vi.mock("@/libs/orpc/client", () => ({
+	client: {
+		billing: {
+			createCheckoutSession: vi.fn().mockResolvedValue({ checkoutUrl: "https://test.dodopayments.com/checkout" }),
+		},
+	},
+}));
+
+const subscription = vi.hoisted(() => ({ trialEligible: true }));
+
+vi.mock("@/features/billing/use-subscription", async (importOriginal) => ({
+	...(await importOriginal<typeof import("@/features/billing/use-subscription")>()),
+	useSubscription: () => subscription,
+}));
+
+afterEach(() => {
+	cleanup();
+	subscription.trialEligible = true;
+});
 
 function renderPricing() {
 	i18n.loadAndActivate({ locale: "en-US", messages: {} });
@@ -36,7 +58,14 @@ describe("Landing pricing", () => {
 		expect(
 			screen.getByRole("heading", { name: "Pro" }).compareDocumentPosition(trial) & Node.DOCUMENT_POSITION_FOLLOWING,
 		).toBeTruthy();
-		expect(within(trial).getByRole("button", { name: "Coming soon" })).toBeDisabled();
+		expect(within(trial).getByRole("button", { name: "Start 7-day trial" })).toBeInTheDocument();
+	});
+
+	it("hides the trial offer from users who already used it", () => {
+		subscription.trialEligible = false;
+		renderPricing();
+		expect(screen.queryByRole("region", { name: "Try all of Pro." })).not.toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "Get Pro" })).toBeInTheDocument();
 	});
 
 	it("preserves the subscription billing toggle", () => {
@@ -45,5 +74,17 @@ describe("Landing pricing", () => {
 		fireEvent.click(screen.getByRole("button", { name: "Monthly" }));
 		expect(screen.getByText("$20")).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "Monthly" })).toHaveAttribute("aria-pressed", "true");
+	});
+
+	it("redirects unauthenticated user to login with plan when clicking Get Pro", () => {
+		renderPricing();
+		fireEvent.click(screen.getByRole("button", { name: "Get Pro" }));
+		expect(navigateMock).toHaveBeenCalledWith({ to: "/auth/login", search: { plan: "yearly" } });
+	});
+
+	it("redirects unauthenticated user to login with trial plan", () => {
+		renderPricing();
+		fireEvent.click(screen.getByRole("button", { name: "Start 7-day trial" }));
+		expect(navigateMock).toHaveBeenCalledWith({ to: "/auth/login", search: { plan: "trial" } });
 	});
 });

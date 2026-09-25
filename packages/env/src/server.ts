@@ -93,6 +93,18 @@ export const env = createEnv({
 		AI_BASE_URL: z.string().min(1).optional(),
 		AI_API_KEY: z.string().min(1).optional(),
 
+		// Billing – Dodo Payments
+		DODO_PAYMENTS_API_KEY: z.string().min(1).optional(),
+		DODO_PAYMENTS_WEBHOOK_KEY: z.string().min(1).optional(),
+		DODO_PAYMENTS_ENVIRONMENT: z.enum(["test_mode", "live_mode"]).default("test_mode"),
+		DODO_PRODUCT_MONTHLY_ID: z.string().min(1).optional(),
+		DODO_PRODUCT_YEARLY_ID: z.string().min(1).optional(),
+		DODO_PRODUCT_TRIAL_ID: z.string().min(1).optional(),
+
+		// Billing – EPAY (Egypt-only, future)
+		EPAY_API_KEY: z.string().min(1).optional(),
+		EPAY_WEBHOOK_KEY: z.string().min(1).optional(),
+
 		// Feature Flags
 		FLAG_DISABLE_SIGNUPS: z.stringbool().default(false),
 		FLAG_DISABLE_EMAIL_AUTH: z.stringbool().default(false),

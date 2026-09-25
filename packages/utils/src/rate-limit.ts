@@ -47,4 +47,10 @@ export const rateLimitConfig = {
 		storageDelete: { maxRequests: 30, window: 60 * 1000 },
 		resumeMutations: { maxRequests: 60, window: 60 * 1000 },
 	},
+	/** Paid-tier rate limits: higher ceilings for abuse prevention, not usage caps. */
+	orpcPaid: {
+		aiRequest: { maxRequests: 60, window: 60 * 1000 },
+		storageUpload: { maxRequests: 40, window: 60 * 1000 },
+		resumeMutations: { maxRequests: 120, window: 60 * 1000 },
+	},
 } as const;

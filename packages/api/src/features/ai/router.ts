@@ -8,6 +8,7 @@ import { storedResumeAnalysisSchema } from "@headcv/schema/resume/analysis";
 import { protectedProcedure } from "../../context";
 import { aiRequestRateLimit } from "../../middleware/rate-limit";
 import { aiProvidersService } from "../ai-providers/service";
+import { entitlementService, RESUME_LIMIT_MESSAGE } from "../billing/service";
 import { resumeService } from "../resume/service";
 import { aiService, fileInputSchema } from "./service";
 
@@ -59,8 +60,13 @@ export const aiRouter = {
 		.errors({
 			BAD_GATEWAY: { message: "The AI provider returned an error or is unreachable.", status: 502 },
 			BAD_REQUEST: { message: "The AI returned an improperly formatted structure.", status: 400 },
+			UPGRADE_REQUIRED: { message: RESUME_LIMIT_MESSAGE, status: 403 },
 		})
 		.handler(async ({ context, input }): Promise<ResumeData> => {
+			// Parsing feeds a new resume, so fail fast before spending AI credits.
+			const { canCreate } = await entitlementService.getResumeAllowance(context.user.id);
+			if (!canCreate) throw new ORPCError("UPGRADE_REQUIRED", { message: RESUME_LIMIT_MESSAGE });
+
 			try {
 				const provider = await getRunnableProvider(context.user.id);
 				return await aiService.parsePdf({
@@ -103,8 +109,13 @@ export const aiRouter = {
 		.errors({
 			BAD_GATEWAY: { message: "The AI provider returned an error or is unreachable.", status: 502 },
 			BAD_REQUEST: { message: "The AI returned an improperly formatted structure.", status: 400 },
+			UPGRADE_REQUIRED: { message: RESUME_LIMIT_MESSAGE, status: 403 },
 		})
 		.handler(async ({ context, input }) => {
+			// Parsing feeds a new resume, so fail fast before spending AI credits.
+			const { canCreate } = await entitlementService.getResumeAllowance(context.user.id);
+			if (!canCreate) throw new ORPCError("UPGRADE_REQUIRED", { message: RESUME_LIMIT_MESSAGE });
+
 			try {
 				const provider = await getRunnableProvider(context.user.id);
 				return await aiService.parseDocx({
@@ -141,7 +152,17 @@ export const aiRouter = {
 			}>(),
 		)
 		.use(aiRequestRateLimit)
+		.errors({
+			UPGRADE_REQUIRED: { message: "AI chat limit reached. Upgrade your plan.", status: 403 },
+		})
 		.handler(async ({ context, input }) => {
+			const reserved = await entitlementService.reserveAiChat(context.user.id);
+			if (!reserved) {
+				throw new ORPCError("UPGRADE_REQUIRED", {
+					message: "AI chat limit reached. Upgrade your plan for unlimited AI chats.",
+				});
+			}
+
 			try {
 				const [provider, resume] = await Promise.all([
 					getRunnableProvider(context.user.id),
