@@ -18,14 +18,12 @@ import { DirectionProvider } from "@headcv/ui/components/direction";
 import { Toaster } from "@headcv/ui/components/sonner";
 import { TooltipProvider } from "@headcv/ui/components/tooltip";
 import { DialogManager } from "@/dialogs/manager";
-import { CommandPalette } from "@/features/command-palette";
+import { LazyCommandPalette } from "@/features/command-palette/lazy";
 import { ThemeProvider } from "@/features/theme/provider";
 import { ConfirmDialogProvider } from "@/hooks/use-confirm";
 import { PromptDialogProvider } from "@/hooks/use-prompt";
-import { getSession } from "@/libs/auth/session";
-import { getLocale, isRTL, loadLocale } from "@/libs/locale";
-import { client } from "@/libs/orpc/client";
-import { getTheme } from "@/libs/theme";
+import { isRTL } from "@/libs/locale";
+import { loadRootContext } from "@/libs/root-context";
 
 type RouterContext = {
 	theme: Theme;
@@ -87,18 +85,8 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 			],
 		};
 	},
-	beforeLoad: async () => {
-		const [theme, locale, session, flags] = await Promise.all([
-			getTheme(),
-			getLocale(),
-			getSession(),
-			client.flags.get().catch(() => ({ disableSignups: false, disableEmailAuth: false })),
-		]);
-
-		await loadLocale(locale);
-
-		return { theme, locale, session, flags };
-	},
+	// Runs on every navigation; served from a short-lived cache (see libs/root-context).
+	beforeLoad: ({ context }) => loadRootContext(context.queryClient),
 });
 
 function RootComponent() {
@@ -131,7 +119,7 @@ function RootComponent() {
 														<Outlet />
 
 														<DialogManager />
-														<CommandPalette />
+														<LazyCommandPalette />
 														<Toaster richColors position="bottom-right" />
 													</PromptDialogProvider>
 												</ConfirmDialogProvider>
