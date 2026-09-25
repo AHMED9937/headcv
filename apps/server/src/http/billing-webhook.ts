@@ -31,6 +31,9 @@ export async function handleDodoWebhook(c: Context): Promise<Response> {
 	} catch (error) {
 		// Checked by name: the billing module is imported lazily, so its class isn't in scope here.
 		if (error instanceof Error && error.name === "WebhookSignatureError") {
+			// The reason (e.g. "No matching signature found" = wrong DODO_PAYMENTS_WEBHOOK_KEY) is safe
+			// to log; the secret and payload are not.
+			console.warn(`[billing-webhook] rejected webhook ${c.req.header("webhook-id") ?? "(no id)"}: ${error.message}`);
 			return c.json({ error: "Invalid webhook signature" }, 401);
 		}
 		// Non-2xx makes Dodo retry (8 attempts over ~27h); the claim was released upstream.

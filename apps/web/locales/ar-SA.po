@@ -60,6 +60,26 @@ msgstr "الاسم"
 #~ msgid "billing.upgrade.importLimit.title"
 #~ msgstr "استخدمت كل عمليات الاستيراد المجانية"
 
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+#~ msgid "checkout.failed.title"
+#~ msgstr "حدث خطأ ما"
+
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+#~ msgid "checkout.failed.retry"
+#~ msgstr "حاول مجددًا"
+
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+#~ msgid "checkout.failed.billing"
+#~ msgstr "عرض الفوترة"
+
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+#~ msgid "checkout.success.description"
+#~ msgstr "اشتراك {plan} مفعّل الآن. استمتع بسير ذاتية ومحادثات ذكاء اصطناعي بلا حدود!"
+
 #. placeholder {0}: section.items.length
 #: src/routes/builder/$resumeId/-sidebar/left/sections/custom.tsx
 msgid "{0, plural, one {# item} other {# items}}"
@@ -869,6 +889,11 @@ msgstr "رسائل المحادثة"
 #: src/features/resume/builder/ai-assistant-panel.tsx
 msgid "Chats for this resume"
 msgstr "محادثات هذه السيرة الذاتية"
+
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+msgid "checkout.delayed.retry"
+msgstr "تحقق مجددًا"
 
 #: src/routes/builder/$resumeId/-components/imported-workspace.tsx
 msgid "Check the fields that matter before you export."
@@ -3097,6 +3122,11 @@ msgstr "تم تمكين حماية كلمة المرور."
 msgid "Patch rolled back."
 msgstr "تم التراجع عن التحديث."
 
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+msgid "checkout.notCompleted.title"
+msgstr "لم تكتمل عملية الدفع"
+
 #. File format label in import source selector
 #: src/dialogs/resume/import.tsx
 msgid "PDF"
@@ -3246,10 +3276,22 @@ msgstr "اللون الأساسي"
 msgid "Prioritize the degree, relevant study, and distinctions that support the target role."
 msgstr "قدّم الدرجة العلمية والدراسة ذات الصلة والتميّز الذي يدعم الوظيفة المستهدفة."
 
+#: src/routes/checkout/success.tsx
+msgid "Pro Monthly"
+msgstr "Pro الشهري"
+
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.plan.trial"
 msgstr "تجربة Pro"
+
+#: src/routes/checkout/success.tsx
+msgid "Pro Trial"
+msgstr "تجربة Pro"
+
+#: src/routes/checkout/success.tsx
+msgid "Pro Yearly"
+msgstr "Pro السنوي"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/footer.tsx
@@ -3690,6 +3732,11 @@ msgstr "نوع القسم"
 msgid "billing.picker.reassurance"
 msgstr "دفع آمن · إلغاء في أي وقت · سيرك الذاتية تبقى لك"
 
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+msgid "checkout.notCompleted.plans"
+msgstr "عرض الخطط"
+
 #: src/routes/agent/-components/new-thread-setup.tsx
 msgid "Select a resume"
 msgstr "اختر سيرة ذاتية"
@@ -3829,6 +3876,11 @@ msgstr "عرض الشريط الجانبي"
 msgid "home.signIn"
 msgstr "تسجيل الدخول"
 
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+msgid "checkout.signedOut.signIn"
+msgstr "تسجيل الدخول"
+
 #. Primary action button label on login form
 #: src/features/auth/pages/login.tsx
 msgid "Sign in"
@@ -3840,6 +3892,11 @@ msgstr "تسجّل الدخول"
 #: src/features/auth/pages/register.tsx
 msgid "Sign in now"
 msgstr "سجّل الدخول الآن"
+
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+msgid "checkout.signedOut.title"
+msgstr "سجّل الدخول لإكمال العملية"
 
 #. Title on the login page
 #: src/features/auth/pages/login.tsx
@@ -3937,11 +3994,6 @@ msgstr "تم التخطي"
 #: src/dialogs/resume/index.tsx
 msgid "Slug"
 msgstr "المعرّف النصي (Slug)"
-
-#. js-lingui-explicit-id
-#: src/routes/checkout/success.tsx
-msgid "checkout.failed.title"
-msgstr "حدث خطأ ما"
 
 #. Fallback error description when resume analysis request fails
 #: src/routes/builder/$resumeId/-sidebar/right/sections/resume-analysis.tsx
@@ -4083,6 +4135,11 @@ msgstr "البقاء"
 #: src/routes/agent/-components/tool-activity.tsx
 msgid "Step complete"
 msgstr "اكتملت الخطوة"
+
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+msgid "checkout.delayed.title"
+msgstr "ما زلنا نؤكد دفعتك"
 
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Stop generation"
@@ -4519,11 +4576,6 @@ msgid "Try again"
 msgstr "حاول مجددًا"
 
 #. js-lingui-explicit-id
-#: src/routes/checkout/success.tsx
-msgid "checkout.failed.retry"
-msgstr "حاول مجددًا"
-
-#. js-lingui-explicit-id
 #: src/features/billing/plan-picker.tsx
 #: src/routes/_home/-sections/pricing.tsx
 msgid "home.offer.title"
@@ -4874,11 +4926,6 @@ msgstr "التحقق من بريدك الإلكتروني مطلوب عند إع
 msgid "checkout.success.billing"
 msgstr "عرض الفوترة"
 
-#. js-lingui-explicit-id
-#: src/routes/checkout/success.tsx
-msgid "checkout.failed.billing"
-msgstr "عرض الفوترة"
-
 #: src/features/resume/builder/ai-assistant-panel.tsx
 msgid "View changes"
 msgstr "عرض التغييرات"
@@ -5038,9 +5085,10 @@ msgid "billing.upgrade.aiLimit.title"
 msgstr "استخدمت كل محادثات الذكاء الاصطناعي المجانية"
 
 #. js-lingui-explicit-id
+#. placeholder {0}: planLabel(plan)
 #: src/routes/checkout/success.tsx
-msgid "checkout.success.description"
-msgstr "اشتراك {plan} مفعّل الآن. استمتع بسير ذاتية ومحادثات ذكاء اصطناعي بلا حدود!"
+msgid "checkout.success.plan"
+msgstr "خطة {0} مفعّلة. استمتع بسير ذاتية ومحادثات ذكاء اصطناعي بلا حدود!"
 
 #: src/features/settings/pages/danger-zone.tsx
 msgid "Your account has been deleted successfully."
@@ -5100,6 +5148,11 @@ msgid "Your password has been updated successfully."
 msgstr "تم تحديث كلمة المرور الخاصة بك بنجاح."
 
 #. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+msgid "checkout.notCompleted.description"
+msgstr "لم تتم عملية الدفع، لذلك لم يتم خصم أي مبلغ منك. يمكنك اختيار خطة والمحاولة مجددًا."
+
+#. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.banner.pending"
 msgstr "جارٍ معالجة الدفع. إذا أكملت الدفع للتو، انقر على تحديث لتفعيل اشتراكك."
@@ -5108,6 +5161,11 @@ msgstr "جارٍ معالجة الدفع. إذا أكملت الدفع للتو�
 #: src/routes/checkout/success.tsx
 msgid "checkout.pending.description"
 msgstr "جارٍ معالجة دفعتك. يستغرق ذلك عادةً بضع ثوانٍ فقط."
+
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+msgid "checkout.signedOut.description"
+msgstr "دفعتك في أمان. سجّل الدخول إلى الحساب الذي استخدمته عند الدفع وستجد خطتك هناك."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/features.tsx

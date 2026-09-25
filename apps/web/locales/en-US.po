@@ -55,6 +55,26 @@ msgstr "Name"
 #~ msgid "billing.upgrade.importLimit.title"
 #~ msgstr "You've used all your free imports"
 
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+#~ msgid "checkout.failed.title"
+#~ msgstr "Something went wrong"
+
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+#~ msgid "checkout.failed.retry"
+#~ msgstr "Try Again"
+
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+#~ msgid "checkout.failed.billing"
+#~ msgstr "View Billing"
+
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+#~ msgid "checkout.success.description"
+#~ msgstr "Your {plan} subscription is now active. Enjoy unlimited resumes and AI chats!"
+
 #. placeholder {0}: section.items.length
 #: src/routes/builder/$resumeId/-sidebar/left/sections/custom.tsx
 msgid "{0, plural, one {# item} other {# items}}"
@@ -864,6 +884,11 @@ msgstr "Chat messages"
 #: src/features/resume/builder/ai-assistant-panel.tsx
 msgid "Chats for this resume"
 msgstr "Chats for this resume"
+
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+msgid "checkout.delayed.retry"
+msgstr "Check again"
 
 #: src/routes/builder/$resumeId/-components/imported-workspace.tsx
 msgid "Check the fields that matter before you export."
@@ -3092,6 +3117,11 @@ msgstr "Password protection has been enabled."
 msgid "Patch rolled back."
 msgstr "Patch rolled back."
 
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+msgid "checkout.notCompleted.title"
+msgstr "Payment not completed"
+
 #. File format label in import source selector
 #: src/dialogs/resume/import.tsx
 msgid "PDF"
@@ -3241,10 +3271,22 @@ msgstr "Primary Color"
 msgid "Prioritize the degree, relevant study, and distinctions that support the target role."
 msgstr "Prioritize the degree, relevant study, and distinctions that support the target role."
 
+#: src/routes/checkout/success.tsx
+msgid "Pro Monthly"
+msgstr "Pro Monthly"
+
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.plan.trial"
 msgstr "Pro Trial"
+
+#: src/routes/checkout/success.tsx
+msgid "Pro Trial"
+msgstr "Pro Trial"
+
+#: src/routes/checkout/success.tsx
+msgid "Pro Yearly"
+msgstr "Pro Yearly"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/footer.tsx
@@ -3685,6 +3727,11 @@ msgstr "Section Type"
 msgid "billing.picker.reassurance"
 msgstr "Secure checkout · Cancel anytime · Your resumes stay yours"
 
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+msgid "checkout.notCompleted.plans"
+msgstr "See plans"
+
 #: src/routes/agent/-components/new-thread-setup.tsx
 msgid "Select a resume"
 msgstr "Select a resume"
@@ -3824,6 +3871,11 @@ msgstr "Sidebar Width"
 msgid "home.signIn"
 msgstr "Sign in"
 
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+msgid "checkout.signedOut.signIn"
+msgstr "Sign in"
+
 #. Primary action button label on login form
 #: src/features/auth/pages/login.tsx
 msgid "Sign in"
@@ -3835,6 +3887,11 @@ msgstr "Sign in"
 #: src/features/auth/pages/register.tsx
 msgid "Sign in now"
 msgstr "Sign in now"
+
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+msgid "checkout.signedOut.title"
+msgstr "Sign in to finish"
 
 #. Title on the login page
 #: src/features/auth/pages/login.tsx
@@ -3932,11 +3989,6 @@ msgstr "Skipped"
 #: src/dialogs/resume/index.tsx
 msgid "Slug"
 msgstr "Slug"
-
-#. js-lingui-explicit-id
-#: src/routes/checkout/success.tsx
-msgid "checkout.failed.title"
-msgstr "Something went wrong"
 
 #. Fallback error description when resume analysis request fails
 #: src/routes/builder/$resumeId/-sidebar/right/sections/resume-analysis.tsx
@@ -4078,6 +4130,11 @@ msgstr "Stay"
 #: src/routes/agent/-components/tool-activity.tsx
 msgid "Step complete"
 msgstr "Step complete"
+
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+msgid "checkout.delayed.title"
+msgstr "Still confirming your payment"
 
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Stop generation"
@@ -4514,11 +4571,6 @@ msgid "Try again"
 msgstr "Try again"
 
 #. js-lingui-explicit-id
-#: src/routes/checkout/success.tsx
-msgid "checkout.failed.retry"
-msgstr "Try Again"
-
-#. js-lingui-explicit-id
 #: src/features/billing/plan-picker.tsx
 #: src/routes/_home/-sections/pricing.tsx
 msgid "home.offer.title"
@@ -4869,11 +4921,6 @@ msgstr "Verifying your email is required when resetting your password."
 msgid "checkout.success.billing"
 msgstr "View Billing"
 
-#. js-lingui-explicit-id
-#: src/routes/checkout/success.tsx
-msgid "checkout.failed.billing"
-msgstr "View Billing"
-
 #: src/features/resume/builder/ai-assistant-panel.tsx
 msgid "View changes"
 msgstr "View changes"
@@ -5033,9 +5080,10 @@ msgid "billing.upgrade.aiLimit.title"
 msgstr "You've used all your free AI chats"
 
 #. js-lingui-explicit-id
+#. placeholder {0}: planLabel(plan)
 #: src/routes/checkout/success.tsx
-msgid "checkout.success.description"
-msgstr "Your {plan} subscription is now active. Enjoy unlimited resumes and AI chats!"
+msgid "checkout.success.plan"
+msgstr "Your {0} plan is active. Enjoy unlimited resumes and AI chats!"
 
 #: src/features/settings/pages/danger-zone.tsx
 msgid "Your account has been deleted successfully."
@@ -5095,6 +5143,11 @@ msgid "Your password has been updated successfully."
 msgstr "Your password has been updated successfully."
 
 #. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+msgid "checkout.notCompleted.description"
+msgstr "Your payment didn't go through, so you haven't been charged. You can choose a plan and try again."
+
+#. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.banner.pending"
 msgstr "Your payment is being processed. If you just completed checkout, click Refresh to activate your subscription."
@@ -5103,6 +5156,11 @@ msgstr "Your payment is being processed. If you just completed checkout, click R
 #: src/routes/checkout/success.tsx
 msgid "checkout.pending.description"
 msgstr "Your payment is being processed. This usually takes just a few seconds."
+
+#. js-lingui-explicit-id
+#: src/routes/checkout/success.tsx
+msgid "checkout.signedOut.description"
+msgstr "Your payment is safe. Sign in to the account you used at checkout and your plan will be there."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/features.tsx
