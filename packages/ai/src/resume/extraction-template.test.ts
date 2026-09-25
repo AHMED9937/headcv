@@ -38,7 +38,9 @@ describe("buildAiExtractionTemplate", () => {
 		const item = template.sections.experience.items[0] as Record<string, unknown>;
 		expect(item.website).toEqual({ url: "", label: "", inlineLink: false });
 		expect(item.company).toBe("");
-		expect(item.period).toBe("");
+		expect(item.startDate).toBe("");
+		expect(item.endDate).toBe("");
+		expect(item).not.toHaveProperty("period");
 	});
 
 	it("preserves unmodified sections from default (e.g., title)", () => {

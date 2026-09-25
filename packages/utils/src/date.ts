@@ -47,6 +47,65 @@ export function formatPeriod(startDate?: string, endDate?: string): string {
 	return `${formatDate(startDate)} - ${formatDate(endDate)}`;
 }
 
+const MONTH_INDEX = new Map(MONTH_NAMES.map((month, index) => [month.toLowerCase(), index + 1]));
+
+export function normalizeMonthDate(value: string): string {
+	const normalized = value.trim();
+	const yearFirst = /^(\d{4})[-/](\d{1,2})(?:[-/]\d{1,2})?$/.exec(normalized);
+	if (yearFirst) return `${yearFirst[1]}-${yearFirst[2]?.padStart(2, "0")}`;
+
+	const monthFirst = /^(\d{1,2})[-/](\d{4})$/.exec(normalized);
+	if (monthFirst) return `${monthFirst[2]}-${monthFirst[1]?.padStart(2, "0")}`;
+
+	const namedMonth = /^([a-z]+)\s+(\d{4})$/i.exec(normalized);
+	if (!namedMonth) return "";
+	const month = MONTH_INDEX.get(namedMonth[1]?.toLowerCase() ?? "");
+	return month ? `${namedMonth[2]}-${String(month).padStart(2, "0")}` : "";
+}
+
+/** Best-effort migration for legacy, human-readable experience periods. */
+export function parsePeriod(period?: string): { startDate: string; endDate: string } {
+	if (!period) return { startDate: "", endDate: "" };
+	const parts = period.split(/\s+(?:-|\u2013|\u2014|to)\s+/i);
+	if (parts.length < 2) return { startDate: normalizeMonthDate(period), endDate: "" };
+	const [start, end] = parts;
+	return {
+		startDate: normalizeMonthDate(start ?? ""),
+		endDate: /^(present|current|now)$/i.test(end?.trim() ?? "") ? "" : normalizeMonthDate(end ?? ""),
+	};
+}
+
+export type DateRangeValue = {
+	startDate?: string | undefined;
+	endDate?: string | undefined;
+	period?: string | undefined;
+};
+
+/** Hydrates structured month values from either current fields or a legacy period. */
+export function hydrateDateRange<T extends DateRangeValue>(value: T): T & { startDate: string; endDate: string } {
+	const legacy = parsePeriod(value.period);
+	return {
+		...value,
+		startDate: normalizeMonthDate(value.startDate ?? "") || legacy.startDate,
+		endDate: normalizeMonthDate(value.endDate ?? "") || legacy.endDate,
+	};
+}
+
+/**
+ * Removes the legacy period once structured dates are available or edited.
+ * Unparseable legacy text is retained when untouched to avoid silent data loss.
+ */
+export function prepareDateRangeForSave<T extends DateRangeValue>(value: T, initial?: DateRangeValue): T {
+	const datesChanged = value.startDate !== initial?.startDate || value.endDate !== initial?.endDate;
+	const preserveLegacy = !datesChanged && !value.startDate && !value.endDate;
+	return { ...value, period: preserveLegacy ? initial?.period || undefined : undefined };
+}
+
+/** Formats current dates, falling back to an un-migrated legacy period. */
+export function formatDateRange(value: DateRangeValue): string {
+	return value.period || formatPeriod(value.startDate, value.endDate);
+}
+
 /**
  * Formats a single date with day included (e.g., "January 15, 2024").
  * Falls back to month-year or year-only for partial dates.

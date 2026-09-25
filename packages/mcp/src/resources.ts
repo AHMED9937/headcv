@@ -1,6 +1,6 @@
+import type router from "@headcv/api/routers";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { RouterClient } from "@orpc/server";
-import type router from "@headcv/api/routers";
 import { ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import schemaJSON from "@headcv/schema/schema.json";
 import { MCP_TOOL_NAME as T } from "./mcp-tool-names";

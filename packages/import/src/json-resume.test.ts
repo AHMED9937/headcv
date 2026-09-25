@@ -69,7 +69,8 @@ describe("JSONResumeImporter.parse", () => {
 		expect(item.company).toBe("Acme Corp");
 		expect(item.position).toBe("Senior Engineer");
 		expect(item.location).toBe("Berlin");
-		expect(item.period.length).toBeGreaterThan(0);
+		expect(item.startDate).toBe("2020-01");
+		expect(item.endDate).toBe("");
 		expect(item.description).toContain("Shipped X");
 	});
 

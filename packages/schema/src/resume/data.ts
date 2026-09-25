@@ -126,13 +126,19 @@ export const certificationItemSchema = baseItemSchema.extend({
 	description: z.string().describe("The description of the certification. This should be a HTML-formatted string."),
 });
 
+const dateRangeFields = {
+	startDate: z.string().optional().describe("The month the item started (YYYY-MM)."),
+	endDate: z.string().optional().describe("The month the item ended (YYYY-MM), or empty for present."),
+	period: z.string().optional().describe("Legacy formatted period retained only for backwards compatibility."),
+};
+
 export const educationItemSchema = baseItemSchema.extend({
 	school: z.string().min(1).describe("The name of the school or institution."),
 	degree: z.string().describe("The degree or qualification obtained."),
 	area: z.string().describe("The area of study or specialization."),
 	grade: z.string().describe("The grade or score achieved."),
 	location: z.string().describe("The location of the school or institution."),
-	period: z.string().describe("The period of time the education was obtained over."),
+	...dateRangeFields,
 	website: itemWebsiteSchema.describe("The website of the school or institution, if any."),
 	description: z.string().describe("The description of the education. This should be a HTML-formatted string."),
 });
@@ -140,7 +146,7 @@ export const educationItemSchema = baseItemSchema.extend({
 export const roleItemSchema = z.object({
 	id: z.string().describe("The unique identifier for the role. Usually generated as a UUID."),
 	position: z.string().describe("The position or job title for this role."),
-	period: z.string().describe("The period of time this role was held."),
+	...dateRangeFields,
 	description: z.string().describe("The description of this specific role. This should be a HTML-formatted string."),
 });
 
@@ -154,11 +160,7 @@ export const experienceItemSchema = baseItemSchema.extend({
 			"The position held at the company or organization. Used when there is only a single role. If multiple roles are provided in the 'roles' field, this serves as a summary title or can be left blank.",
 		),
 	location: z.string().describe("The location of the company or organization."),
-	period: z
-		.string()
-		.describe(
-			"The overall period of time at the company. When multiple roles are used, this should reflect the total tenure.",
-		),
+	...dateRangeFields,
 	website: itemWebsiteSchema.describe("The website of the company or organization, if any."),
 	description: z.string().describe("The description of the experience. This should be a HTML-formatted string."),
 	roles: z
@@ -204,7 +206,7 @@ export const profileItemSchema = baseItemSchema.extend({
 
 export const projectItemSchema = baseItemSchema.extend({
 	name: z.string().min(1).describe("The name of the project."),
-	period: z.string().describe("The period of time the project was worked on."),
+	...dateRangeFields,
 	website: itemWebsiteSchema.describe("The link to the project, if any."),
 	description: z.string().describe("The description of the project. This should be a HTML-formatted string."),
 });
@@ -255,7 +257,7 @@ export const skillItemSchema = baseItemSchema.extend({
 export const volunteerItemSchema = baseItemSchema.extend({
 	organization: z.string().min(1).describe("The name of the organization or company."),
 	location: z.string().describe("The location of the organization or company."),
-	period: z.string().describe("The period of time the author was volunteered at the organization or company."),
+	...dateRangeFields,
 	website: itemWebsiteSchema.describe("The link to the organization or company, if any."),
 	description: z
 		.string()

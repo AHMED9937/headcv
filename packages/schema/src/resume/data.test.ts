@@ -123,7 +123,7 @@ describe("experienceItemSchema", () => {
 			company: "",
 			position: "Engineer",
 			location: "",
-			period: "",
+
 			website: { url: "", label: "", inlineLink: false },
 			description: "",
 			roles: [],
@@ -153,7 +153,7 @@ describe("experienceItemSchema", () => {
 			company: "Acme",
 			position: "",
 			location: "",
-			period: "",
+
 			website: { url: "", label: "", inlineLink: false },
 			description: "",
 		});

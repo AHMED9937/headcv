@@ -2,6 +2,7 @@ import type { ResumeData } from "@headcv/schema/resume/data";
 import { ORPCError } from "@orpc/client";
 import { resumeDataSchema } from "@headcv/schema/resume/data";
 import { defaultResumeData } from "@headcv/schema/resume/default";
+import { normalizeMonthDate, parsePeriod } from "@headcv/utils/date";
 import { generateId } from "@headcv/utils/string";
 
 type UnknownRecord = Record<string, unknown>;
@@ -14,7 +15,9 @@ const itemDefaults = {
 		company: "",
 		position: "",
 		location: "",
-		period: "",
+		startDate: "",
+		endDate: "",
+
 		website: websiteDefaults,
 		description: "",
 		roles: [],
@@ -25,18 +28,28 @@ const itemDefaults = {
 		area: "",
 		grade: "",
 		location: "",
-		period: "",
+		startDate: "",
+		endDate: "",
+
 		website: websiteDefaults,
 		description: "",
 	},
 	skills: { icon: "", iconColor: "", name: "", proficiency: "", level: 0, keywords: [] },
 	languages: { language: "", fluency: "", level: 0 },
 	profiles: { icon: "", iconColor: "", network: "", username: "", website: websiteDefaults },
-	projects: { name: "", period: "", website: websiteDefaults, description: "" },
+	projects: { name: "", startDate: "", endDate: "", website: websiteDefaults, description: "" },
 	awards: { title: "", awarder: "", date: "", website: websiteDefaults, description: "" },
 	certifications: { title: "", issuer: "", date: "", website: websiteDefaults, description: "" },
 	publications: { title: "", publisher: "", date: "", website: websiteDefaults, description: "" },
-	volunteer: { organization: "", location: "", period: "", website: websiteDefaults, description: "" },
+	volunteer: {
+		organization: "",
+		location: "",
+		startDate: "",
+		endDate: "",
+
+		website: websiteDefaults,
+		description: "",
+	},
 	interests: { icon: "", iconColor: "", name: "", keywords: [] },
 	references: { name: "", position: "", website: websiteDefaults, phone: "", description: "" },
 } as const;
@@ -44,16 +57,27 @@ const itemDefaults = {
 type SectionName = keyof typeof itemDefaults;
 
 const meaningfulFields: Record<SectionName, readonly string[]> = {
-	experience: ["company", "position", "description", "location", "period", "website", "roles"],
-	education: ["school", "degree", "area", "grade", "description", "location", "period", "website"],
+	experience: ["company", "position", "description", "location", "startDate", "endDate", "period", "website", "roles"],
+	education: [
+		"school",
+		"degree",
+		"area",
+		"grade",
+		"description",
+		"location",
+		"startDate",
+		"endDate",
+		"period",
+		"website",
+	],
 	skills: ["name", "proficiency", "keywords"],
 	languages: ["language", "fluency", "level"],
 	profiles: ["network", "username", "website"],
-	projects: ["name", "description", "period", "website"],
+	projects: ["name", "description", "startDate", "endDate", "period", "website"],
 	awards: ["title", "awarder", "date", "description", "website"],
 	certifications: ["title", "issuer", "date", "description", "website"],
 	publications: ["title", "publisher", "date", "description", "website"],
-	volunteer: ["organization", "description", "location", "period", "website"],
+	volunteer: ["organization", "description", "location", "startDate", "endDate", "period", "website"],
 	interests: ["name", "keywords"],
 	references: ["name", "position", "phone", "description", "website"],
 };
@@ -102,13 +126,31 @@ function fillItem(raw: unknown, defaults: ItemDefaults, path: string, warnings: 
 	return item;
 }
 
+/** Legacy free-text period, read from the raw input because fillItem keeps only known fields. */
+function legacyPeriod(raw: unknown): string | undefined {
+	return isRecord(raw) && typeof raw.period === "string" ? raw.period : undefined;
+}
+
 function normalizeRoles(raw: unknown, path: string, warnings: string[]): UnknownRecord[] {
 	if (!Array.isArray(raw)) return [];
 	return raw.flatMap((role, index) => {
-		const normalized = fillItem(role, { position: "", period: "", description: "" }, `${path}[${index}]`, warnings);
+		const normalized = fillItem(
+			role,
+			{ position: "", startDate: "", endDate: "", description: "" },
+			`${path}[${index}]`,
+			warnings,
+		);
 		if (!normalized) return [];
+		const dates = parsePeriod(legacyPeriod(role));
+		normalized.startDate = normalizeMonthDate(normalized.startDate as string) || dates.startDate;
+		normalized.endDate = normalizeMonthDate(normalized.endDate as string) || dates.endDate;
+		if (normalized.startDate || normalized.endDate || !normalized.period) delete normalized.period;
 		delete normalized.hidden;
-		return isMeaningful(normalized.position) || isMeaningful(normalized.period) || isMeaningful(normalized.description)
+		return isMeaningful(normalized.position) ||
+			isMeaningful(normalized.startDate) ||
+			isMeaningful(normalized.endDate) ||
+			isMeaningful(normalized.period) ||
+			isMeaningful(normalized.description)
 			? [normalized]
 			: [];
 	});
@@ -120,8 +162,15 @@ function normalizeSectionItems(name: SectionName, raw: unknown, warnings: string
 		const path = `${name}[${index}]`;
 		const item = fillItem(value, itemDefaults[name], path, warnings);
 		if (!item) return [];
-		if (name === "experience")
+		if (name === "experience" || name === "education" || name === "projects" || name === "volunteer") {
+			const dates = parsePeriod(legacyPeriod(value));
+			item.startDate = normalizeMonthDate(item.startDate as string) || dates.startDate;
+			item.endDate = normalizeMonthDate(item.endDate as string) || dates.endDate;
+			if (item.startDate || item.endDate || !item.period) delete item.period;
+		}
+		if (name === "experience") {
 			item.roles = normalizeRoles(isRecord(value) ? value.roles : undefined, `${path}.roles`, warnings);
+		}
 		if (!meaningfulFields[name].some((field) => isMeaningful(item[field]))) return [];
 		// Canonical item schemas require their identifying field to have length >= 1.
 		// A single space remains visually empty while allowing a useful partial item to survive validation.

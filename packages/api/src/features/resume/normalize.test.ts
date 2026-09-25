@@ -22,6 +22,25 @@ describe("normalizeResumeData", () => {
 		expect(data.sections.experience.items).toEqual([]);
 	});
 
+	it("migrates legacy experience periods to structured dates", () => {
+		const { data } = normalizeResumeData({
+			sections: {
+				experience: {
+					items: [
+						{
+							company: "Acme",
+							period: "March 2022 - Present",
+							roles: [{ position: "Lead", period: "05/2023 \u2013 06/2024" }],
+						},
+					],
+				},
+			},
+		});
+		const item = data.sections.experience.items[0];
+		expect(item).toMatchObject({ startDate: "2022-03", endDate: "" });
+		expect(item?.roles[0]).toMatchObject({ startDate: "2023-05", endDate: "2024-06" });
+	});
+
 	it("preserves Arabic text", () => {
 		const { data } = normalizeResumeData({
 			basics: { name: "محمد أحمد" },

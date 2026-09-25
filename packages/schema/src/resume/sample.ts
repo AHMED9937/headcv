@@ -90,7 +90,8 @@ export const sampleResumeData: ResumeData = {
 					company: "Cascade Studios",
 					position: "Senior Game Developer",
 					location: "Seattle, WA",
-					period: "March 2022 - Present",
+					startDate: "2022-03",
+					endDate: "",
 					website: {
 						url: "",
 						label: "",
@@ -115,7 +116,8 @@ export const sampleResumeData: ResumeData = {
 					area: "Computer Science",
 					grade: "3.6 GPA",
 					location: "Seattle, WA",
-					period: "2014 - 2018",
+					startDate: "2014",
+					endDate: "2018",
 					website: {
 						url: "",
 						label: "",
@@ -135,7 +137,8 @@ export const sampleResumeData: ResumeData = {
 					id: "019bef5a-93e4-7746-ad39-4d2603fe2801",
 					hidden: false,
 					name: "Echoes of the Void (Indie Game)",
-					period: "2023 - Present",
+					startDate: "2023",
+					endDate: "",
 					website: {
 						url: "https://itch.io/echoes-of-the-void",
 						label: "View on itch.io",
@@ -148,7 +151,8 @@ export const sampleResumeData: ResumeData = {
 					id: "019bef5a-93e4-7746-ad39-524195dd7eff",
 					hidden: false,
 					name: "Open Source: Unity Dialogue Framework",
-					period: "2021 - 2023",
+					startDate: "2021",
+					endDate: "2023",
 					website: {
 						url: "https://github.com/dkowalski-dev/unity-dialogue",
 						label: "View on GitHub",
@@ -161,7 +165,8 @@ export const sampleResumeData: ResumeData = {
 					id: "019bef5a-93e4-7746-ad39-549106273c73",
 					hidden: false,
 					name: "Game Jam Participation",
-					period: "2019 - Present",
+					startDate: "2019",
+					endDate: "",
 					website: {
 						url: "",
 						label: "",
@@ -412,7 +417,8 @@ export const sampleResumeData: ResumeData = {
 					hidden: false,
 					organization: "Seattle Indies",
 					location: "Seattle, WA",
-					period: "2020 - Present",
+					startDate: "2020",
+					endDate: "",
 					website: {
 						url: "",
 						label: "",
@@ -426,7 +432,8 @@ export const sampleResumeData: ResumeData = {
 					hidden: false,
 					organization: "Code.org Game Development Workshops",
 					location: "Seattle, WA",
-					period: "2021 - Present",
+					startDate: "2021",
+					endDate: "",
 					website: {
 						url: "",
 						label: "",
@@ -472,7 +479,8 @@ export const sampleResumeData: ResumeData = {
 					company: "Pixel Forge Interactive",
 					position: "Game Developer",
 					location: "Bellevue, WA",
-					period: "June 2020 - February 2022",
+					startDate: "2020-06",
+					endDate: "2022-02",
 					website: {
 						url: "",
 						label: "",
@@ -488,7 +496,8 @@ export const sampleResumeData: ResumeData = {
 					company: "Mobile Games Studio",
 					position: "Junior Game Developer",
 					location: "Remote",
-					period: "September 2018 - May 2020",
+					startDate: "2018-09",
+					endDate: "2020-05",
 					website: {
 						url: "",
 						label: "",

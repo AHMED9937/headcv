@@ -3,7 +3,7 @@ import { flattenError, ZodError, z } from "zod";
 import { getNetworkIcon } from "@headcv/resume/icons";
 import { resumeDataSchema } from "@headcv/schema/resume/data";
 import { defaultResumeData } from "@headcv/schema/resume/default";
-import { formatPeriod, formatSingleDate } from "@headcv/utils/date";
+import { formatPeriod, formatSingleDate, normalizeMonthDate } from "@headcv/utils/date";
 import { arrayToHtmlList, toHtmlDescription } from "@headcv/utils/html";
 import { parseLevel } from "@headcv/utils/level";
 import { generateId } from "@headcv/utils/string";
@@ -225,6 +225,8 @@ export class JSONResumeImporter {
 						company: work.name || "",
 						position: work.position || "",
 						location: work.location || "",
+						startDate: normalizeMonthDate(work.startDate || ""),
+						endDate: normalizeMonthDate(work.endDate || ""),
 						period: formatPeriod(work.startDate, work.endDate),
 						website: createItemWebsite(work.url),
 						roles: [],
@@ -247,6 +249,8 @@ export class JSONResumeImporter {
 						area: edu.area || "",
 						grade: edu.score || "",
 						location: "",
+						startDate: normalizeMonthDate(edu.startDate || ""),
+						endDate: normalizeMonthDate(edu.endDate || ""),
 						period: formatPeriod(edu.startDate, edu.endDate),
 						website: createItemWebsite(edu.url),
 						description: edu.courses && edu.courses.length > 0 ? arrayToHtmlList(edu.courses) : "",
@@ -264,6 +268,8 @@ export class JSONResumeImporter {
 						id: generateId(),
 						hidden: false,
 						name: project.name || "",
+						startDate: normalizeMonthDate(project.startDate || ""),
+						endDate: normalizeMonthDate(project.endDate || ""),
 						period: formatPeriod(project.startDate, project.endDate),
 						website: createItemWebsite(project.url),
 						description: toHtmlDescription(project.description, project.highlights),
@@ -388,6 +394,8 @@ export class JSONResumeImporter {
 						hidden: false,
 						organization: vol.organization || "",
 						location: "",
+						startDate: normalizeMonthDate(vol.startDate || ""),
+						endDate: normalizeMonthDate(vol.endDate || ""),
 						period: formatPeriod(vol.startDate, vol.endDate),
 						website: createItemWebsite(vol.url),
 						description: toHtmlDescription(vol.summary, vol.highlights),

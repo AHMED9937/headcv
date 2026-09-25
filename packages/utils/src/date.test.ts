@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { formatDate, formatPeriod, formatSingleDate } from "./date";
+import {
+	formatDate,
+	formatDateRange,
+	formatPeriod,
+	formatSingleDate,
+	hydrateDateRange,
+	normalizeMonthDate,
+	parsePeriod,
+	prepareDateRangeForSave,
+} from "./date";
 
 describe("formatDate", () => {
 	it("formats YYYY-MM as 'Month Year'", () => {
@@ -85,5 +94,54 @@ describe("formatSingleDate", () => {
 
 	it("returns plain year when only year present", () => {
 		expect(formatSingleDate("2024")).toBe("2024");
+	});
+});
+
+describe("parsePeriod", () => {
+	it("migrates named-month periods", () => {
+		expect(parsePeriod("March 2022 - Present")).toEqual({ startDate: "2022-03", endDate: "" });
+	});
+
+	it("migrates numeric month/year periods", () => {
+		expect(parsePeriod("05/2026 \u2013 06/2026")).toEqual({ startDate: "2026-05", endDate: "2026-06" });
+	});
+
+	it("leaves unrecognized legacy values intact at the caller", () => {
+		expect(parsePeriod("2020 - 2024")).toEqual({ startDate: "", endDate: "" });
+	});
+});
+
+describe("normalizeMonthDate", () => {
+	it("normalizes complete ISO dates for month inputs", () => {
+		expect(normalizeMonthDate("2020-01-15")).toBe("2020-01");
+	});
+});
+
+describe("date-range migration", () => {
+	it("hydrates structured dates from a legacy period", () => {
+		expect(hydrateDateRange({ period: "March 2022 - Present" })).toEqual({
+			period: "March 2022 - Present",
+			startDate: "2022-03",
+			endDate: "",
+		});
+	});
+
+	it("drops the legacy period when structured dates are available", () => {
+		expect(
+			prepareDateRangeForSave(
+				{ startDate: "2022-03", endDate: "", period: "March 2022 - Present" },
+				{ startDate: "2022-03", endDate: "", period: "March 2022 - Present" },
+			),
+		).toEqual({ startDate: "2022-03", endDate: "", period: undefined });
+	});
+
+	it("preserves untouched legacy text that cannot be migrated", () => {
+		const initial = { startDate: "", endDate: "", period: "Spring 2022" };
+		expect(prepareDateRangeForSave(initial, initial).period).toBe("Spring 2022");
+	});
+
+	it("formats structured dates with a legacy fallback", () => {
+		expect(formatDateRange({ startDate: "2022-03", endDate: "2024-04" })).toBe("March 2022 - April 2024");
+		expect(formatDateRange({ period: "Spring 2022" })).toBe("Spring 2022");
 	});
 });

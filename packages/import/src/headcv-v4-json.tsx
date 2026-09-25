@@ -4,6 +4,7 @@ import z, { flattenError, ZodError } from "zod";
 import { resumeDataSchema } from "@headcv/schema/resume/data";
 import { templateSchema } from "@headcv/schema/templates";
 import { parseColorString } from "@headcv/utils/color";
+import { parsePeriod } from "@headcv/utils/date";
 import { generateId } from "@headcv/utils/string";
 
 function colorToRgba(color: string): string {
@@ -477,6 +478,7 @@ export class ReactiveResumeV4JSONImporter {
 								company: item.company ?? "",
 								position: item.position ?? "",
 								location: item.location ?? "",
+								...parsePeriod(item.date),
 								period: item.date ?? "",
 								website: {
 									url: item.url?.href ?? "",
@@ -501,6 +503,7 @@ export class ReactiveResumeV4JSONImporter {
 								area: item.area ?? "",
 								grade: item.score ?? "",
 								location: "",
+								...parsePeriod(item.date),
 								period: item.date ?? "",
 								website: {
 									url: item.url?.href ?? "",
@@ -520,6 +523,7 @@ export class ReactiveResumeV4JSONImporter {
 								id: item.id ?? generateId(),
 								hidden: !(item.visible ?? true),
 								name: item.name ?? "",
+								...parsePeriod(item.date),
 								period: item.date ?? "",
 								website: {
 									url: item.url?.href ?? "",
@@ -648,6 +652,7 @@ export class ReactiveResumeV4JSONImporter {
 								hidden: !(item.visible ?? true),
 								organization: item.organization ?? "",
 								location: item.location ?? "",
+								...parsePeriod(item.date),
 								period: item.date ?? "",
 								website: {
 									url: item.url?.href ?? "",
@@ -694,6 +699,7 @@ export class ReactiveResumeV4JSONImporter {
 							// otherwise description IS the primary content and goes to the body below
 							position: hasName ? (item.description ?? "") : "",
 							location: item.location ?? "",
+							...parsePeriod(item.date),
 							period: item.date ?? "",
 							website: {
 								url: item.url?.href ?? "",
