@@ -105,3 +105,11 @@ writeFileSync(
 		],
 	}),
 );
+
+// Apply pending database migrations for production deploys only, after everything
+// above built successfully. The serverless entry never runs the startup migrator,
+// so this is the only automatic path; a failure fails the deploy and the previous
+// version stays live. Migrations must stay additive (expand, then contract later).
+if (process.env.VERCEL_ENV === "production") {
+	execSync("pnpm --filter @headcv/db exec drizzle-kit migrate", { cwd: root, stdio: "inherit", shell: true });
+}

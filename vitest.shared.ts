@@ -44,7 +44,9 @@ export const createVitestProjectConfig = ({
 			include: ["src/**/*.{test,spec}.?(c|m)[jt]s?(x)"],
 			exclude: ["node_modules", "dist", ".output", "coverage", "reports"],
 			pool: "threads",
-			isolate: false,
+			// Each test file gets a fresh module registry, so vi.mock never leaks between files
+			// (shared modules made results depend on file order). Measured: no slower here.
+			isolate: true,
 			passWithNoTests: true,
 			coverage: {
 				provider: "v8",
