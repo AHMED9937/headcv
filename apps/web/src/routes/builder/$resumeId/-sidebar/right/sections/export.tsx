@@ -1,6 +1,6 @@
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { CircleNotchIcon, FileDocIcon, FileJsIcon, FilePdfIcon } from "@phosphor-icons/react";
+import { CircleNotchIcon, FileDocIcon, FilePdfIcon } from "@phosphor-icons/react";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import { buildDocx } from "@headcv/docx";
@@ -15,15 +15,6 @@ export function ExportSectionBuilder() {
 
 	const [isPrinting, setIsPrinting] = useState(false);
 	const resume = resumeData;
-
-	const onDownloadJSON = useCallback(() => {
-		if (!resume) return;
-		const filename = generateFilename(resume.name, "json");
-		const jsonString = JSON.stringify(resume.data, null, 2);
-		const blob = new Blob([jsonString], { type: "application/json" });
-
-		downloadWithAnchor(blob, filename);
-	}, [resume]);
 
 	const onDownloadDOCX = useCallback(async () => {
 		if (!resume) return;
@@ -60,29 +51,12 @@ export function ExportSectionBuilder() {
 		<SectionBase type="export" className="space-y-4">
 			<Button
 				variant="outline"
-				onClick={onDownloadJSON}
-				className="h-auto gap-x-4 whitespace-normal p-4! text-start font-normal active:scale-98"
-			>
-				<FileJsIcon className="size-6 shrink-0" />
-				<div className="flex flex-1 flex-col gap-y-1">
-					<h6 className="font-medium">JSON</h6>
-					<p className="text-muted-foreground text-xs leading-normal">
-						<Trans>
-							Download a copy of your resume in JSON format. Use this file for backup or to import your resume into
-							other applications, including AI assistants.
-						</Trans>
-					</p>
-				</div>
-			</Button>
-
-			<Button
-				variant="outline"
 				onClick={onDownloadDOCX}
 				className="h-auto gap-x-4 whitespace-normal p-4! text-start font-normal active:scale-98"
 			>
 				<FileDocIcon className="size-6 shrink-0" />
 				<div className="flex flex-1 flex-col gap-y-1">
-					<h6 className="font-medium">DOCX</h6>
+					<h6 className="font-medium">{t`Microsoft Word`}</h6>
 					<p className="text-muted-foreground text-xs leading-normal">
 						<Trans>
 							Download a copy of your resume as a Word document. Use this file to further customize your resume in

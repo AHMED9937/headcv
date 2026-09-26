@@ -43,29 +43,16 @@ const renderExport = () =>
 	);
 
 describe("ExportSectionBuilder", () => {
-	it("renders JSON, DOCX, and PDF action buttons", () => {
+	it("offers only Microsoft Word and PDF downloads", () => {
 		renderExport();
-		expect(screen.getByText("JSON")).toBeInTheDocument();
-		expect(screen.getByText("DOCX")).toBeInTheDocument();
-		expect(screen.getByText("PDF")).toBeInTheDocument();
+		const formats = screen.getAllByRole("button").map((button) => button.querySelector("h6")?.textContent);
+		expect(formats).toEqual(["Microsoft Word", "PDF"]);
+		expect(screen.queryByText("JSON")).not.toBeInTheDocument();
 	});
 
-	it("downloads a JSON blob when the JSON button is clicked", () => {
+	it("calls buildDocx and downloads the resulting blob when Microsoft Word is clicked", async () => {
 		renderExport();
-		const button = screen.getByText("JSON").closest("button") as HTMLButtonElement;
-		fireEvent.click(button);
-
-		expect(downloadWithAnchor).toHaveBeenCalledTimes(1);
-		// biome-ignore lint/style/noNonNullAssertion: The assertion above verifies the download call exists before destructuring it.
-		const [blob, filename] = downloadWithAnchor.mock.calls[0]!;
-		expect(blob).toBeInstanceOf(Blob);
-		expect((blob as Blob).type).toBe("application/json");
-		expect(filename).toBe("My Resume.json");
-	});
-
-	it("calls buildDocx and downloads the resulting blob when DOCX is clicked", async () => {
-		renderExport();
-		const button = screen.getByText("DOCX").closest("button") as HTMLButtonElement;
+		const button = screen.getByText("Microsoft Word").closest("button") as HTMLButtonElement;
 
 		fireEvent.click(button);
 		// Wait for the async callback chain to settle.

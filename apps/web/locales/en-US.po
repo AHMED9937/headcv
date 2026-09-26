@@ -1063,8 +1063,12 @@ msgid "Continue where you left off"
 msgstr "Continue where you left off"
 
 #: src/dialogs/resume/import.tsx
-msgid "Continue where you left off by importing an existing resume you created using HeadCV or any another resume builder. Supported formats include PDF, Microsoft Word, as well as JSON files from HeadCV."
-msgstr "Continue where you left off by importing an existing resume you created using HeadCV or any another resume builder. Supported formats include PDF, Microsoft Word, as well as JSON files from HeadCV."
+msgid "Continue where you left off by importing an existing resume from a PDF or Microsoft Word file."
+msgstr "Continue where you left off by importing an existing resume from a PDF or Microsoft Word file."
+
+#: src/dialogs/resume/import.tsx
+#~ msgid "Continue where you left off by importing an existing resume you created using HeadCV or any another resume builder. Supported formats include PDF, Microsoft Word, as well as JSON files from HeadCV."
+#~ msgstr "Continue where you left off by importing an existing resume you created using HeadCV or any another resume builder. Supported formats include PDF, Microsoft Word, as well as JSON files from HeadCV."
 
 #: src/routes/_home/-sections/donate.tsx
 msgid "Contributions fund bug fixes, security updates, and continuous improvements to keep the app running smoothly."
@@ -1496,20 +1500,24 @@ msgid "Download a copy of your resume as a Word document. Use this file to furth
 msgstr "Download a copy of your resume as a Word document. Use this file to further customize your resume in Microsoft Word or Google Docs."
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/export.tsx
-msgid "Download a copy of your resume in JSON format. Use this file for backup or to import your resume into other applications, including AI assistants."
-msgstr "Download a copy of your resume in JSON format. Use this file for backup or to import your resume into other applications, including AI assistants."
+#~ msgid "Download a copy of your resume in JSON format. Use this file for backup or to import your resume into other applications, including AI assistants."
+#~ msgstr "Download a copy of your resume in JSON format. Use this file for backup or to import your resume into other applications, including AI assistants."
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/export.tsx
 msgid "Download a copy of your resume in PDF format. Use this file for printing or to easily share your resume with recruiters."
 msgstr "Download a copy of your resume in PDF format. Use this file for printing or to easily share your resume with recruiters."
 
 #: src/routes/builder/$resumeId/-components/dock.tsx
-msgid "Download DOCX"
-msgstr "Download DOCX"
+#~ msgid "Download DOCX"
+#~ msgstr "Download DOCX"
 
 #: src/routes/builder/$resumeId/-components/dock.tsx
-msgid "Download JSON"
-msgstr "Download JSON"
+#~ msgid "Download JSON"
+#~ msgstr "Download JSON"
+
+#: src/routes/builder/$resumeId/-components/dock.tsx
+msgid "Download Microsoft Word"
+msgstr "Download Microsoft Word"
 
 #: src/features/resume/public/public-resume.tsx
 #: src/routes/agent/-components/thread-workspace.tsx
@@ -2160,6 +2168,10 @@ msgstr "Go to resumes dashboard"
 msgid "Go to section"
 msgstr "Go to section"
 
+#: src/routes/dashboard/route.tsx
+msgid "Go to your resumes"
+msgstr "Go to your resumes"
+
 #: src/features/command-palette/pages/navigation.tsx
 msgid "Go to…"
 msgstr "Go to…"
@@ -2199,8 +2211,8 @@ msgstr "HeadCV — Build a professional ATS-friendly CV in minutes with AI assis
 
 #. Import source option for current HeadCV JSON format
 #: src/dialogs/resume/import.tsx
-msgid "HeadCV (JSON)"
-msgstr "HeadCV (JSON)"
+#~ msgid "HeadCV (JSON)"
+#~ msgstr "HeadCV (JSON)"
 
 #: src/routes/_home/-sections/prefooter.tsx
 msgid "HeadCV continues to grow thanks to its vibrant community. This project owes its progress to numerous individuals who've dedicated their time and skills to make it better. We celebrate the coders who've enhanced its features on GitHub, the linguists whose translations on Crowdin have made it accessible to a broader audience, and the people who've donated to support its continued development."
@@ -2232,8 +2244,8 @@ msgstr "HeadCV v{__APP_VERSION__}"
 
 #. Import source option for legacy HeadCV v4 JSON format
 #: src/dialogs/resume/import.tsx
-msgid "HeadCV v4 (JSON)"
-msgstr "HeadCV v4 (JSON)"
+#~ msgid "HeadCV v4 (JSON)"
+#~ msgstr "HeadCV v4 (JSON)"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/typography.tsx
 msgctxt "Headings or Titles (H1, H2, H3, H4, H5, H6)"
@@ -2491,8 +2503,8 @@ msgstr "Join the candidates who turned their experience into offers."
 
 #. Import source option for standard JSON Resume format
 #: src/dialogs/resume/import.tsx
-msgid "JSON Resume"
-msgstr "JSON Resume"
+#~ msgid "JSON Resume"
+#~ msgstr "JSON Resume"
 
 #: src/components/input/rich-input.tsx
 msgid "Justify Align"
@@ -2812,6 +2824,7 @@ msgstr "Medium"
 
 #. File format label in import source selector
 #: src/dialogs/resume/import.tsx
+#: src/routes/builder/$resumeId/-sidebar/right/sections/export.tsx
 msgid "Microsoft Word"
 msgstr "Microsoft Word"
 

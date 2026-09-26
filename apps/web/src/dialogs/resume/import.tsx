@@ -9,9 +9,6 @@ import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import z from "zod";
-import { ReactiveResumeJSONImporter } from "@headcv/import/headcv-json";
-import { ReactiveResumeV4JSONImporter } from "@headcv/import/headcv-v4-json";
-import { JSONResumeImporter } from "@headcv/import/json-resume";
 import { Badge } from "@headcv/ui/components/badge";
 import { Button } from "@headcv/ui/components/button";
 import {
@@ -52,28 +49,17 @@ const formSchema = z.discriminatedUnion("type", [
 				{ message: "File must be a Microsoft Word document" },
 			),
 	}),
-	z.object({
-		type: z.literal("headcv-json"),
-		file: z
-			.instanceof(File)
-			.refine((file) => file.type === "application/json", { message: "File must be a JSON file" }),
-	}),
-	z.object({
-		type: z.literal("headcv-v4-json"),
-		file: z
-			.instanceof(File)
-			.refine((file) => file.type === "application/json", { message: "File must be a JSON file" }),
-	}),
-	z.object({
-		type: z.literal("json-resume-json"),
-		file: z
-			.instanceof(File)
-			.refine((file) => file.type === "application/json", { message: "File must be a JSON file" }),
-	}),
 ]);
 
 type FormValues = z.infer<typeof formSchema>;
 type ImportType = FormValues["type"];
+
+// Only PDF and Microsoft Word are offered; the picker filters to the chosen type.
+const ACCEPTED_FILES: Record<ImportType, string | undefined> = {
+	"": undefined,
+	pdf: ".pdf,application/pdf",
+	docx: ".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+};
 
 function fileToBase64(file: File): Promise<string> {
 	return new Promise((resolve, reject) => {
@@ -117,24 +103,6 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 
 			try {
 				let data: ResumeData | undefined;
-
-				if (value.type === "json-resume-json") {
-					const json = await value.file.text();
-					const importer = new JSONResumeImporter();
-					data = importer.parse(json);
-				}
-
-				if (value.type === "headcv-json") {
-					const json = await value.file.text();
-					const importer = new ReactiveResumeJSONImporter();
-					data = importer.parse(json);
-				}
-
-				if (value.type === "headcv-v4-json") {
-					const json = await value.file.text();
-					const importer = new ReactiveResumeV4JSONImporter();
-					data = importer.parse(json);
-				}
 
 				if (value.type === "pdf") {
 					if (isLoadingAiProviders) throw new Error(t`Loading AI providers. Please try again in a moment.`);
@@ -234,10 +202,7 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 					<Trans>Import an existing resume</Trans>
 				</DialogTitle>
 				<DialogDescription>
-					<Trans>
-						Continue where you left off by importing an existing resume you created using HeadCV or any another resume
-						builder. Supported formats include PDF, Microsoft Word, as well as JSON files from HeadCV.
-					</Trans>
+					<Trans>Continue where you left off by importing an existing resume from a PDF or Microsoft Word file.</Trans>
 				</DialogDescription>
 			</DialogHeader>
 
@@ -264,27 +229,6 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 											field.handleChange(value as ImportType);
 										}}
 										options={[
-											{
-												value: "headcv-json",
-												label: t({
-													comment: "Import source option for current HeadCV JSON format",
-													message: "HeadCV (JSON)",
-												}),
-											},
-											{
-												value: "headcv-v4-json",
-												label: t({
-													comment: "Import source option for legacy HeadCV v4 JSON format",
-													message: "HeadCV v4 (JSON)",
-												}),
-											},
-											{
-												value: "json-resume-json",
-												label: t({
-													comment: "Import source option for standard JSON Resume format",
-													message: "JSON Resume",
-												}),
-											},
 											{
 												value: "pdf",
 												label: (
@@ -325,7 +269,13 @@ export function ImportResumeDialog(_: DialogProps<"resume.import">) {
 							hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}
 						>
 							<FormControl>
-								<Input type="file" className="hidden" ref={inputRef} onChange={onUploadFile} />
+								<Input
+									type="file"
+									accept={ACCEPTED_FILES[type]}
+									className="hidden"
+									ref={inputRef}
+									onChange={onUploadFile}
+								/>
 
 								<Button
 									variant="outline"

@@ -5,7 +5,6 @@ import {
 	CircleNotchIcon,
 	CubeFocusIcon,
 	FileDocIcon,
-	FileJsIcon,
 	FilePdfIcon,
 	LinkSimpleIcon,
 	MagnifyingGlassMinusIcon,
@@ -50,15 +49,6 @@ export function BuilderDock({ pageScale, onZoomIn, onZoomOut, onFit }: BuilderDo
 		await copyToClipboard(publicUrl);
 		toast.success(t`A link to your resume has been copied to clipboard.`);
 	}, [publicUrl, copyToClipboard]);
-
-	const onDownloadJSON = useCallback(async () => {
-		if (!resume) return;
-		const filename = generateFilename(resume.name, "json");
-		const jsonString = JSON.stringify(resume.data, null, 2);
-		const blob = new Blob([jsonString], { type: "application/json" });
-
-		downloadWithAnchor(blob, filename);
-	}, [resume]);
 
 	const onDownloadDOCX = useCallback(async () => {
 		if (!resume) return;
@@ -116,8 +106,7 @@ export function BuilderDock({ pageScale, onZoomIn, onZoomOut, onFit }: BuilderDo
 				/>
 				<div className="mx-1 h-8 w-px bg-border" />
 				<DockIcon icon={LinkSimpleIcon} title={t`Copy URL`} onClick={() => onCopyUrl()} />
-				<DockIcon icon={FileJsIcon} title={t`Download JSON`} onClick={() => onDownloadJSON()} />
-				<DockIcon icon={FileDocIcon} title={t`Download DOCX`} onClick={() => onDownloadDOCX()} />
+				<DockIcon icon={FileDocIcon} title={t`Download Microsoft Word`} onClick={() => onDownloadDOCX()} />
 				<DockIcon
 					title={t`Download PDF`}
 					disabled={isPrinting}

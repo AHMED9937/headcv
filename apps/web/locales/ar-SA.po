@@ -1068,8 +1068,12 @@ msgid "Continue where you left off"
 msgstr "تابع من حيث توقفت"
 
 #: src/dialogs/resume/import.tsx
-msgid "Continue where you left off by importing an existing resume you created using HeadCV or any another resume builder. Supported formats include PDF, Microsoft Word, as well as JSON files from HeadCV."
-msgstr "تابع من حيث توقفت باستيراد سيرة ذاتية أنشأتها باستخدام HeadCV أو أي منشئ سير ذاتية آخر. الصيغ المدعومة: PDF وMicrosoft Word، بالإضافة إلى ملفات JSON من HeadCV."
+msgid "Continue where you left off by importing an existing resume from a PDF or Microsoft Word file."
+msgstr "تابع من حيث توقفت باستيراد سيرة ذاتية موجودة من ملف PDF أو Microsoft Word."
+
+#: src/dialogs/resume/import.tsx
+#~ msgid "Continue where you left off by importing an existing resume you created using HeadCV or any another resume builder. Supported formats include PDF, Microsoft Word, as well as JSON files from HeadCV."
+#~ msgstr "تابع من حيث توقفت باستيراد سيرة ذاتية أنشأتها باستخدام HeadCV أو أي منشئ سير ذاتية آخر. الصيغ المدعومة: PDF وMicrosoft Word، بالإضافة إلى ملفات JSON من HeadCV."
 
 #: src/routes/_home/-sections/donate.tsx
 msgid "Contributions fund bug fixes, security updates, and continuous improvements to keep the app running smoothly."
@@ -1501,20 +1505,24 @@ msgid "Download a copy of your resume as a Word document. Use this file to furth
 msgstr "قم بتنزيل نسخة من سيرتك الذاتية كمستند Word. استخدم هذا الملف لتخصيص سيرتك الذاتية بشكل أكبر في Microsoft Word أو محرر مستندات Google."
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/export.tsx
-msgid "Download a copy of your resume in JSON format. Use this file for backup or to import your resume into other applications, including AI assistants."
-msgstr "نزّل نسخة من سيرتك الذاتية بصيغة JSON. استخدم هذا الملف للنسخ الاحتياطي أو لاستيراد سيرتك الذاتية إلى تطبيقات أخرى، بما في ذلك مساعدي الذكاء الاصطناعي."
+#~ msgid "Download a copy of your resume in JSON format. Use this file for backup or to import your resume into other applications, including AI assistants."
+#~ msgstr "نزّل نسخة من سيرتك الذاتية بصيغة JSON. استخدم هذا الملف للنسخ الاحتياطي أو لاستيراد سيرتك الذاتية إلى تطبيقات أخرى، بما في ذلك مساعدي الذكاء الاصطناعي."
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/export.tsx
 msgid "Download a copy of your resume in PDF format. Use this file for printing or to easily share your resume with recruiters."
 msgstr "نزّل نسخة من سيرتك الذاتية بصيغة PDF. استخدم هذا الملف للطباعة أو لمشاركة سيرتك الذاتية بسهولة مع مسؤولي التوظيف."
 
 #: src/routes/builder/$resumeId/-components/dock.tsx
-msgid "Download DOCX"
-msgstr "تنزيل DOCX"
+#~ msgid "Download DOCX"
+#~ msgstr "تنزيل DOCX"
 
 #: src/routes/builder/$resumeId/-components/dock.tsx
-msgid "Download JSON"
-msgstr "تنزيل JSON"
+#~ msgid "Download JSON"
+#~ msgstr "تنزيل JSON"
+
+#: src/routes/builder/$resumeId/-components/dock.tsx
+msgid "Download Microsoft Word"
+msgstr "تنزيل Microsoft Word"
 
 #: src/features/resume/public/public-resume.tsx
 #: src/routes/agent/-components/thread-workspace.tsx
@@ -2165,6 +2173,10 @@ msgstr "الانتقال إلى لوحة معلومات السير الذاتي�
 msgid "Go to section"
 msgstr "الذهاب إلى القسم"
 
+#: src/routes/dashboard/route.tsx
+msgid "Go to your resumes"
+msgstr "الانتقال إلى سيرك الذاتية"
+
 #: src/features/command-palette/pages/navigation.tsx
 msgid "Go to…"
 msgstr "انتقل إلى…"
@@ -2204,8 +2216,8 @@ msgstr "HeadCV — أنشئ سيرة ذاتية احترافية متوافقة 
 
 #. Import source option for current HeadCV JSON format
 #: src/dialogs/resume/import.tsx
-msgid "HeadCV (JSON)"
-msgstr "HeadCV (JSON)"
+#~ msgid "HeadCV (JSON)"
+#~ msgstr "HeadCV (JSON)"
 
 #: src/routes/_home/-sections/prefooter.tsx
 msgid "HeadCV continues to grow thanks to its vibrant community. This project owes its progress to numerous individuals who've dedicated their time and skills to make it better. We celebrate the coders who've enhanced its features on GitHub, the linguists whose translations on Crowdin have made it accessible to a broader audience, and the people who've donated to support its continued development."
@@ -2237,8 +2249,8 @@ msgstr "HeadCV الإصدار {__APP_VERSION__}"
 
 #. Import source option for legacy HeadCV v4 JSON format
 #: src/dialogs/resume/import.tsx
-msgid "HeadCV v4 (JSON)"
-msgstr "HeadCV v4 (JSON)"
+#~ msgid "HeadCV v4 (JSON)"
+#~ msgstr "HeadCV v4 (JSON)"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/typography.tsx
 msgctxt "Headings or Titles (H1, H2, H3, H4, H5, H6)"
@@ -2496,8 +2508,8 @@ msgstr "انضم إلى المتقدمين الذين حولوا خبراتهم 
 
 #. Import source option for standard JSON Resume format
 #: src/dialogs/resume/import.tsx
-msgid "JSON Resume"
-msgstr "استئناف JSON"
+#~ msgid "JSON Resume"
+#~ msgstr "استئناف JSON"
 
 #: src/components/input/rich-input.tsx
 msgid "Justify Align"
@@ -2817,6 +2829,7 @@ msgstr "متوسط"
 
 #. File format label in import source selector
 #: src/dialogs/resume/import.tsx
+#: src/routes/builder/$resumeId/-sidebar/right/sections/export.tsx
 msgid "Microsoft Word"
 msgstr "مايكروسوفت وورد"
 
