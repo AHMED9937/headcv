@@ -37,14 +37,16 @@ describe("SummaryBuilder", () => {
 			</I18nProvider>,
 		);
 
+		// Real keystrokes without timer pauses between them: fast and stable under full-suite load.
+		const user = userEvent.setup({ delay: null });
 		const formulaButton = screen.getAllByRole("button")[0];
 		expect(formulaButton).toBeTruthy();
 		if (!formulaButton) throw new Error("Formula button not found");
-		await userEvent.click(formulaButton);
+		await user.click(formulaButton);
 
 		const inputs = screen.getAllByRole("textbox");
 		for (const input of inputs) {
-			await userEvent.type(input, "test");
+			await user.type(input, "test");
 		}
 
 		const applyButton = screen.getByRole("button", { name: /Apply to summary/i });
