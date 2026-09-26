@@ -21,7 +21,11 @@ const {
 	getContentSectionComponent: vi.fn((section: string) => (
 		<div data-testid={`content-section-${section}`}>{section}</div>
 	)),
-	getDesignSectionComponent: vi.fn((section: string) => <div data-testid={`design-section-${section}`}>{section}</div>),
+	getDesignSectionComponent: vi.fn((section: string) => (
+		<div id={`sidebar-${section}`} data-testid={`design-section-${section}`}>
+			{section}
+		</div>
+	)),
 	isVisibleEditorSection: vi.fn((sectionId: string) => sectionId !== "projects" && sectionId !== "interests"),
 	mobileState: { value: false },
 	setCollapsed: vi.fn(),
@@ -144,10 +148,11 @@ const renderWorkspace = (overrides: Partial<ComponentProps<typeof ImportedWorksp
 };
 
 describe("ImportedWorkspace", () => {
-	it("renders Design with the same section-navigation pattern", async () => {
+	it("renders every Design section stacked, with a rail highlighting the current one", async () => {
 		const { props } = renderWorkspace({ isImported: true });
 		const navigation = screen.getByRole("navigation", { name: "Design your resume" });
 		const sectionButtons = within(navigation).getAllByRole("button");
+		const designSections = ["template", "design", "typography", "layout", "page", "notes"];
 
 		expect(sectionButtons.map((button) => button.textContent)).toEqual([
 			"Template",
@@ -157,15 +162,29 @@ describe("ImportedWorkspace", () => {
 			"Page",
 			"Notes",
 		]);
-		expect(within(navigation).getByRole("button", { name: "Typography" })).toHaveAttribute("aria-current", "page");
+		expect(within(navigation).getByRole("button", { name: "Typography" })).toHaveAttribute("aria-current", "location");
 		expect(screen.getByText("Imported")).toBeInTheDocument();
-		expect(screen.getByTestId("design-section-typography")).toBeInTheDocument();
-		expect(screen.queryByTestId("design-section-template")).not.toBeInTheDocument();
-		expect(getDesignSectionComponent).toHaveBeenCalledTimes(1);
-		expect(getDesignSectionComponent).toHaveBeenCalledWith("typography");
+		expect(screen.getAllByTestId(/^design-section-/).map((element) => element.dataset.testid)).toEqual(
+			designSections.map((section) => `design-section-${section}`),
+		);
+		for (const section of designSections) expect(getDesignSectionComponent).toHaveBeenCalledWith(section);
 
 		await userEvent.click(within(navigation).getByRole("button", { name: "Layout" }));
 		expect(props.onDesignSectionChange).toHaveBeenCalledWith("layout");
+	});
+
+	it("scrolls to the current Design section when it is re-selected", async () => {
+		const scrollIntoView = vi.spyOn(Element.prototype, "scrollIntoView").mockImplementation(() => {});
+		const { props } = renderWorkspace({ designSection: "page" });
+		await waitFor(() => expect(scrollIntoView).toHaveBeenCalled());
+		scrollIntoView.mockClear();
+
+		const navigation = screen.getByRole("navigation", { name: "Design your resume" });
+		await userEvent.click(within(navigation).getByRole("button", { name: "Page" }));
+
+		expect(scrollIntoView).toHaveBeenCalledWith({ behavior: "smooth", block: "start" });
+		expect(props.onDesignSectionChange).not.toHaveBeenCalled();
+		scrollIntoView.mockRestore();
 	});
 
 	it("renders Content as stacked sections in CV order with a Personal Details card", () => {

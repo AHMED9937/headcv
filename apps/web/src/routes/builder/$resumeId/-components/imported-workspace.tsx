@@ -2,20 +2,16 @@ import type { ReactNode } from "react";
 import type { DesignWorkspaceSection, LeftSidebarSection } from "@/libs/resume/section";
 import type { MobileBuilderView } from "./mobile-view-switch";
 import type { WorkspaceTab } from "./workspace-search";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { CheckCircleIcon, DownloadSimpleIcon, PaletteIcon } from "@phosphor-icons/react";
-import { useEffect, useState } from "react";
+import { CheckCircleIcon, DownloadSimpleIcon } from "@phosphor-icons/react";
+import { useState } from "react";
 import { ScrollArea } from "@headcv/ui/components/scroll-area";
 import { useCurrentResume } from "@/features/resume/builder/draft";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { designWorkspaceSections } from "@/libs/resume/section";
-import { getSectionComponent as getDesignSectionComponent } from "../-sidebar/right/section-components";
 import { ExportSectionBuilder } from "../-sidebar/right/sections/export";
-import { useSectionStore } from "../-store/section";
 import { ContentWorkspacePanel } from "./content-workspace";
+import { DesignWorkspacePanel } from "./design-workspace";
 import { MobileViewSwitch } from "./mobile-view-switch";
-import { WorkspaceSectionNavigation, WorkspaceSectionSelect } from "./workspace-section-navigation";
 
 type Props = {
 	tab: WorkspaceTab;
@@ -38,52 +34,24 @@ export function ImportedWorkspace({
 }: Props) {
 	const isMobile = useIsMobile();
 	const [mobileView, setMobileView] = useState<MobileBuilderView>("editor");
-	const setCollapsed = useSectionStore((state) => state.setCollapsed);
-	const expandLeftSection = useSectionStore((state) => state.expandLeftSection);
-	const activeSection = tab === "content" ? section : tab === "design" ? designSection : null;
-
-	useEffect(() => {
-		if (!activeSection) return;
-		if (tab === "content") expandLeftSection(activeSection);
-		else setCollapsed(activeSection, false);
-	}, [activeSection, expandLeftSection, setCollapsed, tab]);
 
 	const editor = (
 		<div className="flex h-full min-h-0 flex-col bg-background">
 			{tab === "content" ? (
 				<ContentWorkspacePanel section={section} onSectionChange={onSectionChange} />
+			) : tab === "design" ? (
+				<DesignWorkspacePanel
+					section={designSection}
+					onSectionChange={onDesignSectionChange}
+					status={isImported ? <Trans>Imported</Trans> : undefined}
+				/>
 			) : (
-				<div className="flex min-h-0 flex-1">
-					{tab === "design" && (
-						<WorkspaceSectionNavigation
-							ariaLabel={t`Design your resume`}
-							description={<Trans>Select a section to edit</Trans>}
-							icon={<PaletteIcon className="size-4" aria-hidden="true" />}
-							items={designWorkspaceSections}
-							onChange={onDesignSectionChange}
-							section={designSection}
-							status={isImported ? <Trans>Imported</Trans> : undefined}
-							title={<Trans>Design your resume</Trans>}
-						/>
-					)}
-
-					<ScrollArea key={activeSection ?? tab} className="@container min-h-0 min-w-0 flex-1">
-						<div className="space-y-4 p-4 sm:p-6">
-							{tab === "design" && (
-								<WorkspaceSectionSelect
-									ariaLabel={t`Design your resume`}
-									items={designWorkspaceSections}
-									label={<Trans>Section</Trans>}
-									onChange={onDesignSectionChange}
-									section={designSection}
-								/>
-							)}
-							{tab === "design" && getDesignSectionComponent(designSection)}
-							{tab === "review" && <ImportReview isImported={isImported} />}
-							{tab === "export" && <ExportPanel isImported={isImported} />}
-						</div>
-					</ScrollArea>
-				</div>
+				<ScrollArea key={tab} className="@container min-h-0 min-w-0 flex-1">
+					<div className="space-y-4 p-4 sm:p-6">
+						{tab === "review" && <ImportReview isImported={isImported} />}
+						{tab === "export" && <ExportPanel isImported={isImported} />}
+					</div>
+				</ScrollArea>
 			)}
 		</div>
 	);

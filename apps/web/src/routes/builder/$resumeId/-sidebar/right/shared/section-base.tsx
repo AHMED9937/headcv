@@ -1,18 +1,44 @@
 import type { RightSidebarSection } from "@/libs/resume/section";
 import { CaretDownIcon } from "@phosphor-icons/react";
+import { createContext, useContext } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@headcv/ui/components/accordion";
 import { Button } from "@headcv/ui/components/button";
 import { cn } from "@headcv/utils/style";
 import { getSectionIcon, getSectionTitle } from "@/libs/resume/section";
 import { useSectionStore } from "../../../-store/section";
 
+// When true, sections render as always-open cards (e.g. the stacked Design workspace).
+const StaticSectionContext = createContext(false);
+
+export const StaticSectionsProvider = StaticSectionContext.Provider;
+
 type Props = React.ComponentProps<typeof AccordionContent> & {
 	type: RightSidebarSection;
 };
 
 export function SectionBase({ type, className, ...props }: Props) {
+	const isStatic = useContext(StaticSectionContext);
 	const collapsed = useSectionStore((state) => state.sections[type]?.collapsed ?? false);
 	const toggleCollapsed = useSectionStore((state) => state.toggleCollapsed);
+
+	if (isStatic) {
+		return (
+			<section
+				id={`sidebar-${type}`}
+				aria-labelledby={`sidebar-${type}-title`}
+				className="scroll-mt-4 rounded-2xl border bg-background p-5 shadow-sm sm:p-6"
+			>
+				<div className="flex items-center gap-x-4">
+					{getSectionIcon(type)}
+					<h2 id={`sidebar-${type}-title`} className="line-clamp-1 font-semibold text-2xl tracking-tight">
+						{getSectionTitle(type)}
+					</h2>
+				</div>
+
+				<div className={cn("mt-4", className)}>{props.children}</div>
+			</section>
+		);
+	}
 
 	return (
 		<Accordion

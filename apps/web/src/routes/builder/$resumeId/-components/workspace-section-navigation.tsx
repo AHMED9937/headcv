@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import type { SidebarSection } from "@/libs/resume/section";
 import { ScrollArea } from "@headcv/ui/components/scroll-area";
 import { cn } from "@headcv/utils/style";
-import { getSectionIcon, getSectionTitle } from "@/libs/resume/section";
+import { getSectionTitle } from "@/libs/resume/section";
 
 type WorkspaceSectionNavigationProps<TSection extends SidebarSection> = {
 	ariaLabel: string;
@@ -26,7 +26,7 @@ export function WorkspaceSectionNavigation<TSection extends SidebarSection>({
 	title,
 }: WorkspaceSectionNavigationProps<TSection>) {
 	return (
-		<nav className="hidden min-h-0 w-52 shrink-0 flex-col border-e bg-muted/20 lg:flex" aria-label={ariaLabel}>
+		<nav className="hidden min-h-0 w-44 shrink-0 flex-col border-e bg-muted/20 lg:flex" aria-label={ariaLabel}>
 			<div className="border-b px-4 py-4">
 				<div className="flex items-center gap-2 text-primary">
 					{icon}
@@ -41,23 +41,19 @@ export function WorkspaceSectionNavigation<TSection extends SidebarSection>({
 			</div>
 
 			<ScrollArea className="min-h-0 flex-1">
-				<div className="space-y-1 p-2">
+				<div className="mx-4 my-4 flex flex-col border-s">
 					{items.map((item) => (
 						<button
 							key={item}
 							type="button"
 							onClick={() => onChange(item)}
 							className={cn(
-								"flex w-full items-center gap-2 rounded-lg px-3 py-2 text-start text-sm transition-colors hover:bg-muted",
-								section === item &&
-									(item === "ai-review"
-										? "bg-green-100 font-medium text-green-800 dark:bg-green-900/40 dark:text-green-100"
-										: "bg-primary/10 font-medium text-primary"),
+								"-ms-px w-full border-transparent border-s-2 px-3 py-1.5 text-start text-muted-foreground text-sm transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+								section === item && "border-primary font-medium text-primary hover:text-primary",
 							)}
-							aria-current={section === item ? "page" : undefined}
+							aria-current={section === item ? "location" : undefined}
 						>
-							{getSectionIcon(item, { size: 16, "aria-hidden": true })}
-							<span className="truncate">{getSectionTitle(item)}</span>
+							<span className="block truncate">{getSectionTitle(item)}</span>
 						</button>
 					))}
 				</div>
