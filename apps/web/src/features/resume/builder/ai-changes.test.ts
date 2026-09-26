@@ -187,6 +187,16 @@ describe("getAffectedPreviewSectionIds for custom sections", () => {
 		expect(ids).toContain("cs-1");
 		expect(ids).toContain("cs-2");
 	});
+
+	it("finds a custom section the AI created on a blank resume", () => {
+		const currentData = { ...defaultResumeData, customSections: [{ id: "new-cs" }] } as never;
+		const operations = [
+			{ op: "add", path: "/customSections/0", value: { id: "new-cs", title: "Achievements" } },
+			{ op: "add", path: "/customSections/0/items/-", value: { id: "item-1" } },
+		] as const;
+		const ids = getAffectedPreviewSectionIds(operations as never, defaultResumeData, currentData);
+		expect(Array.from(ids)).toEqual(["new-cs"]);
+	});
 });
 
 describe("getSectionDiffs for profiles and custom", () => {
