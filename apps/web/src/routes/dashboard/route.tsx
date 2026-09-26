@@ -1,3 +1,4 @@
+import { t } from "@lingui/core/macro";
 import { createFileRoute, Link, Outlet, redirect } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
@@ -79,7 +80,8 @@ function RouteComponent() {
 	return (
 		<div className="flex min-h-svh flex-col bg-muted/30">
 			<header className="sticky top-0 z-50 flex h-14 items-center justify-between border-b bg-background/95 px-4 backdrop-blur">
-				<Link to="/" className="flex items-center">
+				{/* Signed-in users are sent home to their resumes, not the marketing page. */}
+				<Link to="/dashboard/resumes" aria-label={t`Go to your resumes`} className="flex items-center">
 					<BrandIcon variant="logo" className="h-8 w-auto" />
 				</Link>
 
