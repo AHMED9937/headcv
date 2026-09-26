@@ -14,6 +14,7 @@ import { cn } from "@headcv/utils/style";
 import { templates } from "@/dialogs/resume/template/data";
 import { getResumeErrorMessage } from "@/libs/error-message";
 import { orpc } from "@/libs/orpc/client";
+import { LandingBrand } from "@/routes/_home/-sections/landing-brand";
 
 export const Route = createFileRoute("/templates/")({
 	validateSearch: (search: Record<string, unknown>): { template?: Template } => ({
@@ -91,8 +92,12 @@ function TemplateGalleryPage() {
 			<div className="min-h-0 flex-1 overflow-y-auto px-4 py-6 sm:px-8 sm:py-10">
 				<div className="mx-auto max-w-7xl pb-8">
 					<header>
-						<Link to="/" className="font-display font-semibold text-primary text-xl tracking-tight">
-							HeadCV
+						<Link
+							to="/"
+							className="inline-flex min-h-11 items-center rounded-lg focus-visible:ring-2 focus-visible:ring-ring"
+							aria-label={t({ id: "home.brand", message: "HeadCV home" })}
+						>
+							<LandingBrand />
 						</Link>
 					</header>
 

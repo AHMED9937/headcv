@@ -1,6 +1,7 @@
 import { RouterProvider } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
+import { BrandIcon } from "@headcv/ui/components/brand-icon";
 import { getRouter } from "./router";
 import "./polyfills/map-upsert";
 import "./index.css";
@@ -22,7 +23,7 @@ function App() {
 	if (error) {
 		return (
 			<div className="mx-auto flex h-svh max-w-md flex-col items-center justify-center gap-y-4 px-4 text-center">
-				<p className="font-bold text-2xl">HeadCV</p>
+				<BrandIcon variant="logo" className="h-10 w-auto" />
 				<p className="text-muted-foreground">{error.message}</p>
 				<button
 					type="button"
