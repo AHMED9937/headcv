@@ -103,6 +103,7 @@ export function getCustomSectionId(operation: JsonPatchOperation, data: ResumeDa
 export function getAffectedPreviewSectionIds(
 	operations: JsonPatchOperation[],
 	snapshotData?: ResumeData | null,
+	currentData?: ResumeData | null,
 ): Set<string> {
 	const sectionIds = new Set<string>();
 
@@ -111,11 +112,14 @@ export function getAffectedPreviewSectionIds(
 		if (!section) continue;
 
 		if (section === "custom") {
-			const customSectionId = snapshotData
-				? getCustomSectionIdForOperation(operation, snapshotData, snapshotData)
-				: getCustomSectionId(operation, snapshotData);
+			// Sections the AI just created only exist in the post-change data.
+			const lookupData = currentData ?? snapshotData;
+			const customSectionId =
+				lookupData && snapshotData
+					? getCustomSectionIdForOperation(operation, lookupData, snapshotData)
+					: getCustomSectionId(operation, lookupData);
 			if (customSectionId) sectionIds.add(customSectionId);
-			else for (const customSection of snapshotData?.customSections ?? []) sectionIds.add(customSection.id);
+			else for (const customSection of lookupData?.customSections ?? []) sectionIds.add(customSection.id);
 			continue;
 		}
 

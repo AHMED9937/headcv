@@ -93,9 +93,9 @@ export function AiAssistantProvider({ children, resumeId }: { children: React.Re
 	const changedPreviewSectionIds = useMemo(
 		() =>
 			isActionVisible && action && snapshotData
-				? Array.from(getAffectedPreviewSectionIds(action.operations, snapshotData))
+				? Array.from(getAffectedPreviewSectionIds(action.operations, snapshotData, reviewData))
 				: [],
-		[action, isActionVisible, snapshotData],
+		[action, isActionVisible, snapshotData, reviewData],
 	);
 	const visibleChangedPreviewSectionIds = useMemo(() => {
 		if (!isActionVisible || !action || !snapshotData || !reviewData) return [];
