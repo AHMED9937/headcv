@@ -16,11 +16,21 @@ jobs:
       contents: write
       pull-requests: write
 
+    # Runs once the Crowdin project is configured; until then translations are maintained in-repo.
+    env:
+      CROWDIN_ENABLED: ${{ secrets.CROWDIN_PROJECT_ID != '' && secrets.CROWDIN_PERSONAL_TOKEN != '' }}
+
     steps:
+      - name: Skip when Crowdin is not configured
+        if: env.CROWDIN_ENABLED != 'true'
+        run: echo "::notice::CROWDIN_PROJECT_ID / CROWDIN_PERSONAL_TOKEN are not set; skipping the Crowdin sync."
+
       - name: Checkout Repository
+        if: env.CROWDIN_ENABLED == 'true'
         uses: actions/checkout@v6
 
       - name: Sync Translations from Crowdin
+        if: env.CROWDIN_ENABLED == 'true'
         uses: crowdin/github-action@v2
         with:
           download_translations: true
