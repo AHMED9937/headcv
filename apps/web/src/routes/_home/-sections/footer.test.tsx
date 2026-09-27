@@ -23,8 +23,7 @@ const renderFooter = () =>
 describe("Footer", () => {
 	it("renders the HeadCV brand and tagline", () => {
 		const { container } = renderFooter();
-		const logos = Array.from(container.querySelectorAll("img")).filter((img) => img.alt === "HeadCV");
-		expect(logos.length).toBeGreaterThan(0);
+		expect(screen.getByRole("link", { name: "HeadCV home" })).toBeInTheDocument();
 		expect(container.textContent).toContain("HeadCV is a guided CV builder");
 	});
 
