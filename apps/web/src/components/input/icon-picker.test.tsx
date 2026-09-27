@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
@@ -70,5 +70,10 @@ describe("IconPicker", () => {
 	it("renders the picker button as a single icon-size button", () => {
 		const { container } = renderPicker();
 		expect(container.querySelectorAll("button").length).toBeGreaterThanOrEqual(1);
+	});
+
+	it("gives the icon-only trigger an accessible name", () => {
+		renderPicker();
+		expect(screen.getByRole("button", { name: "Choose icon" })).toBeInTheDocument();
 	});
 });

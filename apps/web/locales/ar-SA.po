@@ -843,6 +843,10 @@ msgstr "اختر قالبًا يناسب قصتك"
 msgid "home.free.templatesText"
 msgstr "اختر من قوالبنا، مع مساحة لخبراتك وشخصيتك."
 
+#: src/components/input/icon-picker.tsx
+msgid "Choose icon"
+msgstr "اختر أيقونة"
+
 #: src/components/input/month-input.tsx
 msgid "Choose month"
 msgstr "اختر الشهر"
@@ -1192,6 +1196,14 @@ msgstr "خطتك الحالية"
 msgid "Custom"
 msgstr "مخصص"
 
+#: src/routes/builder/$resumeId/-sidebar/left/sections/custom-fields.tsx
+msgid "Custom field link"
+msgstr "رابط الحقل المخصص"
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/custom-fields.tsx
+msgid "Custom field text"
+msgstr "نص الحقل المخصص"
+
 #: src/features/resume/builder/ai-changes.ts
 msgid "Custom Fields"
 msgstr "حقول مخصصة"
@@ -1408,6 +1420,10 @@ msgstr "اسحب الأقسام وأسقطها هنا لنقلها بين الأ
 #: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
 msgid "Drag photo to reposition"
 msgstr "اسحب الصورة لتغيير موضعها"
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/custom-fields.tsx
+msgid "Drag to reorder custom field"
+msgstr "اسحب لإعادة ترتيب الحقل المخصص"
 
 #. Resume card context menu action to create a copy
 #. Resume card dropdown action to create a copy
@@ -3170,6 +3186,10 @@ msgstr "إزالة"
 #: src/components/input/chip-input.tsx
 msgid "Remove {chip}"
 msgstr "إزالة {chip}"
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/custom-fields.tsx
+msgid "Remove custom field"
+msgstr "إزالة الحقل المخصص"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "Remove Password"

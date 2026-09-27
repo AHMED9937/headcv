@@ -4,6 +4,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
+import { FormItem, FormLabel } from "@headcv/ui/components/form";
 import { URLInput } from "./url-input";
 
 beforeAll(() => {
@@ -81,5 +82,17 @@ describe("URLInput", () => {
 		const { container } = renderInput({ url: "https://example.com", label: "" });
 		const buttons = container.querySelectorAll("button");
 		expect(buttons.length).toBeGreaterThan(0);
+	});
+
+	it("is named by the FormLabel of its FormItem", () => {
+		render(
+			<I18nProvider i18n={i18n}>
+				<FormItem>
+					<FormLabel>Website</FormLabel>
+					<URLInput value={{ url: "https://example.com", label: "" }} onChange={vi.fn()} hideLabelButton />
+				</FormItem>
+			</I18nProvider>,
+		);
+		expect(screen.getByRole("textbox", { name: "Website" })).toHaveValue("example.com");
 	});
 });

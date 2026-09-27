@@ -3,6 +3,7 @@ import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { TagIcon } from "@phosphor-icons/react";
 import { useCallback, useMemo } from "react";
+import { FormControl } from "@headcv/ui/components/form";
 import { Input } from "@headcv/ui/components/input";
 import {
 	InputGroup,
@@ -58,11 +59,16 @@ export function URLInput<TValue extends Website>({ value, onChange, hideLabelBut
 				<InputGroupText>{PREFIX}</InputGroupText>
 			</InputGroupAddon>
 
-			<InputGroupInput
-				value={urlValue}
-				className={cn(props.className, "ps-0!")}
-				onChange={handleUrlChange}
-				{...props}
+			{/* FormControl gives the input the id its FormItem label points at. */}
+			<FormControl
+				render={
+					<InputGroupInput
+						value={urlValue}
+						className={cn(props.className, "ps-0!")}
+						onChange={handleUrlChange}
+						{...props}
+					/>
+				}
 			/>
 
 			{!hideLabelButton && (
