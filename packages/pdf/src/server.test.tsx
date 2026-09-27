@@ -7,10 +7,8 @@ const rendererMock = vi.hoisted(() => ({
 	renderToBuffer: vi.fn(async () => Buffer.from("%PDF")),
 }));
 
-vi.mock("@react-pdf/renderer", async (importOriginal) => ({
-	...(await importOriginal<typeof import("@react-pdf/renderer")>()),
-	renderToBuffer: rendererMock.renderToBuffer,
-}));
+// Mock the adapter's renderer boundary so the test never loads the full react-pdf engine.
+vi.mock("./renderer", () => ({ renderToBuffer: rendererMock.renderToBuffer }));
 
 vi.mock("./document", () => ({
 	ResumeDocument: () => null,
