@@ -18,7 +18,7 @@ import { db } from "@headcv/db/client";
 import * as schema from "@headcv/db/schema";
 import { ResetPasswordEmail, VerifyEmail, VerifyEmailChange } from "@headcv/email/templates/auth";
 import { sendEmail } from "@headcv/email/transport";
-import { env } from "@headcv/env/server";
+import { env, vercelPreviewOrigins } from "@headcv/env/server";
 import { rateLimitConfig, TRUSTED_IP_HEADERS } from "@headcv/utils/rate-limit";
 import { generateId, toUsername } from "@headcv/utils/string";
 import { isAllowedOAuthRedirectUri } from "@headcv/utils/url-security.node";
@@ -54,7 +54,8 @@ function isCustomOAuthProviderEnabled() {
 	return Boolean(env.OAUTH_CLIENT_ID) && Boolean(env.OAUTH_CLIENT_SECRET) && (hasDiscovery || hasManual);
 }
 
-const TRUSTED_ORIGINS = getTrustedOrigins(env.APP_URL);
+// Previews answer on both the deployment URL and the branch alias.
+const TRUSTED_ORIGINS = getTrustedOrigins(env.APP_URL, vercelPreviewOrigins);
 const oauthProviderRateLimit = isRateLimitEnabled
 	? rateLimitConfig.betterAuth.oauthProvider
 	: ({
