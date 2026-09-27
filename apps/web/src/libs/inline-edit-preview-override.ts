@@ -42,7 +42,7 @@ export const useInlineEditPreviewOverrideStore = create<InlineEditPreviewOverrid
 	clearOverride: () => set({ override: null }),
 }));
 
-export function useInlineEditPreviewOverride() {
+function useInlineEditPreviewOverride() {
 	return useInlineEditPreviewOverrideStore((state) => state.override);
 }
 

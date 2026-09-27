@@ -118,7 +118,7 @@ export const fileInputSchema = z.object({
 
 type TestConnectionInput = z.infer<typeof aiCredentialsSchema>;
 
-export async function testConnection(input: TestConnectionInput): Promise<boolean> {
+async function testConnection(input: TestConnectionInput): Promise<boolean> {
 	const RESPONSE_OK = "1";
 
 	const result = await generateText({

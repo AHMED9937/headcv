@@ -2,14 +2,7 @@ import type { RouterOutput } from "@/libs/orpc/client";
 import { t } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
-import {
-	ArchiveIcon,
-	ArrowLeftIcon,
-	ChatCircleDotsIcon,
-	DotsThreeVerticalIcon,
-	PlusIcon,
-	TrashIcon,
-} from "@phosphor-icons/react";
+import { ArchiveIcon, DotsThreeVerticalIcon, PlusIcon, TrashIcon } from "@phosphor-icons/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useMemo } from "react";
@@ -263,34 +256,5 @@ export function AgentThreadList({
 				))}
 			</div>
 		</ScrollArea>
-	);
-}
-
-export function AgentThreadSidebar({
-	activeThreadId = null,
-	className,
-}: {
-	activeThreadId?: string | null;
-	className?: string;
-}) {
-	return (
-		<aside className={cn("flex h-full min-h-0 flex-col border-e bg-muted/30", className)}>
-			<div className="flex h-14 shrink-0 items-center justify-between gap-3 border-b px-3">
-				<div className="flex min-w-0 items-center gap-2">
-					<ChatCircleDotsIcon className="shrink-0" />
-					<div className="min-w-0 truncate font-semibold">
-						<Trans>Threads</Trans>
-					</div>
-				</div>
-				<Button size="icon-sm" variant="ghost" nativeButton={false} render={<Link to="/dashboard/resumes" />}>
-					<ArrowLeftIcon />
-					<span className="sr-only">
-						<Trans>Back to resumes</Trans>
-					</span>
-				</Button>
-			</div>
-
-			<AgentThreadList activeThreadId={activeThreadId} />
-		</aside>
 	);
 }

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { designWorkspaceSections, leftSidebarSections } from "@/libs/resume/section";
 
-export const workspaceTabs = ["content", "design", "review", "export"] as const;
+const workspaceTabs = ["content", "design", "review", "export"] as const;
 
 export type WorkspaceTab = (typeof workspaceTabs)[number];
 

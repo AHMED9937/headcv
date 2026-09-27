@@ -24,7 +24,7 @@ import { CHECKOUT_THEME_CONFIG } from "./checkout-theme";
 // ---------------------------------------------------------------------------
 
 /** Thrown for any webhook that fails authentication, so the route can answer 401. */
-export class WebhookSignatureError extends Error {
+class WebhookSignatureError extends Error {
 	override name = "WebhookSignatureError";
 }
 

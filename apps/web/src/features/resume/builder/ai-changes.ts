@@ -6,7 +6,7 @@ import { getSectionTitle, leftSidebarSections } from "@/libs/resume/section";
 
 const JSON_POINTER_TOKEN = /~1|~0/g;
 
-export function decodeJsonPointerSegment(segment: string): string {
+function decodeJsonPointerSegment(segment: string): string {
 	return segment.replace(JSON_POINTER_TOKEN, (token) => (token === "~1" ? "/" : "~"));
 }
 
@@ -96,7 +96,7 @@ function getCustomSectionIdForOperation(
 	return null;
 }
 
-export function getCustomSectionId(operation: JsonPatchOperation, data: ResumeData | undefined | null): string | null {
+function getCustomSectionId(operation: JsonPatchOperation, data: ResumeData | undefined | null): string | null {
 	return getCustomSectionIdForOperation(operation, data ?? ({} as ResumeData), data ?? ({} as ResumeData));
 }
 

@@ -1,6 +1,6 @@
 export const MIN_PREVIEW_SCALE = 0.5;
 export const MAX_PREVIEW_SCALE = 2;
-export const PREVIEW_SCALE_STEP = 0.1;
+const PREVIEW_SCALE_STEP = 0.1;
 export const PREVIEW_HORIZONTAL_PADDING = 48;
 const MAX_FIT_WIDTH_SCALE = 1;
 

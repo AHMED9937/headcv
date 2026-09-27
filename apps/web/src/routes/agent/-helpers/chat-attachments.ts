@@ -6,7 +6,7 @@ export type ChatAttachment = {
 	mediaType: string;
 };
 
-export function attachmentToFilePart(attachment: ChatAttachment): FileUIPart {
+function attachmentToFilePart(attachment: ChatAttachment): FileUIPart {
 	return {
 		type: "file",
 		url: `agent-attachment:${attachment.id}`,

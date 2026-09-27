@@ -13,7 +13,6 @@
 		"@napi-rs/canvas": "^0.1.80",
 		"@headcv/config": "workspace:*",
 		"@headcv/db": "workspace:*",
-		"@headcv/env": "workspace:*",
 		"@headcv/pdf": "workspace:*",
 		"@headcv/schema": "workspace:*",
 		"@types/pg": "^8.20.0",
