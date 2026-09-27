@@ -14,6 +14,7 @@ import { BuilderSidebarEdge } from "../../-components/edge";
 import { useSectionStore } from "../../-store/section";
 import { useBuilderSidebar } from "../../-store/sidebar";
 import { getSectionComponent } from "./section-components";
+import { PersonalDetailsSectionBuilder } from "./sections/personal-details";
 
 export function BuilderSidebarLeft({ guided = false }: { guided?: boolean }) {
 	const scrollAreaRef = useRef<HTMLDivElement | null>(null);
@@ -48,7 +49,11 @@ export function BuilderSidebarLeft({ guided = false }: { guided?: boolean }) {
 					<div className="space-y-4 p-4">
 						{sections.map((section) => (
 							<Fragment key={section}>
-								{getSectionComponent(section)}
+								{guided && section === "basics" ? (
+									<PersonalDetailsSectionBuilder guided />
+								) : (
+									getSectionComponent(section)
+								)}
 								<Separator />
 							</Fragment>
 						))}

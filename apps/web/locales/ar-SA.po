@@ -33,53 +33,6 @@ msgstr "تم الإنشاء"
 msgid "Name"
 msgstr "الاسم"
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/pricing.tsx
-#~ msgid "home.comingSoon"
-#~ msgstr "قريبًا"
-
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/pricing.tsx
-#~ msgid "home.pricing.proSoon"
-#~ msgstr "النسخة الاحترافية قريبًا"
-
-#. placeholder {0}: sub.usage.resumeUploadsUsed
-#. placeholder {1}: sub.usage.resumeUploadsLimit
-#. js-lingui-explicit-id
-#: src/dialogs/billing/upgrade.tsx
-#~ msgid "billing.upgrade.importLimit.description"
-#~ msgstr "استخدمت {0} من {1} عمليات استيراد. مع Pro يمكنك استيراد كل سيرك الذاتية بلا حدود."
-
-#. js-lingui-explicit-id
-#: src/routes/dashboard/settings/billing.tsx
-#~ msgid "billing.usage.uploads"
-#~ msgstr "رفع السير الذاتية (تحليل بالذكاء الاصطناعي)"
-
-#. js-lingui-explicit-id
-#: src/dialogs/billing/upgrade.tsx
-#~ msgid "billing.upgrade.importLimit.title"
-#~ msgstr "استخدمت كل عمليات الاستيراد المجانية"
-
-#. js-lingui-explicit-id
-#: src/routes/checkout/success.tsx
-#~ msgid "checkout.failed.title"
-#~ msgstr "حدث خطأ ما"
-
-#. js-lingui-explicit-id
-#: src/routes/checkout/success.tsx
-#~ msgid "checkout.failed.retry"
-#~ msgstr "حاول مجددًا"
-
-#. js-lingui-explicit-id
-#: src/routes/checkout/success.tsx
-#~ msgid "checkout.failed.billing"
-#~ msgstr "عرض الفوترة"
-
-#. js-lingui-explicit-id
-#: src/routes/checkout/success.tsx
-#~ msgid "checkout.success.description"
-#~ msgstr "اشتراك {plan} مفعّل الآن. استمتع بسير ذاتية ومحادثات ذكاء اصطناعي بلا حدود!"
-
 #. placeholder {0}: section.items.length
 #: src/routes/builder/$resumeId/-sidebar/left/sections/custom.tsx
 msgid "{0, plural, one {# item} other {# items}}"
@@ -385,14 +338,6 @@ msgstr "اضبط الخطوط والألوان والتباعد لسيرة ذا�
 msgid "After AI update"
 msgstr "بعد تحديث الذكاء الاصطناعي"
 
-#: src/features/command-palette/pages/navigation.tsx
-#~ msgid "Agent"
-#~ msgstr "عامل"
-
-#: src/routes/dashboard/-components/sidebar.tsx
-#~ msgid "Agents"
-#~ msgstr "الوكلاء"
-
 #: src/dialogs/resume/import.tsx
 #: src/routes/builder/$resumeId/-components/header.tsx
 msgid "AI"
@@ -517,10 +462,6 @@ msgstr "أي شخص لديه عنوان URL العام للسيرة الذاتي
 msgid "Anyone with the link can view and download the resume."
 msgstr "يمكن لأي شخص لديه الرابط عرض السيرة الذاتية وتنزيلها."
 
-#: src/routes/dashboard/-components/sidebar.tsx
-#~ msgid "App"
-#~ msgstr "التطبيق"
-
 #: src/routes/_home/-sections/statistics.tsx
 msgid "Application Statistics"
 msgstr "إحصاءات التطبيق"
@@ -601,10 +542,6 @@ msgstr "المجال"
 msgid "Area of Study"
 msgstr "مجال الدراسة"
 
-#: src/features/command-palette/pages/navigation.tsx
-#~ msgid "Artificial Intelligence"
-#~ msgstr "الذكاء الاصطناعي"
-
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Ask anything about this resume"
 msgstr "اسأل عن أي شيء بخصوص هذه السيرة الذاتية"
@@ -614,7 +551,6 @@ msgid "Ask permission first and keep the reference's role and contact details cu
 msgstr "اطلب الإذن أولًا وحافظ على تحديث منصب المرجع وبيانات التواصل معه."
 
 #: src/features/resume/builder/ai-changes.ts
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
 msgid "Aspect Ratio"
 msgstr "نسبة الأبعاد"
 
@@ -683,6 +619,10 @@ msgstr "العودة إلى تسجيل الدخول"
 msgid "Back to resumes"
 msgstr "العودة إلى السير الذاتية"
 
+#: src/routes/builder/$resumeId/-components/guided-editor.tsx
+msgid "Back to step"
+msgstr "العودة إلى الخطوة"
+
 #: src/routes/builder/$resumeId/-sidebar/right/sections/design.tsx
 msgid "Background Color"
 msgstr "لون الخلفية"
@@ -738,12 +678,10 @@ msgid "Border Color"
 msgstr "لون الإطار"
 
 #: src/features/resume/builder/ai-changes.ts
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
 msgid "Border Radius"
 msgstr "نصف قطر الحافة"
 
 #: src/features/resume/builder/ai-changes.ts
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
 msgid "Border Width"
 msgstr "عرض الإطار"
 
@@ -950,10 +888,6 @@ msgstr "اختر قالبًا وابدأ البناء"
 msgid "Choose a template that fits your story"
 msgstr "اختر قالبًا يناسب قصتك"
 
-#: src/routes/agent/index.tsx
-#~ msgid "Choose an existing conversation from the sidebar, or start a new draft-focused thread."
-#~ msgstr "اختر محادثة موجودة من الشريط الجانبي، أو ابدأ سلسلة محادثات جديدة تركز على المسودة."
-
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/features.tsx
 msgid "home.free.templatesText"
@@ -972,7 +906,9 @@ msgstr "اختر اهتمامات محددة تضيف سياقًا مفيدًا 
 msgid "home.hero.fullPreview"
 msgstr "فتح معاينة السيرة الذاتية بحجم كامل (تفتح في علامة تبويب جديدة)"
 
+#. Profile photo shape option
 #: src/components/level/combobox.tsx
+#: src/routes/builder/$resumeId/-sidebar/left/sections/picture-shapes.ts
 msgid "Circle"
 msgstr "دائرة"
 
@@ -1070,10 +1006,6 @@ msgstr "تابع من حيث توقفت"
 #: src/dialogs/resume/import.tsx
 msgid "Continue where you left off by importing an existing resume from a PDF or Microsoft Word file."
 msgstr "تابع من حيث توقفت باستيراد سيرة ذاتية موجودة من ملف PDF أو Microsoft Word."
-
-#: src/dialogs/resume/import.tsx
-#~ msgid "Continue where you left off by importing an existing resume you created using HeadCV or any another resume builder. Supported formats include PDF, Microsoft Word, as well as JSON files from HeadCV."
-#~ msgstr "تابع من حيث توقفت باستيراد سيرة ذاتية أنشأتها باستخدام HeadCV أو أي منشئ سير ذاتية آخر. الصيغ المدعومة: PDF وMicrosoft Word، بالإضافة إلى ملفات JSON من HeadCV."
 
 #: src/routes/_home/-sections/donate.tsx
 msgid "Contributions fund bug fixes, security updates, and continuous improvements to keep the app running smoothly."
@@ -1301,6 +1233,10 @@ msgstr "جاري إنشاء مفتاح واجهة برمجة التطبيقات 
 msgid "Creating your resume..."
 msgstr "جاري إنشاء سيرتك الذاتية..."
 
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
+msgid "Crop, zoom and choose the shape of your resume photo."
+msgstr "اقتصاص الصورة وتكبيرها واختيار شكل صورة سيرتك الذاتية."
+
 #: src/dialogs/auth/change-password.tsx
 msgid "Current Password"
 msgstr "كلمة المرور الحالية"
@@ -1402,10 +1338,6 @@ msgstr "حذف عمود"
 msgid "Delete Page"
 msgstr "حذف الصفحة"
 
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
-msgid "Delete picture"
-msgstr "حذف الصورة"
-
 #: src/components/input/rich-input.tsx
 msgid "Delete Row"
 msgstr "حذف صف"
@@ -1451,7 +1383,7 @@ msgstr "الوصف"
 msgid "Design"
 msgstr "التصميم"
 
-#: src/routes/builder/$resumeId/-components/imported-workspace.tsx
+#: src/routes/builder/$resumeId/-components/design-workspace.tsx
 msgid "Design your resume"
 msgstr "صمّم سيرتك الذاتية"
 
@@ -1505,20 +1437,8 @@ msgid "Download a copy of your resume as a Word document. Use this file to furth
 msgstr "قم بتنزيل نسخة من سيرتك الذاتية كمستند Word. استخدم هذا الملف لتخصيص سيرتك الذاتية بشكل أكبر في Microsoft Word أو محرر مستندات Google."
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/export.tsx
-#~ msgid "Download a copy of your resume in JSON format. Use this file for backup or to import your resume into other applications, including AI assistants."
-#~ msgstr "نزّل نسخة من سيرتك الذاتية بصيغة JSON. استخدم هذا الملف للنسخ الاحتياطي أو لاستيراد سيرتك الذاتية إلى تطبيقات أخرى، بما في ذلك مساعدي الذكاء الاصطناعي."
-
-#: src/routes/builder/$resumeId/-sidebar/right/sections/export.tsx
 msgid "Download a copy of your resume in PDF format. Use this file for printing or to easily share your resume with recruiters."
 msgstr "نزّل نسخة من سيرتك الذاتية بصيغة PDF. استخدم هذا الملف للطباعة أو لمشاركة سيرتك الذاتية بسهولة مع مسؤولي التوظيف."
-
-#: src/routes/builder/$resumeId/-components/dock.tsx
-#~ msgid "Download DOCX"
-#~ msgstr "تنزيل DOCX"
-
-#: src/routes/builder/$resumeId/-components/dock.tsx
-#~ msgid "Download JSON"
-#~ msgstr "تنزيل JSON"
 
 #: src/routes/builder/$resumeId/-components/dock.tsx
 msgid "Download Microsoft Word"
@@ -1547,6 +1467,10 @@ msgstr "عمليات التنزيل"
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
 msgid "Drag and drop sections here to move them between columns"
 msgstr "اسحب الأقسام وأسقطها هنا لنقلها بين الأعمدة"
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
+msgid "Drag photo to reposition"
+msgstr "اسحب الصورة لتغيير موضعها"
 
 #. Resume card context menu action to create a copy
 #. Resume card dropdown action to create a copy
@@ -1587,11 +1511,6 @@ msgstr "تحرير {chip}"
 #: src/routes/builder/$resumeId/-sidebar/left/shared/section-base.tsx
 msgid "Edit {sectionTitle} heading"
 msgstr "تعديل عنوان {sectionTitle}"
-
-#. Screen reader description for the fullscreen rich-text editor dialog
-#: src/components/input/rich-input.tsx
-#~ msgid "Edit content in fullscreen mode"
-#~ msgstr "تحرير المحتوى في وضع ملء الشاشة"
 
 #: src/dialogs/resume/sections/experience.tsx
 msgid "Edit Entry"
@@ -1738,10 +1657,6 @@ msgstr "جميع قوالب السيرة الذاتية متاحة"
 #: src/routes/_home/-sections/features.tsx
 msgid "home.free.heading"
 msgstr "كل ما تحتاجه للبدء"
-
-#: src/components/input/rich-input.tsx
-#~ msgid "Exit Fullscreen"
-#~ msgstr "الخروج من وضع ملء الشاشة"
 
 #: src/dialogs/resume/sections/custom.tsx
 #: src/libs/resume/section-title.ts
@@ -1957,10 +1872,6 @@ msgstr "املأ معلوماتك"
 msgid "Filter"
 msgstr "تصفية"
 
-#: src/routes/dashboard/resumes/index.tsx
-#~ msgid "Filter by"
-#~ msgstr "تصفية حسب"
-
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Find weak bullets and rewrite them with stronger outcomes, numbers, scope, and sharper verbs."
 msgstr "ابحث عن النقاط الضعيفة وأعد صياغتها بنتائج وأرقام ونطاق وأفعال أكثر دقة."
@@ -2109,15 +2020,6 @@ msgstr "معاينة سيرتك الذاتية بالحجم الكامل."
 msgid "Full-size resume preview"
 msgstr "معاينة السيرة الذاتية بالحجم الكامل"
 
-#: src/components/input/rich-input.tsx
-#~ msgid "Fullscreen"
-#~ msgstr "ملء الشاشة"
-
-#. Screen reader title for the fullscreen rich-text editor dialog
-#: src/components/input/rich-input.tsx
-#~ msgid "Fullscreen Editor"
-#~ msgstr "محرر ملء الشاشة الكاملة"
-
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/templates-showcase.tsx
 msgid "home.templates.edit"
@@ -2193,10 +2095,6 @@ msgstr "جوجل"
 msgid "Grade"
 msgstr "التقدير"
 
-#: src/routes/dashboard/resumes/index.tsx
-#~ msgid "Grid"
-#~ msgstr "الشبكة"
-
 #: src/routes/_home/-sections/donate.tsx
 msgid "Grow the Team"
 msgstr "توسيع الفريق"
@@ -2214,11 +2112,6 @@ msgstr "HeadCV — أنشئ سيرة ذاتية احترافية متوافقة 
 msgid "home.seo.ogImageAlt"
 msgstr "HeadCV — أنشئ سيرة ذاتية احترافية متوافقة مع أنظمة التوظيف في دقائق بمساعدة الذكاء الاصطناعي ومعاينة مباشرة."
 
-#. Import source option for current HeadCV JSON format
-#: src/dialogs/resume/import.tsx
-#~ msgid "HeadCV (JSON)"
-#~ msgstr "HeadCV (JSON)"
-
 #: src/routes/_home/-sections/prefooter.tsx
 msgid "HeadCV continues to grow thanks to its vibrant community. This project owes its progress to numerous individuals who've dedicated their time and skills to make it better. We celebrate the coders who've enhanced its features on GitHub, the linguists whose translations on Crowdin have made it accessible to a broader audience, and the people who've donated to support its continued development."
 msgstr "يواصل HeadCV النمو بفضل مجتمعه النابض بالحياة. يدين هذا المشروع بتقدمه للعديد من الأفراد الذين كرّسوا وقتهم ومهاراتهم لتحسينه. نحتفي بالمبرمجين الذين عززوا ميزاته على GitHub، واللغويين الذين جعلت ترجماتهم على Crowdin التطبيق متاحًا لشريحة أوسع، والأشخاص الذين قدّموا تبرعات لدعم تطويره المستمر."
@@ -2226,6 +2119,7 @@ msgstr "يواصل HeadCV النمو بفضل مجتمعه النابض بالح
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/footer.tsx
 #: src/routes/_home/-sections/header.tsx
+#: src/routes/templates/index.tsx
 msgid "home.brand"
 msgstr "الصفحة الرئيسية لـ HeadCV"
 
@@ -2246,11 +2140,6 @@ msgstr "HeadCV منشئ سيرة ذاتية موجه يساعدك على سرد 
 #: src/components/ui/copyright.tsx
 msgid "HeadCV v{__APP_VERSION__}"
 msgstr "HeadCV الإصدار {__APP_VERSION__}"
-
-#. Import source option for legacy HeadCV v4 JSON format
-#: src/dialogs/resume/import.tsx
-#~ msgid "HeadCV v4 (JSON)"
-#~ msgstr "HeadCV v4 (JSON)"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/typography.tsx
 msgctxt "Headings or Titles (H1, H2, H3, H4, H5, H6)"
@@ -2403,10 +2292,6 @@ msgstr "جاري استيراد سيرتك الذاتية..."
 msgid "Importing…"
 msgstr "جارٍ الاستيراد…"
 
-#: src/dialogs/resume/sections/experience.tsx
-#~ msgid "Include measurable results so recruiters can quickly grasp your impact."
-#~ msgstr ""
-
 #: src/components/section-tips.tsx
 msgid "Include only professional profiles that strengthen your application."
 msgstr "أضف فقط الملفات المهنية التي تقوّي طلبك."
@@ -2506,11 +2391,6 @@ msgstr "john.doe@example.com"
 msgid "home.final.text"
 msgstr "انضم إلى المتقدمين الذين حولوا خبراتهم إلى عروض عمل."
 
-#. Import source option for standard JSON Resume format
-#: src/dialogs/resume/import.tsx
-#~ msgid "JSON Resume"
-#~ msgstr "استئناف JSON"
-
 #: src/components/input/rich-input.tsx
 msgid "Justify Align"
 msgstr "محاذاة بضبط العرض"
@@ -2590,11 +2470,6 @@ msgstr "وسم"
 #: src/dialogs/billing/upgrade.tsx
 msgid "billing.upgrade.badge.title"
 msgstr "احصل على وظيفتك التالية أسرع مع Pro"
-
-#. Preset button for setting picture aspect ratio to landscape orientation
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
-msgid "Landscape"
-msgstr "أفقي"
 
 #. Menu item that opens language selection submenu
 #: src/dialogs/resume/sections/language.tsx
@@ -2700,10 +2575,6 @@ msgstr "لينكد إن"
 msgid "Linking your {providerName} account..."
 msgstr "جاري ربط حسابك على {providerName}..."
 
-#: src/routes/dashboard/resumes/index.tsx
-#~ msgid "List"
-#~ msgstr "قائمة"
-
 #: src/components/section-tips.tsx
 msgid "List relevant, demonstrable skills using terminology from the target role."
 msgstr "اذكر مهارات ذات صلة يمكن إثباتها باستخدام مصطلحات الوظيفة المستهدفة."
@@ -2804,6 +2675,14 @@ msgstr "اجعلها خاصة بك"
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Make the experience section more results-oriented and remove vague responsibilities."
 msgstr "اجعل قسم الخبرة أكثر تركيزاً على النتائج، وتخلص من المسؤوليات الغامضة."
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
+msgid "Manage photo"
+msgstr "إدارة الصورة"
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
+msgid "Manage Photo"
+msgstr "إدارة الصورة"
 
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
@@ -3171,8 +3050,8 @@ msgid "Phone"
 msgstr "الهاتف"
 
 #: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
-msgid "Photo customizations"
-msgstr "تخصيصات الصورة"
+msgid "Photo"
+msgstr "الصورة"
 
 #: src/libs/resume/section.tsx
 msgid "Picture"
@@ -3192,6 +3071,10 @@ msgstr "الفوترة الشهرية المخططة"
 #: src/routes/dashboard/settings/route.tsx
 msgid "Plans & Billing"
 msgstr "الخطط والفوترة"
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
+msgid "Please choose an image file."
+msgstr "يرجى اختيار ملف صورة."
 
 #: src/features/auth/pages/reset-password.tsx
 msgid "Please enter a new password for your account"
@@ -3224,8 +3107,8 @@ msgstr "يُرجى الانتظار أثناء إنشاء ملف PDF الخاص 
 msgid "Please wait while your PDF is being generated…"
 msgstr "يرجى الانتظار ريثما يتم إنشاء ملف PDF الخاص بك…"
 
-#. Preset button for setting picture aspect ratio to portrait orientation
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
+#. Profile photo shape option
+#: src/routes/builder/$resumeId/-sidebar/left/sections/picture-shapes.ts
 msgid "Portrait"
 msgstr "طولي"
 
@@ -3363,10 +3246,6 @@ msgstr "المنشورات"
 msgid "Publisher"
 msgstr "الناشر"
 
-#: src/dialogs/resume/sections/experience.tsx
-#~ msgid "Quantify achievements with numbers, percentages, or time saved whenever possible."
-#~ msgstr ""
-
 #: src/routes/agent/-components/tool-activity.tsx
 msgid "Reading attachment…"
 msgstr "جارٍ قراءة المرفق…"
@@ -3443,13 +3322,13 @@ msgstr "إزالة {chip}"
 msgid "Remove Password"
 msgstr "إزالة كلمة المرور"
 
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
+msgid "Remove Photo"
+msgstr "إزالة الصورة"
+
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "Removing password protection..."
 msgstr "جاري إزالة حماية كلمة المرور..."
-
-#: src/routes/builder/$resumeId/-sidebar/left/shared/section-menu.tsx
-#~ msgid "Rename"
-#~ msgstr "إعادة التسمية"
 
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
@@ -3459,6 +3338,10 @@ msgstr "يتجدد في {periodEnd}."
 #: src/dialogs/resume/sections/experience.tsx
 msgid "Reorder"
 msgstr "إعادة الترتيب"
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
+msgid "Replace Photo"
+msgstr "استبدال الصورة"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/information.tsx
 msgid "Report a Bug"
@@ -3524,10 +3407,6 @@ msgstr "اكتمل تحليل السيرة الذاتية."
 #: src/routes/_home/-sections/footer.tsx
 msgid "home.footer.builder"
 msgstr "منشئ السيرة الذاتية"
-
-#: src/routes/builder/$resumeId/-components/imported-workspace.tsx
-#~ msgid "Resume content"
-#~ msgstr ""
 
 #: src/routes/agent/-components/patch-tool-card.tsx
 msgid "Resume patch"
@@ -3621,9 +3500,18 @@ msgid "Roles"
 msgstr "الأدوار"
 
 #: src/features/resume/builder/ai-changes.ts
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
 msgid "Rotation"
 msgstr "الدوران"
+
+#. Profile photo shape option
+#: src/routes/builder/$resumeId/-sidebar/left/sections/picture-shapes.ts
+msgid "Rounded portrait"
+msgstr "طولي بحواف مستديرة"
+
+#. Profile photo shape option
+#: src/routes/builder/$resumeId/-sidebar/left/sections/picture-shapes.ts
+msgid "Rounded square"
+msgstr "مربّع بحواف مستديرة"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/resume-analysis.tsx
 msgid "Run your first analysis to get a scorecard, strengths, and prioritized suggestions."
@@ -3632,6 +3520,7 @@ msgstr "قم بإجراء تحليلك الأول للحصول على بطاقة
 #. Passkey rename prompt confirm action in authentication settings
 #: src/features/settings/authentication/components/passkeys.tsx
 #: src/hooks/use-form-blocker.tsx
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
 msgid "Save"
 msgstr "الحفظ"
 
@@ -3683,6 +3572,10 @@ msgstr "احفظ تقدمك"
 msgid "Saved"
 msgstr "تم الحفظ"
 
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
+msgid "Saving…"
+msgstr "جارٍ الحفظ…"
+
 #: src/dialogs/auth/enable-two-factor.tsx
 msgid "Scan the QR code below with your preferred authenticator app. You can also copy the secret below and paste it into your app."
 msgstr "امسح رمز الاستجابة السريعة أدناه باستخدام تطبيق المصادقة المفضل لديك. يمكنك أيضًا نسخ السر أدناه ولصقه في تطبيقك."
@@ -3732,7 +3625,7 @@ msgstr "جارٍ البحث في الويب…"
 msgid "Secret copied to clipboard."
 msgstr "تم نسخ السر إلى الحافظة."
 
-#: src/routes/builder/$resumeId/-components/imported-workspace.tsx
+#: src/routes/builder/$resumeId/-components/design-workspace.tsx
 msgid "Section"
 msgstr "القسم"
 
@@ -3754,13 +3647,9 @@ msgstr "عرض الخطط"
 msgid "Select a resume"
 msgstr "اختر سيرة ذاتية"
 
-#: src/routes/builder/$resumeId/-components/imported-workspace.tsx
+#: src/routes/builder/$resumeId/-components/design-workspace.tsx
 msgid "Select a section to edit"
 msgstr "اختر قسمًا لتعديله"
-
-#: src/routes/agent/index.tsx
-#~ msgid "Select a thread"
-#~ msgstr "اختر موضوعًا"
 
 #: src/components/ui/combobox.tsx
 msgid "Select..."
@@ -3815,9 +3704,12 @@ msgid "Shadow Color"
 msgstr "لون الظل"
 
 #: src/features/resume/builder/ai-changes.ts
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
 msgid "Shadow Width"
 msgstr "عرض الظل"
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
+msgid "Shape"
+msgstr "الشكل"
 
 #: src/libs/resume/section.tsx
 msgid "Sharing"
@@ -3960,15 +3852,10 @@ msgid "Single-column with an inline three-column entry header (position · organ
 msgstr "عمود واحد مع رأس إدخال مضمن من ثلاثة أعمدة (الموضع - المؤسسة - الفترة)؛ مدمج وملائم لـ ATS، ومناسب تمامًا للسيرة الذاتية الآسيوية (CN/JP/KR)."
 
 #: src/dialogs/resume/template/data.ts
-#~ msgid "Single-column with uppercase section headings and a primary-color top rule on every page; polished for executive, consulting, or startup resumes."
-#~ msgstr "تصميم ذو عمود واحد مع عناوين أقسام بأحرف كبيرة وخطوط علوية بلون أساسي في كل صفحة؛ مصمم خصيصًا للسير الذاتية التنفيذية أو الاستشارية أو للشركات الناشئة."
-
-#: src/dialogs/resume/template/data.ts
 msgid "Single-column; polished and serious for senior or enterprise-level positions."
 msgstr "عمود واحد؛ مصقول ورسمي للوظائف العليا أو مناصب الشركات الكبرى."
 
 #: src/features/resume/builder/ai-changes.ts
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
 msgid "Size"
 msgstr "الحجم"
 
@@ -4022,10 +3909,6 @@ msgstr "حدث خطأ ما. يُرجى المحاولة مرة أخرى."
 msgid "Sort"
 msgstr "ترتيب"
 
-#: src/routes/dashboard/resumes/index.tsx
-#~ msgid "Sort by"
-#~ msgstr "فرز حسب"
-
 #: src/routes/builder/$resumeId/-sidebar/right/sections/information.tsx
 msgid "Source Code"
 msgstr "شفرة المصدر"
@@ -4042,9 +3925,9 @@ msgstr "تباعد (عمودي)"
 msgid "Sponsors"
 msgstr "الرعاة"
 
-#. Preset button for setting picture aspect ratio to square
+#. Profile photo shape option
 #: src/components/level/combobox.tsx
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
+#: src/routes/builder/$resumeId/-sidebar/left/sections/picture-shapes.ts
 msgid "Square"
 msgstr "مربّع"
 
@@ -4090,17 +3973,9 @@ msgstr "ابدأ في إنشاء سيرتك الذاتية من الصفر"
 msgid "Start Date"
 msgstr "تاريخ البدء"
 
-#: src/dialogs/resume/sections/experience.tsx
-#~ msgid "Start each point with a strong action verb, e.g., \"Led\", \"Built\", \"Improved\"."
-#~ msgstr ""
-
 #: src/routes/dashboard/resumes/-components/cards/create-card.tsx
 msgid "Start guided build"
 msgstr "ابدأ البناء الموجّه"
-
-#: src/routes/agent/index.tsx
-#~ msgid "Start new thread"
-#~ msgstr "ابدأ موضوعًا جديدًا"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/header.tsx
@@ -4225,10 +4100,6 @@ msgstr "يمكن استخدام الوسوم لتصنيف سيرتك الذات�
 #: src/components/section-tips.tsx
 msgid "Tailor a few lines to the target role, strongest skills, and evidence."
 msgstr "خصّص بضعة أسطر للوظيفة المستهدفة وأقوى مهاراتك والأدلة عليها."
-
-#: src/dialogs/resume/sections/experience.tsx
-#~ msgid "Tailor each bullet to skills commonly expected for this role."
-#~ msgstr ""
 
 #: src/components/section-tips.tsx
 msgid "Tailor the message to the employer and support your fit with one concrete example."
@@ -4437,13 +4308,13 @@ msgstr "هذا اسم مناسب لعناوين URL لسيرتك الذاتية.
 msgid "This keeps the entire pending update, including other sections. You can then request another change in chat."
 msgstr "سيؤدي هذا إلى الاحتفاظ بالتحديث المعلّق بالكامل، بما في ذلك الأقسام الأخرى. يمكنك بعدها طلب تغيير آخر في المحادثة."
 
-#: src/dialogs/resume/import.tsx
-#~ msgid "This may take a few minutes, depending on the response of the AI provider. Please do not close the window or refresh the page."
-#~ msgstr "قد يستغرق هذا بضع دقائق اعتمادًا على استجابة مزوّد الذكاء الاصطناعي. يُرجى عدم إغلاق النافذة أو تحديث الصفحة."
-
 #: src/libs/error-message.ts
 msgid "This patch no longer matches the current resume version."
 msgstr "لم يعد هذا التعديل مطابقًا للنسخة الحالية من السيرة الذاتية."
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
+msgid "This photo could not be processed. Try another image."
+msgstr "تعذّرت معالجة هذه الصورة. جرّب صورة أخرى."
 
 #: src/features/resume/builder/draft.ts
 msgid "This resume is locked and cannot be updated."
@@ -4762,10 +4633,6 @@ msgstr "تحديث قسم مخصص موجود"
 msgid "Update an existing education"
 msgstr "تحديث مؤهل دراسي موجود"
 
-#: src/dialogs/resume/sections/experience.tsx
-#~ msgid "Update an existing experience"
-#~ msgstr "تحديث خبرة موجودة"
-
 #: src/dialogs/resume/sections/interest.tsx
 msgid "Update an existing interest"
 msgstr "تحديث اهتمام موجود"
@@ -4839,16 +4706,11 @@ msgid "billing.upgrade.title"
 msgstr "الترقية إلى Pro"
 
 #: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
-msgid "Upload picture"
-msgstr "تحميل الصورة"
-
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
-msgid "Uploading picture…"
-msgstr "جارٍ تحميل الصورة…"
+msgid "Upload photo"
+msgstr "رفع صورة"
 
 #. Form field label for the generated public resume link in sharing settings
 #: src/features/resume/builder/ai-changes.ts
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "URL"
 msgstr "عنوان URL"
@@ -5232,6 +5094,10 @@ msgstr "رابط سيرتك الذاتية العام محمي حاليًا بك
 #: src/routes/_home/-sections/donate.tsx
 msgid "Your support ensures the project remains free and accessible for everyone, now and in the future."
 msgstr "يضمن دعمك بقاء المشروع مجانيًا ومتاحة للجميع، الآن وفي المستقبل."
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
+msgid "Zoom"
+msgstr "التكبير"
 
 #: src/routes/builder/$resumeId/-components/dock.tsx
 msgid "Zoom in"

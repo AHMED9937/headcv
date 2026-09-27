@@ -12,10 +12,11 @@ const mocks = vi.hoisted(() => ({
 	keep: vi.fn(),
 	refresh: vi.fn(),
 	navigate: vi.fn(),
+	search: {} as { mode?: string },
 	action: null as unknown,
 }));
 vi.mock("@/hooks/use-confirm", () => ({ useConfirm: () => mocks.confirm }));
-vi.mock("@tanstack/react-router", () => ({ useNavigate: () => mocks.navigate, useSearch: () => ({}) }));
+vi.mock("@tanstack/react-router", () => ({ useNavigate: () => mocks.navigate, useSearch: () => mocks.search }));
 vi.mock("./draft", () => ({
 	useCurrentResume: () => ({ id: "resume-1", data: defaultResumeData }),
 	refreshResumeFromServer: mocks.refresh,
@@ -52,6 +53,9 @@ function Controls() {
 			<button type="button" onClick={() => context.regenerateSection("summary")}>
 				Regenerate
 			</button>
+			<button type="button" onClick={() => context.editManually("experience")}>
+				Edit experience manually
+			</button>
 			<button type="button" onClick={context.refreshAction}>
 				Refresh
 			</button>
@@ -61,6 +65,7 @@ function Controls() {
 beforeAll(() => i18n.loadAndActivate({ locale: "en", messages: {} }));
 beforeEach(() => {
 	vi.clearAllMocks();
+	mocks.search = {};
 	mocks.refresh.mockResolvedValue(undefined);
 	mocks.keep.mockResolvedValue({ status: "accepted" });
 	mocks.action = {
@@ -156,5 +161,25 @@ describe("AI review provider", () => {
 		expect(ids.textContent).toMatch(/summary/);
 		expect(ids.textContent).toMatch(/experience/);
 		expect(screen.getByText("<p>Led platform rewrite.</p>")).toBeInTheDocument();
+	});
+
+	it("sends Edit manually to the content tab in the edit workspace", async () => {
+		await renderProvider();
+		await userEvent.click(screen.getByText("Edit experience manually"));
+		const { search } = mocks.navigate.mock.calls[0][0];
+		expect(search({ mode: "edit" })).toEqual({ mode: "edit", tab: "content", section: "experience" });
+	});
+
+	it("sends Edit manually to the matching step in the guided create flow", async () => {
+		mocks.search = { mode: "create" };
+		await renderProvider();
+		await userEvent.click(screen.getByText("Edit experience manually"));
+		const { search } = mocks.navigate.mock.calls[0][0];
+		expect(search({ mode: "create", step: "review", section: "ai-review", reviewSection: "experience" })).toEqual({
+			mode: "create",
+			step: "work-experience",
+			section: undefined,
+			reviewSection: undefined,
+		});
 	});
 });

@@ -41,15 +41,21 @@ vi.mock("@/features/resume/builder/draft", () => ({
 	useCurrentResume: () => resume,
 	useUpdateResumeData: () => updateResumeData,
 }));
+// Uncontrolled forms (no onChange) write straight to the resume store, so the mocks report which mode they got.
 vi.mock("./basics", () => ({
-	BasicsSectionForm: ({ onChange }: { onChange: (value: typeof resume.data.basics) => void }) => (
-		<button type="button" onClick={() => onChange({ ...resume.data.basics, name: "Jane Doe" })}>
-			Change name
-		</button>
-	),
+	BasicsSectionForm: ({ onChange }: { onChange?: (value: typeof resume.data.basics) => void }) =>
+		onChange ? (
+			<button type="button" onClick={() => onChange({ ...resume.data.basics, name: "Jane Doe" })}>
+				Change name
+			</button>
+		) : (
+			<p>Basics form saves directly</p>
+		),
 }));
 vi.mock("./picture", () => ({
-	PictureSectionForm: () => <div data-testid="picture-form">Picture form</div>,
+	PictureSectionForm: ({ onChange }: { onChange?: unknown }) => (
+		<p>{onChange ? "Picture form in draft" : "Picture form saves directly"}</p>
+	),
 }));
 vi.mock("@/components/section-tips", () => ({ SectionTips: () => <div>Personal details tips</div> }));
 
@@ -63,11 +69,11 @@ beforeEach(() => {
 	useInlineEditPreviewOverrideStore.setState({ override: null });
 });
 
-function renderPersonalDetails() {
+function renderPersonalDetails({ guided = false }: { guided?: boolean } = {}) {
 	return render(
 		<I18nProvider i18n={i18n}>
 			<BuilderSectionNavigationProvider navigateToSection={navigateToSection}>
-				<PersonalDetailsSectionBuilder />
+				<PersonalDetailsSectionBuilder guided={guided} />
 			</BuilderSectionNavigationProvider>
 		</I18nProvider>,
 	);
@@ -91,9 +97,22 @@ describe("PersonalDetailsSectionBuilder", () => {
 		expect(useInlineEditPreviewOverrideStore.getState().override).toBeNull();
 	});
 
+	it("shows the same editor, saving directly, in the guided create flow", async () => {
+		renderPersonalDetails({ guided: true });
+		expect(screen.getByRole("heading", { name: "Edit Personal Details" })).toBeInTheDocument();
+		expect(screen.getByText("Basics form saves directly")).toBeInTheDocument();
+		expect(screen.getByText("Picture form saves directly")).toBeInTheDocument();
+		expect(screen.queryByRole("button", { name: "Done" })).not.toBeInTheDocument();
+		expect(screen.queryByRole("button", { name: "Back" })).not.toBeInTheDocument();
+
+		await userEvent.click(screen.getByRole("button", { name: "Get Tips" }));
+		expect(screen.getByText("Personal details tips")).toBeInTheDocument();
+	});
+
 	it("updates only the live preview draft until Done", async () => {
 		renderPersonalDetails();
 		await userEvent.click(screen.getByRole("button", { name: "Edit Personal Details" }));
+		expect(screen.getByText("Picture form in draft")).toBeInTheDocument();
 		await userEvent.click(screen.getByRole("button", { name: "Change name" }));
 		expect(updateResumeData).not.toHaveBeenCalled();
 		expect(useInlineEditPreviewOverrideStore.getState().override).toMatchObject({

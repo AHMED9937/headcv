@@ -1,5 +1,6 @@
 export { getStepSectionId } from "./steps";
 
+import type { BuilderSearch } from "@/routes/builder/$resumeId/-components/workspace-search";
 import type { BuilderStepId } from "./steps";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useCallback, useMemo } from "react";
@@ -31,7 +32,10 @@ export function useBuilderStep() {
 
 	const setStep = useCallback(
 		(stepId: BuilderStepId) => {
-			void navigate({ search: (prev: BuilderStepSearch) => ({ ...prev, step: stepId }) });
+			// Changing step also leaves any open AI review.
+			void navigate({
+				search: (prev: BuilderSearch) => ({ ...prev, step: stepId, section: undefined, reviewSection: undefined }),
+			});
 		},
 		[navigate],
 	);
