@@ -4,6 +4,7 @@ import type { TemplateMetadata } from "./data";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
 import { SlideshowIcon } from "@phosphor-icons/react";
+import { isDefaultPrimaryColor, templatePrimaryColors } from "@headcv/schema/templates";
 import { Badge } from "@headcv/ui/components/badge";
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@headcv/ui/components/dialog";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@headcv/ui/components/hover-card";
@@ -22,7 +23,13 @@ export function TemplateGalleryDialog(_: DialogProps<"resume.template.gallery">)
 
 	function onSelectTemplate(template: Template) {
 		updateResumeData((draft) => {
+			const previousTemplate = draft.metadata.template;
+			const shouldUpdateColor = isDefaultPrimaryColor(draft.metadata.design.colors.primary, previousTemplate);
 			draft.metadata.template = template;
+			// Only replace a template default; a color the user picked stays.
+			if (shouldUpdateColor) {
+				draft.metadata.design.colors.primary = templatePrimaryColors[template];
+			}
 		});
 
 		closeDialog();

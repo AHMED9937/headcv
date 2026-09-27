@@ -7,7 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { defaultResumeData } from "@headcv/schema/resume/default";
-import { templateSchema } from "@headcv/schema/templates";
+import { templatePrimaryColors, templateSchema } from "@headcv/schema/templates";
 import { Button } from "@headcv/ui/components/button";
 import { generateId, slugify } from "@headcv/utils/string";
 import { cn } from "@headcv/utils/style";
@@ -73,6 +73,7 @@ function TemplateGalleryPage() {
 			});
 			const data = structuredClone(defaultResumeData);
 			data.metadata.template = selectedTemplate;
+			data.metadata.design.colors.primary = templatePrimaryColors[data.metadata.template];
 
 			await updateResume.mutateAsync({ id, data });
 			await navigate({
