@@ -194,7 +194,7 @@ export function Tools() {
 					{steps.map((step, index) => (
 						<li key={step.title} className="grid items-center gap-6 md:grid-cols-2 md:gap-12 lg:gap-20">
 							<div className={cn("text-start", index % 2 === 0 && "md:order-2")}>
-								<span aria-hidden="true" className="mb-3 block font-semibold text-4xl text-accent">
+								<span aria-hidden="true" className="mb-3 block font-semibold text-4xl text-accent-strong">
 									<bdi>{String(index + 1).padStart(2, "0")}</bdi>
 								</span>
 								<h3 className="font-display font-semibold text-2xl text-primary sm:text-3xl">{step.title}</h3>

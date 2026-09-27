@@ -160,6 +160,7 @@ A future `tokens.json` will live at `Doc/pack/tokens.json` and follow the W3C De
 | `--primary-dark` | `#152642` | Hover / pressed primary, gradients, deep footer. |
 | `--primary-light` | `#e8e0d6` | Subtle backgrounds, placeholder, hover fills, selected pills, focus rings. |
 | `--accent` | `#c9a227` | Confidence gold; stars, stats, premium hints, hover lift. |
+| `--accent-strong` | `#ad8428` | Gold **text**, large sizes only (≥24px, or ≥18.66px bold): 3:1 on `--bg` and white. `--accent` fails contrast as text (2.1:1). Dark theme: `#fbbf24`. Added 2026-09-27 (Lighthouse contrast fix). |
 | `--accent-light` | `#f5efe6` | Warning / disclosure backgrounds, hero gradient base. |
 | `--success` | `#10b981` | Passed states, free labels, completion, positive actions. |
 | `--success-light` | `#d1fae5` | Success badge and chip backgrounds. |
