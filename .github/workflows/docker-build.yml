@@ -55,7 +55,14 @@ jobs:
       id-token: write
       attestations: write
 
+    # Docker Hub is optional: GHCR publishing only needs GITHUB_TOKEN.
+    env:
+      DOCKERHUB_ENABLED: ${{ secrets.DOCKER_USERNAME != '' && secrets.DOCKER_PASSWORD != '' }}
+
     steps:
+      - name: Normalize image name
+        run: echo "IMAGE=${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
+
       - name: Checkout Repository
         uses: actions/checkout@v6
 
@@ -67,6 +74,7 @@ jobs:
         uses: docker/setup-buildx-action@v4
 
       - name: Login to Docker Hub
+        if: env.DOCKERHUB_ENABLED == 'true'
         uses: docker/login-action@v4
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -85,7 +93,7 @@ jobs:
         with:
           images: |
             ghcr.io/${{ env.IMAGE }}
-            docker.io/${{ env.IMAGE }}
+            name=docker.io/${{ env.IMAGE }},enable=${{ env.DOCKERHUB_ENABLED == 'true' }}
           tags: |
             type=sha,prefix=sha-,suffix=-${{ matrix.arch }}
 
@@ -131,7 +139,15 @@ jobs:
       id-token: write
       attestations: write
 
+    # Docker Hub is optional: GHCR publishing only needs GITHUB_TOKEN.
+    env:
+      DOCKERHUB_ENABLED: ${{ secrets.DOCKER_USERNAME != '' && secrets.DOCKER_PASSWORD != '' }}
+      SSH_REDEPLOY_ENABLED: ${{ secrets.SSH_KEY != '' && secrets.SSH_HOST != '' && secrets.SSH_USER != '' }}
+
     steps:
+      - name: Normalize image name
+        run: echo "IMAGE=${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
+
       - name: Checkout Repository
         uses: actions/checkout@v6
         with:
@@ -153,6 +169,7 @@ jobs:
         uses: docker/setup-buildx-action@v4
 
       - name: Login to Docker Hub
+        if: env.DOCKERHUB_ENABLED == 'true'
         uses: docker/login-action@v4
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -181,7 +198,7 @@ jobs:
         with:
           images: |
             ghcr.io/${{ env.IMAGE }}
-            docker.io/${{ env.IMAGE }}
+            name=docker.io/${{ env.IMAGE }},enable=${{ env.DOCKERHUB_ENABLED == 'true' }}
           tags: |
             type=sha,prefix=sha-
             type=raw,value=nightly,enable=${{ needs.mode.outputs.nightly == 'true' }}
@@ -214,11 +231,14 @@ jobs:
             --annotation "index:org.opencontainers.image.source=https://github.com/AHMED9937/headcv" \
             --annotation "index:org.opencontainers.image.version=${{ steps.version.outputs.version }}" \
             $(printf 'ghcr.io/${{ env.IMAGE }}@sha256:%s ' *) \
-            $(printf 'docker.io/${{ env.IMAGE }}@sha256:%s ' *)
+            $(if [[ "$DOCKERHUB_ENABLED" == "true" ]]; then printf 'docker.io/${{ env.IMAGE }}@sha256:%s ' *; fi)
 
           # Get the digest of the multi-arch manifest
           GHCR_DIGEST=$(docker buildx imagetools inspect ghcr.io/${{ env.IMAGE }}:${FINAL_TAG} --format '{{json .Manifest.Digest}}' | tr -d '"')
-          DOCKER_DIGEST=$(docker buildx imagetools inspect docker.io/${{ env.IMAGE }}:${FINAL_TAG} --format '{{json .Manifest.Digest}}' | tr -d '"')
+          DOCKER_DIGEST=""
+          if [[ "$DOCKERHUB_ENABLED" == "true" ]]; then
+            DOCKER_DIGEST=$(docker buildx imagetools inspect docker.io/${{ env.IMAGE }}:${FINAL_TAG} --format '{{json .Manifest.Digest}}' | tr -d '"')
+          fi
           echo "final_tag=$FINAL_TAG" >> "$GITHUB_OUTPUT"
           echo "ghcr_digest=$GHCR_DIGEST" >> "$GITHUB_OUTPUT"
           echo "docker_digest=$DOCKER_DIGEST" >> "$GITHUB_OUTPUT"
@@ -232,15 +252,19 @@ jobs:
           cosign sign --yes ghcr.io/${{ env.IMAGE }}@${{ steps.manifest.outputs.ghcr_digest }}
 
           # Sign Docker Hub image
-          cosign sign --yes docker.io/${{ env.IMAGE }}@${{ steps.manifest.outputs.docker_digest }}
+          if [[ "$DOCKERHUB_ENABLED" == "true" ]]; then
+            cosign sign --yes docker.io/${{ env.IMAGE }}@${{ steps.manifest.outputs.docker_digest }}
+          fi
 
       - name: Inspect image
         run: |
           docker buildx imagetools inspect ghcr.io/${{ env.IMAGE }}:${{ steps.manifest.outputs.final_tag }}
-          docker buildx imagetools inspect docker.io/${{ env.IMAGE }}:${{ steps.manifest.outputs.final_tag }}
+          if [[ "$DOCKERHUB_ENABLED" == "true" ]]; then
+            docker buildx imagetools inspect docker.io/${{ env.IMAGE }}:${{ steps.manifest.outputs.final_tag }}
+          fi
 
       - name: Redeploy Stack
-        if: ${{ needs.mode.outputs.release == 'true' }}
+        if: ${{ needs.mode.outputs.release == 'true' && env.SSH_REDEPLOY_ENABLED == 'true' }}
         uses: appleboy/ssh-action@v1
         with:
           key: ${{ secrets.SSH_KEY }}
