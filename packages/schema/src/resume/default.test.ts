@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { templatePrimaryColors } from "../templates";
 import { resumeDataSchema } from "./data";
 import { defaultResumeData } from "./default";
 
@@ -10,6 +11,10 @@ describe("defaultResumeData", () => {
 
 	it("uses the 'onyx' template", () => {
 		expect(defaultResumeData.metadata.template).toBe("onyx");
+	});
+
+	it("uses the onyx template's accent color", () => {
+		expect(defaultResumeData.metadata.design.colors.primary).toBe(templatePrimaryColors.onyx);
 	});
 
 	it("uses en-US locale", () => {

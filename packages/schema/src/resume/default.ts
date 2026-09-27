@@ -1,4 +1,5 @@
 import type { ResumeData } from "./data";
+import { templatePrimaryColors } from "../templates";
 
 export const defaultResumeData: ResumeData = {
 	picture: {
@@ -130,7 +131,7 @@ export const defaultResumeData: ResumeData = {
 		},
 		design: {
 			colors: {
-				primary: "rgba(220, 38, 38, 1)",
+				primary: templatePrimaryColors.onyx,
 				text: "rgba(0, 0, 0, 1)",
 				background: "rgba(255, 255, 255, 1)",
 			},

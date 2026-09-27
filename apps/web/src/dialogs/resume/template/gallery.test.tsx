@@ -4,6 +4,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
+import { templatePrimaryColors } from "@headcv/schema/templates";
 import { Dialog } from "@headcv/ui/components/dialog";
 import { useDialogStore } from "@/dialogs/store";
 
@@ -26,6 +27,16 @@ afterEach(() => {
 	updateResumeData.mockReset();
 	useDialogStore.setState({ open: false, activeDialog: null, onBeforeClose: null });
 });
+
+type Draft = { metadata: { template: string; design: { colors: { primary: string } } } };
+
+// Runs the recipe passed to updateResumeData against a Ditto draft with the given accent.
+const applyRecipe = (primary: string) => {
+	const recipe = updateResumeData.mock.calls[0]?.[0] as (draft: Draft) => void;
+	const draft: Draft = { metadata: { template: "ditto", design: { colors: { primary } } } };
+	recipe(draft);
+	return draft;
+};
 
 const renderGallery = () =>
 	render(
@@ -64,9 +75,23 @@ describe("TemplateGalleryDialog", () => {
 		fireEvent.click(button);
 
 		expect(updateResumeData).toHaveBeenCalledTimes(1);
-		const recipe = updateResumeData.mock.calls[0]?.[0] as (draft: { metadata: { template: string } }) => void;
-		const draft = { metadata: { template: "ditto" } };
-		recipe(draft);
+		const draft = applyRecipe(templatePrimaryColors.ditto);
 		expect(draft.metadata.template).toBe("onyx");
+	});
+
+	it("switches a default accent to the new template's accent", () => {
+		renderGallery();
+		fireEvent.click(screen.getByAltText("Gengar").closest("button") as HTMLButtonElement);
+
+		const draft = applyRecipe(templatePrimaryColors.ditto);
+		expect(draft.metadata.design.colors.primary).toBe(templatePrimaryColors.gengar);
+	});
+
+	it("keeps a color the user picked when switching templates", () => {
+		renderGallery();
+		fireEvent.click(screen.getByAltText("Gengar").closest("button") as HTMLButtonElement);
+
+		const draft = applyRecipe(templatePrimaryColors.azurill);
+		expect(draft.metadata.design.colors.primary).toBe(templatePrimaryColors.azurill);
 	});
 });

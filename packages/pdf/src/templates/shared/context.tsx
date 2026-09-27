@@ -11,6 +11,7 @@ import type {
 	TemplateStyleSlots,
 } from "./types";
 import { createContext, use } from "react";
+import { applyMonochromeStyle, getPlacementInk } from "./styles";
 
 type TemplateContextValue = {
 	styles: TemplateStyleSlots;
@@ -102,7 +103,7 @@ export const useTemplateStyle = (slot: keyof TemplateStyleSlots): StyleInput => 
 	const { styles } = useTemplateContext();
 	const context = useTemplateStyleContext();
 
-	return resolveStyleSlot(styles[slot] as TemplateStyleSlot | undefined, context);
+	return applyMonochromeStyle(slot, resolveStyleSlot(styles[slot] as TemplateStyleSlot | undefined, context), context);
 };
 
 export const useTemplateFeatureStyle = (
@@ -116,9 +117,9 @@ export const useTemplateFeatureStyle = (
 	return resolveStyleSlot(slots?.[slot] as TemplateStyleSlot | undefined, context);
 };
 
-export const useTemplateIconSlot = (slot: "icon") => {
+export const useTemplateIconSlot = (slot: "icon"): Partial<TemplateIconProps> => {
 	const { styles } = useTemplateContext();
 	const context = useTemplateStyleContext();
 
-	return resolveIconSlot(styles[slot], context);
+	return { ...resolveIconSlot(styles[slot], context), color: getPlacementInk(context) };
 };

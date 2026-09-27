@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { templateSchema } from "./templates";
+import { isDefaultPrimaryColor, templatePrimaryColors, templateSchema } from "./templates";
 
 describe("templateSchema", () => {
 	it("accepts known template names", () => {
@@ -48,5 +48,23 @@ describe("templateSchema", () => {
 	it("includes 14 templates", () => {
 		const validTemplates = templateSchema.options;
 		expect(validTemplates).toHaveLength(15);
+	});
+});
+
+describe("templatePrimaryColors", () => {
+	it("gives every template an opaque rgba accent", () => {
+		for (const template of templateSchema.options) {
+			expect(templatePrimaryColors[template]).toMatch(/^rgba\(\d{1,3}, \d{1,3}, \d{1,3}, 1\)$/);
+		}
+	});
+
+	it("treats template accents and the legacy red as defaults", () => {
+		expect(isDefaultPrimaryColor(templatePrimaryColors.gengar, "gengar")).toBe(true);
+		expect(isDefaultPrimaryColor("rgba(220, 38, 38, 1)", "gengar")).toBe(true);
+	});
+
+	it("treats any other color as a user choice", () => {
+		expect(isDefaultPrimaryColor("rgba(1, 2, 3, 1)", "gengar")).toBe(false);
+		expect(isDefaultPrimaryColor(templatePrimaryColors.gengar, "ditto")).toBe(false);
 	});
 });
