@@ -838,6 +838,10 @@ msgstr "Choose a template that fits your story"
 msgid "home.free.templatesText"
 msgstr "Choose from our resume templates, with room for your experience and personality."
 
+#: src/components/input/icon-picker.tsx
+msgid "Choose icon"
+msgstr "Choose icon"
+
 #: src/components/input/month-input.tsx
 msgid "Choose month"
 msgstr "Choose month"
@@ -1187,6 +1191,14 @@ msgstr "Current Plan"
 msgid "Custom"
 msgstr "Custom"
 
+#: src/routes/builder/$resumeId/-sidebar/left/sections/custom-fields.tsx
+msgid "Custom field link"
+msgstr "Custom field link"
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/custom-fields.tsx
+msgid "Custom field text"
+msgstr "Custom field text"
+
 #: src/features/resume/builder/ai-changes.ts
 msgid "Custom Fields"
 msgstr "Custom Fields"
@@ -1403,6 +1415,10 @@ msgstr "Drag and drop sections here to move them between columns"
 #: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
 msgid "Drag photo to reposition"
 msgstr "Drag photo to reposition"
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/custom-fields.tsx
+msgid "Drag to reorder custom field"
+msgstr "Drag to reorder custom field"
 
 #. Resume card context menu action to create a copy
 #. Resume card dropdown action to create a copy
@@ -3165,6 +3181,10 @@ msgstr "Remove"
 #: src/components/input/chip-input.tsx
 msgid "Remove {chip}"
 msgstr "Remove {chip}"
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/custom-fields.tsx
+msgid "Remove custom field"
+msgstr "Remove custom field"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "Remove Password"
