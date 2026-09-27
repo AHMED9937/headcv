@@ -15,7 +15,7 @@ import {
 	isValidStepId,
 } from "./steps";
 
-export type BuilderStepSearch = {
+type BuilderStepSearch = {
 	step?: string;
 };
 
