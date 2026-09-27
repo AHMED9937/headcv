@@ -26,6 +26,8 @@
 	--primary-dark: #152642;
 	--primary-light: #e8e0d6;
 	--accent: #c9a227;
+	/* Gold for large text only (>=24px, or >=18.66px bold): 3:1 on --bg and white. */
+	--accent-strong: #ad8428;
 	--accent-light: #f5efe6;
 	--success: #10b981;
 	--success-light: #d1fae5;
@@ -126,6 +128,7 @@
 	--secondary: #1e3a5f;
 	--secondary-foreground: #f1f5f9;
 	--accent: #fbbf24;
+	--accent-strong: #fbbf24;
 	--accent-foreground: #152642;
 	--destructive: #ef4444;
 	--destructive-foreground: #ffffff;
@@ -175,6 +178,7 @@
 	--color-accent: var(--accent);
 	--color-accent-foreground: var(--accent-foreground);
 	--color-accent-light: var(--accent-light);
+	--color-accent-strong: var(--accent-strong);
 	--color-destructive: var(--destructive);
 	--color-success: var(--success);
 	--color-success-light: var(--success-light);
