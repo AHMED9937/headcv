@@ -12,6 +12,7 @@ import {
 } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { Button } from "@headcv/ui/components/button";
+import { cn } from "@headcv/utils/style";
 import { SectionTips } from "@/components/section-tips";
 import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
 import { requestResumePreviewSection } from "@/features/resume/preview/preview-navigation";
@@ -22,19 +23,68 @@ import {
 import { useBuilderSectionNavigation } from "../../../-components/section-navigation-context";
 import { BasicsSectionForm } from "./basics";
 import { PictureSectionForm } from "./picture";
+import { getPictureShape } from "./picture-shapes";
 
 type PersonalDetailsDraft = { basics: Basics; picture: Picture };
 
-export function PersonalDetailsSectionBuilder() {
+type PersonalDetailsEditorProps = {
+	value?: PersonalDetailsDraft;
+	onChange?: (value: PersonalDetailsDraft) => void;
+	onBack?: () => void;
+	footer?: React.ReactNode;
+};
+
+/** Shared by the edit card (draft saved on Done) and the guided step (autosaves to the resume). */
+function PersonalDetailsEditor({ value, onChange, onBack, footer }: PersonalDetailsEditorProps) {
+	const [showTips, setShowTips] = useState(false);
+
+	return (
+		<div id="sidebar-basics" className="space-y-5 rounded-2xl border bg-background p-5 shadow-sm">
+			<div className="flex items-center justify-between gap-3">
+				{onBack ? (
+					<Button variant="ghost" size="sm" onClick={onBack}>
+						<ArrowLeftIcon aria-hidden="true" />
+						<Trans>Back</Trans>
+					</Button>
+				) : (
+					<span />
+				)}
+				<Button variant="ghost" size="sm" aria-expanded={showTips} onClick={() => setShowTips((open) => !open)}>
+					<LightbulbIcon aria-hidden="true" />
+					<Trans>Get Tips</Trans>
+				</Button>
+			</div>
+			<h2 className="font-semibold text-xl tracking-tight">
+				<Trans>Edit Personal Details</Trans>
+			</h2>
+			{showTips && <SectionTips type="basics" />}
+			<div className="grid @lg:grid-cols-[minmax(0,1fr)_minmax(15rem,0.65fr)] grid-cols-1 gap-6">
+				<BasicsSectionForm
+					value={value?.basics}
+					onChange={value && onChange ? (basics) => onChange({ ...value, basics }) : undefined}
+				/>
+				<PictureSectionForm
+					value={value?.picture}
+					onChange={value && onChange ? (picture) => onChange({ ...value, picture }) : undefined}
+				/>
+			</div>
+			{footer}
+		</div>
+	);
+}
+
+export function PersonalDetailsSectionBuilder({ guided = false }: { guided?: boolean }) {
 	const resume = useCurrentResume();
 	const updateResumeData = useUpdateResumeData();
 	const setPreviewOverride = useSetInlineEditPreviewOverride();
 	const clearPreviewOverride = useClearInlineEditPreviewOverride();
 	const { navigateToSection } = useBuilderSectionNavigation();
 	const [draft, setDraft] = useState<PersonalDetailsDraft | null>(null);
-	const [showTips, setShowTips] = useState(false);
 
 	useEffect(() => clearPreviewOverride, [clearPreviewOverride]);
+
+	// The guided wizard edits the resume directly; its Next button plays the role of Done.
+	if (guided) return <PersonalDetailsEditor />;
 
 	const navigateToPreview = () => {
 		requestResumePreviewSection("basics");
@@ -44,7 +94,6 @@ export function PersonalDetailsSectionBuilder() {
 	const openEditor = () => {
 		const next = { basics: structuredClone(resume.data.basics), picture: structuredClone(resume.data.picture) };
 		setDraft(next);
-		setShowTips(false);
 		navigateToPreview();
 	};
 
@@ -56,7 +105,6 @@ export function PersonalDetailsSectionBuilder() {
 	const closeEditor = () => {
 		clearPreviewOverride();
 		setDraft(null);
-		setShowTips(false);
 	};
 
 	const save = () => {
@@ -70,33 +118,16 @@ export function PersonalDetailsSectionBuilder() {
 
 	if (draft) {
 		return (
-			<div id="sidebar-basics" className="space-y-5 rounded-2xl border bg-background p-5 shadow-sm">
-				<div className="flex items-center justify-between gap-3">
-					<Button variant="ghost" size="sm" onClick={closeEditor}>
-						<ArrowLeftIcon aria-hidden="true" />
-						<Trans>Back</Trans>
+			<PersonalDetailsEditor
+				value={draft}
+				onChange={updateDraft}
+				onBack={closeEditor}
+				footer={
+					<Button className="w-full" onClick={save}>
+						<Trans>Done</Trans>
 					</Button>
-					<Button variant="ghost" size="sm" onClick={() => setShowTips((open) => !open)}>
-						<LightbulbIcon aria-hidden="true" />
-						<Trans>Get Tips</Trans>
-					</Button>
-				</div>
-				<h2 className="font-semibold text-xl tracking-tight">
-					<Trans>Edit Personal Details</Trans>
-				</h2>
-				{showTips && <SectionTips type="basics" />}
-				<div className="grid @lg:grid-cols-[minmax(0,1fr)_minmax(15rem,0.65fr)] grid-cols-1 gap-6">
-					<BasicsSectionForm value={draft.basics} onChange={(basics) => updateDraft({ ...draft, basics })} />
-					<PictureSectionForm
-						value={draft.picture}
-						onChange={(picture) => updateDraft({ ...draft, picture })}
-						advancedCollapsible
-					/>
-				</div>
-				<Button className="w-full" onClick={save}>
-					<Trans>Done</Trans>
-				</Button>
-			</div>
+				}
+			/>
 		);
 	}
 
@@ -125,7 +156,12 @@ export function PersonalDetailsSectionBuilder() {
 					{basics.phone && <ContactLine icon={<PhoneIcon />} value={basics.phone} />}
 					{basics.location && <ContactLine icon={<MapPinIcon />} value={basics.location} />}
 				</div>
-				<div className="flex size-18 items-center justify-center overflow-hidden rounded-full bg-secondary">
+				<div
+					className={cn(
+						"flex size-18 items-center justify-center overflow-hidden bg-secondary",
+						pictureUrl && !picture.hidden ? getPictureShape(picture).className : "rounded-full",
+					)}
+				>
 					{pictureUrl && !picture.hidden ? (
 						<img src={pictureUrl} alt="" className="size-full object-cover" />
 					) : (

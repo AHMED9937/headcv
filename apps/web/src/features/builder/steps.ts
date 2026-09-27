@@ -145,3 +145,10 @@ export function getStepSectionId(stepId: BuilderStepId): LeftSidebarSection | nu
 			return null;
 	}
 }
+
+/** Inverse of getStepSectionId: the guided step where a sidebar section is edited. */
+export function getStepForSection(section: LeftSidebarSection): BuilderStepId {
+	if (section === "picture") return "personal-details";
+	const step = BUILDER_STEPS.find(({ id }) => getStepSectionId(id) === section);
+	return step?.id ?? "additional-sections";
+}

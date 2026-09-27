@@ -9,6 +9,7 @@ import { createContext, useCallback, useContext, useMemo, useState } from "react
 import { toast } from "sonner";
 import { normalizeResumeData } from "@headcv/resume/normalize";
 import { applyResumePatches } from "@headcv/resume/patch";
+import { getStepForSection } from "@/features/builder/steps";
 import { useConfirm } from "@/hooks/use-confirm";
 import { getAgentErrorMessage } from "@/libs/error-message";
 import { orpc } from "@/libs/orpc/client";
@@ -276,10 +277,22 @@ export function AiAssistantProvider({ children, resumeId }: { children: React.Re
 			const leftSection = leftSidebarSections.includes(sectionId as LeftSidebarSection)
 				? (sectionId as LeftSidebarSection)
 				: "custom";
-			void navigate({ search: (previous: BuilderSearch) => ({ ...previous, tab: "content", section: leftSection }) });
+			// The guided create flow is step-based, so jump to the step that edits this section.
+			if (search.mode === "create") {
+				void navigate({
+					search: (previous: BuilderSearch) => ({
+						...previous,
+						step: getStepForSection(leftSection),
+						section: undefined,
+						reviewSection: undefined,
+					}),
+				});
+			} else {
+				void navigate({ search: (previous: BuilderSearch) => ({ ...previous, tab: "content", section: leftSection }) });
+			}
 			setOpen(false);
 		},
-		[navigate],
+		[navigate, search.mode],
 	);
 	const clearDraft = useCallback(() => setDraft(undefined), []);
 

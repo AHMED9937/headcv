@@ -1,19 +1,29 @@
+import type { BuilderSearch } from "./workspace-search";
 import { Trans } from "@lingui/react/macro";
+import { ArrowLeftIcon } from "@phosphor-icons/react";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { Button } from "@headcv/ui/components/button";
 import { ScrollArea } from "@headcv/ui/components/scroll-area";
 import { useDialogStore } from "@/dialogs/store";
 import { BuilderStepActions } from "@/features/builder/step-actions";
 import { getStepSectionId, useBuilderStep } from "@/features/builder/use-builder-step";
+import { useAiAssistant } from "@/features/resume/builder/ai-assistant";
 import { useCurrentResume } from "@/features/resume/builder/draft";
 import { BuilderSidebarLeft } from "../-sidebar/left";
+import { AiReviewSectionBuilder } from "../-sidebar/left/sections/ai-review";
 import { DesignSectionBuilder } from "../-sidebar/right/sections/design";
 import { ExportSectionBuilder } from "../-sidebar/right/sections/export";
 import { PageSectionBuilder } from "../-sidebar/right/sections/page";
 import { TemplateSectionBuilder } from "../-sidebar/right/sections/template";
 import { TypographySectionBuilder } from "../-sidebar/right/sections/typography";
+import { useSectionStore } from "../-store/section";
 import { InlineSectionEditor } from "./inline-section-editor";
 
 export function GuidedEditor() {
 	const { currentStep } = useBuilderStep();
+	const { section } = useSearch({ from: "/builder/$resumeId" });
+	const { hasReviewableChanges } = useAiAssistant();
 	const sectionId = getStepSectionId(currentStep);
 	const showingInlineEditor = useDialogStore(
 		(state) =>
@@ -22,6 +32,8 @@ export function GuidedEditor() {
 	);
 
 	if (showingInlineEditor) return <InlineSectionEditor />;
+	// The AI banner's Review button targets `section=ai-review`; the step-based flow shows it in place of the step.
+	if (section === "ai-review" && hasReviewableChanges) return <GuidedAiReview />;
 	if (sectionId) return <BuilderSidebarLeft guided />;
 
 	return (
@@ -112,6 +124,37 @@ function SaveAccountStep() {
 			<p className="text-muted-foreground text-sm">
 				<Trans>Create an account when you are ready to keep this resume across devices.</Trans>
 			</p>
+		</div>
+	);
+}
+
+function GuidedAiReview() {
+	const navigate = useNavigate({ from: "/builder/$resumeId" });
+	const expandLeftSection = useSectionStore((state) => state.expandLeftSection);
+
+	useEffect(() => {
+		expandLeftSection("ai-review");
+	}, [expandLeftSection]);
+
+	return (
+		<div className="flex h-full min-h-0 flex-col bg-background">
+			<ScrollArea className="flex-1">
+				<div className="space-y-4 p-4">
+					<Button
+						variant="ghost"
+						size="sm"
+						onClick={() => {
+							void navigate({
+								search: (previous: BuilderSearch) => ({ ...previous, section: undefined, reviewSection: undefined }),
+							});
+						}}
+					>
+						<ArrowLeftIcon aria-hidden="true" />
+						<Trans>Back to step</Trans>
+					</Button>
+					<AiReviewSectionBuilder />
+				</div>
+			</ScrollArea>
 		</div>
 	);
 }

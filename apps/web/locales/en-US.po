@@ -28,53 +28,6 @@ msgstr "Created"
 msgid "Name"
 msgstr "Name"
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/pricing.tsx
-#~ msgid "home.comingSoon"
-#~ msgstr "Coming soon"
-
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/pricing.tsx
-#~ msgid "home.pricing.proSoon"
-#~ msgstr "Pro is coming soon"
-
-#. placeholder {0}: sub.usage.resumeUploadsUsed
-#. placeholder {1}: sub.usage.resumeUploadsLimit
-#. js-lingui-explicit-id
-#: src/dialogs/billing/upgrade.tsx
-#~ msgid "billing.upgrade.importLimit.description"
-#~ msgstr "{0} of {1} imports used. Pro lets you bring in every resume you have, without limits."
-
-#. js-lingui-explicit-id
-#: src/routes/dashboard/settings/billing.tsx
-#~ msgid "billing.usage.uploads"
-#~ msgstr "Resume Uploads (AI Parse)"
-
-#. js-lingui-explicit-id
-#: src/dialogs/billing/upgrade.tsx
-#~ msgid "billing.upgrade.importLimit.title"
-#~ msgstr "You've used all your free imports"
-
-#. js-lingui-explicit-id
-#: src/routes/checkout/success.tsx
-#~ msgid "checkout.failed.title"
-#~ msgstr "Something went wrong"
-
-#. js-lingui-explicit-id
-#: src/routes/checkout/success.tsx
-#~ msgid "checkout.failed.retry"
-#~ msgstr "Try Again"
-
-#. js-lingui-explicit-id
-#: src/routes/checkout/success.tsx
-#~ msgid "checkout.failed.billing"
-#~ msgstr "View Billing"
-
-#. js-lingui-explicit-id
-#: src/routes/checkout/success.tsx
-#~ msgid "checkout.success.description"
-#~ msgstr "Your {plan} subscription is now active. Enjoy unlimited resumes and AI chats!"
-
 #. placeholder {0}: section.items.length
 #: src/routes/builder/$resumeId/-sidebar/left/sections/custom.tsx
 msgid "{0, plural, one {# item} other {# items}}"
@@ -380,14 +333,6 @@ msgstr "Adjust your fonts, colors and spacing for a resume that feels like you."
 msgid "After AI update"
 msgstr "After AI update"
 
-#: src/features/command-palette/pages/navigation.tsx
-#~ msgid "Agent"
-#~ msgstr "Agent"
-
-#: src/routes/dashboard/-components/sidebar.tsx
-#~ msgid "Agents"
-#~ msgstr "Agents"
-
 #: src/dialogs/resume/import.tsx
 #: src/routes/builder/$resumeId/-components/header.tsx
 msgid "AI"
@@ -512,10 +457,6 @@ msgstr "Anyone who has the resume's public URL will be able to view and download
 msgid "Anyone with the link can view and download the resume."
 msgstr "Anyone with the link can view and download the resume."
 
-#: src/routes/dashboard/-components/sidebar.tsx
-#~ msgid "App"
-#~ msgstr "App"
-
 #: src/routes/_home/-sections/statistics.tsx
 msgid "Application Statistics"
 msgstr "Application Statistics"
@@ -596,10 +537,6 @@ msgstr "Area"
 msgid "Area of Study"
 msgstr "Area of Study"
 
-#: src/features/command-palette/pages/navigation.tsx
-#~ msgid "Artificial Intelligence"
-#~ msgstr "Artificial Intelligence"
-
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Ask anything about this resume"
 msgstr "Ask anything about this resume"
@@ -609,7 +546,6 @@ msgid "Ask permission first and keep the reference's role and contact details cu
 msgstr "Ask permission first and keep the reference's role and contact details current."
 
 #: src/features/resume/builder/ai-changes.ts
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
 msgid "Aspect Ratio"
 msgstr "Aspect Ratio"
 
@@ -678,6 +614,10 @@ msgstr "Back to Login"
 msgid "Back to resumes"
 msgstr "Back to resumes"
 
+#: src/routes/builder/$resumeId/-components/guided-editor.tsx
+msgid "Back to step"
+msgstr "Back to step"
+
 #: src/routes/builder/$resumeId/-sidebar/right/sections/design.tsx
 msgid "Background Color"
 msgstr "Background Color"
@@ -733,12 +673,10 @@ msgid "Border Color"
 msgstr "Border Color"
 
 #: src/features/resume/builder/ai-changes.ts
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
 msgid "Border Radius"
 msgstr "Border Radius"
 
 #: src/features/resume/builder/ai-changes.ts
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
 msgid "Border Width"
 msgstr "Border Width"
 
@@ -945,10 +883,6 @@ msgstr "Choose a template and start building"
 msgid "Choose a template that fits your story"
 msgstr "Choose a template that fits your story"
 
-#: src/routes/agent/index.tsx
-#~ msgid "Choose an existing conversation from the sidebar, or start a new draft-focused thread."
-#~ msgstr "Choose an existing conversation from the sidebar, or start a new draft-focused thread."
-
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/features.tsx
 msgid "home.free.templatesText"
@@ -967,7 +901,9 @@ msgstr "Choose specific interests that add useful context or show commitment."
 msgid "home.hero.fullPreview"
 msgstr "Choose the Chikorita resume template"
 
+#. Profile photo shape option
 #: src/components/level/combobox.tsx
+#: src/routes/builder/$resumeId/-sidebar/left/sections/picture-shapes.ts
 msgid "Circle"
 msgstr "Circle"
 
@@ -1065,10 +1001,6 @@ msgstr "Continue where you left off"
 #: src/dialogs/resume/import.tsx
 msgid "Continue where you left off by importing an existing resume from a PDF or Microsoft Word file."
 msgstr "Continue where you left off by importing an existing resume from a PDF or Microsoft Word file."
-
-#: src/dialogs/resume/import.tsx
-#~ msgid "Continue where you left off by importing an existing resume you created using HeadCV or any another resume builder. Supported formats include PDF, Microsoft Word, as well as JSON files from HeadCV."
-#~ msgstr "Continue where you left off by importing an existing resume you created using HeadCV or any another resume builder. Supported formats include PDF, Microsoft Word, as well as JSON files from HeadCV."
 
 #: src/routes/_home/-sections/donate.tsx
 msgid "Contributions fund bug fixes, security updates, and continuous improvements to keep the app running smoothly."
@@ -1296,6 +1228,10 @@ msgstr "Creating your API key..."
 msgid "Creating your resume..."
 msgstr "Creating your resume..."
 
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
+msgid "Crop, zoom and choose the shape of your resume photo."
+msgstr "Crop, zoom and choose the shape of your resume photo."
+
 #: src/dialogs/auth/change-password.tsx
 msgid "Current Password"
 msgstr "Current Password"
@@ -1397,10 +1333,6 @@ msgstr "Delete Column"
 msgid "Delete Page"
 msgstr "Delete Page"
 
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
-msgid "Delete picture"
-msgstr "Delete picture"
-
 #: src/components/input/rich-input.tsx
 msgid "Delete Row"
 msgstr "Delete Row"
@@ -1446,7 +1378,7 @@ msgstr "Description"
 msgid "Design"
 msgstr "Design"
 
-#: src/routes/builder/$resumeId/-components/imported-workspace.tsx
+#: src/routes/builder/$resumeId/-components/design-workspace.tsx
 msgid "Design your resume"
 msgstr "Design your resume"
 
@@ -1500,20 +1432,8 @@ msgid "Download a copy of your resume as a Word document. Use this file to furth
 msgstr "Download a copy of your resume as a Word document. Use this file to further customize your resume in Microsoft Word or Google Docs."
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/export.tsx
-#~ msgid "Download a copy of your resume in JSON format. Use this file for backup or to import your resume into other applications, including AI assistants."
-#~ msgstr "Download a copy of your resume in JSON format. Use this file for backup or to import your resume into other applications, including AI assistants."
-
-#: src/routes/builder/$resumeId/-sidebar/right/sections/export.tsx
 msgid "Download a copy of your resume in PDF format. Use this file for printing or to easily share your resume with recruiters."
 msgstr "Download a copy of your resume in PDF format. Use this file for printing or to easily share your resume with recruiters."
-
-#: src/routes/builder/$resumeId/-components/dock.tsx
-#~ msgid "Download DOCX"
-#~ msgstr "Download DOCX"
-
-#: src/routes/builder/$resumeId/-components/dock.tsx
-#~ msgid "Download JSON"
-#~ msgstr "Download JSON"
 
 #: src/routes/builder/$resumeId/-components/dock.tsx
 msgid "Download Microsoft Word"
@@ -1542,6 +1462,10 @@ msgstr "Downloads"
 #: src/routes/builder/$resumeId/-sidebar/right/sections/layout/pages.tsx
 msgid "Drag and drop sections here to move them between columns"
 msgstr "Drag and drop sections here to move them between columns"
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
+msgid "Drag photo to reposition"
+msgstr "Drag photo to reposition"
 
 #. Resume card context menu action to create a copy
 #. Resume card dropdown action to create a copy
@@ -1582,11 +1506,6 @@ msgstr "Edit {chip}"
 #: src/routes/builder/$resumeId/-sidebar/left/shared/section-base.tsx
 msgid "Edit {sectionTitle} heading"
 msgstr "Edit {sectionTitle} heading"
-
-#. Screen reader description for the fullscreen rich-text editor dialog
-#: src/components/input/rich-input.tsx
-#~ msgid "Edit content in fullscreen mode"
-#~ msgstr "Edit content in fullscreen mode"
 
 #: src/dialogs/resume/sections/experience.tsx
 msgid "Edit Entry"
@@ -1733,10 +1652,6 @@ msgstr "Every resume template included"
 #: src/routes/_home/-sections/features.tsx
 msgid "home.free.heading"
 msgstr "Everything you need to get started"
-
-#: src/components/input/rich-input.tsx
-#~ msgid "Exit Fullscreen"
-#~ msgstr "Exit Fullscreen"
 
 #: src/dialogs/resume/sections/custom.tsx
 #: src/libs/resume/section-title.ts
@@ -1952,10 +1867,6 @@ msgstr "Fill in your facts"
 msgid "Filter"
 msgstr "Filter"
 
-#: src/routes/dashboard/resumes/index.tsx
-#~ msgid "Filter by"
-#~ msgstr "Filter by"
-
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Find weak bullets and rewrite them with stronger outcomes, numbers, scope, and sharper verbs."
 msgstr "Find weak bullets and rewrite them with stronger outcomes, numbers, scope, and sharper verbs."
@@ -2104,15 +2015,6 @@ msgstr "Full-size preview of your resume."
 msgid "Full-size resume preview"
 msgstr "Full-size resume preview"
 
-#: src/components/input/rich-input.tsx
-#~ msgid "Fullscreen"
-#~ msgstr "Fullscreen"
-
-#. Screen reader title for the fullscreen rich-text editor dialog
-#: src/components/input/rich-input.tsx
-#~ msgid "Fullscreen Editor"
-#~ msgstr "Fullscreen Editor"
-
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/templates-showcase.tsx
 msgid "home.templates.edit"
@@ -2188,10 +2090,6 @@ msgstr "Google"
 msgid "Grade"
 msgstr "Grade"
 
-#: src/routes/dashboard/resumes/index.tsx
-#~ msgid "Grid"
-#~ msgstr "Grid"
-
 #: src/routes/_home/-sections/donate.tsx
 msgid "Grow the Team"
 msgstr "Grow the Team"
@@ -2209,11 +2107,6 @@ msgstr "HeadCV — Build a professional ATS-friendly CV in minutes with AI assis
 msgid "home.seo.ogImageAlt"
 msgstr "HeadCV — Build a professional ATS-friendly CV in minutes with AI assistance and live preview."
 
-#. Import source option for current HeadCV JSON format
-#: src/dialogs/resume/import.tsx
-#~ msgid "HeadCV (JSON)"
-#~ msgstr "HeadCV (JSON)"
-
 #: src/routes/_home/-sections/prefooter.tsx
 msgid "HeadCV continues to grow thanks to its vibrant community. This project owes its progress to numerous individuals who've dedicated their time and skills to make it better. We celebrate the coders who've enhanced its features on GitHub, the linguists whose translations on Crowdin have made it accessible to a broader audience, and the people who've donated to support its continued development."
 msgstr "HeadCV continues to grow thanks to its vibrant community. This project owes its progress to numerous individuals who've dedicated their time and skills to make it better. We celebrate the coders who've enhanced its features on GitHub, the linguists whose translations on Crowdin have made it accessible to a broader audience, and the people who've donated to support its continued development."
@@ -2221,6 +2114,7 @@ msgstr "HeadCV continues to grow thanks to its vibrant community. This project o
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/footer.tsx
 #: src/routes/_home/-sections/header.tsx
+#: src/routes/templates/index.tsx
 msgid "home.brand"
 msgstr "HeadCV home"
 
@@ -2241,11 +2135,6 @@ msgstr "HeadCV is a guided CV builder that helps you tell your story with clear 
 #: src/components/ui/copyright.tsx
 msgid "HeadCV v{__APP_VERSION__}"
 msgstr "HeadCV v{__APP_VERSION__}"
-
-#. Import source option for legacy HeadCV v4 JSON format
-#: src/dialogs/resume/import.tsx
-#~ msgid "HeadCV v4 (JSON)"
-#~ msgstr "HeadCV v4 (JSON)"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/typography.tsx
 msgctxt "Headings or Titles (H1, H2, H3, H4, H5, H6)"
@@ -2398,10 +2287,6 @@ msgstr "Importing your resume..."
 msgid "Importing…"
 msgstr "Importing…"
 
-#: src/dialogs/resume/sections/experience.tsx
-#~ msgid "Include measurable results so recruiters can quickly grasp your impact."
-#~ msgstr "Include measurable results so recruiters can quickly grasp your impact."
-
 #: src/components/section-tips.tsx
 msgid "Include only professional profiles that strengthen your application."
 msgstr "Include only professional profiles that strengthen your application."
@@ -2501,11 +2386,6 @@ msgstr "john.doe@example.com"
 msgid "home.final.text"
 msgstr "Join the candidates who turned their experience into offers."
 
-#. Import source option for standard JSON Resume format
-#: src/dialogs/resume/import.tsx
-#~ msgid "JSON Resume"
-#~ msgstr "JSON Resume"
-
 #: src/components/input/rich-input.tsx
 msgid "Justify Align"
 msgstr "Justify Align"
@@ -2585,11 +2465,6 @@ msgstr "Label"
 #: src/dialogs/billing/upgrade.tsx
 msgid "billing.upgrade.badge.title"
 msgstr "Land your next job faster with Pro"
-
-#. Preset button for setting picture aspect ratio to landscape orientation
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
-msgid "Landscape"
-msgstr "Landscape"
 
 #. Menu item that opens language selection submenu
 #: src/dialogs/resume/sections/language.tsx
@@ -2695,10 +2570,6 @@ msgstr "LinkedIn"
 msgid "Linking your {providerName} account..."
 msgstr "Linking your {providerName} account..."
 
-#: src/routes/dashboard/resumes/index.tsx
-#~ msgid "List"
-#~ msgstr "List"
-
 #: src/components/section-tips.tsx
 msgid "List relevant, demonstrable skills using terminology from the target role."
 msgstr "List relevant, demonstrable skills using terminology from the target role."
@@ -2799,6 +2670,14 @@ msgstr "Make it yours"
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Make the experience section more results-oriented and remove vague responsibilities."
 msgstr "Make the experience section more results-oriented and remove vague responsibilities."
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
+msgid "Manage photo"
+msgstr "Manage photo"
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
+msgid "Manage Photo"
+msgstr "Manage Photo"
 
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
@@ -3166,8 +3045,8 @@ msgid "Phone"
 msgstr "Phone"
 
 #: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
-msgid "Photo customizations"
-msgstr "Photo customizations"
+msgid "Photo"
+msgstr "Photo"
 
 #: src/libs/resume/section.tsx
 msgid "Picture"
@@ -3187,6 +3066,10 @@ msgstr "Planned monthly billing"
 #: src/routes/dashboard/settings/route.tsx
 msgid "Plans & Billing"
 msgstr "Plans & Billing"
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
+msgid "Please choose an image file."
+msgstr "Please choose an image file."
 
 #: src/features/auth/pages/reset-password.tsx
 msgid "Please enter a new password for your account"
@@ -3219,8 +3102,8 @@ msgstr "Please wait while your PDF is being generated..."
 msgid "Please wait while your PDF is being generated…"
 msgstr "Please wait while your PDF is being generated…"
 
-#. Preset button for setting picture aspect ratio to portrait orientation
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
+#. Profile photo shape option
+#: src/routes/builder/$resumeId/-sidebar/left/sections/picture-shapes.ts
 msgid "Portrait"
 msgstr "Portrait"
 
@@ -3358,10 +3241,6 @@ msgstr "Publications"
 msgid "Publisher"
 msgstr "Publisher"
 
-#: src/dialogs/resume/sections/experience.tsx
-#~ msgid "Quantify achievements with numbers, percentages, or time saved whenever possible."
-#~ msgstr "Quantify achievements with numbers, percentages, or time saved whenever possible."
-
 #: src/routes/agent/-components/tool-activity.tsx
 msgid "Reading attachment…"
 msgstr "Reading attachment…"
@@ -3438,13 +3317,13 @@ msgstr "Remove {chip}"
 msgid "Remove Password"
 msgstr "Remove Password"
 
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
+msgid "Remove Photo"
+msgstr "Remove Photo"
+
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "Removing password protection..."
 msgstr "Removing password protection..."
-
-#: src/routes/builder/$resumeId/-sidebar/left/shared/section-menu.tsx
-#~ msgid "Rename"
-#~ msgstr "Rename"
 
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
@@ -3454,6 +3333,10 @@ msgstr "Renews on {periodEnd}."
 #: src/dialogs/resume/sections/experience.tsx
 msgid "Reorder"
 msgstr "Reorder"
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
+msgid "Replace Photo"
+msgstr "Replace Photo"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/information.tsx
 msgid "Report a Bug"
@@ -3519,10 +3402,6 @@ msgstr "Resume analysis complete."
 #: src/routes/_home/-sections/footer.tsx
 msgid "home.footer.builder"
 msgstr "Resume builder"
-
-#: src/routes/builder/$resumeId/-components/imported-workspace.tsx
-#~ msgid "Resume content"
-#~ msgstr "Resume content"
 
 #: src/routes/agent/-components/patch-tool-card.tsx
 msgid "Resume patch"
@@ -3616,9 +3495,18 @@ msgid "Roles"
 msgstr "Roles"
 
 #: src/features/resume/builder/ai-changes.ts
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
 msgid "Rotation"
 msgstr "Rotation"
+
+#. Profile photo shape option
+#: src/routes/builder/$resumeId/-sidebar/left/sections/picture-shapes.ts
+msgid "Rounded portrait"
+msgstr "Rounded portrait"
+
+#. Profile photo shape option
+#: src/routes/builder/$resumeId/-sidebar/left/sections/picture-shapes.ts
+msgid "Rounded square"
+msgstr "Rounded square"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/resume-analysis.tsx
 msgid "Run your first analysis to get a scorecard, strengths, and prioritized suggestions."
@@ -3627,6 +3515,7 @@ msgstr "Run your first analysis to get a scorecard, strengths, and prioritized s
 #. Passkey rename prompt confirm action in authentication settings
 #: src/features/settings/authentication/components/passkeys.tsx
 #: src/hooks/use-form-blocker.tsx
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
 msgid "Save"
 msgstr "Save"
 
@@ -3678,6 +3567,10 @@ msgstr "Save your progress"
 msgid "Saved"
 msgstr "Saved"
 
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
+msgid "Saving…"
+msgstr "Saving…"
+
 #: src/dialogs/auth/enable-two-factor.tsx
 msgid "Scan the QR code below with your preferred authenticator app. You can also copy the secret below and paste it into your app."
 msgstr "Scan the QR code below with your preferred authenticator app. You can also copy the secret below and paste it into your app."
@@ -3727,7 +3620,7 @@ msgstr "Searching the web…"
 msgid "Secret copied to clipboard."
 msgstr "Secret copied to clipboard."
 
-#: src/routes/builder/$resumeId/-components/imported-workspace.tsx
+#: src/routes/builder/$resumeId/-components/design-workspace.tsx
 msgid "Section"
 msgstr "Section"
 
@@ -3749,13 +3642,9 @@ msgstr "See plans"
 msgid "Select a resume"
 msgstr "Select a resume"
 
-#: src/routes/builder/$resumeId/-components/imported-workspace.tsx
+#: src/routes/builder/$resumeId/-components/design-workspace.tsx
 msgid "Select a section to edit"
 msgstr "Select a section to edit"
-
-#: src/routes/agent/index.tsx
-#~ msgid "Select a thread"
-#~ msgstr "Select a thread"
 
 #: src/components/ui/combobox.tsx
 msgid "Select..."
@@ -3810,9 +3699,12 @@ msgid "Shadow Color"
 msgstr "Shadow Color"
 
 #: src/features/resume/builder/ai-changes.ts
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
 msgid "Shadow Width"
 msgstr "Shadow Width"
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
+msgid "Shape"
+msgstr "Shape"
 
 #: src/libs/resume/section.tsx
 msgid "Sharing"
@@ -3955,15 +3847,10 @@ msgid "Single-column with an inline three-column entry header (position · organ
 msgstr "Single-column with an inline three-column entry header (position · organization · period); compact and ATS-friendly, well-suited for Asian resume conventions (CN/JP/KR)."
 
 #: src/dialogs/resume/template/data.ts
-#~ msgid "Single-column with uppercase section headings and a primary-color top rule on every page; polished for executive, consulting, or startup resumes."
-#~ msgstr "Single-column with uppercase section headings and a primary-color top rule on every page; polished for executive, consulting, or startup resumes."
-
-#: src/dialogs/resume/template/data.ts
 msgid "Single-column; polished and serious for senior or enterprise-level positions."
 msgstr "Single-column; polished and serious for senior or enterprise-level positions."
 
 #: src/features/resume/builder/ai-changes.ts
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
 msgid "Size"
 msgstr "Size"
 
@@ -4017,10 +3904,6 @@ msgstr "Something went wrong. Please try again."
 msgid "Sort"
 msgstr "Sort"
 
-#: src/routes/dashboard/resumes/index.tsx
-#~ msgid "Sort by"
-#~ msgstr "Sort by"
-
 #: src/routes/builder/$resumeId/-sidebar/right/sections/information.tsx
 msgid "Source Code"
 msgstr "Source Code"
@@ -4037,9 +3920,9 @@ msgstr "Spacing (Vertical)"
 msgid "Sponsors"
 msgstr "Sponsors"
 
-#. Preset button for setting picture aspect ratio to square
+#. Profile photo shape option
 #: src/components/level/combobox.tsx
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
+#: src/routes/builder/$resumeId/-sidebar/left/sections/picture-shapes.ts
 msgid "Square"
 msgstr "Square"
 
@@ -4085,17 +3968,9 @@ msgstr "Start building your resume from scratch"
 msgid "Start Date"
 msgstr "Start Date"
 
-#: src/dialogs/resume/sections/experience.tsx
-#~ msgid "Start each point with a strong action verb, e.g., \"Led\", \"Built\", \"Improved\"."
-#~ msgstr "Start each point with a strong action verb, e.g., \"Led\", \"Built\", \"Improved\"."
-
 #: src/routes/dashboard/resumes/-components/cards/create-card.tsx
 msgid "Start guided build"
 msgstr "Start guided build"
-
-#: src/routes/agent/index.tsx
-#~ msgid "Start new thread"
-#~ msgstr "Start new thread"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/header.tsx
@@ -4221,10 +4096,6 @@ msgstr "Tags can be used to categorize your resume by keywords."
 msgid "Tailor a few lines to the target role, strongest skills, and evidence."
 msgstr "Tailor a few lines to the target role, strongest skills, and evidence."
 
-#: src/dialogs/resume/sections/experience.tsx
-#~ msgid "Tailor each bullet to skills commonly expected for this role."
-#~ msgstr "Tailor each bullet to skills commonly expected for this role."
-
 #: src/components/section-tips.tsx
 msgid "Tailor the message to the employer and support your fit with one concrete example."
 msgstr "Tailor the message to the employer and support your fit with one concrete example."
@@ -4299,7 +4170,7 @@ msgstr "The command you're looking for doesn't exist."
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/pricing.tsx
 msgid "home.pricing.disclosure"
-msgstr "The free builder is available now. Paid plans are coming soon; the prices below are planned, and no payment is taken."
+msgstr "The free builder is available now. Upgrade to Pro for unlimited imports and AI assistance."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/templates-showcase.tsx
@@ -4432,13 +4303,13 @@ msgstr "This is a URL-friendly name for your resume."
 msgid "This keeps the entire pending update, including other sections. You can then request another change in chat."
 msgstr "This keeps the entire pending update, including other sections. You can then request another change in chat."
 
-#: src/dialogs/resume/import.tsx
-#~ msgid "This may take a few minutes, depending on the response of the AI provider. Please do not close the window or refresh the page."
-#~ msgstr "This may take a few minutes, depending on the response of the AI provider. Please do not close the window or refresh the page."
-
 #: src/libs/error-message.ts
 msgid "This patch no longer matches the current resume version."
 msgstr "This patch no longer matches the current resume version."
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
+msgid "This photo could not be processed. Try another image."
+msgstr "This photo could not be processed. Try another image."
 
 #: src/features/resume/builder/draft.ts
 msgid "This resume is locked and cannot be updated."
@@ -4757,10 +4628,6 @@ msgstr "Update an existing custom section"
 msgid "Update an existing education"
 msgstr "Update an existing education"
 
-#: src/dialogs/resume/sections/experience.tsx
-#~ msgid "Update an existing experience"
-#~ msgstr "Update an existing experience"
-
 #: src/dialogs/resume/sections/interest.tsx
 msgid "Update an existing interest"
 msgstr "Update an existing interest"
@@ -4834,16 +4701,11 @@ msgid "billing.upgrade.title"
 msgstr "Upgrade to Pro"
 
 #: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
-msgid "Upload picture"
-msgstr "Upload picture"
-
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
-msgid "Uploading picture…"
-msgstr "Uploading picture…"
+msgid "Upload photo"
+msgstr "Upload photo"
 
 #. Form field label for the generated public resume link in sharing settings
 #: src/features/resume/builder/ai-changes.ts
-#: src/routes/builder/$resumeId/-sidebar/left/sections/picture.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "URL"
 msgstr "URL"
@@ -5227,6 +5089,10 @@ msgstr "Your resume's public link is currently protected by a password. Share th
 #: src/routes/_home/-sections/donate.tsx
 msgid "Your support ensures the project remains free and accessible for everyone, now and in the future."
 msgstr "Your support ensures the project remains free and accessible for everyone, now and in the future."
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
+msgid "Zoom"
+msgstr "Zoom"
 
 #: src/routes/builder/$resumeId/-components/dock.tsx
 msgid "Zoom in"
