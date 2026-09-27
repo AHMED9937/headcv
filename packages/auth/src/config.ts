@@ -19,6 +19,7 @@ import * as schema from "@headcv/db/schema";
 import { ResetPasswordEmail, VerifyEmail, VerifyEmailChange } from "@headcv/email/templates/auth";
 import { sendEmail } from "@headcv/email/transport";
 import { env, vercelPreviewOrigins } from "@headcv/env/server";
+import { isEmailDomainAllowed } from "@headcv/utils/email-domain";
 import { rateLimitConfig, TRUSTED_IP_HEADERS } from "@headcv/utils/rate-limit";
 import { generateId, toUsername } from "@headcv/utils/string";
 import { isAllowedOAuthRedirectUri } from "@headcv/utils/url-security.node";
@@ -54,8 +55,20 @@ function isCustomOAuthProviderEnabled() {
 	return Boolean(env.OAUTH_CLIENT_ID) && Boolean(env.OAUTH_CLIENT_SECRET) && (hasDiscovery || hasManual);
 }
 
+const isAppleProviderEnabled = Boolean(env.APPLE_CLIENT_ID) && Boolean(env.APPLE_CLIENT_SECRET);
+
 // Previews answer on both the deployment URL and the branch alias.
-const TRUSTED_ORIGINS = getTrustedOrigins(env.APP_URL, vercelPreviewOrigins);
+// Apple posts its OAuth callback (response_mode=form_post) from appleid.apple.com.
+const TRUSTED_ORIGINS = getTrustedOrigins(env.APP_URL, [
+	...vercelPreviewOrigins,
+	...(isAppleProviderEnabled ? ["https://appleid.apple.com"] : []),
+]);
+
+/** Paths that put a new email address on an account, keyed to the body field holding it. */
+const EMAIL_DOMAIN_GUARDED_PATHS: Record<string, "email" | "newEmail"> = {
+	"/sign-up/email": "email",
+	"/change-email": "newEmail",
+};
 const oauthProviderRateLimit = isRateLimitEnabled
 	? rateLimitConfig.betterAuth.oauthProvider
 	: ({
@@ -107,6 +120,22 @@ const getAuthConfig = () => {
 
 		hooks: {
 			before: createAuthMiddleware(async (ctx) => {
+				const emailField = EMAIL_DOMAIN_GUARDED_PATHS[ctx.path];
+				if (emailField) {
+					const body = ctx.body as Record<string, unknown> | undefined;
+					const email = body?.[emailField];
+
+					// Social sign-ups are vouched for by the identity provider; only
+					// self-asserted addresses are held to the trusted-domain allowlist.
+					if (typeof email === "string" && !isEmailDomainAllowed(email, env.SIGNUP_ALLOWED_EMAIL_DOMAINS)) {
+						throw new APIError("BAD_REQUEST", {
+							code: "EMAIL_DOMAIN_NOT_ALLOWED",
+							message: `Please use an email from a trusted provider (${env.SIGNUP_ALLOWED_EMAIL_DOMAINS.join(", ")}), or continue with Google or Apple.`,
+						});
+					}
+					return;
+				}
+
 				if (!ctx.path.includes("/oauth2/register")) return;
 
 				const body = ctx.body as { redirect_uris?: unknown } | undefined;
@@ -202,7 +231,7 @@ const getAuthConfig = () => {
 		account: {
 			accountLinking: {
 				enabled: true,
-				trustedProviders: ["google", "github", "linkedin"],
+				trustedProviders: ["google", "apple", "github", "linkedin"],
 			},
 		},
 
@@ -217,6 +246,20 @@ const getAuthConfig = () => {
 					providerName: "Google",
 					getName: (profile, context) => profile.name ?? context.emailLocalPart,
 					getImage: (profile) => profile.picture,
+				}),
+			},
+
+			apple: {
+				enabled: isAppleProviderEnabled,
+				disableSignUp: env.FLAG_DISABLE_SIGNUPS,
+				disableImplicitSignUp: true,
+				clientId: env.APPLE_CLIENT_ID ?? "",
+				clientSecret: env.APPLE_CLIENT_SECRET ?? "",
+				appBundleIdentifier: env.APPLE_APP_BUNDLE_IDENTIFIER,
+				mapProfileToUser: createProfileMapper({
+					providerName: "Apple",
+					// Apple only sends the name on the first consent; Better Auth folds it into profile.name.
+					getName: (profile, context) => profile.name || context.emailLocalPart,
 				}),
 			},
 

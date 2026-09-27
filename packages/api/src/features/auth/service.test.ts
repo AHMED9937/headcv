@@ -3,6 +3,9 @@ import { describe, expect, it, vi } from "vitest";
 const envMock = vi.hoisted(() => ({
 	GOOGLE_CLIENT_ID: undefined as string | undefined,
 	GOOGLE_CLIENT_SECRET: undefined as string | undefined,
+	APPLE_CLIENT_ID: undefined as string | undefined,
+	APPLE_CLIENT_SECRET: undefined as string | undefined,
+	FLAG_ENABLE_PASSKEYS: false,
 	GITHUB_CLIENT_ID: undefined as string | undefined,
 	GITHUB_CLIENT_SECRET: undefined as string | undefined,
 	LINKEDIN_CLIENT_ID: undefined as string | undefined,
@@ -23,6 +26,9 @@ const { authService } = await import("./service");
 const resetEnv = () => {
 	envMock.GOOGLE_CLIENT_ID = undefined;
 	envMock.GOOGLE_CLIENT_SECRET = undefined;
+	envMock.APPLE_CLIENT_ID = undefined;
+	envMock.APPLE_CLIENT_SECRET = undefined;
+	envMock.FLAG_ENABLE_PASSKEYS = false;
 	envMock.GITHUB_CLIENT_ID = undefined;
 	envMock.GITHUB_CLIENT_SECRET = undefined;
 	envMock.LINKEDIN_CLIENT_ID = undefined;
@@ -33,17 +39,24 @@ const resetEnv = () => {
 };
 
 describe("authService.providers.list", () => {
-	it("always includes credential and passkey providers", () => {
+	it("always includes the credential provider", () => {
 		resetEnv();
-		const providers = authService.providers.list();
-		expect(providers.credential).toBe("Password");
-		expect(providers.passkey).toBe("Passkey");
+		expect(authService.providers.list().credential).toBe("Password");
+	});
+
+	it("hides passkeys unless FLAG_ENABLE_PASSKEYS is set", () => {
+		resetEnv();
+		expect(authService.providers.list().passkey).toBeUndefined();
+
+		envMock.FLAG_ENABLE_PASSKEYS = true;
+		expect(authService.providers.list().passkey).toBe("Passkey");
 	});
 
 	it("omits social providers when credentials are not configured", () => {
 		resetEnv();
 		const providers = authService.providers.list();
 		expect(providers.google).toBeUndefined();
+		expect(providers.apple).toBeUndefined();
 		expect(providers.github).toBeUndefined();
 		expect(providers.linkedin).toBeUndefined();
 		expect(providers.custom).toBeUndefined();
@@ -62,6 +75,19 @@ describe("authService.providers.list", () => {
 		envMock.GOOGLE_CLIENT_ID = "id";
 		const providers = authService.providers.list();
 		expect(providers.google).toBeUndefined();
+	});
+
+	it("includes Apple when both client id and secret are present", () => {
+		resetEnv();
+		envMock.APPLE_CLIENT_ID = "com.headcv.web";
+		envMock.APPLE_CLIENT_SECRET = "signed-jwt";
+		expect(authService.providers.list().apple).toBe("Apple");
+	});
+
+	it("does NOT include Apple when only the client id is set", () => {
+		resetEnv();
+		envMock.APPLE_CLIENT_ID = "com.headcv.web";
+		expect(authService.providers.list().apple).toBeUndefined();
 	});
 
 	it("includes GitHub when both client id and secret are present", () => {

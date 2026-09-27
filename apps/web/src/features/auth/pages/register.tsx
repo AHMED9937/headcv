@@ -2,14 +2,15 @@ import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ArrowRightIcon, EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useToggle } from "usehooks-ts";
 import z from "zod";
 import { Alert, AlertDescription, AlertTitle } from "@headcv/ui/components/alert";
 import { Button } from "@headcv/ui/components/button";
-import { FormControl, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
+import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
 import { Input } from "@headcv/ui/components/input";
+import { ANY_EMAIL_DOMAIN, isEmailDomainAllowed } from "@headcv/utils/email-domain";
 import { authClient } from "@/libs/auth/client";
 import { useAppForm } from "@/libs/tanstack-form";
 import { SocialAuth } from "../components/social-auth";
@@ -19,29 +20,40 @@ type PendingPlan = "monthly" | "yearly" | "trial";
 /** Session-storage key used to persist plan intent across email verification redirects. */
 const PENDING_PLAN_KEY = "headcv_pending_plan";
 
-const formSchema = z.object({
-	name: z.string().min(3).max(64),
-	username: z
-		.string()
-		.min(3)
-		.max(64)
-		.trim()
-		.toLowerCase()
-		.regex(/^[a-z0-9._-]+$/, {
-			message: "Username can only contain lowercase letters, numbers, dots, hyphens and underscores.",
-		}),
-	email: z.email().toLowerCase(),
-	password: z.string().min(6).max(64),
-});
+const createFormSchema = (allowedEmailDomains: readonly string[]) =>
+	z.object({
+		name: z.string().min(3).max(64),
+		username: z
+			.string()
+			.min(3)
+			.max(64)
+			.trim()
+			.toLowerCase()
+			.regex(/^[a-z0-9._-]+$/, {
+				message: "Username can only contain lowercase letters, numbers, dots, hyphens and underscores.",
+			}),
+		// Mirrors the server allowlist for instant feedback; the server remains the enforcer.
+		email: z
+			.email()
+			.toLowerCase()
+			.refine((email) => isEmailDomainAllowed(email, allowedEmailDomains), {
+				message: `Please use an email from a trusted provider (${allowedEmailDomains.join(", ")}).`,
+			}),
+		password: z.string().min(6).max(64),
+	});
 
 type Props = {
 	disableEmailAuth: boolean;
+	signupEmailDomains: string[];
 	pendingPlan?: PendingPlan;
 };
 
-export function RegisterPage({ disableEmailAuth, pendingPlan }: Props) {
+export function RegisterPage({ disableEmailAuth, signupEmailDomains, pendingPlan }: Props) {
 	const [submitted, setSubmitted] = useState(false);
 	const [showPassword, toggleShowPassword] = useToggle(false);
+
+	const formSchema = useMemo(() => createFormSchema(signupEmailDomains), [signupEmailDomains]);
+	const restrictsEmailDomains = !signupEmailDomains.includes(ANY_EMAIL_DOMAIN);
 
 	const form = useAppForm({
 		defaultValues: { name: "", username: "", email: "", password: "" },
@@ -90,23 +102,6 @@ export function RegisterPage({ disableEmailAuth, pendingPlan }: Props) {
 				<h1 className="font-semibold text-2xl tracking-tight">
 					<Trans>Create a new account</Trans>
 				</h1>
-
-				<div className="text-muted-foreground">
-					<Trans>
-						Already have an account?{" "}
-						<Button
-							variant="link"
-							nativeButton={false}
-							className="h-auto gap-1.5 px-1! py-0"
-							render={
-								<Link to="/auth/login" search={pendingPlan ? { plan: pendingPlan } : {}}>
-									<Trans comment="Call-to-action link from registration page to login page">Sign in now</Trans>{" "}
-									<ArrowRightIcon />
-								</Link>
-							}
-						/>
-					</Trans>
-				</div>
 			</div>
 
 			{!disableEmailAuth && (
@@ -188,7 +183,7 @@ export function RegisterPage({ disableEmailAuth, pendingPlan }: Props) {
 											autoComplete="section-register email"
 											placeholder={t({
 												comment: "Example email placeholder on registration form",
-												message: "john.doe@example.com",
+												message: "john.doe@gmail.com",
 											})}
 											className="lowercase"
 											name={field.name}
@@ -199,6 +194,13 @@ export function RegisterPage({ disableEmailAuth, pendingPlan }: Props) {
 									}
 								/>
 								<FormMessage errors={field.state.meta.errors} />
+								{restrictsEmailDomains && (
+									<FormDescription>
+										<Trans comment="Hint under the registration email field listing accepted email domains">
+											Use an address from: {signupEmailDomains.join(", ")}
+										</Trans>
+									</FormDescription>
+								)}
 							</FormItem>
 						)}
 					</form.Field>
@@ -249,14 +251,41 @@ export function RegisterPage({ disableEmailAuth, pendingPlan }: Props) {
 						)}
 					</form.Field>
 
-					<Button type="submit" className="w-full">
-						<Trans comment="Primary action button label on registration form">Sign up</Trans>
-					</Button>
+					<div className="space-y-3">
+						<Button type="submit" className="w-full">
+							<Trans comment="Primary action button label on registration form">Sign up</Trans>
+						</Button>
+
+						<SignInPrompt pendingPlan={pendingPlan} />
+					</div>
 				</form>
 			)}
 
 			<SocialAuth requestSignUp pendingPlan={pendingPlan} />
+
+			{disableEmailAuth && <SignInPrompt pendingPlan={pendingPlan} />}
 		</>
+	);
+}
+
+function SignInPrompt({ pendingPlan }: { pendingPlan?: PendingPlan }) {
+	return (
+		<p className="text-center text-muted-foreground text-sm">
+			<Trans>
+				Already have an account?{" "}
+				<Button
+					variant="link"
+					nativeButton={false}
+					className="h-auto gap-1.5 px-1! py-0"
+					render={
+						<Link to="/auth/login" search={pendingPlan ? { plan: pendingPlan } : {}}>
+							<Trans comment="Call-to-action link from registration page to login page">Sign in now</Trans>{" "}
+							<ArrowRightIcon />
+						</Link>
+					}
+				/>
+			</Trans>
+		</p>
 	);
 }
 

@@ -2,6 +2,7 @@ import type { AuthProvider } from "@headcv/auth/types";
 import type { ReactNode } from "react";
 import { t } from "@lingui/core/macro";
 import {
+	AppleLogoIcon,
 	FingerprintIcon,
 	GithubLogoIcon,
 	GoogleLogoIcon,
@@ -40,6 +41,12 @@ export function getProviderName(providerId: AuthProvider): string {
 				message: "Google",
 			}),
 		)
+		.with("apple", () =>
+			t({
+				comment: "Authentication provider display name in account settings",
+				message: "Apple",
+			}),
+		)
 		.with("github", () =>
 			t({
 				comment: "Authentication provider display name in account settings",
@@ -69,6 +76,7 @@ export function getProviderIcon(providerId: AuthProvider): ReactNode {
 		.with("credential", () => <PasswordIcon />)
 		.with("passkey", () => <FingerprintIcon />)
 		.with("google", () => <GoogleLogoIcon />)
+		.with("apple", () => <AppleLogoIcon />)
 		.with("github", () => <GithubLogoIcon />)
 		.with("linkedin", () => <LinkedinLogoIcon />)
 		.with("custom", () => <VaultIcon />)

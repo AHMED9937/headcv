@@ -51,6 +51,11 @@ export const env = createEnv({
 		GOOGLE_CLIENT_ID: z.string().min(1).optional(),
 		GOOGLE_CLIENT_SECRET: z.string().min(1).optional(),
 
+		// Social Auth (Apple). The client secret is a signed JWT that Apple caps at 6 months.
+		APPLE_CLIENT_ID: z.string().min(1).optional(),
+		APPLE_CLIENT_SECRET: z.string().min(1).optional(),
+		APPLE_APP_BUNDLE_IDENTIFIER: z.string().min(1).optional(),
+
 		// Social Auth (GitHub)
 		GITHUB_CLIENT_ID: z.string().min(1).optional(),
 		GITHUB_CLIENT_SECRET: z.string().min(1).optional(),
@@ -72,6 +77,28 @@ export const env = createEnv({
 			.min(1)
 			.transform((value) => value.split(" "))
 			.default(["openid", "profile", "email"]),
+
+		// Email/password sign-ups are limited to these mailbox domains ("*" allows any domain).
+		SIGNUP_ALLOWED_EMAIL_DOMAINS: z
+			.string()
+			.min(1)
+			.transform((value) =>
+				value
+					.split(",")
+					.map((domain) => domain.trim().toLowerCase())
+					.filter(Boolean),
+			)
+			.default([
+				"gmail.com",
+				"googlemail.com",
+				"outlook.com",
+				"hotmail.com",
+				"live.com",
+				"msn.com",
+				"icloud.com",
+				"me.com",
+				"mac.com",
+			]),
 
 		// Email (SMTP)
 		SMTP_HOST: z.string().min(1).optional(),
@@ -115,6 +142,7 @@ export const env = createEnv({
 		// Feature Flags
 		FLAG_DISABLE_SIGNUPS: z.stringbool().default(false),
 		FLAG_DISABLE_EMAIL_AUTH: z.stringbool().default(false),
+		FLAG_ENABLE_PASSKEYS: z.stringbool().default(false),
 		FLAG_DISABLE_IMAGE_PROCESSING: z.stringbool().default(false),
 		FLAG_ALLOW_UNSAFE_AI_BASE_URL: z.stringbool().default(false),
 		FLAG_ALLOW_UNSAFE_OAUTH_REDIRECT_URI: z.stringbool().default(false),

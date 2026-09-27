@@ -7,6 +7,7 @@
 		"./color": "./src/color.ts",
 		"./date": "./src/date.ts",
 		"./diff": "./src/diff.ts",
+		"./email-domain": "./src/email-domain.ts",
 		"./field": "./src/field.ts",
 		"./file": "./src/file.ts",
 		"./html": "./src/html.ts",

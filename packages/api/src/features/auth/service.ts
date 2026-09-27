@@ -10,9 +10,11 @@ export type ProviderList = Partial<Record<AuthProvider, string>>;
 
 const providers = {
 	list: (): ProviderList => {
-		const providers: ProviderList = { credential: "Password", passkey: "Passkey" };
+		const providers: ProviderList = { credential: "Password" };
 
+		if (env.FLAG_ENABLE_PASSKEYS) providers.passkey = "Passkey";
 		if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) providers.google = "Google";
+		if (env.APPLE_CLIENT_ID && env.APPLE_CLIENT_SECRET) providers.apple = "Apple";
 		if (env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET) providers.github = "GitHub";
 		if (env.LINKEDIN_CLIENT_ID && env.LINKEDIN_CLIENT_SECRET) providers.linkedin = "LinkedIn";
 		if (env.OAUTH_CLIENT_ID && env.OAUTH_CLIENT_SECRET) providers.custom = env.OAUTH_PROVIDER_NAME ?? "Custom OAuth";

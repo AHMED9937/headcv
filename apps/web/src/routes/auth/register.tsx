@@ -20,5 +20,11 @@ function RouteComponent() {
 	const { flags } = Route.useRouteContext();
 	const { plan } = Route.useSearch();
 
-	return <RegisterPage disableEmailAuth={flags.disableEmailAuth} pendingPlan={plan} />;
+	return (
+		<RegisterPage
+			disableEmailAuth={flags.disableEmailAuth}
+			signupEmailDomains={flags.signupEmailDomains}
+			pendingPlan={plan}
+		/>
+	);
 }
