@@ -3,7 +3,7 @@
 	"tags": ["-lintignore"],
 	"workspaces": {
 		".": {
-			"ignoreFiles": [".ncurc.cjs"]
+			"ignoreFiles": [".ncurc.cjs", ".devin/**"]
 		},
 		"apps/web": {
 			"entry": ["lingui.config.ts", "vite.config.ts", "vitest.config.ts"],
@@ -16,16 +16,20 @@
 		},
 		"apps/server": {
 			"ignoreDependencies": [
+				"@ai-sdk/anthropic",
+				"@ai-sdk/google",
+				"@ai-sdk/openai",
+				"@ai-sdk/openai-compatible",
 				"@aws-sdk/client-s3",
 				"@better-auth/api-key",
 				"@better-auth/drizzle-adapter",
 				"@better-auth/infra",
 				"@better-auth/passkey",
+				"@headcv/ai",
 				"@orpc/experimental-ratelimit",
-				"@react-pdf/renderer",
 				"@sindresorhus/slugify",
 				"@t3-oss/env-core",
-				"@uiw/color-convert",
+				"ai",
 				"bcrypt",
 				"cjk-regex",
 				"deepmerge-ts",
@@ -33,17 +37,29 @@
 				"dotenv",
 				"drizzle-zod",
 				"es-toolkit",
+				"esbuild",
 				"fast-json-patch",
+				"ioredis",
+				"jsonrepair",
 				"node-html-parser",
 				"nodemailer",
+				"ollama-ai-provider-v2",
 				"phosphor-icons-react-pdf",
 				"react-email",
 				"react-pdf-html",
+				"resumable-stream",
 				"sharp",
 				"ts-pattern",
 				"unique-names-generator",
 				"uuid"
-			]
+			],
+			"entry": ["src/vercel.ts"]
+		},
+		"tooling": {
+			"entry": ["*.mjs"]
+		},
+		"packages/api": {
+			"entry": ["scripts/*.mjs"]
 		}
 	},
 	"ignoreDependencies": ["@headcv/config", "npm-check-updates"]

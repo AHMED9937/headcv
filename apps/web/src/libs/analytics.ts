@@ -8,7 +8,7 @@
  * - If no analytics provider is configured, events are logged to console.debug in development.
  */
 
-export type LandingEvent =
+type LandingEvent =
 	| { name: "landing_view"; properties?: Record<string, never> }
 	| { name: "landing_cta_click"; properties: { cta: "create_my_cv" } }
 	| { name: "language_select"; properties: { locale: string } }

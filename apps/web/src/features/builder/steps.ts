@@ -86,7 +86,7 @@ export function isStepComplete(stepId: BuilderStepId, resume: Resume): boolean {
 	}
 }
 
-export function getSkippedSteps(resume: Resume): BuilderStepId[] {
+function getSkippedSteps(resume: Resume): BuilderStepId[] {
 	return (resume.data.metadata?.skippedSteps as BuilderStepId[]) ?? [];
 }
 
@@ -102,10 +102,6 @@ export function getLastIncompleteStep(resume: Resume): BuilderStepId {
 	}
 
 	return BUILDER_STEPS[BUILDER_STEPS.length - 1]?.id;
-}
-
-export function getFirstStep(): BuilderStepId {
-	return BUILDER_STEPS[0]?.id;
 }
 
 export function getNextStep(stepId: BuilderStepId): BuilderStepId | undefined {

@@ -106,10 +106,16 @@ writeFileSync(
 	}),
 );
 
-// Apply pending database migrations for production deploys only, after everything
-// above built successfully. The serverless entry never runs the startup migrator,
-// so this is the only automatic path; a failure fails the deploy and the previous
-// version stays live. Migrations must stay additive (expand, then contract later).
-if (process.env.VERCEL_ENV === "production") {
+// Apply pending database migrations after everything above built successfully.
+// The serverless entry never runs the startup migrator, so this is the only
+// automatic path; a failure fails the deploy and the previous version stays live.
+// Migrations must stay additive (expand, then contract later).
+// Previews migrate only when MIGRATE_PREVIEW_DATABASE=true, which must be set only
+// once Neon gives each preview its own database branch: without branching, a
+// preview's DATABASE_URL is the production database.
+const shouldMigrate =
+	process.env.VERCEL_ENV === "production" ||
+	(process.env.VERCEL_ENV === "preview" && process.env.MIGRATE_PREVIEW_DATABASE === "true");
+if (shouldMigrate) {
 	execSync("pnpm --filter @headcv/db exec drizzle-kit migrate", { cwd: root, stdio: "inherit", shell: true });
 }

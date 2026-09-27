@@ -3,6 +3,7 @@ import { createEnv } from "@t3-oss/env-core";
 import { config } from "dotenv";
 import { z } from "zod";
 import { findWorkspaceRoot } from "@headcv/utils/monorepo.node";
+import { getVercelPreviewOrigins, resolveAppUrl } from "./vercel";
 
 const workspaceRoot = findWorkspaceRoot();
 
@@ -21,6 +22,12 @@ const stripQuotes = (value: string | undefined) => {
 const runtimeEnv = Object.fromEntries(
 	Object.entries(process.env).map(([key, value]) => [key, typeof value === "string" ? stripQuotes(value) : value]),
 );
+
+// Vercel previews get a new URL per deployment, so APP_URL is derived there instead of pinned.
+runtimeEnv.APP_URL = resolveAppUrl(runtimeEnv);
+
+/** Extra origins a Vercel preview answers on; empty everywhere else. */
+export const vercelPreviewOrigins = getVercelPreviewOrigins(runtimeEnv);
 
 export const env = createEnv({
 	server: {

@@ -1,4 +1,4 @@
-export function getTrustedOrigins(appUrl: string): string[] {
+export function getTrustedOrigins(appUrl: string, additionalOrigins: readonly string[] = []): string[] {
 	const normalizeOrigin = (origin: string): string => origin.replace(/\/$/, "");
 	const trustedOrigins = new Set<string>([
 		"http://localhost:3000",
@@ -15,6 +15,8 @@ export function getTrustedOrigins(appUrl: string): string[] {
 		configuredUrl.hostname = loopbackAlias;
 		trustedOrigins.add(normalizeOrigin(configuredUrl.origin));
 	}
+
+	for (const origin of additionalOrigins) trustedOrigins.add(normalizeOrigin(new URL(origin).origin));
 
 	return Array.from(trustedOrigins);
 }

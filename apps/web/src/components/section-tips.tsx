@@ -1,7 +1,7 @@
 import { t } from "@lingui/core/macro";
 import { TipPopover } from "./tip-popover";
 
-export function getSectionTips(type: string): string[] {
+function getSectionTips(type: string): string[] {
 	switch (type) {
 		case "basics":
 			return [t`Keep contact details current and professional; include only links you actively maintain.`];

@@ -10,13 +10,13 @@ export type PdfGenerationRequest = {
 	sectionMarkerPrefix?: string;
 };
 
-export type PdfGenerationSuccess = {
+type PdfGenerationSuccess = {
 	id: number;
 	ok: true;
 	bytes: ArrayBuffer;
 };
 
-export type PdfGenerationFailure = {
+type PdfGenerationFailure = {
 	id: number;
 	ok: false;
 	error: {

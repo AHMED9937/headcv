@@ -14,6 +14,14 @@ describe("getTrustedOrigins", () => {
 		);
 	});
 
+	it("trusts additional origins such as a Vercel preview's branch alias", () => {
+		expect(
+			getTrustedOrigins("https://headcv-abc123-team.vercel.app", ["https://headcv-git-feature-team.vercel.app/"]),
+		).toEqual(
+			expect.arrayContaining(["https://headcv-abc123-team.vercel.app", "https://headcv-git-feature-team.vercel.app"]),
+		);
+	});
+
 	it("does not add a loopback alias for non-localhost app URLs", () => {
 		expect(getTrustedOrigins("https://example.com")).not.toContain("https://localhost");
 	});

@@ -1,7 +1,6 @@
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
-	CheckCircleIcon,
 	DownloadSimpleIcon,
 	FileArrowUpIcon,
 	FileTextIcon,
@@ -98,43 +97,6 @@ export function Features() {
 						</div>
 					))}
 				</div>
-			</div>
-		</section>
-	);
-}
-
-export function FreePromise() {
-	return (
-		<section aria-labelledby="promise-heading" className="border-y bg-secondary/40 px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-			<div className="mx-auto grid max-w-5xl items-center gap-8 md:grid-cols-2 md:gap-16">
-				<div className="text-start">
-					<p className="mb-3 font-semibold text-primary text-xs uppercase tracking-widest rtl:tracking-normal">
-						<Trans id="home.promise.eyebrow">A clear start</Trans>
-					</p>
-					<h2 id="promise-heading" className="font-bold font-display text-3xl text-primary sm:text-4xl">
-						<Trans id="home.promise.title">Your resume. No surprises.</Trans>
-					</h2>
-					<p className="mt-4 text-muted-foreground leading-relaxed">
-						<Trans id="home.promise.text">
-							Build and download your resume for free today. Pro is coming later, with pricing shown upfront.
-						</Trans>
-					</p>
-				</div>
-				<ul className="rounded-2xl border bg-card p-6 sm:p-8">
-					{[
-						t({ id: "home.promise.export", message: "Free PDF export" }),
-						t({ id: "home.noWatermark", message: "No watermarks" }),
-						t({ id: "home.promise.charge", message: "No automatic charges" }),
-					].map((text) => (
-						<li
-							key={text}
-							className="flex items-center gap-3 border-b py-4 text-start font-medium first:pt-0 last:border-0 last:pb-0"
-						>
-							<CheckCircleIcon aria-hidden="true" className="size-5 shrink-0 text-primary" />
-							{text}
-						</li>
-					))}
-				</ul>
 			</div>
 		</section>
 	);

@@ -27,7 +27,6 @@
 		"@aws-sdk/client-s3": "^3.1053.0",
 		"@headcv/ai": "workspace:*",
 		"@headcv/auth": "workspace:*",
-		"@headcv/content": "workspace:*",
 		"@headcv/db": "workspace:*",
 		"@headcv/env": "workspace:*",
 		"@headcv/pdf": "workspace:*",

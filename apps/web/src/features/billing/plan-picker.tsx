@@ -8,7 +8,7 @@ import { Button } from "@headcv/ui/components/button";
 import { cn } from "@headcv/utils/style";
 import { useCheckout } from "./use-subscription";
 
-export const PRO_PRICES = { monthly: 20, yearly: 5, yearlyTotal: 60, trial: 3 } as const;
+const PRO_PRICES = { monthly: 20, yearly: 5, yearlyTotal: 60, trial: 3 } as const;
 
 export const getProFeatures = () => [
 	t({ id: "home.pro.resumes", message: "Unlimited resumes for every opportunity" }),

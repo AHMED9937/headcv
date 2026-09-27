@@ -54,7 +54,7 @@ const getBuiltInSection = (sectionId: string, data: ResumeData): ItemSectionLike
 	return data.sections[sectionId as SectionType] as ItemSectionLike;
 };
 
-export const isVisibleLayoutSection = (sectionId: string, data: ResumeData): boolean => {
+const isVisibleLayoutSection = (sectionId: string, data: ResumeData): boolean => {
 	if (sectionId === "summary") return !data.summary.hidden && data.summary.content.trim().length > 0;
 
 	const builtInSection = getBuiltInSection(sectionId, data);

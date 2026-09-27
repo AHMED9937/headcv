@@ -135,11 +135,6 @@ msgstr "تجربة لمدة 7 أيام"
 msgid "home.template.boldText"
 msgstr "صورة شخصية جريئة بلمسة ذهبية دافئة."
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/features.tsx
-msgid "home.promise.eyebrow"
-msgstr "بداية واضحة"
-
 #: src/features/settings/pages/profile.tsx
 msgid "A confirmation link has been sent to your current email address. Please check your inbox to confirm the change."
 msgstr "تم إرسال رابط تأكيد إلى عنوان بريدك الإلكتروني الحالي. يُرجى التحقق من بريدك الوارد لتأكيد التغيير."
@@ -153,10 +148,6 @@ msgstr "سيرة ذاتية تعكس شخصيتك"
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "A link to your resume has been copied to clipboard."
 msgstr "تم نسخ رابط إلى سيرتك الذاتية إلى الحافظة."
-
-#: src/routes/_home/-sections/testimonials.tsx
-msgid "A lot of people have written to me over the years to share their experiences with HeadCV and how it has helped them, and I never get tired of reading them. If you have a story to share, let me know by sending me an email at <0>{email}</0>."
-msgstr "كتب إليّ الكثير من الأشخاص على مر السنين لمشاركة تجاربهم مع HeadCV وكيف ساعدتهم، ولا أشعر بالملل أبدًا من قراءتها. إذا كان لديك قصة تود مشاركتها، فأخبرني عن طريق إرسال بريد إلكتروني إلى <0>{email}</0>."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/templates-showcase.tsx
@@ -347,14 +338,6 @@ msgstr "الذكاء الاصطناعي"
 msgid "AI agent setup is not available yet."
 msgstr "إعداد وكيل الذكاء الاصطناعي غير متاح بعد."
 
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "AI agent setup is unavailable right now. Please try again in a moment."
-msgstr "إعداد وكيل الذكاء الاصطناعي غير متاح حاليًا. يرجى المحاولة مرة أخرى بعد قليل."
-
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "AI agent setup is unavailable until REDIS_URL is configured."
-msgstr "إعداد وكيل الذكاء الاصطناعي غير متاح حتى يتم ضبط REDIS_URL."
-
 #. js-lingui-explicit-id
 #: src/features/billing/plan-picker.tsx
 msgid "home.pro.ai"
@@ -384,14 +367,6 @@ msgstr "محادثة الذكاء الاصطناعي"
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.usage.chats"
 msgstr "محادثات الذكاء الاصطناعي"
-
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "AI provider is not configured in the environment."
-msgstr "مزوّد الذكاء الاصطناعي غير مُعدّ في البيئة."
-
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "AI provider is not configured."
-msgstr "مزوّد الذكاء الاصطناعي غير مُعدّ."
 
 #: src/features/resume/builder/ai-review.tsx
 #: src/libs/resume/section.tsx
@@ -461,10 +436,6 @@ msgstr "أي شخص لديه عنوان URL العام للسيرة الذاتي
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "Anyone with the link can view and download the resume."
 msgstr "يمكن لأي شخص لديه الرابط عرض السيرة الذاتية وتنزيلها."
-
-#: src/routes/_home/-sections/statistics.tsx
-msgid "Application Statistics"
-msgstr "إحصاءات التطبيق"
 
 #: src/routes/agent/-components/patch-tool-card.tsx
 msgid "Applied"
@@ -615,10 +586,6 @@ msgstr "العودة إلى الإدخالات"
 msgid "Back to Login"
 msgstr "العودة إلى تسجيل الدخول"
 
-#: src/routes/agent/-components/thread-sidebar.tsx
-msgid "Back to resumes"
-msgstr "العودة إلى السير الذاتية"
-
 #: src/routes/builder/$resumeId/-components/guided-editor.tsx
 msgid "Back to step"
 msgstr "العودة إلى الخطوة"
@@ -660,10 +627,6 @@ msgstr "تُدفع <0>{0}</0> مرة واحدة سنويًا — أقل من ث�
 msgid "home.pricing.period"
 msgstr "فترة الفوترة"
 
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "Blank draft"
-msgstr "مسودة فارغة"
-
 #: src/routes/builder/$resumeId/-sidebar/right/sections/typography.tsx
 msgctxt "Body Text (paragraphs, lists, etc.)"
 msgid "Body"
@@ -698,11 +661,6 @@ msgstr "أنشئ سيرة ذاتية احترافية مجانًا"
 #: src/routes/__root.tsx
 msgid "Build a Professional CV in Minutes"
 msgstr "أنشئ سيرة ذاتية احترافية في دقائق"
-
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/features.tsx
-msgid "home.promise.text"
-msgstr "أنشئ وحمّل سيرتك الذاتية مجانًا اليوم. النسخة الاحترافية قادمة، وسنُعلن عن الأسعار بوضوح."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/pricing.tsx
@@ -867,14 +825,6 @@ msgstr "اختر صيغة"
 msgid "Choose a preset or custom shade."
 msgstr "اختر لوناً محدداً مسبقاً أو مخصصاً."
 
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "Choose a resume"
-msgstr "اختر سيرة ذاتية"
-
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "Choose a resume draft to get started."
-msgstr "اختر مسودة سيرة ذاتية للبدء."
-
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/tools.tsx
 msgid "home.steps.choose"
@@ -1006,10 +956,6 @@ msgstr "تابع من حيث توقفت"
 #: src/dialogs/resume/import.tsx
 msgid "Continue where you left off by importing an existing resume from a PDF or Microsoft Word file."
 msgstr "تابع من حيث توقفت باستيراد سيرة ذاتية موجودة من ملف PDF أو Microsoft Word."
-
-#: src/routes/_home/-sections/donate.tsx
-msgid "Contributions fund bug fixes, security updates, and continuous improvements to keep the app running smoothly."
-msgstr "تموّل المساهمات إصلاحات الأخطاء وتحديثات الأمان والتحسينات المستمرة للحفاظ على عمل التطبيق بسلاسة."
 
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Conversation copied."
@@ -1200,10 +1146,6 @@ msgstr "أنشئ حسابًا عندما تكون جاهزًا للاحتفاظ 
 msgid "home.plan.resume"
 msgstr "أنشئ وحرّر سيرتك الذاتية"
 
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "Create from scratch"
-msgstr "أنشئ من الصفر"
-
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/final-cta.tsx
 #: src/routes/_home/-sections/hero.tsx
@@ -1295,10 +1237,6 @@ msgstr "سمة داكنة"
 #: src/features/resume/builder/ai-changes.ts
 msgid "Date"
 msgstr "التاريخ"
-
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Decrease zoom"
-msgstr "تقليل التكبير"
 
 #: src/dialogs/resume/sections/education.tsx
 #: src/features/resume/builder/ai-changes.ts
@@ -1445,7 +1383,6 @@ msgid "Download Microsoft Word"
 msgstr "تنزيل Microsoft Word"
 
 #: src/features/resume/public/public-resume.tsx
-#: src/routes/agent/-components/thread-workspace.tsx
 #: src/routes/builder/$resumeId/-components/dock.tsx
 msgid "Download PDF"
 msgstr "تنزيل PDF"
@@ -1482,10 +1419,6 @@ msgstr "اسحب الصورة لتغيير موضعها"
 #: src/routes/dashboard/resumes/-components/menus/dropdown-menu.tsx
 msgid "Duplicate"
 msgstr "استنساخ"
-
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "Duplicate as AI Draft"
-msgstr "نسخ كمسودة ذكاء اصطناعي"
 
 #: src/dialogs/resume/index.tsx
 msgid "Duplicate Resume"
@@ -1639,10 +1572,6 @@ msgstr "أدخِل كلمة المرور الخاصة بك لتأكيد إعدا
 msgid "Enter your password to disable two-factor authentication. Your account will be less secure without 2FA enabled."
 msgstr "أدخِل كلمة المرور الخاصة بك لتعطيل المصادقة الثنائية. سيكون حسابك أقل أمانًا بدون تمكين المصادقة الثنائية (2FA)."
 
-#: src/routes/_home/-sections/donate.tsx
-msgid "Every contribution, big or small, makes a huge difference to the project.<0/>Thank you for your support!"
-msgstr "كل مساهمة، كبيرة كانت أم صغيرة، تُحدث فارقًا كبيرًا في المشروع.<0/>شكرًا لك على دعمك!"
-
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/pricing.tsx
 msgid "home.offer.description"
@@ -1681,10 +1610,6 @@ msgstr "استكشف"
 #: src/routes/_home/-sections/templates-showcase.tsx
 msgid "home.templates.all"
 msgstr "استكشف جميع القوالب ({count})"
-
-#: src/routes/_home/-sections/templates.tsx
-msgid "Explore our diverse selection of templates, each designed to fit different styles, professions, and personalities. HeadCV currently offers 12 templates, with more on the way."
-msgstr "استكشف مجموعتنا المتنوعة من القوالب، وقد صُمِّم كل واحد منها ليناسب الأساليب والمهن والشخصيات المختلفة. يقدّم HeadCV حاليًا 12 قالبًا، مع المزيد في الطريق."
 
 #: src/features/builder/steps.ts
 #: src/libs/resume/section.tsx
@@ -1804,10 +1729,6 @@ msgstr "فشل تسجيل الدخول. يُرجى المحاولة مرة أخ�
 #: src/features/user/dropdown-menu.tsx
 msgid "Failed to sign out. Please try again."
 msgstr "فشل تسجيل الخروج. يرجى المحاولة مرة أخرى."
-
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "Failed to start agent thread."
-msgstr "فشل بدء تشغيل سلسلة الوكيل."
 
 #: src/features/resume/builder/ai-assistant-panel.tsx
 msgid "Failed to start AI chat."
@@ -1969,11 +1890,6 @@ msgid "home.hero.eyebrow"
 msgstr "منشئ سيرة ذاتية مجاني عبر الإنترنت"
 
 #. js-lingui-explicit-id
-#: src/routes/_home/-sections/features.tsx
-msgid "home.promise.export"
-msgstr "تصدير PDF مجاني"
-
-#. js-lingui-explicit-id
 #: src/features/billing/plan-badge.tsx
 msgid "billing.badge.free"
 msgstr "الخطة المجانية"
@@ -2095,10 +2011,6 @@ msgstr "جوجل"
 msgid "Grade"
 msgstr "التقدير"
 
-#: src/routes/_home/-sections/donate.tsx
-msgid "Grow the Team"
-msgstr "توسيع الفريق"
-
 #: src/routes/__root.tsx
 msgid "HeadCV"
 msgstr "HeadCV"
@@ -2122,10 +2034,6 @@ msgstr "يواصل HeadCV النمو بفضل مجتمعه النابض بالح
 #: src/routes/templates/index.tsx
 msgid "home.brand"
 msgstr "الصفحة الرئيسية لـ HeadCV"
-
-#: src/routes/_home/-sections/donate.tsx
-msgid "HeadCV is a free and open-source project, built with love and maintained by me and a community of contributors. Your donations help keep the lights on and the code flowing."
-msgstr "HeadCV هو مشروع مجاني ومفتوح المصدر، صُنع بحب ويُدار من قبلي ومن قبل مجتمع من المساهمين. تساعد تبرعاتك في إبقاء الأضواء مضاءة واستمرار تدفق الشيفرة."
 
 #: src/routes/__root.tsx
 msgid "HeadCV is a guided CV builder that helps you create an ATS-friendly resume in minutes. Free to start; no credit card required."
@@ -2175,10 +2083,6 @@ msgstr "العنوان 6"
 #: src/routes/builder/$resumeId/-sidebar/left/sections/basics.tsx
 msgid "Headline"
 msgstr "العنوان"
-
-#: src/routes/_home/-sections/donate.tsx
-msgid "Help me bring more experienced contributors on board, reducing the burden on a single maintainer and accelerating development."
-msgstr "ساعدني في ضم مساهمين أكثر خبرة إلى الفريق، لتقليل العبء على مشرف واحد وتسريع وتيرة التطوير."
 
 #: src/features/resume/builder/ai-assistant.tsx
 msgid "Help me edit my {label} section. Ask what I want to change before applying changes."
@@ -2295,10 +2199,6 @@ msgstr "جارٍ الاستيراد…"
 #: src/components/section-tips.tsx
 msgid "Include only professional profiles that strengthen your application."
 msgstr "أضف فقط الملفات المهنية التي تقوّي طلبك."
-
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Increase zoom"
-msgstr "تكبير الصورة"
 
 #: src/libs/resume/section.tsx
 msgid "Information"
@@ -2513,10 +2413,6 @@ msgstr "التخطيط"
 msgid "Layout"
 msgstr "التخطيط"
 
-#: src/routes/_home/-sections/hired-bar.tsx
-msgid "Leading companies in tech, finance, healthcare, and government trust HeadCV users."
-msgstr "شركات رائدة في التقنية والمال والرعاية الصحية والقطاع الحكومي تثق بمستخدمي HeadCV."
-
 #: src/hooks/use-form-blocker.tsx
 msgid "Leave"
 msgstr "مغادرة"
@@ -2584,10 +2480,6 @@ msgstr "اذكر مهارات ذات صلة يمكن إثباتها باستخد
 msgid "home.templates.live"
 msgstr "معاينة مباشرة"
 
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Loading agent workspace…"
-msgstr "جارٍ تحميل مساحة عمل الوكيل…"
-
 #: src/dialogs/resume/import.tsx
 msgid "Loading AI providers. Please try again in a moment."
 msgstr "جارٍ تحميل مزودي خدمات الذكاء الاصطناعي. يرجى المحاولة مرة أخرى بعد قليل."
@@ -2598,7 +2490,6 @@ msgid "billing.loading"
 msgstr "جارٍ تحميل معلومات الفوترة..."
 
 #: src/features/command-palette/pages/resumes.tsx
-#: src/routes/agent/-components/new-thread-setup.tsx
 msgid "Loading resumes…"
 msgstr "استئناف التحميل…"
 
@@ -2634,10 +2525,6 @@ msgstr "قفل"
 #: src/features/user/dropdown-menu.tsx
 msgid "Logout"
 msgstr "تسجيل الخروج"
-
-#: src/routes/_home/-sections/donate.tsx
-msgid "Long-term Sustainability"
-msgstr "الاستدامة طويلة الأجل"
 
 #. Link to backup-code verification flow when authenticator app is unavailable
 #: src/features/auth/pages/verify-2fa.tsx
@@ -2711,10 +2598,6 @@ msgstr "متوسط"
 #: src/routes/builder/$resumeId/-sidebar/right/sections/export.tsx
 msgid "Microsoft Word"
 msgstr "مايكروسوفت وورد"
-
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Missing working resume"
-msgstr "سيرة ذاتية مفقودة"
 
 #. js-lingui-explicit-id
 #: src/features/billing/plan-picker.tsx
@@ -2828,11 +2711,6 @@ msgstr "لا"
 msgid "No AI-suggested changes to review right now."
 msgstr "لا توجد تغييرات مقترحة من الذكاء الاصطناعي للمراجعة حاليًا."
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/features.tsx
-msgid "home.promise.charge"
-msgstr "لا توجد رسوم تلقائية"
-
 #: src/features/resume/builder/ai-review.tsx
 msgid "No change details are available for this update. You can still keep or revert it, or edit the affected sections below."
 msgstr "لا تتوفر تفاصيل التغيير لهذا التحديث. لا يزال بإمكانك الاحتفاظ به أو التراجع عنه، أو تعديل الأقسام المتأثرة أدناه."
@@ -2868,11 +2746,6 @@ msgstr "لم نعثر على نتائج."
 msgid "No threads yet."
 msgstr "لا توجد مواضيع حتى الآن."
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/features.tsx
-msgid "home.noWatermark"
-msgstr "بدون علامات مائية"
-
 #: src/libs/resume/section.tsx
 msgid "Notes"
 msgstr "ملاحظات"
@@ -2881,10 +2754,6 @@ msgstr "ملاحظات"
 #: src/routes/_home/-sections/tools.tsx
 msgid "home.demo.one"
 msgstr "عمود واحد"
-
-#: src/routes/_home/-sections/donate.tsx
-msgid "Ongoing Maintenance"
-msgstr "صيانة مستمرة"
 
 #. Resume card context menu action to open the resume editor
 #. Resume card dropdown action to open the resume editor
@@ -2907,10 +2776,6 @@ msgstr "فتح عميل البريد الإلكتروني"
 msgid "Open full-size resume preview"
 msgstr "فتح معاينة السيرة الذاتية بالحجم الكامل"
 
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Open in builder"
-msgstr "افتح في أداة الإنشاء"
-
 #: src/routes/builder/$resumeId/-sidebar/right/sections/resume-analysis.tsx
 msgid "Open Integrations Settings"
 msgstr "فتح إعدادات التكامل"
@@ -2919,10 +2784,6 @@ msgstr "فتح إعدادات التكامل"
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.portal.loading"
 msgstr "جارٍ فتح البوابة..."
-
-#: src/routes/_home/-sections/donate.tsx
-msgid "opens in new tab"
-msgstr "يفتح في علامة تبويب جديدة"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "Optionally, set a password so that only people with the password can view your resume through the link."
@@ -2941,10 +2802,6 @@ msgstr "قائمة مرتبة"
 #: src/features/resume/builder/ai-changes.ts
 msgid "Organization"
 msgstr "المنظمة"
-
-#: src/routes/_home/-sections/hired-bar.tsx
-msgid "Our candidates have been hired at"
-msgstr "تم توظيف مرشحينا في"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/resume-analysis.tsx
 msgid "Overall Score"
@@ -3102,10 +2959,6 @@ msgstr "يرجى الانتظار بينما نؤكد دفعتك مع مزوّد
 #: src/routes/builder/$resumeId/-sidebar/right/sections/export.tsx
 msgid "Please wait while your PDF is being generated..."
 msgstr "يُرجى الانتظار أثناء إنشاء ملف PDF الخاص بك..."
-
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Please wait while your PDF is being generated…"
-msgstr "يرجى الانتظار ريثما يتم إنشاء ملف PDF الخاص بك…"
 
 #. Profile photo shape option
 #: src/routes/builder/$resumeId/-sidebar/left/sections/picture-shapes.ts
@@ -3391,10 +3244,6 @@ msgstr "هل تريد استعادة النظام إلى ما قبل هذا ال
 msgid "Restored"
 msgstr "تمت الاستعادة"
 
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Resume"
-msgstr "سيرة ذاتية"
-
 #: src/routes/builder/$resumeId/-components/header.tsx
 msgid "Resume actions"
 msgstr "إجراءات السيرة الذاتية"
@@ -3440,16 +3289,15 @@ msgstr "تم تحميل السيرة الذاتية بنجاح"
 msgid "Resume workspace"
 msgstr "مساحة عمل السيرة الذاتية"
 
-#: src/features/command-palette/pages/navigation.tsx
-#: src/features/command-palette/pages/resumes.tsx
-#: src/routes/_home/-sections/statistics.tsx
-#: src/routes/dashboard/resumes/index.tsx
-msgid "Resumes"
-msgstr "السير الذاتية"
-
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.usage.resumes"
+msgstr "السير الذاتية"
+
+#: src/features/command-palette/pages/navigation.tsx
+#: src/features/command-palette/pages/resumes.tsx
+#: src/routes/dashboard/resumes/index.tsx
+msgid "Resumes"
 msgstr "السير الذاتية"
 
 #: src/routes/agent/-components/thread-workspace.tsx
@@ -3642,10 +3490,6 @@ msgstr "دفع آمن · إلغاء في أي وقت · سيرك الذاتية 
 #: src/routes/checkout/success.tsx
 msgid "checkout.notCompleted.plans"
 msgstr "عرض الخطط"
-
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "Select a resume"
-msgstr "اختر سيرة ذاتية"
 
 #: src/routes/builder/$resumeId/-components/design-workspace.tsx
 msgid "Select a section to edit"
@@ -3946,14 +3790,6 @@ msgstr "امنحنا نجمة على GitHub، لدينا حاليًا {0} نجم
 msgid "home.pricing.startTrial"
 msgstr "ابدأ التجربة لمدة 7 أيام"
 
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Start a new thread"
-msgstr "ابدأ موضوعًا جديدًا"
-
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "Start a thread"
-msgstr "ابدأ موضوعًا"
-
 #: src/routes/templates/index.tsx
 msgid "Start building"
 msgstr "ابدأ البناء"
@@ -3981,10 +3817,6 @@ msgstr "ابدأ البناء الموجّه"
 #: src/routes/_home/-sections/header.tsx
 msgid "home.start"
 msgstr "ابدأ الآن"
-
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "Start Thread"
-msgstr "موضوع البداية"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/features.tsx
@@ -4064,10 +3896,6 @@ msgstr "الاقتراحات"
 msgid "Summary"
 msgstr "الملخّص"
 
-#: src/routes/_home/-sections/donate.tsx
-msgid "Support HeadCV"
-msgstr "ادعم HeadCV"
-
 #: src/routes/builder/$resumeId/-sidebar/right/sections/information.tsx
 msgid "Support the app by doing what you can!"
 msgstr "ادعم التطبيق بما تستطيع!"
@@ -4124,14 +3952,6 @@ msgstr "معرض القوالب"
 #: src/routes/_home/-sections/templates-showcase.tsx
 msgid "home.nav.templates"
 msgstr "القوالب"
-
-#: src/routes/_home/-sections/templates.tsx
-msgid "Templates"
-msgstr "القوالب"
-
-#: src/routes/_home/-sections/testimonials.tsx
-msgid "Testimonials"
-msgstr "قصص المستخدمين"
 
 #: src/components/input/rich-input.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/design.tsx
@@ -4227,10 +4047,6 @@ msgstr "تستخدم القوالب أقسامًا واضحة ونصًا مقر�
 msgid "The URL you entered is not valid."
 msgstr "عنوان URL الذي أدخلته غير صالح."
 
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "The working resume was deleted. This thread is read-only."
-msgstr "تم حذف السيرة الذاتية. هذه المحادثة للقراءة فقط."
-
 #. Menu item that opens appearance theme selection submenu
 #: src/features/command-palette/pages/preferences/theme.tsx
 #: src/features/user/dropdown-menu.tsx
@@ -4247,7 +4063,6 @@ msgid "There was a problem while generating the DOCX, please try again."
 msgstr "حدثت مشكلة أثناء إنشاء DOCX، يرجى المحاولة مرة أخرى."
 
 #: src/features/resume/public/public-resume.tsx
-#: src/routes/agent/-components/thread-workspace.tsx
 #: src/routes/builder/$resumeId/-components/dock.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/export.tsx
 msgid "There was a problem while generating the PDF, please try again."
@@ -4283,10 +4098,6 @@ msgstr "لا يمكن التراجع عن هذا الإجراء. سيتم حذف
 #: src/routes/agent/-components/thread-sidebar.tsx
 msgid "This action cannot be undone. Messages and thread attachments will be removed."
 msgstr "لا يمكن التراجع عن هذا الإجراء. سيتم حذف الرسائل ومرفقات الموضوع."
-
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "This agent thread could not be opened."
-msgstr "تعذر فتح هذا الموضوع الخاص بالوكيل."
 
 #: src/features/resume/builder/ai-assistant-panel.tsx
 msgid "This chat could not be opened for the current resume."
@@ -4380,11 +4191,6 @@ msgstr "تمت أرشفة الموضوع."
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Thread deleted."
 msgstr "تم حذف الموضوع."
-
-#: src/routes/agent/-components/thread-sidebar.tsx
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Threads"
-msgstr "الخيوط"
 
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Tighten the skills section so it supports the target role instead of reading like a keyword dump."
@@ -4744,10 +4550,6 @@ msgstr "استخدم الاسم الدقيق للشهادة والجهة الم�
 msgid "Username"
 msgstr "اسم المستخدم"
 
-#: src/routes/_home/-sections/statistics.tsx
-msgid "Users"
-msgstr "المستخدمون"
-
 #: src/components/input/rich-input.tsx
 msgid "Valid URLs must start with http:// or https://."
 msgstr "يجب أن تبدأ عناوين URL الصالحة بـ http:// أو https://."
@@ -5082,18 +4884,9 @@ msgstr "تم استيراد سيرتك الذاتية بنجاح."
 msgid "Your resume has been updated successfully."
 msgstr "تم تحديث سيرتك الذاتية بنجاح."
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/features.tsx
-msgid "home.promise.title"
-msgstr "سيرتك الذاتية. بدون مفاجآت."
-
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "Your resume's public link is currently protected by a password. Share the password only with people you trust."
 msgstr "رابط سيرتك الذاتية العام محمي حاليًا بكلمة مرور. شارك كلمة المرور فقط مع الأشخاص الذين تثق بهم."
-
-#: src/routes/_home/-sections/donate.tsx
-msgid "Your support ensures the project remains free and accessible for everyone, now and in the future."
-msgstr "يضمن دعمك بقاء المشروع مجانيًا ومتاحة للجميع، الآن وفي المستقبل."
 
 #: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
 msgid "Zoom"
@@ -5102,10 +4895,6 @@ msgstr "التكبير"
 #: src/routes/builder/$resumeId/-components/dock.tsx
 msgid "Zoom in"
 msgstr "تكبير"
-
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Zoom level"
-msgstr "مستوى التكبير"
 
 #: src/routes/builder/$resumeId/-components/dock.tsx
 msgid "Zoom out"

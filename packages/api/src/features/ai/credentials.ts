@@ -84,20 +84,12 @@ export function redactEncryptedCredential(fields: StoredCredentialFields): Redac
 	};
 }
 
-function isCredentialEncryptionConfigured() {
-	return !!getEncryptionSecret();
-}
-
 function isAgentStreamingConfigured() {
 	return !!env.REDIS_URL?.trim();
 }
 
 export function isAgentEnvironmentConfigured() {
 	return isAgentStreamingConfigured();
-}
-
-export function assertCredentialEncryptionConfigured() {
-	if (!isCredentialEncryptionConfigured()) throw new Error("AI_CREDENTIAL_ENCRYPTION_UNAVAILABLE");
 }
 
 export function assertAgentEnvironment() {

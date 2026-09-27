@@ -130,11 +130,6 @@ msgstr "7-day trial"
 msgid "home.template.boldText"
 msgstr "A bold portrait. A warm touch of gold."
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/features.tsx
-msgid "home.promise.eyebrow"
-msgstr "A clear start"
-
 #: src/features/settings/pages/profile.tsx
 msgid "A confirmation link has been sent to your current email address. Please check your inbox to confirm the change."
 msgstr "A confirmation link has been sent to your current email address. Please check your inbox to confirm the change."
@@ -148,10 +143,6 @@ msgstr "A CV that feels like you"
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "A link to your resume has been copied to clipboard."
 msgstr "A link to your resume has been copied to clipboard."
-
-#: src/routes/_home/-sections/testimonials.tsx
-msgid "A lot of people have written to me over the years to share their experiences with HeadCV and how it has helped them, and I never get tired of reading them. If you have a story to share, let me know by sending me an email at <0>{email}</0>."
-msgstr "A lot of people have written to me over the years to share their experiences with HeadCV and how it has helped them, and I never get tired of reading them. If you have a story to share, let me know by sending me an email at <0>{email}</0>."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/templates-showcase.tsx
@@ -342,14 +333,6 @@ msgstr "AI"
 msgid "AI agent setup is not available yet."
 msgstr "AI agent setup is not available yet."
 
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "AI agent setup is unavailable right now. Please try again in a moment."
-msgstr "AI agent setup is unavailable right now. Please try again in a moment."
-
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "AI agent setup is unavailable until REDIS_URL is configured."
-msgstr "AI agent setup is unavailable until REDIS_URL is configured."
-
 #. js-lingui-explicit-id
 #: src/features/billing/plan-picker.tsx
 msgid "home.pro.ai"
@@ -379,14 +362,6 @@ msgstr "AI Chat"
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.usage.chats"
 msgstr "AI Chats"
-
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "AI provider is not configured in the environment."
-msgstr "AI provider is not configured in the environment."
-
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "AI provider is not configured."
-msgstr "AI provider is not configured."
 
 #: src/features/resume/builder/ai-review.tsx
 #: src/libs/resume/section.tsx
@@ -456,10 +431,6 @@ msgstr "Anyone who has the resume's public URL will be able to view and download
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "Anyone with the link can view and download the resume."
 msgstr "Anyone with the link can view and download the resume."
-
-#: src/routes/_home/-sections/statistics.tsx
-msgid "Application Statistics"
-msgstr "Application Statistics"
 
 #: src/routes/agent/-components/patch-tool-card.tsx
 msgid "Applied"
@@ -610,10 +581,6 @@ msgstr "Back to entries"
 msgid "Back to Login"
 msgstr "Back to Login"
 
-#: src/routes/agent/-components/thread-sidebar.tsx
-msgid "Back to resumes"
-msgstr "Back to resumes"
-
 #: src/routes/builder/$resumeId/-components/guided-editor.tsx
 msgid "Back to step"
 msgstr "Back to step"
@@ -655,10 +622,6 @@ msgstr "Billed <0>{0}</0> once a year — less than a coffee a month."
 msgid "home.pricing.period"
 msgstr "Billing period"
 
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "Blank draft"
-msgstr "Blank draft"
-
 #: src/routes/builder/$resumeId/-sidebar/right/sections/typography.tsx
 msgctxt "Body Text (paragraphs, lists, etc.)"
 msgid "Body"
@@ -693,11 +656,6 @@ msgstr "Build a job-winning resume for free"
 #: src/routes/__root.tsx
 msgid "Build a Professional CV in Minutes"
 msgstr "Build a Professional CV in Minutes"
-
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/features.tsx
-msgid "home.promise.text"
-msgstr "Build and download your resume for free today. Pro is coming later, with pricing shown upfront."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/pricing.tsx
@@ -862,14 +820,6 @@ msgstr "Choose a formula"
 msgid "Choose a preset or custom shade."
 msgstr "Choose a preset or custom shade."
 
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "Choose a resume"
-msgstr "Choose a resume"
-
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "Choose a resume draft to get started."
-msgstr "Choose a resume draft to get started."
-
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/tools.tsx
 msgid "home.steps.choose"
@@ -1001,10 +951,6 @@ msgstr "Continue where you left off"
 #: src/dialogs/resume/import.tsx
 msgid "Continue where you left off by importing an existing resume from a PDF or Microsoft Word file."
 msgstr "Continue where you left off by importing an existing resume from a PDF or Microsoft Word file."
-
-#: src/routes/_home/-sections/donate.tsx
-msgid "Contributions fund bug fixes, security updates, and continuous improvements to keep the app running smoothly."
-msgstr "Contributions fund bug fixes, security updates, and continuous improvements to keep the app running smoothly."
 
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Conversation copied."
@@ -1195,10 +1141,6 @@ msgstr "Create an account when you are ready to keep this resume across devices.
 msgid "home.plan.resume"
 msgstr "Create and edit your resume"
 
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "Create from scratch"
-msgstr "Create from scratch"
-
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/final-cta.tsx
 #: src/routes/_home/-sections/hero.tsx
@@ -1290,10 +1232,6 @@ msgstr "Dark theme"
 #: src/features/resume/builder/ai-changes.ts
 msgid "Date"
 msgstr "Date"
-
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Decrease zoom"
-msgstr "Decrease zoom"
 
 #: src/dialogs/resume/sections/education.tsx
 #: src/features/resume/builder/ai-changes.ts
@@ -1440,7 +1378,6 @@ msgid "Download Microsoft Word"
 msgstr "Download Microsoft Word"
 
 #: src/features/resume/public/public-resume.tsx
-#: src/routes/agent/-components/thread-workspace.tsx
 #: src/routes/builder/$resumeId/-components/dock.tsx
 msgid "Download PDF"
 msgstr "Download PDF"
@@ -1477,10 +1414,6 @@ msgstr "Drag photo to reposition"
 #: src/routes/dashboard/resumes/-components/menus/dropdown-menu.tsx
 msgid "Duplicate"
 msgstr "Duplicate"
-
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "Duplicate as AI Draft"
-msgstr "Duplicate as AI Draft"
 
 #: src/dialogs/resume/index.tsx
 msgid "Duplicate Resume"
@@ -1634,10 +1567,6 @@ msgstr "Enter your password to confirm setting up two-factor authentication. Whe
 msgid "Enter your password to disable two-factor authentication. Your account will be less secure without 2FA enabled."
 msgstr "Enter your password to disable two-factor authentication. Your account will be less secure without 2FA enabled."
 
-#: src/routes/_home/-sections/donate.tsx
-msgid "Every contribution, big or small, makes a huge difference to the project.<0/>Thank you for your support!"
-msgstr "Every contribution, big or small, makes a huge difference to the project.<0/>Thank you for your support!"
-
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/pricing.tsx
 msgid "home.offer.description"
@@ -1676,10 +1605,6 @@ msgstr "Explore"
 #: src/routes/_home/-sections/templates-showcase.tsx
 msgid "home.templates.all"
 msgstr "Explore all {count} templates"
-
-#: src/routes/_home/-sections/templates.tsx
-msgid "Explore our diverse selection of templates, each designed to fit different styles, professions, and personalities. HeadCV currently offers 12 templates, with more on the way."
-msgstr "Explore our diverse selection of templates, each designed to fit different styles, professions, and personalities. HeadCV currently offers 12 templates, with more on the way."
 
 #: src/features/builder/steps.ts
 #: src/libs/resume/section.tsx
@@ -1799,10 +1724,6 @@ msgstr "Failed to sign in. Please try again."
 #: src/features/user/dropdown-menu.tsx
 msgid "Failed to sign out. Please try again."
 msgstr "Failed to sign out. Please try again."
-
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "Failed to start agent thread."
-msgstr "Failed to start agent thread."
 
 #: src/features/resume/builder/ai-assistant-panel.tsx
 msgid "Failed to start AI chat."
@@ -1964,11 +1885,6 @@ msgid "home.hero.eyebrow"
 msgstr "Free online resume builder"
 
 #. js-lingui-explicit-id
-#: src/routes/_home/-sections/features.tsx
-msgid "home.promise.export"
-msgstr "Free PDF export"
-
-#. js-lingui-explicit-id
 #: src/features/billing/plan-badge.tsx
 msgid "billing.badge.free"
 msgstr "Free plan"
@@ -2090,10 +2006,6 @@ msgstr "Google"
 msgid "Grade"
 msgstr "Grade"
 
-#: src/routes/_home/-sections/donate.tsx
-msgid "Grow the Team"
-msgstr "Grow the Team"
-
 #: src/routes/__root.tsx
 msgid "HeadCV"
 msgstr "HeadCV"
@@ -2117,10 +2029,6 @@ msgstr "HeadCV continues to grow thanks to its vibrant community. This project o
 #: src/routes/templates/index.tsx
 msgid "home.brand"
 msgstr "HeadCV home"
-
-#: src/routes/_home/-sections/donate.tsx
-msgid "HeadCV is a free and open-source project, built with love and maintained by me and a community of contributors. Your donations help keep the lights on and the code flowing."
-msgstr "HeadCV is a free and open-source project, built with love and maintained by me and a community of contributors. Your donations help keep the lights on and the code flowing."
 
 #: src/routes/__root.tsx
 msgid "HeadCV is a guided CV builder that helps you create an ATS-friendly resume in minutes. Free to start; no credit card required."
@@ -2170,10 +2078,6 @@ msgstr "Heading 6"
 #: src/routes/builder/$resumeId/-sidebar/left/sections/basics.tsx
 msgid "Headline"
 msgstr "Headline"
-
-#: src/routes/_home/-sections/donate.tsx
-msgid "Help me bring more experienced contributors on board, reducing the burden on a single maintainer and accelerating development."
-msgstr "Help me bring more experienced contributors on board, reducing the burden on a single maintainer and accelerating development."
 
 #: src/features/resume/builder/ai-assistant.tsx
 msgid "Help me edit my {label} section. Ask what I want to change before applying changes."
@@ -2290,10 +2194,6 @@ msgstr "Importing…"
 #: src/components/section-tips.tsx
 msgid "Include only professional profiles that strengthen your application."
 msgstr "Include only professional profiles that strengthen your application."
-
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Increase zoom"
-msgstr "Increase zoom"
 
 #: src/libs/resume/section.tsx
 msgid "Information"
@@ -2508,10 +2408,6 @@ msgstr "Layout"
 msgid "Layout"
 msgstr "Layout"
 
-#: src/routes/_home/-sections/hired-bar.tsx
-msgid "Leading companies in tech, finance, healthcare, and government trust HeadCV users."
-msgstr "Leading companies in tech, finance, healthcare, and government trust HeadCV users."
-
 #: src/hooks/use-form-blocker.tsx
 msgid "Leave"
 msgstr "Leave"
@@ -2579,10 +2475,6 @@ msgstr "List relevant, demonstrable skills using terminology from the target rol
 msgid "home.templates.live"
 msgstr "Live preview"
 
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Loading agent workspace…"
-msgstr "Loading agent workspace…"
-
 #: src/dialogs/resume/import.tsx
 msgid "Loading AI providers. Please try again in a moment."
 msgstr "Loading AI providers. Please try again in a moment."
@@ -2593,7 +2485,6 @@ msgid "billing.loading"
 msgstr "Loading billing information..."
 
 #: src/features/command-palette/pages/resumes.tsx
-#: src/routes/agent/-components/new-thread-setup.tsx
 msgid "Loading resumes…"
 msgstr "Loading resumes…"
 
@@ -2629,10 +2520,6 @@ msgstr "Lock"
 #: src/features/user/dropdown-menu.tsx
 msgid "Logout"
 msgstr "Logout"
-
-#: src/routes/_home/-sections/donate.tsx
-msgid "Long-term Sustainability"
-msgstr "Long-term Sustainability"
 
 #. Link to backup-code verification flow when authenticator app is unavailable
 #: src/features/auth/pages/verify-2fa.tsx
@@ -2706,10 +2593,6 @@ msgstr "Medium"
 #: src/routes/builder/$resumeId/-sidebar/right/sections/export.tsx
 msgid "Microsoft Word"
 msgstr "Microsoft Word"
-
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Missing working resume"
-msgstr "Missing working resume"
 
 #. js-lingui-explicit-id
 #: src/features/billing/plan-picker.tsx
@@ -2823,11 +2706,6 @@ msgstr "No"
 msgid "No AI-suggested changes to review right now."
 msgstr "No AI-suggested changes to review right now."
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/features.tsx
-msgid "home.promise.charge"
-msgstr "No automatic charges"
-
 #: src/features/resume/builder/ai-review.tsx
 msgid "No change details are available for this update. You can still keep or revert it, or edit the affected sections below."
 msgstr "No change details are available for this update. You can still keep or revert it, or edit the affected sections below."
@@ -2863,11 +2741,6 @@ msgstr "No results found."
 msgid "No threads yet."
 msgstr "No threads yet."
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/features.tsx
-msgid "home.noWatermark"
-msgstr "No watermarks"
-
 #: src/libs/resume/section.tsx
 msgid "Notes"
 msgstr "Notes"
@@ -2876,10 +2749,6 @@ msgstr "Notes"
 #: src/routes/_home/-sections/tools.tsx
 msgid "home.demo.one"
 msgstr "One column"
-
-#: src/routes/_home/-sections/donate.tsx
-msgid "Ongoing Maintenance"
-msgstr "Ongoing Maintenance"
 
 #. Resume card context menu action to open the resume editor
 #. Resume card dropdown action to open the resume editor
@@ -2902,10 +2771,6 @@ msgstr "Open Email Client"
 msgid "Open full-size resume preview"
 msgstr "Open full-size resume preview"
 
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Open in builder"
-msgstr "Open in builder"
-
 #: src/routes/builder/$resumeId/-sidebar/right/sections/resume-analysis.tsx
 msgid "Open Integrations Settings"
 msgstr "Open Integrations Settings"
@@ -2914,10 +2779,6 @@ msgstr "Open Integrations Settings"
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.portal.loading"
 msgstr "Opening portal..."
-
-#: src/routes/_home/-sections/donate.tsx
-msgid "opens in new tab"
-msgstr "opens in new tab"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "Optionally, set a password so that only people with the password can view your resume through the link."
@@ -2936,10 +2797,6 @@ msgstr "Ordered List"
 #: src/features/resume/builder/ai-changes.ts
 msgid "Organization"
 msgstr "Organization"
-
-#: src/routes/_home/-sections/hired-bar.tsx
-msgid "Our candidates have been hired at"
-msgstr "Our candidates have been hired at"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/resume-analysis.tsx
 msgid "Overall Score"
@@ -3097,10 +2954,6 @@ msgstr "Please wait while we confirm your payment with our provider."
 #: src/routes/builder/$resumeId/-sidebar/right/sections/export.tsx
 msgid "Please wait while your PDF is being generated..."
 msgstr "Please wait while your PDF is being generated..."
-
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Please wait while your PDF is being generated…"
-msgstr "Please wait while your PDF is being generated…"
 
 #. Profile photo shape option
 #: src/routes/builder/$resumeId/-sidebar/left/sections/picture-shapes.ts
@@ -3386,10 +3239,6 @@ msgstr "Restore the resume to before this patch? This will roll back this patch 
 msgid "Restored"
 msgstr "Restored"
 
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Resume"
-msgstr "Resume"
-
 #: src/routes/builder/$resumeId/-components/header.tsx
 msgid "Resume actions"
 msgstr "Resume actions"
@@ -3435,16 +3284,15 @@ msgstr "Resume successfully downloaded"
 msgid "Resume workspace"
 msgstr "Resume workspace"
 
-#: src/features/command-palette/pages/navigation.tsx
-#: src/features/command-palette/pages/resumes.tsx
-#: src/routes/_home/-sections/statistics.tsx
-#: src/routes/dashboard/resumes/index.tsx
-msgid "Resumes"
-msgstr "Resumes"
-
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.usage.resumes"
+msgstr "Resumes"
+
+#: src/features/command-palette/pages/navigation.tsx
+#: src/features/command-palette/pages/resumes.tsx
+#: src/routes/dashboard/resumes/index.tsx
+msgid "Resumes"
 msgstr "Resumes"
 
 #: src/routes/agent/-components/thread-workspace.tsx
@@ -3637,10 +3485,6 @@ msgstr "Secure checkout · Cancel anytime · Your resumes stay yours"
 #: src/routes/checkout/success.tsx
 msgid "checkout.notCompleted.plans"
 msgstr "See plans"
-
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "Select a resume"
-msgstr "Select a resume"
 
 #: src/routes/builder/$resumeId/-components/design-workspace.tsx
 msgid "Select a section to edit"
@@ -3941,14 +3785,6 @@ msgstr "Star us on GitHub, currently {0} stars (opens in new tab)"
 msgid "home.pricing.startTrial"
 msgstr "Start 7-day trial"
 
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Start a new thread"
-msgstr "Start a new thread"
-
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "Start a thread"
-msgstr "Start a thread"
-
 #: src/routes/templates/index.tsx
 msgid "Start building"
 msgstr "Start building"
@@ -3976,10 +3812,6 @@ msgstr "Start guided build"
 #: src/routes/_home/-sections/header.tsx
 msgid "home.start"
 msgstr "Start now"
-
-#: src/routes/agent/-components/new-thread-setup.tsx
-msgid "Start Thread"
-msgstr "Start Thread"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/features.tsx
@@ -4059,10 +3891,6 @@ msgstr "Suggestions"
 msgid "Summary"
 msgstr "Summary"
 
-#: src/routes/_home/-sections/donate.tsx
-msgid "Support HeadCV"
-msgstr "Support HeadCV"
-
 #: src/routes/builder/$resumeId/-sidebar/right/sections/information.tsx
 msgid "Support the app by doing what you can!"
 msgstr "Support the app by doing what you can!"
@@ -4119,14 +3947,6 @@ msgstr "Template Gallery"
 #: src/routes/_home/-sections/templates-showcase.tsx
 msgid "home.nav.templates"
 msgstr "Templates"
-
-#: src/routes/_home/-sections/templates.tsx
-msgid "Templates"
-msgstr "Templates"
-
-#: src/routes/_home/-sections/testimonials.tsx
-msgid "Testimonials"
-msgstr "Testimonials"
 
 #: src/components/input/rich-input.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/design.tsx
@@ -4222,10 +4042,6 @@ msgstr "The templates use clear sections and readable text. For automated applic
 msgid "The URL you entered is not valid."
 msgstr "The URL you entered is not valid."
 
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "The working resume was deleted. This thread is read-only."
-msgstr "The working resume was deleted. This thread is read-only."
-
 #. Menu item that opens appearance theme selection submenu
 #: src/features/command-palette/pages/preferences/theme.tsx
 #: src/features/user/dropdown-menu.tsx
@@ -4242,7 +4058,6 @@ msgid "There was a problem while generating the DOCX, please try again."
 msgstr "There was a problem while generating the DOCX, please try again."
 
 #: src/features/resume/public/public-resume.tsx
-#: src/routes/agent/-components/thread-workspace.tsx
 #: src/routes/builder/$resumeId/-components/dock.tsx
 #: src/routes/builder/$resumeId/-sidebar/right/sections/export.tsx
 msgid "There was a problem while generating the PDF, please try again."
@@ -4278,10 +4093,6 @@ msgstr "This action cannot be undone. Conversation messages and uploaded attachm
 #: src/routes/agent/-components/thread-sidebar.tsx
 msgid "This action cannot be undone. Messages and thread attachments will be removed."
 msgstr "This action cannot be undone. Messages and thread attachments will be removed."
-
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "This agent thread could not be opened."
-msgstr "This agent thread could not be opened."
 
 #: src/features/resume/builder/ai-assistant-panel.tsx
 msgid "This chat could not be opened for the current resume."
@@ -4375,11 +4186,6 @@ msgstr "Thread archived."
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Thread deleted."
 msgstr "Thread deleted."
-
-#: src/routes/agent/-components/thread-sidebar.tsx
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Threads"
-msgstr "Threads"
 
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Tighten the skills section so it supports the target role instead of reading like a keyword dump."
@@ -4739,10 +4545,6 @@ msgstr "Use the exact credential and issuer, with a verification link when avail
 msgid "Username"
 msgstr "Username"
 
-#: src/routes/_home/-sections/statistics.tsx
-msgid "Users"
-msgstr "Users"
-
 #: src/components/input/rich-input.tsx
 msgid "Valid URLs must start with http:// or https://."
 msgstr "Valid URLs must start with http:// or https://."
@@ -5077,18 +4879,9 @@ msgstr "Your resume has been imported successfully."
 msgid "Your resume has been updated successfully."
 msgstr "Your resume has been updated successfully."
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/features.tsx
-msgid "home.promise.title"
-msgstr "Your resume. No surprises."
-
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "Your resume's public link is currently protected by a password. Share the password only with people you trust."
 msgstr "Your resume's public link is currently protected by a password. Share the password only with people you trust."
-
-#: src/routes/_home/-sections/donate.tsx
-msgid "Your support ensures the project remains free and accessible for everyone, now and in the future."
-msgstr "Your support ensures the project remains free and accessible for everyone, now and in the future."
 
 #: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
 msgid "Zoom"
@@ -5097,10 +4890,6 @@ msgstr "Zoom"
 #: src/routes/builder/$resumeId/-components/dock.tsx
 msgid "Zoom in"
 msgstr "Zoom in"
-
-#: src/routes/agent/-components/thread-workspace.tsx
-msgid "Zoom level"
-msgstr "Zoom level"
 
 #: src/routes/builder/$resumeId/-components/dock.tsx
 msgid "Zoom out"

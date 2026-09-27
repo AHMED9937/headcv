@@ -6,8 +6,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 type PanelImperativeHandle = ReturnType<typeof usePanelRef>;
 
-export const BUILDER_LAYOUT_COOKIE_NAME = "builder_layout";
-
 export type BuilderLayout = {
 	left: number;
 	artboard: number;

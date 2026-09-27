@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type ResumePreviewNavigationRequest = {
+type ResumePreviewNavigationRequest = {
 	id: number;
 	requestedAt: number;
 	sectionId: string;

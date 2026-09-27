@@ -25,7 +25,7 @@ const LONG_UNBROKEN_TOKEN_LENGTH = 24;
 
 const createCharacterBreaks = (word: string) => [...word].flatMap((character) => [character, ""]);
 
-export const getPdfWordBreaks = (word: string, useCharacterBreaking: boolean): string[] => {
+const getPdfWordBreaks = (word: string, useCharacterBreaking: boolean): string[] => {
 	if (useCharacterBreaking || [...word].length > LONG_UNBROKEN_TOKEN_LENGTH) return createCharacterBreaks(word);
 	return [word];
 };
