@@ -1,6 +1,20 @@
 import fs from "node:fs/promises";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+const env: {
+	APP_URL: string;
+	VERCEL_ENV: "production" | "preview" | "development" | undefined;
+	GOOGLE_SITE_VERIFICATION: string | undefined;
+} = {
+	APP_URL: "https://headcv.com/",
+	VERCEL_ENV: "production",
+	GOOGLE_SITE_VERIFICATION: undefined,
+};
+
+vi.mock("@headcv/env/server", () => ({
+	env,
+}));
+
 vi.mock("node:fs", () => ({
 	existsSync: vi.fn(() => true),
 }));
@@ -21,10 +35,13 @@ describe("web app fallback classification", () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		vi.mocked(fs.readFile).mockResolvedValue("<html>app</html>");
+		env.APP_URL = "https://headcv.com/";
+		env.VERCEL_ENV = "production";
+		env.GOOGLE_SITE_VERIFICATION = undefined;
 	});
 
-	it("serves the shell for the root app route without noindex", async () => {
-		const response = await handleWebApp(new Request("https://example.com/"));
+	it("serves the shell for the root app route without noindex in production", async () => {
+		const response = await handleWebApp(new Request("https://headcv.com/"));
 
 		expect(response.status).toBe(200);
 		expect(response.headers.get("Content-Type")).toBe("text/html; charset=UTF-8");
@@ -38,8 +55,8 @@ describe("web app fallback classification", () => {
 		"/builder/resume-1",
 		"/templates",
 		"/templates/azurill.pdf",
-	])("serves noindex shell for known app prefix %s", async (pathname) => {
-		const response = await handleWebApp(new Request(`https://example.com${pathname}`));
+	])("serves noindex shell for known app prefix %s in production", async (pathname) => {
+		const response = await handleWebApp(new Request(`https://headcv.com${pathname}`));
 
 		expect(response.status).toBe(200);
 		expect(response.headers.get("Content-Type")).toBe("text/html; charset=UTF-8");
@@ -47,16 +64,46 @@ describe("web app fallback classification", () => {
 		expect(await response.text()).toBe("<html>app</html>");
 	});
 
-	it("serves noindex shell for public resume shaped routes", async () => {
-		const response = await handleWebApp(new Request("https://example.com/alice/resume"));
+	it("does not send noindex for public resume paths in production", async () => {
+		const response = await handleWebApp(new Request("https://headcv.com/alice/resume"));
 
 		expect(response.status).toBe(200);
-		expect(response.headers.get("X-Robots-Tag")).toBe("noindex, follow");
+		expect(response.headers.get("X-Robots-Tag")).toBeNull();
 		expect(await response.text()).toBe("<html>app</html>");
 	});
 
+	it("noindexes every fallback on non-production hosts", async () => {
+		env.APP_URL = "http://localhost:3000/";
+		env.VERCEL_ENV = undefined;
+
+		const response = await handleWebApp(new Request("http://localhost:3000/"));
+
+		expect(response.status).toBe(200);
+		expect(response.headers.get("X-Robots-Tag")).toBe("noindex, nofollow");
+	});
+
+	it("noindexes every fallback on Vercel preview deployments", async () => {
+		env.APP_URL = "https://headcv-git-preview.example.vercel.app/";
+		env.VERCEL_ENV = "preview";
+
+		const response = await handleWebApp(new Request("https://headcv-git-preview.example.vercel.app/"));
+
+		expect(response.status).toBe(200);
+		expect(response.headers.get("X-Robots-Tag")).toBe("noindex, nofollow");
+	});
+
+	it("injects the Google site verification meta tag when configured", async () => {
+		env.GOOGLE_SITE_VERIFICATION = "abc123";
+		vi.mocked(fs.readFile).mockResolvedValue("<html><head><!--headcv:google-site-verification--></head></html>");
+
+		const response = await handleWebApp(new Request("https://headcv.com/"));
+		const text = await response.text();
+
+		expect(text).toContain('<meta name="google-site-verification" content="abc123" />');
+	});
+
 	it("returns noindex 404 for unknown non-asset routes", async () => {
-		const response = await handleWebApp(new Request("https://example.com/unknown/extra/path"));
+		const response = await handleWebApp(new Request("https://headcv.com/unknown/extra/path"));
 
 		expect(response.status).toBe(404);
 		expect(response.headers.get("Content-Type")).toBe("text/plain; charset=UTF-8");
@@ -69,7 +116,7 @@ describe("web app fallback classification", () => {
 		"/api/foo",
 		"/uploads/foo",
 	])("does not treat reserved two-segment path %s as a public resume", async (pathname) => {
-		const response = await handleWebApp(new Request(`https://example.com${pathname}`));
+		const response = await handleWebApp(new Request(`https://headcv.com${pathname}`));
 
 		expect(response.status).toBe(404);
 		expect(response.headers.get("Content-Type")).toBe("text/plain; charset=UTF-8");
@@ -79,7 +126,7 @@ describe("web app fallback classification", () => {
 	});
 
 	it("returns plain 404 for missing asset-looking paths", async () => {
-		const response = await handleWebApp(new Request("https://example.com/assets/missing.css"));
+		const response = await handleWebApp(new Request("https://headcv.com/assets/missing.css"));
 
 		expect(response.status).toBe(404);
 		expect(response.headers.get("X-Robots-Tag")).toBeNull();
@@ -88,8 +135,8 @@ describe("web app fallback classification", () => {
 	});
 
 	it("mirrors fallback status and headers for HEAD without a body", async () => {
-		const knownResponse = handleWebAppHead(new Request("https://example.com/dashboard"));
-		const unknownResponse = handleWebAppHead(new Request("https://example.com/unknown/extra/path"));
+		const knownResponse = handleWebAppHead(new Request("https://headcv.com/dashboard"));
+		const unknownResponse = handleWebAppHead(new Request("https://headcv.com/unknown/extra/path"));
 
 		expect(knownResponse.status).toBe(200);
 		expect(knownResponse.headers.get("Content-Type")).toBe("text/html; charset=UTF-8");
