@@ -32,28 +32,30 @@ describe("SEO static endpoints", () => {
 		expect(response.status).toBe(200);
 		expect(response.headers.get("Content-Type")).toBe("application/xml; charset=UTF-8");
 		expect(text).toContain("<loc>https://app.example.com/</loc>");
+		expect(text).toContain("<loc>https://app.example.com/templates</loc>");
 		expect(text).not.toContain("docs.headcv.com");
 		expect(text).not.toContain("/auth");
 		expect(text).not.toContain("/dashboard");
 		expect(text).not.toContain("/builder");
-		expect(text).not.toContain("/templates");
 		expect(text).not.toContain("/schema.json");
 	});
 
-	it("generates a lightweight llms.txt product index", async () => {
+	it("generates a machine-readable llms.txt product index", async () => {
 		const response = handleLlms();
 		const text = await response.text();
 
 		expect(response.status).toBe(200);
 		expect(response.headers.get("Content-Type")).toBe("text/plain; charset=UTF-8");
 		expect(text).toContain("# HeadCV");
-		expect(text).toContain("- Product: https://app.example.com");
+		expect(text).toContain("HeadCV is a free, open-source resume builder");
+		expect(text).toContain("## Product");
+		expect(text).toContain("- Guided CV builder: https://app.example.com/");
+		expect(text).toContain("- Resume templates: https://app.example.com/templates");
+		expect(text).toContain("## Resources");
 		expect(text).toContain("- Documentation: https://docs.headcv.com");
-		expect(text).toContain("- Documentation sitemap: https://docs.headcv.com/sitemap.xml");
-		expect(text).toContain("- Documentation llms.txt: https://docs.headcv.com/llms.txt");
-		expect(text).toContain("- API documentation: https://docs.headcv.com/api-reference");
+		expect(text).toContain("- API / OpenAPI: https://app.example.com/api/openapi/spec.json");
 		expect(text).toContain("- Resume schema: https://app.example.com/schema.json");
-		expect(text).toContain("- OpenAPI specification: https://app.example.com/api/openapi/spec.json");
+		expect(text).toContain("- Source code: https://github.com/AHMED9937/headcv");
 	});
 
 	it("returns headers without a body for HEAD responses", async () => {

@@ -7,6 +7,8 @@ import { createNoindexFollowMeta } from "@/libs/seo";
 
 type LoaderData = Omit<RouterOutput["resume"]["getBySlug"], "data"> & { data: ResumeData };
 
+const appUrl = "https://headcv.com";
+
 export const Route = createFileRoute("/$username/$slug")({
 	component: lazyRouteComponent(() => import("@/features/resume/public/public-resume"), "PublicResumeRoute"),
 	loader: async ({ context, params }) => {
@@ -17,10 +19,37 @@ export const Route = createFileRoute("/$username/$slug")({
 
 		return { resume: resume as LoaderData };
 	},
-	head: ({ loaderData }) => {
+	head: ({ loaderData, params }) => {
 		const resume = loaderData?.resume;
-		const title = resume ? resume.name || resume.data.basics.name || "Resume" : "HeadCV";
-		return { meta: [{ title: `${title} - HeadCV` }, createNoindexFollowMeta()] };
+		if (!resume?.isPublic) {
+			return { meta: [{ title: "Resume - HeadCV" }, createNoindexFollowMeta()] };
+		}
+
+		const name = resume.data.basics.name || resume.name || "Resume";
+		const title = `${name} - HeadCV`;
+		const description = resume.data.basics.headline || `View ${name}'s professional resume on HeadCV.`;
+		const canonicalUrl = `${appUrl}/${params.username}/${params.slug}`;
+		const ogImage = `${appUrl}/opengraph/banner.jpg`;
+
+		return {
+			title,
+			links: [{ rel: "canonical", href: canonicalUrl }],
+			meta: [
+				{ name: "description", content: description },
+				{ name: "robots", content: "index, follow" },
+				{ property: "og:title", content: title },
+				{ property: "og:description", content: description },
+				{ property: "og:type", content: "profile" },
+				{ property: "og:url", content: canonicalUrl },
+				{ property: "og:image", content: ogImage },
+				{ property: "og:image:width", content: "1200" },
+				{ property: "og:image:height", content: "630" },
+				{ property: "twitter:title", content: title },
+				{ property: "twitter:description", content: description },
+				{ property: "twitter:image", content: ogImage },
+				{ property: "twitter:card", content: "summary_large_image" },
+			],
+		};
 	},
 	onError: (error) => {
 		if (error instanceof ORPCError && error.code === "NEED_PASSWORD") {

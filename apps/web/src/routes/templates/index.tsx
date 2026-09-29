@@ -1,5 +1,6 @@
 import type { Template } from "@headcv/schema/templates";
-import { t } from "@lingui/core/macro";
+import { i18n } from "@lingui/core";
+import { msg, t } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
 import { CheckIcon, SlideshowIcon } from "@phosphor-icons/react";
@@ -7,20 +8,71 @@ import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { defaultResumeData } from "@headcv/schema/resume/default";
-import { templateSchema } from "@headcv/schema/templates";
+import { templatePrimaryColors, templateSchema } from "@headcv/schema/templates";
 import { Button } from "@headcv/ui/components/button";
 import { generateId, slugify } from "@headcv/utils/string";
 import { cn } from "@headcv/utils/style";
 import { templates } from "@/dialogs/resume/template/data";
 import { getResumeErrorMessage } from "@/libs/error-message";
 import { orpc } from "@/libs/orpc/client";
+import { createTemplateGalleryStructuredDataScript, getCanonicalRootUrl } from "@/libs/seo";
 import { LandingBrand } from "@/routes/_home/-sections/landing-brand";
+
+const pageTitle = msg({
+	id: "templates.seo.title",
+	message: "Resume Templates | ATS-Friendly & Modern CV Designs | HeadCV",
+});
+
+const pageDescription = msg({
+	id: "templates.seo.description",
+	message:
+		"Browse HeadCV's free resume templates. Choose an ATS-friendly, modern, professional, or creative CV design and start building your resume in minutes.",
+});
+
+const pageOgImageAlt = msg({
+	id: "templates.seo.ogImageAlt",
+	message: "HeadCV resume template gallery — ATS-friendly, modern, and professional CV designs.",
+});
 
 export const Route = createFileRoute("/templates/")({
 	validateSearch: (search: Record<string, unknown>): { template?: Template } => ({
 		template: templateSchema.safeParse(search.template).data,
 	}),
 	component: TemplateGalleryPage,
+	head: () => {
+		const appUrl = "https://headcv.com";
+		const canonicalUrl = `${appUrl}/templates`;
+		const rootUrl = getCanonicalRootUrl(appUrl);
+		const title = i18n._(pageTitle);
+		const description = i18n._(pageDescription);
+		const ogImage = `${appUrl}/opengraph/features.jpg`;
+		const ogLocale = i18n.locale === "ar" ? "ar_SA" : "en_US";
+
+		return {
+			title,
+			links: [{ rel: "canonical", href: canonicalUrl }],
+			meta: [
+				{ name: "description", content: description },
+				{ name: "robots", content: "index, follow" },
+				{ property: "og:title", content: title },
+				{ property: "og:description", content: description },
+				{ property: "og:type", content: "website" },
+				{ property: "og:url", content: canonicalUrl },
+				{ property: "og:image", content: ogImage },
+				{ property: "og:image:width", content: "1200" },
+				{ property: "og:image:height", content: "630" },
+				{ property: "og:image:alt", content: i18n._(pageOgImageAlt) },
+				{ property: "og:site_name", content: "HeadCV" },
+				{ property: "og:locale", content: ogLocale },
+				{ property: "twitter:title", content: title },
+				{ property: "twitter:image", content: ogImage },
+				{ name: "twitter:image:alt", content: i18n._(pageOgImageAlt) },
+				{ property: "twitter:description", content: description },
+				{ property: "twitter:card", content: "summary_large_image" },
+			],
+			scripts: [createTemplateGalleryStructuredDataScript(canonicalUrl, rootUrl, i18n.locale)],
+		};
+	},
 });
 
 const categoryOptions = ["All", "ATS friendly", "Professional", "Modern", "Creative"] as const;
@@ -47,6 +99,7 @@ const templateGalleryOrder = [
 function TemplateGalleryPage() {
 	const { i18n } = useLingui();
 	const search = Route.useSearch();
+	const { session } = Route.useRouteContext();
 	const navigate = useNavigate({ from: Route.fullPath });
 	const [category, setCategory] = useState<(typeof categoryOptions)[number]>("All");
 	const [chosenTemplate, setSelectedTemplate] = useState<Template>();
@@ -65,6 +118,14 @@ function TemplateGalleryPage() {
 	async function continueToBuilder() {
 		setError(null);
 
+		if (!session) {
+			await navigate({
+				to: "/auth/register",
+				search: { redirect: `/templates?template=${selectedTemplate}` },
+			});
+			return;
+		}
+
 		try {
 			const id = await createResume.mutateAsync({
 				name: t`My CV`,
@@ -73,6 +134,7 @@ function TemplateGalleryPage() {
 			});
 			const data = structuredClone(defaultResumeData);
 			data.metadata.template = selectedTemplate;
+			data.metadata.design.colors.primary = templatePrimaryColors[data.metadata.template];
 
 			await updateResume.mutateAsync({ id, data });
 			await navigate({

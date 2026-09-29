@@ -122,6 +122,23 @@ export const createRootStructuredDataScript = (canonicalUrl: string, locale = "e
 		"@graph": getRootStructuredData(canonicalUrl, locale),
 	});
 
+export const createTemplateGalleryStructuredDataScript = (canonicalUrl: string, rootUrl: string, locale = "en") =>
+	createStructuredDataScript("headcv-template-gallery-structured-data", {
+		"@context": "https://schema.org",
+		"@graph": [
+			{
+				"@type": "CollectionPage",
+				"@id": `${canonicalUrl}#collection`,
+				name: "Resume Templates",
+				url: canonicalUrl,
+				description: "Browse free ATS-friendly, modern, professional, and creative resume templates on HeadCV.",
+				inLanguage: locale,
+				isPartOf: { "@id": `${rootUrl}#website` },
+				about: "Resume and CV design templates",
+			},
+		],
+	});
+
 const homeFaqJsonLdItems = [
 	{
 		question: "Is HeadCV free to use?",

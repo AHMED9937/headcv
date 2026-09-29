@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { serveStatic } from "@hono/node-server/serve-static";
+import { env } from "@headcv/env/server";
 
 function resolveWebDistPath() {
 	const candidates: string[] = [];
@@ -36,6 +37,8 @@ const reservedPublicResumeSegments = new Set([
 	"templates",
 ]);
 
+const GOOGLE_SITE_VERIFICATION_PLACEHOLDER = "__HEADCV_GOOGLE_SITE_VERIFICATION__";
+
 export const serveWebDistStatic = serveStatic({ root: staticRoot });
 
 function isAssetPath(pathname: string): boolean {
@@ -57,14 +60,36 @@ function isPublicResumePath(pathname: string): boolean {
 	return segments.length === 2 && firstSegment !== undefined && !reservedPublicResumeSegments.has(firstSegment);
 }
 
-function getFallbackResponseHeaders(pathname: string) {
-	if (pathname === "/") return { "Content-Type": "text/html; charset=UTF-8" };
-	if (isNoindexShellPath(pathname) || isPublicResumePath(pathname)) {
-		return {
-			"Content-Type": "text/html; charset=UTF-8",
-			"X-Robots-Tag": "noindex, follow",
-		};
+function isProductionHost(): boolean {
+	if (env.VERCEL_ENV) return env.VERCEL_ENV === "production";
+
+	try {
+		return new URL(env.APP_URL).hostname === "headcv.com";
+	} catch {
+		return false;
 	}
+}
+
+function injectGoogleSiteVerification(html: string): string {
+	return html.replace(GOOGLE_SITE_VERIFICATION_PLACEHOLDER, env.GOOGLE_SITE_VERIFICATION ?? "");
+}
+
+function getFallbackResponseHeaders(pathname: string) {
+	const headers: Record<string, string> = { "Content-Type": "text/html; charset=UTF-8" };
+	const isProduction = isProductionHost();
+
+	if (!isProduction) {
+		headers["X-Robots-Tag"] = "noindex, nofollow";
+		if (pathname === "/" || isNoindexShellPath(pathname) || isPublicResumePath(pathname)) return headers;
+		return null;
+	}
+
+	if (pathname === "/") return headers;
+	if (isNoindexShellPath(pathname)) {
+		headers["X-Robots-Tag"] = "noindex, follow";
+		return headers;
+	}
+	if (isPublicResumePath(pathname)) return headers;
 
 	return null;
 }
@@ -86,7 +111,8 @@ export async function handleWebApp(request: Request) {
 	const headers = getFallbackResponseHeaders(pathname);
 	if (!headers) return notFoundResponse({ noindex: true });
 
-	const html = await fs.readFile(indexHtmlPath, "utf-8");
+	const rawHtml = await fs.readFile(indexHtmlPath, "utf-8");
+	const html = injectGoogleSiteVerification(rawHtml);
 	return new Response(html, { headers });
 }
 
