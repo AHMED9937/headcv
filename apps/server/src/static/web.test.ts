@@ -94,12 +94,14 @@ describe("web app fallback classification", () => {
 
 	it("injects the Google site verification meta tag when configured", async () => {
 		env.GOOGLE_SITE_VERIFICATION = "abc123";
-		vi.mocked(fs.readFile).mockResolvedValue("<html><head><!--headcv:google-site-verification--></head></html>");
+		vi.mocked(fs.readFile).mockResolvedValue(
+			'<html><head><meta name="google-site-verification" content="__HEADCV_GOOGLE_SITE_VERIFICATION__"></head></html>',
+		);
 
 		const response = await handleWebApp(new Request("https://headcv.com/"));
 		const text = await response.text();
 
-		expect(text).toContain('<meta name="google-site-verification" content="abc123" />');
+		expect(text).toContain('<meta name="google-site-verification" content="abc123">');
 	});
 
 	it("returns noindex 404 for unknown non-asset routes", async () => {

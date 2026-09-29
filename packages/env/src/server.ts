@@ -124,7 +124,10 @@ export const env = createEnv({
 		// or a self-hosted Rendertron instance) to serve static HTML snapshots to search/AI crawlers.
 		PRERENDER_SERVICE_URL: z.string().min(1).url().optional(),
 		PRERENDER_TOKEN: z.string().min(1).optional(),
-		GOOGLE_SITE_VERIFICATION: z.string().min(1).optional(),
+		GOOGLE_SITE_VERIFICATION: z
+			.string()
+			.regex(/^[A-Za-z0-9_-]+$/)
+			.optional(),
 		VERCEL_ENV: z.enum(["production", "preview", "development"]).optional(),
 
 		// Crowdin (optional, for translation tooling)

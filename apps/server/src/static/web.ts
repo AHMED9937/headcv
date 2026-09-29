@@ -37,7 +37,7 @@ const reservedPublicResumeSegments = new Set([
 	"templates",
 ]);
 
-const GOOGLE_SITE_VERIFICATION_PLACEHOLDER = "<!--headcv:google-site-verification-->";
+const GOOGLE_SITE_VERIFICATION_PLACEHOLDER = "__HEADCV_GOOGLE_SITE_VERIFICATION__";
 
 export const serveWebDistStatic = serveStatic({ root: staticRoot });
 
@@ -71,10 +71,7 @@ function isProductionHost(): boolean {
 }
 
 function injectGoogleSiteVerification(html: string): string {
-	if (!env.GOOGLE_SITE_VERIFICATION) return html;
-
-	const tag = `<meta name="google-site-verification" content="${env.GOOGLE_SITE_VERIFICATION}" />`;
-	return html.replace(GOOGLE_SITE_VERIFICATION_PLACEHOLDER, tag);
+	return html.replace(GOOGLE_SITE_VERIFICATION_PLACEHOLDER, env.GOOGLE_SITE_VERIFICATION ?? "");
 }
 
 function getFallbackResponseHeaders(pathname: string) {
