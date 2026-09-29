@@ -53,8 +53,6 @@ describe("web app fallback classification", () => {
 		"/auth/login",
 		"/dashboard",
 		"/builder/resume-1",
-		"/templates",
-		"/templates/azurill.pdf",
 	])("serves noindex shell for known app prefix %s in production", async (pathname) => {
 		const response = await handleWebApp(new Request(`https://headcv.com${pathname}`));
 
@@ -62,6 +60,20 @@ describe("web app fallback classification", () => {
 		expect(response.headers.get("Content-Type")).toBe("text/html; charset=UTF-8");
 		expect(response.headers.get("X-Robots-Tag")).toBe("noindex, follow");
 		expect(await response.text()).toBe("<html>app</html>");
+	});
+
+	it("serves the templates gallery indexable in production", async () => {
+		const response = await handleWebApp(new Request("https://headcv.com/templates"));
+
+		expect(response.status).toBe(200);
+		expect(response.headers.get("X-Robots-Tag")).toBeNull();
+		expect(await response.text()).toBe("<html>app</html>");
+	});
+
+	it("returns noindex 404 for unknown template subpaths", async () => {
+		const response = await handleWebApp(new Request("https://headcv.com/templates/unknown"));
+
+		expect(response.status).toBe(404);
 	});
 
 	it("does not send noindex for public resume paths in production", async () => {

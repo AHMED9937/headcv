@@ -26,7 +26,8 @@ function resolveWebDistPath() {
 
 const staticRoot = resolveWebDistPath();
 const indexHtmlPath = `${staticRoot}/index.html`;
-const noindexShellPrefixes = ["/auth", "/dashboard", "/builder", "/templates"];
+const noindexShellPrefixes = ["/auth", "/dashboard", "/builder"];
+const publicShellPaths = new Set(["/", "/templates"]);
 const reservedPublicResumeSegments = new Set([
 	"api",
 	".well-known",
@@ -75,23 +76,16 @@ function injectGoogleSiteVerification(html: string): string {
 }
 
 function getFallbackResponseHeaders(pathname: string) {
+	const isAllowed = publicShellPaths.has(pathname) || isNoindexShellPath(pathname) || isPublicResumePath(pathname);
+	if (!isAllowed) return null;
+
 	const headers: Record<string, string> = { "Content-Type": "text/html; charset=UTF-8" };
-	const isProduction = isProductionHost();
-
-	if (!isProduction) {
+	if (!isProductionHost()) {
 		headers["X-Robots-Tag"] = "noindex, nofollow";
-		if (pathname === "/" || isNoindexShellPath(pathname) || isPublicResumePath(pathname)) return headers;
-		return null;
-	}
-
-	if (pathname === "/") return headers;
-	if (isNoindexShellPath(pathname)) {
+	} else if (isNoindexShellPath(pathname)) {
 		headers["X-Robots-Tag"] = "noindex, follow";
-		return headers;
 	}
-	if (isPublicResumePath(pathname)) return headers;
-
-	return null;
+	return headers;
 }
 
 function notFoundResponse(options: { head?: boolean; noindex?: boolean } = {}) {
