@@ -1,13 +1,19 @@
 import type { RouterOutput } from "@/libs/orpc/client";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { FingerprintIcon, GithubLogoIcon, GoogleLogoIcon, LinkedinLogoIcon, VaultIcon } from "@phosphor-icons/react";
+import {
+	AppleLogoIcon,
+	FingerprintIcon,
+	GithubLogoIcon,
+	GoogleLogoIcon,
+	LinkedinLogoIcon,
+	VaultIcon,
+} from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Button } from "@headcv/ui/components/button";
 import { Skeleton } from "@headcv/ui/components/skeleton";
-import { cn } from "@headcv/utils/style";
 import { authClient } from "@/libs/auth/client";
 import { orpc } from "@/libs/orpc/client";
 
@@ -40,6 +46,10 @@ function getSocialSignInOptions(
 
 export function SocialAuth({ requestSignUp = false, pendingPlan }: SocialAuthProps) {
 	const { data: providers = {}, isLoading } = useQuery(orpc.auth.providers.list.queryOptions());
+
+	// The password form isn't a button here; with nothing else enabled, drop the divider too.
+	const hasButtonProviders = Object.keys(providers).some((provider) => provider !== "credential");
+	if (!isLoading && !hasButtonProviders) return null;
 
 	return (
 		<>
@@ -162,56 +172,56 @@ function SocialAuthButtons({ providers, requestSignUp, pendingPlan }: SocialAuth
 
 	return (
 		<div className="grid grid-cols-2 gap-4">
-			<Button
-				variant="secondary"
-				onClick={handleOAuthLogin}
-				className={cn("hidden", "custom" in providers && "inline-flex")}
-			>
-				<VaultIcon />
-				{providers.custom}
-			</Button>
+			{"google" in providers && (
+				<Button
+					onClick={() => handleSocialLogin("google")}
+					className="flex-1 bg-[#4285F4] text-white hover:bg-[#4285F4]/80"
+				>
+					<GoogleLogoIcon />
+					<Trans comment="Brand name label for Google social sign-in button">Google</Trans>
+				</Button>
+			)}
 
-			<Button
-				variant="secondary"
-				onClick={handlePasskeyLogin}
-				className={cn("hidden", "passkey" in providers && "inline-flex")}
-			>
-				<FingerprintIcon />
-				<Trans comment="Label for passkey sign-in button">Passkey</Trans>
-			</Button>
+			{"apple" in providers && (
+				<Button onClick={() => handleSocialLogin("apple")} className="flex-1 bg-black text-white hover:bg-black/80">
+					<AppleLogoIcon weight="fill" />
+					<Trans comment="Brand name label for Apple social sign-in button">Apple</Trans>
+				</Button>
+			)}
 
-			<Button
-				onClick={() => handleSocialLogin("google")}
-				className={cn(
-					"hidden flex-1 bg-[#4285F4] text-white hover:bg-[#4285F4]/80",
-					"google" in providers && "inline-flex",
-				)}
-			>
-				<GoogleLogoIcon />
-				<Trans comment="Brand name label for Google social sign-in button">Google</Trans>
-			</Button>
+			{"github" in providers && (
+				<Button
+					onClick={() => handleSocialLogin("github")}
+					className="flex-1 bg-[#2b3137] text-white hover:bg-[#2b3137]/80"
+				>
+					<GithubLogoIcon />
+					<Trans comment="Brand name label for GitHub social sign-in button">GitHub</Trans>
+				</Button>
+			)}
 
-			<Button
-				onClick={() => handleSocialLogin("github")}
-				className={cn(
-					"hidden flex-1 bg-[#2b3137] text-white hover:bg-[#2b3137]/80",
-					"github" in providers && "inline-flex",
-				)}
-			>
-				<GithubLogoIcon />
-				<Trans comment="Brand name label for GitHub social sign-in button">GitHub</Trans>
-			</Button>
+			{"linkedin" in providers && (
+				<Button
+					onClick={() => handleSocialLogin("linkedin")}
+					className="flex-1 bg-[#0A66C2] text-white hover:bg-[#0A66C2]/80"
+				>
+					<LinkedinLogoIcon />
+					<Trans comment="Brand name label for LinkedIn social sign-in button">LinkedIn</Trans>
+				</Button>
+			)}
 
-			<Button
-				onClick={() => handleSocialLogin("linkedin")}
-				className={cn(
-					"hidden flex-1 bg-[#0A66C2] text-white hover:bg-[#0A66C2]/80",
-					"linkedin" in providers && "inline-flex",
-				)}
-			>
-				<LinkedinLogoIcon />
-				<Trans comment="Brand name label for LinkedIn social sign-in button">LinkedIn</Trans>
-			</Button>
+			{"custom" in providers && (
+				<Button variant="secondary" onClick={handleOAuthLogin}>
+					<VaultIcon />
+					{providers.custom}
+				</Button>
+			)}
+
+			{"passkey" in providers && (
+				<Button variant="secondary" onClick={handlePasskeyLogin}>
+					<FingerprintIcon />
+					<Trans comment="Label for passkey sign-in button">Passkey</Trans>
+				</Button>
+			)}
 		</div>
 	);
 }

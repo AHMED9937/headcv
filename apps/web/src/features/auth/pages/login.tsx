@@ -141,27 +141,6 @@ export function LoginPage({ disableEmailAuth, disableSignups, pendingPlan }: Pro
 				<h1 className="font-semibold text-2xl tracking-tight">
 					<Trans comment="Title on the login page">Sign in to your account</Trans>
 				</h1>
-
-				{!disableSignups && (
-					<div className="text-muted-foreground">
-						<Trans>
-							Don't have an account?{" "}
-							<Button
-								variant="link"
-								nativeButton={false}
-								className="h-auto gap-1.5 px-1! py-0"
-								render={
-									<Link to="/auth/register" search={pendingPlan ? { plan: pendingPlan } : {}}>
-										<Trans comment="Call-to-action link from login page to account registration page">
-											Create one now
-										</Trans>{" "}
-										<ArrowRightIcon />
-									</Link>
-								}
-							/>
-						</Trans>
-					</div>
-				)}
 			</div>
 
 			{!disableEmailAuth && (
@@ -263,13 +242,40 @@ export function LoginPage({ disableEmailAuth, disableSignups, pendingPlan }: Pro
 						)}
 					</form.Field>
 
-					<Button type="submit" className="w-full">
-						<Trans comment="Primary action button label on login form">Sign in</Trans>
-					</Button>
+					<div className="space-y-3">
+						<Button type="submit" className="w-full">
+							<Trans comment="Primary action button label on login form">Sign in</Trans>
+						</Button>
+
+						{!disableSignups && <SignUpPrompt pendingPlan={pendingPlan} />}
+					</div>
 				</form>
 			)}
 
 			<SocialAuth pendingPlan={pendingPlan} />
+
+			{disableEmailAuth && !disableSignups && <SignUpPrompt pendingPlan={pendingPlan} />}
 		</>
+	);
+}
+
+function SignUpPrompt({ pendingPlan }: { pendingPlan?: PendingPlan }) {
+	return (
+		<p className="text-center text-muted-foreground text-sm">
+			<Trans>
+				Don't have an account?{" "}
+				<Button
+					variant="link"
+					nativeButton={false}
+					className="h-auto gap-1.5 px-1! py-0"
+					render={
+						<Link to="/auth/register" search={pendingPlan ? { plan: pendingPlan } : {}}>
+							<Trans comment="Call-to-action link from login page to account registration page">Create one now</Trans>{" "}
+							<ArrowRightIcon />
+						</Link>
+					}
+				/>
+			</Trans>
+		</p>
 	);
 }

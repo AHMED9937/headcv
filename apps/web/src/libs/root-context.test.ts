@@ -20,7 +20,7 @@ beforeEach(() => {
 	vi.clearAllMocks();
 	mocks.locale = "en-US";
 	mocks.getSession.mockResolvedValue({ user: { id: "u1" } });
-	mocks.getFlags.mockResolvedValue({ disableSignups: false, disableEmailAuth: false });
+	mocks.getFlags.mockResolvedValue({ disableSignups: false, disableEmailAuth: false, signupEmailDomains: ["*"] });
 });
 
 describe("loadRootContext", () => {

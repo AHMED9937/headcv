@@ -19,9 +19,11 @@ export function AuthenticationSettingsPage() {
 
 			<TwoFactorSection />
 
-			<PasskeysSection />
+			{"passkey" in enabledProviders && <PasskeysSection />}
 
 			{"google" in enabledProviders && <SocialProviderSection provider="google" animationDelay={0.4} />}
+
+			{"apple" in enabledProviders && <SocialProviderSection provider="apple" animationDelay={0.45} />}
 
 			{"github" in enabledProviders && <SocialProviderSection provider="github" animationDelay={0.5} />}
 

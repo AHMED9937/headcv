@@ -13,7 +13,8 @@ import { getTheme } from "./theme";
 const ROOT_CONTEXT_STALE_MS = 60_000;
 const ROOT_CONTEXT_KEY = ["root-context"] as const;
 
-const defaultFlags = { disableSignups: false, disableEmailAuth: false };
+// Unknown domain policy falls back to "*": the server still enforces the real allowlist.
+const defaultFlags = { disableSignups: false, disableEmailAuth: false, signupEmailDomains: ["*"] };
 
 export async function loadRootContext(queryClient: QueryClient) {
 	const theme = getTheme();

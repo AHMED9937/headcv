@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 const envMock = vi.hoisted(() => ({
 	FLAG_DISABLE_SIGNUPS: false,
 	FLAG_DISABLE_EMAIL_AUTH: false,
+	SIGNUP_ALLOWED_EMAIL_DOMAINS: ["gmail.com", "outlook.com"],
 }));
 
 vi.mock("@headcv/env/server", () => ({ env: envMock }));
@@ -16,6 +17,7 @@ describe("flagsService.getFlags", () => {
 		expect(flagsService.getFlags()).toEqual({
 			disableSignups: false,
 			disableEmailAuth: false,
+			signupEmailDomains: ["gmail.com", "outlook.com"],
 		});
 	});
 
@@ -25,6 +27,7 @@ describe("flagsService.getFlags", () => {
 		expect(flagsService.getFlags()).toEqual({
 			disableSignups: true,
 			disableEmailAuth: false,
+			signupEmailDomains: ["gmail.com", "outlook.com"],
 		});
 	});
 
@@ -34,6 +37,7 @@ describe("flagsService.getFlags", () => {
 		expect(flagsService.getFlags()).toEqual({
 			disableSignups: false,
 			disableEmailAuth: true,
+			signupEmailDomains: ["gmail.com", "outlook.com"],
 		});
 	});
 
