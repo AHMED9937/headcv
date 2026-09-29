@@ -1,8 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /builder/
-Disallow: /dashboard/
-Disallow: /settings/
-Disallow: /agent/
-
-Sitemap: https://headcv.com/sitemap.xml
