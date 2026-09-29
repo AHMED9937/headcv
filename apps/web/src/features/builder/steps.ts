@@ -15,8 +15,7 @@ export type BuilderStepId =
 	| "additional-sections"
 	| "review"
 	| "design"
-	| "export"
-	| "save-account";
+	| "export";
 
 export type BuilderStep = {
 	id: BuilderStepId;
@@ -36,7 +35,6 @@ export const BUILDER_STEPS: BuilderStep[] = [
 	{ id: "review", required: false },
 	{ id: "design", required: false },
 	{ id: "export", required: false },
-	{ id: "save-account", required: false },
 ];
 
 export function getStepLabel(stepId: BuilderStepId): string {
@@ -53,7 +51,6 @@ export function getStepLabel(stepId: BuilderStepId): string {
 		.with("review", () => t`Review`)
 		.with("design", () => t`Design`)
 		.with("export", () => t`Export`)
-		.with("save-account", () => t`Save Account`)
 		.exhaustive();
 }
 
@@ -79,7 +76,6 @@ export function isStepComplete(stepId: BuilderStepId, resume: Resume): boolean {
 		case "review":
 		case "design":
 		case "export":
-		case "save-account":
 			return (resume.data.metadata?.completedSteps as BuilderStepId[] | undefined)?.includes(stepId) ?? false;
 		default:
 			return false;
