@@ -40,11 +40,12 @@ Then open `http://localhost:3000` and verify `http://localhost:3001/api/health` 
 See `.env.example` for the full list:
 
 - Application: `PORT`, `SERVER_PORT`
-- Social auth: `GOOGLE_*`, `GITHUB_*`, `LINKEDIN_*`
+- Social auth: `GOOGLE_*`, `APPLE_*`, `GITHUB_*`, `LINKEDIN_*`
 - Custom OAuth: `OAUTH_*`
 - Email (SMTP): `SMTP_*`  without SMTP config, emails are logged to the console in dev
+- Sign-up policy: `SIGNUP_ALLOWED_EMAIL_DOMAINS`  comma-separated allowlist for email/password sign-ups and email changes; leave empty for the default trusted providers (Gmail, Outlook family, Apple), or set `*` to allow any domain. Social sign-ups are provider-verified and exempt.
 - Storage: `S3_*`, `LOCAL_STORAGE_PATH`
-- Feature flags: `FLAG_DISABLE_SIGNUPS`, `FLAG_DISABLE_EMAIL_AUTH`, `FLAG_DISABLE_IMAGE_PROCESSING`, `FLAG_ALLOW_UNSAFE_OAUTH_REDIRECT_URI`
+- Feature flags: `FLAG_DISABLE_SIGNUPS`, `FLAG_DISABLE_EMAIL_AUTH`, `FLAG_ENABLE_PASSKEYS`, `FLAG_DISABLE_IMAGE_PROCESSING`, `FLAG_ALLOW_UNSAFE_OAUTH_REDIRECT_URI`
 - Tooling: `GOOGLE_CLOUD_API_KEY`, `CROWDIN_*`
 - Local/remote LLM (dev-only): `LLM_BASE_URL`, `LLM_MODEL`, `LLM_API_KEY`, `LLM_TIMEOUT`, `LLM_MAX_TOKENS`, `LLM_TEMPERATURE`
 

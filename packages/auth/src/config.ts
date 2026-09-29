@@ -58,8 +58,11 @@ function isCustomOAuthProviderEnabled() {
 const isAppleProviderEnabled = Boolean(env.APPLE_CLIENT_ID) && Boolean(env.APPLE_CLIENT_SECRET);
 
 // Previews answer on both the deployment URL and the branch alias.
-// Apple posts its OAuth callback (response_mode=form_post) from appleid.apple.com.
-const TRUSTED_ORIGINS = getTrustedOrigins(env.APP_URL, [
+// Apple posts its OAuth callback (response_mode=form_post) from appleid.apple.com,
+// but that origin is only relevant to Better Auth's trusted origin list, not to
+// dynamic OAuth client registration redirect URI validation below.
+const BASE_TRUSTED_ORIGINS = getTrustedOrigins(env.APP_URL, [...vercelPreviewOrigins]);
+const BETTER_AUTH_TRUSTED_ORIGINS = getTrustedOrigins(env.APP_URL, [
 	...vercelPreviewOrigins,
 	...(isAppleProviderEnabled ? ["https://appleid.apple.com"] : []),
 ]);
@@ -112,7 +115,7 @@ const getAuthConfig = () => {
 		database: drizzleAdapter(db, { schema, provider: "pg" }),
 
 		telemetry: { enabled: false },
-		trustedOrigins: TRUSTED_ORIGINS,
+		trustedOrigins: BETTER_AUTH_TRUSTED_ORIGINS,
 		rateLimit: {
 			...rateLimitConfig.betterAuth.global,
 			enabled: isRateLimitEnabled,
@@ -133,7 +136,8 @@ const getAuthConfig = () => {
 							message: `Please use an email from a trusted provider (${env.SIGNUP_ALLOWED_EMAIL_DOMAINS.join(", ")}), or continue with Google or Apple.`,
 						});
 					}
-					return;
+					// Fall through to the shared path guard below; email-domain paths do not
+					// reach the OAuth redirect_uri validation block.
 				}
 
 				if (!ctx.path.includes("/oauth2/register")) return;
@@ -146,7 +150,7 @@ const getAuthConfig = () => {
 						throw new APIError("BAD_REQUEST", { message: "redirect_uris entries must be strings" });
 					}
 					if (
-						!isAllowedOAuthRedirectUri(uri, TRUSTED_ORIGINS, {
+						!isAllowedOAuthRedirectUri(uri, BASE_TRUSTED_ORIGINS, {
 							allowUnsafe: env.FLAG_ALLOW_UNSAFE_OAUTH_REDIRECT_URI,
 						})
 					) {
