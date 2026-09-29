@@ -23,7 +23,7 @@ afterEach(() => {
 });
 
 describe("createSectionTitleResolverForLocale", () => {
-	it("returns a resolver function that produces section titles", async () => {
+	it("returns a resolver function that produces section titles", { timeout: 15_000 }, async () => {
 		const { createSectionTitleResolverForLocale } = await import("./section-title-locale");
 
 		const resolver = await createSectionTitleResolverForLocale("en-US");

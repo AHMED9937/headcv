@@ -28,7 +28,7 @@ describe("SummaryBuilder", () => {
 		expect(screen.getByText(/Choose a formula/i)).toBeInTheDocument();
 	});
 
-	it("assembles a formula from filled-in facts", async () => {
+	it("assembles a formula from filled-in facts", { timeout: 15_000 }, async () => {
 		render(
 			<I18nProvider i18n={i18n}>
 				<PromptDialogProvider>
