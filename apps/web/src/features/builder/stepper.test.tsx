@@ -26,7 +26,7 @@ beforeAll(() => {
 });
 
 describe("BuilderStepper", () => {
-	it("renders all 13 steps", () => {
+	it("renders all 12 steps", () => {
 		render(
 			<I18nProvider i18n={i18n}>
 				<BuilderStepper currentStep="personal-details" onStepClick={onStepClick} />
@@ -34,7 +34,7 @@ describe("BuilderStepper", () => {
 		);
 
 		expect(screen.getByRole("button", { name: /Personal Details/i })).toHaveAttribute("aria-current", "step");
-		expect(screen.getAllByRole("button")).toHaveLength(13);
+		expect(screen.getAllByRole("button")).toHaveLength(12);
 	});
 
 	it("calls onStepClick when a step is clicked", async () => {
@@ -55,7 +55,6 @@ describe("BuilderStepper", () => {
 		expect(isStepComplete("review", resume)).toBe(false);
 		expect(isStepComplete("design", resume)).toBe(false);
 		expect(isStepComplete("export", resume)).toBe(false);
-		expect(isStepComplete("save-account", resume)).toBe(false);
 		expect(
 			isStepComplete("review", {
 				data: { metadata: { completedSteps: ["review"] } },

@@ -1,8 +1,9 @@
+import type { DesignWorkspaceSection } from "@/libs/resume/section";
 import type { BuilderSearch } from "./workspace-search";
 import { Trans } from "@lingui/react/macro";
 import { ArrowLeftIcon } from "@phosphor-icons/react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@headcv/ui/components/button";
 import { ScrollArea } from "@headcv/ui/components/scroll-area";
 import { useDialogStore } from "@/dialogs/store";
@@ -12,13 +13,11 @@ import { useAiAssistant } from "@/features/resume/builder/ai-assistant";
 import { useCurrentResume } from "@/features/resume/builder/draft";
 import { BuilderSidebarLeft } from "../-sidebar/left";
 import { AiReviewSectionBuilder } from "../-sidebar/left/sections/ai-review";
-import { DesignSectionBuilder } from "../-sidebar/right/sections/design";
 import { ExportSectionBuilder } from "../-sidebar/right/sections/export";
-import { PageSectionBuilder } from "../-sidebar/right/sections/page";
-import { TemplateSectionBuilder } from "../-sidebar/right/sections/template";
-import { TypographySectionBuilder } from "../-sidebar/right/sections/typography";
 import { useSectionStore } from "../-store/section";
+import { DesignWorkspacePanel } from "./design-workspace";
 import { InlineSectionEditor } from "./inline-section-editor";
+import { DEFAULT_DESIGN_SECTION } from "./workspace-search";
 
 export function GuidedEditor() {
 	const { currentStep } = useBuilderStep();
@@ -38,34 +37,27 @@ export function GuidedEditor() {
 
 	return (
 		<div className="flex h-full min-h-0 flex-col bg-background">
-			<ScrollArea className="flex-1">
-				<div className="space-y-4 p-4">
-					{currentStep === "review" && <GuidedReview />}
-					{currentStep === "design" && <GuidedDesign />}
-					{currentStep === "export" && <ExportSectionBuilder />}
-					{currentStep === "save-account" && <SaveAccountStep />}
-				</div>
-			</ScrollArea>
+			{currentStep === "design" ? (
+				<GuidedDesign />
+			) : (
+				<ScrollArea className="flex-1">
+					<div className="space-y-4 p-4">
+						{currentStep === "review" && <GuidedReview />}
+						{currentStep === "export" && <ExportSectionBuilder />}
+					</div>
+				</ScrollArea>
+			)}
 			<BuilderStepActions />
 		</div>
 	);
 }
 
 function GuidedDesign() {
+	const [designSection, setDesignSection] = useState<DesignWorkspaceSection>(DEFAULT_DESIGN_SECTION);
+
 	return (
-		<div className="space-y-4">
-			<div className="space-y-1">
-				<h2 className="font-display font-semibold text-2xl">
-					<Trans>Make it yours</Trans>
-				</h2>
-				<p className="text-muted-foreground text-sm">
-					<Trans>Adjust the look without changing your content.</Trans>
-				</p>
-			</div>
-			<TemplateSectionBuilder />
-			<DesignSectionBuilder />
-			<TypographySectionBuilder />
-			<PageSectionBuilder />
+		<div className="flex min-h-0 flex-1 flex-col">
+			<DesignWorkspacePanel section={designSection} onSectionChange={setDesignSection} />
 		</div>
 	);
 }
@@ -111,19 +103,6 @@ function GuidedReview() {
 					</li>
 				))}
 			</ul>
-		</div>
-	);
-}
-
-function SaveAccountStep() {
-	return (
-		<div className="space-y-3">
-			<h2 className="font-display font-semibold text-2xl">
-				<Trans>Save your progress</Trans>
-			</h2>
-			<p className="text-muted-foreground text-sm">
-				<Trans>Create an account when you are ready to keep this resume across devices.</Trans>
-			</p>
 		</div>
 	);
 }
