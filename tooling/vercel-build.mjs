@@ -19,6 +19,18 @@ mkdirSync(serverFuncDir, { recursive: true });
 // to reinstall dependencies while building.
 execSync("pnpm --filter web exec vite build --emptyOutDir", { cwd: root, stdio: "inherit", shell: true });
 
+// Vercel serves the SPA shell straight from the CDN, so the Google Search
+// Console token must be baked into index.html at build time. The same sentinel
+// is still replaced at runtime by apps/server for the container/Docker path.
+const indexHtmlPath = join(webDist, "index.html");
+writeFileSync(
+	indexHtmlPath,
+	readFileSync(indexHtmlPath, "utf-8").replaceAll(
+		"__HEADCV_GOOGLE_SITE_VERIFICATION__",
+		process.env.GOOGLE_SITE_VERIFICATION ?? "",
+	),
+);
+
 // Bundle the server function into a single ESM file.
 const serverBundle = join(serverFuncDir, "index.mjs");
 const esbuildArgs = [
@@ -80,12 +92,32 @@ writeFileSync(
 	}),
 );
 
-// Global routing table.
+// Global routing table. Private app shells get an explicit noindex header and
+// non-production builds noindex every response, since the CDN serves the SPA
+// shell without ever hitting the server function's robots logic.
+const noindexRoutes = [
+	...(process.env.VERCEL_ENV === "production"
+		? []
+		: [
+				{
+					src: "^/.*$",
+					headers: { "x-robots-tag": "noindex, nofollow" },
+					continue: true,
+				},
+			]),
+	{
+		src: "^/(?:auth|dashboard|builder)(?:/.*)?$",
+		headers: { "x-robots-tag": "noindex, follow" },
+		continue: true,
+	},
+];
+
 writeFileSync(
 	join(outDir, "config.json"),
 	JSON.stringify({
 		version: 3,
 		routes: [
+			...noindexRoutes,
 			{
 				handle: "filesystem",
 			},

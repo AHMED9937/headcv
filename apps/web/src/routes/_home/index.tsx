@@ -34,7 +34,7 @@ export const Route = createFileRoute("/_home/")({
 	component: RouteComponent,
 	pendingComponent: LoadingScreen,
 	head: () => {
-		const appUrl = "https://headcv.com";
+		const appUrl = "https://www.headcv.com";
 		const canonicalUrl = getCanonicalRootUrl(appUrl);
 		const title = i18n._(landingTitle);
 		const description = i18n._(landingDescription);

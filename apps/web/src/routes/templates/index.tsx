@@ -40,7 +40,7 @@ export const Route = createFileRoute("/templates/")({
 	}),
 	component: TemplateGalleryPage,
 	head: () => {
-		const appUrl = "https://headcv.com";
+		const appUrl = "https://www.headcv.com";
 		const canonicalUrl = `${appUrl}/templates`;
 		const rootUrl = getCanonicalRootUrl(appUrl);
 		const title = i18n._(pageTitle);

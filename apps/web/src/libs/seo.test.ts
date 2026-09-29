@@ -6,7 +6,7 @@ import {
 	getRootStructuredData,
 } from "./seo";
 
-const canonicalUrl = "https://headcv.com/";
+const canonicalUrl = "https://www.headcv.com/";
 
 describe("getCanonicalRootUrl", () => {
 	it("uses the production root when no origin is available", () => {

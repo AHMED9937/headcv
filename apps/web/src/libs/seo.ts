@@ -1,4 +1,4 @@
-const productionRootUrl = "https://headcv.com/";
+const productionRootUrl = "https://www.headcv.com/";
 const appName = "HeadCV";
 
 // TODO(Q9): Replace with the final product domain and repository URL once decided.
