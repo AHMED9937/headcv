@@ -43,7 +43,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 	component: RootComponent,
 	head: () => {
 		const title = `${i18n._(appName)} | ${i18n._(tagline)}`;
-		const appUrl = typeof window !== "undefined" ? window.location.origin : "https://headcv.com";
+		const appUrl = typeof window !== "undefined" ? window.location.origin : "https://www.headcv.com";
 
 		return {
 			links: [

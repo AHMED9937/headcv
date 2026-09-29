@@ -7,7 +7,7 @@ import { createNoindexFollowMeta } from "@/libs/seo";
 
 type LoaderData = Omit<RouterOutput["resume"]["getBySlug"], "data"> & { data: ResumeData };
 
-const appUrl = "https://headcv.com";
+const appUrl = "https://www.headcv.com";
 
 export const Route = createFileRoute("/$username/$slug")({
 	component: lazyRouteComponent(() => import("@/features/resume/public/public-resume"), "PublicResumeRoute"),
