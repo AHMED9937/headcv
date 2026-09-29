@@ -2,9 +2,13 @@ import { RouterProvider } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { BrandIcon } from "@headcv/ui/components/brand-icon";
+import { installStaleChunkRecovery } from "./libs/stale-chunk-recovery";
 import { getRouter } from "./router";
 import "./polyfills/map-upsert";
 import "./index.css";
+
+// Recover a stale client that survives a deploy and 404s on old route chunks.
+installStaleChunkRecovery();
 
 type Router = Awaited<ReturnType<typeof getRouter>>;
 
