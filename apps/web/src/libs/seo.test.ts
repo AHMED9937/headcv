@@ -79,7 +79,10 @@ describe("getRootStructuredData", () => {
 			"@type": "FAQPage",
 			mainEntity: expect.arrayContaining([
 				expect.objectContaining({
-					name: "Is HeadCV free to use?",
+					name: "What is HeadCV and how does it work?",
+				}),
+				expect.objectContaining({
+					name: "Can I import an existing resume into HeadCV?",
 				}),
 			]),
 		});

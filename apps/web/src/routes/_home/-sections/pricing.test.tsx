@@ -49,16 +49,24 @@ function renderPricing() {
 }
 
 describe("Landing pricing", () => {
-	it("shows the compact $3 trial after the plans without repeated duration or arrows", () => {
+	it("shows the compact $3 trial before the plans without repeated duration or arrows", () => {
 		renderPricing();
 		const trial = screen.getByRole("region", { name: "Try all of Pro." });
 		expect(within(trial).getByText("$3")).toBeInTheDocument();
 		expect(within(trial).getByText("7-day trial")).toBeInTheDocument();
 		expect(trial.textContent).not.toMatch(/US|for 7 days|→/);
 		expect(
-			screen.getByRole("heading", { name: "Pro" }).compareDocumentPosition(trial) & Node.DOCUMENT_POSITION_FOLLOWING,
+			trial.compareDocumentPosition(screen.getByRole("heading", { name: "Pro" })) & Node.DOCUMENT_POSITION_FOLLOWING,
 		).toBeTruthy();
 		expect(within(trial).getByRole("button", { name: "Start 7-day trial" })).toBeInTheDocument();
+	});
+
+	it("describes the Free and Pro plans without cover-letter benefits", () => {
+		renderPricing();
+		expect(screen.getByText("Everything you need for a professional resume:")).toBeInTheDocument();
+		expect(screen.getByText("Includes all Free features, plus:")).toBeInTheDocument();
+		expect(screen.getByText("Full design customization")).toBeInTheDocument();
+		expect(screen.queryByText(/cover letter/i)).not.toBeInTheDocument();
 	});
 
 	it("hides the trial offer from users who already used it", () => {

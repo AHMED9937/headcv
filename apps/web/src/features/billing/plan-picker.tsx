@@ -11,11 +11,10 @@ import { useCheckout } from "./use-subscription";
 const PRO_PRICES = { monthly: 20, yearly: 5, yearlyTotal: 60, trial: 3 } as const;
 
 export const getProFeatures = () => [
-	t({ id: "home.pro.resumes", message: "Unlimited resumes for every opportunity" }),
-	t({ id: "home.pro.letters", message: "Unlimited matching cover letters" }),
-	t({ id: "home.pro.imports", message: "Import without limits" }),
-	t({ id: "home.pro.tracker", message: "Your applications, organized" }),
-	t({ id: "home.pro.ai", message: "AI assistance for your next draft" }),
+	t({ id: "home.pro.resumes", message: "Unlimited resumes" }),
+	t({ id: "home.pro.imports", message: "Unlimited imports" }),
+	t({ id: "home.pro.tracker", message: "Job Application Tracker" }),
+	t({ id: "home.pro.ai", message: "AI features" }),
 ];
 
 type PlanPickerProps = {
@@ -36,6 +35,27 @@ export function PlanPicker({ hideTrial = false, className }: PlanPickerProps) {
 
 	return (
 		<div className={cn("space-y-4", className)}>
+			{!hideTrial && (
+				<div className="flex flex-wrap items-center gap-4 rounded-2xl border border-[#c9a227] bg-linear-to-r from-[#f5e8bf] to-[#fffaf0] p-4 text-[#152642]">
+					<bdi className="font-bold font-display text-3xl">{money(PRO_PRICES.trial)}</bdi>
+					<div className="min-w-0 flex-1">
+						<p className="font-semibold">
+							<Trans id="home.offer.title">Try all of Pro.</Trans>
+						</p>
+						<p className="text-sm">
+							<Trans id="billing.picker.trialNote">7 days of every Pro tool. Not sure yet? Start here.</Trans>
+						</p>
+					</div>
+					<Button
+						disabled={isLoading}
+						onClick={() => checkout("trial")}
+						className="h-auto min-h-11 whitespace-normal bg-[#152642] px-5 py-2 text-white hover:bg-[#152642]/90"
+					>
+						{ctaLabel("trial", <Trans id="home.pricing.startTrial">Start 7-day trial</Trans>)}
+					</Button>
+				</div>
+			)}
+
 			<div className="rounded-2xl bg-primary p-5 text-primary-foreground shadow-lg sm:p-6">
 				<div className="flex flex-wrap items-center justify-between gap-3">
 					<p className="flex items-center gap-2 font-display font-semibold text-xl">
@@ -97,7 +117,10 @@ export function PlanPicker({ hideTrial = false, className }: PlanPickerProps) {
 					</p>
 				</div>
 
-				<ul className="mt-4 grid gap-2 sm:grid-cols-2">
+				<p className="mt-5 text-primary-foreground/80 text-sm">
+					<Trans id="home.pricing.proIncludes">Includes all Free features, plus:</Trans>
+				</p>
+				<ul className="mt-3 grid gap-2 sm:grid-cols-2">
 					{getProFeatures().map((feature) => (
 						<li key={feature} className="flex items-start gap-2 text-sm">
 							<CheckIcon aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
@@ -118,27 +141,6 @@ export function PlanPicker({ hideTrial = false, className }: PlanPickerProps) {
 					<Trans id="billing.picker.reassurance">Secure checkout · Cancel anytime · Your resumes stay yours</Trans>
 				</p>
 			</div>
-
-			{!hideTrial && (
-				<div className="flex flex-wrap items-center gap-4 rounded-2xl border border-[#c9a227] bg-linear-to-r from-[#f5e8bf] to-[#fffaf0] p-4 text-[#152642]">
-					<bdi className="font-bold font-display text-3xl">{money(PRO_PRICES.trial)}</bdi>
-					<div className="min-w-0 flex-1">
-						<p className="font-semibold">
-							<Trans id="home.offer.title">Try all of Pro.</Trans>
-						</p>
-						<p className="text-sm">
-							<Trans id="billing.picker.trialNote">7 days of every Pro tool. Not sure yet? Start here.</Trans>
-						</p>
-					</div>
-					<Button
-						disabled={isLoading}
-						onClick={() => checkout("trial")}
-						className="h-auto min-h-11 whitespace-normal bg-[#152642] px-5 py-2 text-white hover:bg-[#152642]/90"
-					>
-						{ctaLabel("trial", <Trans id="home.pricing.startTrial">Start 7-day trial</Trans>)}
-					</Button>
-				</div>
-			)}
 		</div>
 	);
 }
