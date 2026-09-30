@@ -39,7 +39,7 @@ export function PlanBadge({ compact = false, className }: PlanBadgeProps) {
 						<Trans id="billing.badge.trial">Trial</Trans>
 					)
 				) : isPaid ? (
-					"Pro"
+					<Trans id="billing.badge.pro">Pro</Trans>
 				) : (
 					<Trans id="billing.badge.free">Free plan</Trans>
 				)}

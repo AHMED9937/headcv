@@ -133,7 +133,9 @@ export function Pricing() {
 					{/* Pro */}
 					<div className="flex h-full flex-col rounded-2xl border border-accent/60 bg-card p-6 text-card-foreground shadow-md sm:p-8">
 						<div className="flex items-center justify-between gap-3">
-							<h3 className="shrink-0 font-display font-semibold text-3xl">Pro</h3>
+							<h3 className="shrink-0 font-display font-semibold text-3xl">
+								<Trans id="home.pricing.pro">Pro</Trans>
+							</h3>
 							{/* Billing toggle */}
 							<div className="flex shrink-0 items-center gap-2.5 whitespace-nowrap">
 								<span className="rounded-full bg-accent-light px-2 py-0.5 font-semibold text-primary text-xs">

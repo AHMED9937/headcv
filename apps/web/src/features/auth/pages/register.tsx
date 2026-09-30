@@ -8,9 +8,9 @@ import { useToggle } from "usehooks-ts";
 import z from "zod";
 import { Alert, AlertDescription, AlertTitle } from "@headcv/ui/components/alert";
 import { Button } from "@headcv/ui/components/button";
-import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
+import { FormControl, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
 import { Input } from "@headcv/ui/components/input";
-import { ANY_EMAIL_DOMAIN, isEmailDomainAllowed } from "@headcv/utils/email-domain";
+import { isEmailDomainAllowed } from "@headcv/utils/email-domain";
 import { authClient } from "@/libs/auth/client";
 import { useAppForm } from "@/libs/tanstack-form";
 import { SocialAuth } from "../components/social-auth";
@@ -39,7 +39,7 @@ const createFormSchema = (allowedEmailDomains: readonly string[]) =>
 			.toLowerCase()
 			.email({ message: "Enter a valid email address." })
 			.refine((email) => isEmailDomainAllowed(email, allowedEmailDomains), {
-				message: `Please use an email from a trusted provider (${allowedEmailDomains.join(", ")}).`,
+				message: t`Use an address from: ${allowedEmailDomains.join(", ")}`,
 			}),
 		password: z.string().min(6).max(64),
 	});
@@ -55,7 +55,6 @@ export function RegisterPage({ disableEmailAuth, signupEmailDomains, pendingPlan
 	const [showPassword, toggleShowPassword] = useToggle(false);
 
 	const formSchema = useMemo(() => createFormSchema(signupEmailDomains), [signupEmailDomains]);
-	const restrictsEmailDomains = !signupEmailDomains.includes(ANY_EMAIL_DOMAIN);
 
 	const form = useAppForm({
 		defaultValues: { name: "", username: "", email: "", password: "" },
@@ -205,13 +204,6 @@ export function RegisterPage({ disableEmailAuth, signupEmailDomains, pendingPlan
 									}
 								/>
 								<FormMessage errors={field.state.meta.errors} />
-								{restrictsEmailDomains && (
-									<FormDescription>
-										<Trans comment="Hint under the registration email field listing accepted email domains">
-											Use an address from: {signupEmailDomains.join(", ")}
-										</Trans>
-									</FormDescription>
-								)}
 							</FormItem>
 						)}
 					</form.Field>

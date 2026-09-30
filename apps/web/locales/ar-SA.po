@@ -35,7 +35,7 @@ msgstr "الاسم"
 
 #: src/routes/_home/-sections/pricing.tsx
 msgid "-75%"
-msgstr ""
+msgstr "-٧٥٪"
 
 #. placeholder {0}: section.items.length
 #: src/routes/builder/$resumeId/-sidebar/left/sections/custom.tsx
@@ -107,12 +107,12 @@ msgstr "→ العودة إلى العبارات"
 #. placeholder {0}: money(20)
 #: src/routes/_home/-sections/pricing.tsx
 msgid "<0>{0}</0> billed monthly"
-msgstr ""
+msgstr "<0>{0}</0> تُدفع شهريًا"
 
 #. placeholder {0}: money(60)
 #: src/routes/_home/-sections/pricing.tsx
 msgid "<0>{0}</0> billed yearly"
-msgstr ""
+msgstr "<0>{0}</0> تُدفع سنويًا"
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/information.tsx
 msgid "<0>Thank you for using HeadCV! This app is a labor of love, created mostly in my spare time, with wonderful support from open-source contributors around the world.</0><1>If HeadCV has been helpful to you, and you'd like to help keep it free and open for everyone, please consider making a donation. Every little bit is appreciated!</1>"
@@ -132,7 +132,7 @@ msgstr "3 أشهر"
 
 #: src/routes/_home/-sections/pricing.tsx
 msgid "3 resumes"
-msgstr ""
+msgstr "3 سير ذاتية"
 
 #: src/dialogs/api-key/create.tsx
 msgid "6 months"
@@ -379,7 +379,7 @@ msgstr "محادثات الذكاء الاصطناعي"
 
 #: src/features/billing/plan-picker.tsx
 msgid "AI features"
-msgstr ""
+msgstr "ميزات الذكاء الاصطناعي"
 
 #: src/features/resume/builder/ai-review.tsx
 #: src/libs/resume/section.tsx
@@ -401,7 +401,7 @@ msgstr "كل الحقول"
 
 #: src/routes/_home/-sections/pricing.tsx
 msgid "All resume templates"
-msgstr ""
+msgstr "جميع قوالب السيرة الذاتية"
 
 #: src/routes/templates/index.tsx
 msgid "All templates"
@@ -459,7 +459,7 @@ msgstr "يمكن لأي شخص لديه الرابط عرض السيرة الذ�
 #: src/features/auth/components/social-auth.tsx
 #: src/features/settings/authentication/components/hooks.tsx
 msgid "Apple"
-msgstr ""
+msgstr "آبل"
 
 #: src/routes/agent/-components/patch-tool-card.tsx
 msgid "Applied"
@@ -674,7 +674,7 @@ msgstr "عرض الإطار"
 #. js-lingui-explicit-id
 #: src/routes/templates/index.tsx
 msgid "templates.seo.description"
-msgstr ""
+msgstr "تصفح قوالب السيرة الذاتية المجانية من HeadCV. اختر تصميمًا متوافقًا مع أنظمة تتبع المتقدمين أو عصريًا أو احترافيًا أو إبداعيًا، وابدأ إنشاء سيرتك الذاتية خلال دقائق."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/hero.tsx
@@ -728,7 +728,7 @@ msgstr "هل يمكنني استيراد سيرة ذاتية موجودة؟"
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
 msgid "home.faq.versions"
-msgstr ""
+msgstr "هل يمكنني حفظ عدة إصدارات من السيرة الذاتية على HeadCV؟"
 
 #. Account deletion confirmation dialog cancel action in danger zone
 #. Confirmation dialog button label to abort deleting a custom section in resume builder
@@ -765,7 +765,7 @@ msgstr "إلغاء"
 
 #: src/routes/_home/-sections/pricing.tsx
 msgid "Cancel anytime"
-msgstr ""
+msgstr "يمكنك الإلغاء في أي وقت"
 
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Cannot restore; the resume has changed since this edit was applied."
@@ -828,7 +828,7 @@ msgstr "تحقق من بريدك الإلكتروني للحصول على راب
 
 #: src/features/auth/pages/register.tsx
 msgid "Check your inbox for the verification link required to activate your account."
-msgstr ""
+msgstr "تحقق من صندوق الوارد للعثور على رابط التحقق المطلوب لتفعيل حسابك."
 
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
@@ -1241,7 +1241,7 @@ msgstr "أقسام مخصصة"
 
 #: src/routes/builder/$resumeId/-components/header.tsx
 msgid "Customize"
-msgstr ""
+msgstr "خصّص"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/tools.tsx
@@ -1386,7 +1386,7 @@ msgstr "إرشادات الاستخدام"
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
 msgid "home.faq.languages"
-msgstr ""
+msgstr "هل يدعم HeadCV لغات متعددة؟"
 
 #: src/features/auth/pages/login.tsx
 msgid "Don't have an account? <0/>"
@@ -1554,7 +1554,7 @@ msgstr "البريد الإلكتروني غير مؤكد"
 
 #: src/features/auth/pages/register.tsx
 msgid "Email verification is required."
-msgstr ""
+msgstr "التحقق من البريد الإلكتروني مطلوب."
 
 #: src/features/settings/authentication/components/two-factor.tsx
 msgid "Enable 2FA"
@@ -1618,7 +1618,7 @@ msgstr "كل أدوات النسخة الاحترافية. سير ذاتية غ�
 
 #: src/routes/_home/-sections/pricing.tsx
 msgid "Everything you need for a professional resume:"
-msgstr ""
+msgstr "كل ما تحتاجه لإنشاء سيرة ذاتية احترافية:"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/features.tsx
@@ -1924,7 +1924,7 @@ msgstr "مجانية"
 
 #: src/routes/_home/-sections/pricing.tsx
 msgid "Free forever"
-msgstr ""
+msgstr "مجاني دائمًا"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/hero.tsx
@@ -1962,7 +1962,7 @@ msgstr "من صفحة فارغة إلى طلبك التالي، في أربع خ
 
 #: src/routes/_home/-sections/pricing.tsx
 msgid "Full design customization"
-msgstr ""
+msgstr "تخصيص كامل للتصميم"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/tools.tsx
@@ -2084,7 +2084,7 @@ msgstr "الصفحة الرئيسية لـ HeadCV"
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
 msgid "home.faq.howItWorksText"
-msgstr ""
+msgstr "HeadCV أداة مجانية وسهلة الاستخدام لإنشاء سير ذاتية احترافية ومتوافقة مع أنظمة تتبع المتقدمين بسرعة. اختر من بين 15 قالبًا احترافيًا، وخصّص التخطيط والتصميم، ونزّل ملفات PDF بلا حدود أو علامات مائية. ابدأ من سيرة فارغة أو استورد ملف PDF أو Microsoft Word لتعبئة محتواك مسبقًا."
 
 #: src/routes/__root.tsx
 msgid "HeadCV is a guided CV builder that helps you create an ATS-friendly resume in minutes. Free to start; no credit card required."
@@ -2098,17 +2098,17 @@ msgstr "HeadCV منشئ سيرة ذاتية موجه يساعدك على سرد 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
 msgid "home.faq.whyFreeText"
-msgstr ""
+msgstr "طوّر HeadCV فريق صغير ومستقل يركز على مساعدة الناس حول العالم في الحصول على وظائف. تموّل الميزات المدفوعة الاختيارية، مثل حفظ عدة إصدارات واستخدام مساعد الكتابة بالذكاء الاصطناعي، التطوير المستمر مع إبقاء الخطة المجانية سخية."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
 msgid "home.faq.privacyText"
-msgstr ""
+msgstr "يضع HeadCV الخصوصية أولًا ويلتزم باللائحة العامة لحماية البيانات. لا نبيع بياناتك الشخصية. أنت تملك محتواك ويمكنك حذف حسابك وبياناتك في أي وقت."
 
 #. js-lingui-explicit-id
 #: src/routes/templates/index.tsx
 msgid "templates.seo.ogImageAlt"
-msgstr ""
+msgstr "معرض قوالب السيرة الذاتية من HeadCV — تصاميم عصرية واحترافية ومتوافقة مع أنظمة تتبع المتقدمين."
 
 #. App version label in footer; includes semantic version variable
 #: src/components/ui/copyright.tsx
@@ -2217,7 +2217,7 @@ msgstr "الصفحة الرئيسية"
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
 msgid "home.faq.privacy"
-msgstr ""
+msgstr "كيف يحمي HeadCV بياناتي؟"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/footer.tsx
@@ -2237,7 +2237,7 @@ msgstr "حدد الثغرات في نظام تتبع المتقدمين للوظ
 
 #: src/features/auth/pages/register.tsx
 msgid "If this address is new, we sent a verification link. If you already have an account, sign in instead."
-msgstr ""
+msgstr "إذا كان هذا العنوان جديدًا، فقد أرسلنا رابط تحقق. وإذا كان لديك حساب بالفعل، فسجّل الدخول بدلًا من ذلك."
 
 #: src/dialogs/resume/import.tsx
 msgid "Import"
@@ -2273,7 +2273,7 @@ msgstr "أضف فقط الملفات المهنية التي تقوّي طلبك
 #: src/features/billing/plan-picker.tsx
 #: src/routes/_home/-sections/pricing.tsx
 msgid "Includes all Free features, plus:"
-msgstr ""
+msgstr "يتضمن جميع ميزات الخطة المجانية، بالإضافة إلى:"
 
 #: src/libs/resume/section.tsx
 msgid "Information"
@@ -2334,7 +2334,7 @@ msgstr "العناصر"
 
 #: src/features/billing/plan-picker.tsx
 msgid "Job Application Tracker"
-msgstr ""
+msgstr "متتبع طلبات التوظيف"
 
 #: src/components/tip-popover.tsx
 msgid "Job-specific guidance"
@@ -2366,7 +2366,7 @@ msgstr "john.doe@example.com"
 #. Example email placeholder on registration form
 #: src/features/auth/pages/register.tsx
 msgid "john.doe@gmail.com"
-msgstr ""
+msgstr "john.doe@gmail.com"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/final-cta.tsx
@@ -2684,7 +2684,7 @@ msgstr "شهريًا"
 
 #: src/routes/_home/-sections/pricing.tsx
 msgid "Monthly billing"
-msgstr ""
+msgstr "الفوترة الشهرية"
 
 #: src/routes/builder/$resumeId/-components/header.tsx
 msgid "More"
@@ -2807,7 +2807,7 @@ msgstr "لا حاجة لبطاقة ائتمان"
 
 #: src/routes/_home/-sections/pricing.tsx
 msgid "No credit card required"
-msgstr ""
+msgstr "لا حاجة إلى بطاقة ائتمان"
 
 #. Error shown when AI import endpoint returns no parsed resume data
 #: src/dialogs/resume/import.tsx
@@ -2832,7 +2832,7 @@ msgstr "لا توجد مواضيع حتى الآن."
 
 #: src/routes/_home/-sections/pricing.tsx
 msgid "No watermarks or branding"
-msgstr ""
+msgstr "من دون علامات مائية أو شعارات"
 
 #: src/libs/resume/section.tsx
 msgid "Notes"
@@ -3101,6 +3101,22 @@ msgstr "اللون الأساسي"
 msgid "Prioritize the degree, relevant study, and distinctions that support the target role."
 msgstr "قدّم الدرجة العلمية والدراسة ذات الصلة والتميّز الذي يدعم الوظيفة المستهدفة."
 
+#. js-lingui-explicit-id
+#: src/features/billing/plan-picker.tsx
+#: src/routes/_home/-sections/pricing.tsx
+msgid "home.pricing.pro"
+msgstr "احترافي"
+
+#. js-lingui-explicit-id
+#: src/features/billing/plan-badge.tsx
+msgid "billing.badge.pro"
+msgstr "احترافي"
+
+#. js-lingui-explicit-id
+#: src/routes/dashboard/settings/billing.tsx
+msgid "billing.plan.proMonthly"
+msgstr "احترافي شهري"
+
 #: src/routes/checkout/success.tsx
 msgid "Pro Monthly"
 msgstr "Pro الشهري"
@@ -3113,6 +3129,11 @@ msgstr "تجربة Pro"
 #: src/routes/checkout/success.tsx
 msgid "Pro Trial"
 msgstr "تجربة Pro"
+
+#. js-lingui-explicit-id
+#: src/routes/dashboard/settings/billing.tsx
+msgid "billing.plan.proYearly"
+msgstr "احترافي سنوي"
 
 #: src/routes/checkout/success.tsx
 msgid "Pro Yearly"
@@ -3369,7 +3390,7 @@ msgstr "تم تحميل السيرة الذاتية بنجاح"
 #. js-lingui-explicit-id
 #: src/routes/templates/index.tsx
 msgid "templates.seo.title"
-msgstr ""
+msgstr "قوالب سيرة ذاتية | تصاميم حديثة ومتوافقة مع أنظمة التوظيف | HeadCV"
 
 #: src/routes/builder/$resumeId/-components/header.tsx
 msgid "Resume workspace"
@@ -3593,7 +3614,7 @@ msgstr "جاري إرسال رسالة إعادة تعيين كلمة المرو
 
 #: src/features/auth/pages/register.tsx
 msgid "Sending..."
-msgstr ""
+msgstr "جارٍ الإرسال..."
 
 #: src/components/input/rich-input.tsx
 msgid "Separator"
@@ -3712,7 +3733,7 @@ msgstr "تسجّل الدخول"
 
 #: src/features/auth/pages/register.tsx
 msgid "Sign in instead"
-msgstr ""
+msgstr "سجّل الدخول بدلًا من ذلك"
 
 #. Call-to-action link from forgot-password page to login page
 #. Call-to-action link from registration page to login page
@@ -4444,15 +4465,15 @@ msgstr "غير محدود"
 
 #: src/features/billing/plan-picker.tsx
 msgid "Unlimited imports"
-msgstr ""
+msgstr "استيراد غير محدود"
 
 #: src/routes/_home/-sections/pricing.tsx
 msgid "Unlimited PDF downloads"
-msgstr ""
+msgstr "تنزيلات PDF غير محدودة"
 
 #: src/features/billing/plan-picker.tsx
 msgid "Unlimited resumes"
-msgstr ""
+msgstr "سير ذاتية غير محدودة"
 
 #. js-lingui-explicit-id
 #: src/dialogs/billing/upgrade.tsx
@@ -4604,7 +4625,7 @@ msgstr "استخدم صورة شخصية واضحة واحترافية بخلف�
 
 #: src/features/auth/pages/register.tsx
 msgid "Use a different email"
-msgstr ""
+msgstr "استخدم بريدًا إلكترونيًا مختلفًا"
 
 #: src/components/section-tips.tsx
 msgid "Use a recognized and honest proficiency level."
@@ -4614,7 +4635,7 @@ msgstr "استخدم مستوى إتقان معترفًا به وصادقًا."
 #. placeholder {0}: signupEmailDomains.join(", ")
 #: src/features/auth/pages/register.tsx
 msgid "Use an address from: {0}"
-msgstr ""
+msgstr "استخدم عنوانًا من: {0}"
 
 #: src/components/input/color-picker.tsx
 msgid "Use color {color}"
@@ -4642,7 +4663,7 @@ msgstr "القيمة"
 
 #: src/features/auth/pages/register.tsx
 msgid "Verification email sent."
-msgstr ""
+msgstr "تم إرسال رسالة التحقق."
 
 #: src/features/settings/pages/profile.tsx
 msgid "Verified"
@@ -4661,7 +4682,7 @@ msgstr "التحقق باستخدام رمز نسخ احتياطي"
 
 #: src/features/auth/pages/register.tsx
 msgid "Verify your email"
-msgstr ""
+msgstr "تحقق من بريدك الإلكتروني"
 
 #: src/features/auth/pages/verify-2fa-backup.tsx
 msgid "Verifying backup code..."
@@ -4710,7 +4731,7 @@ msgstr "التطوع"
 
 #: src/features/auth/pages/register.tsx
 msgid "We could not send the verification email. Please try again."
-msgstr ""
+msgstr "تعذر إرسال رسالة التحقق. يرجى المحاولة مرة أخرى."
 
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
@@ -4756,7 +4777,7 @@ msgstr "بماذا تريد أن تعيد تسمية هذا القسم؟"
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
 msgid "home.faq.howItWorks"
-msgstr ""
+msgstr "ما هو HeadCV وكيف يعمل؟"
 
 #: src/routes/builder/$resumeId/-components/header.tsx
 #: src/routes/dashboard/resumes/-components/menus/context-menu.tsx
@@ -4767,7 +4788,7 @@ msgstr "عند القفل، لا يمكن تحديث السيرة الذاتية
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
 msgid "home.faq.whyFree"
-msgstr ""
+msgstr "لماذا HeadCV مجاني؟"
 
 #: src/features/builder/steps.ts
 msgid "Work Experience"
@@ -4793,7 +4814,7 @@ msgstr "سنويًا"
 
 #: src/routes/_home/-sections/pricing.tsx
 msgid "Yearly billing"
-msgstr ""
+msgstr "الفوترة السنوية"
 
 #: src/features/resume/builder/ai-review.tsx
 msgid "Yes"
@@ -4807,7 +4828,7 @@ msgstr "تستخدم القوالب أقسامًا واضحة ونصًا مقر�
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
 msgid "home.faq.versionsText"
-msgstr ""
+msgstr "نعم. يمكنك تعديل سيرة ذاتية واحدة وتنزيلها مجانًا بلا حدود. رقِّ إلى خطة مدفوعة لحفظ عدة إصدارات في الوقت نفسه لوظائف أو لغات مختلفة. إذا عدت إلى الخطة المجانية، تبقى سيرتك الأولى قابلة للتعديل والتنزيل، بينما تُحفظ الإصدارات الإضافية لكنها تظل مقفلة."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
@@ -4817,7 +4838,7 @@ msgstr "نعم. استورد سيرتك الذاتية الحالية، ثم ر�
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
 msgid "home.faq.languagesText"
-msgstr ""
+msgstr "نعم. يمكنك كتابة سيرتك الذاتية بلغات متعددة وتخصيص عناوين الأقسام وتنسيقات التاريخ وحجم الصفحة. يدعم HeadCV التخطيطات من اليمين إلى اليسار للغات مثل العربية والعبرية. تتيح لك الترقية حفظ إصدار منفصل وإدارته لكل لغة."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx

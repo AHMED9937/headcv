@@ -60,7 +60,7 @@ export function PlanPicker({ hideTrial = false, className }: PlanPickerProps) {
 				<div className="flex flex-wrap items-center justify-between gap-3">
 					<p className="flex items-center gap-2 font-display font-semibold text-xl">
 						<SparkleIcon weight="fill" className="size-5 text-primary" aria-hidden="true" />
-						Pro
+						<Trans id="home.pricing.pro">Pro</Trans>
 					</p>
 					<fieldset
 						aria-label={t({ id: "home.pricing.period", message: "Billing period" })}

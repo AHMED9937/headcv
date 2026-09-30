@@ -65,19 +65,13 @@ describe("RegisterPage", () => {
 		expect(signUp.compareDocumentPosition(signIn) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
 	});
 
-	it("lists the accepted email domains", () => {
+	it("shows accepted domains only after an untrusted email is submitted", async () => {
 		renderRegister();
 
-		expect(screen.getByText("Use an address from: gmail.com, outlook.com")).toBeInTheDocument();
-	});
-
-	it("rejects an email from an untrusted domain without calling the server", async () => {
-		renderRegister();
+		expect(screen.queryByText("Use an address from: gmail.com, outlook.com")).not.toBeInTheDocument();
 		await fillForm("john@mailinator.com");
 
-		expect(
-			await screen.findByText("Please use an email from a trusted provider (gmail.com, outlook.com)."),
-		).toBeInTheDocument();
+		expect(await screen.findByText("Use an address from: gmail.com, outlook.com")).toBeInTheDocument();
 		expect(signUpEmail).not.toHaveBeenCalled();
 	});
 

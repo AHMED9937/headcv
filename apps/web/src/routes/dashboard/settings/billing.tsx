@@ -156,7 +156,11 @@ function BillingPage() {
 						{isTrial ? (
 							<Trans id="billing.plan.trial">Pro Trial</Trans>
 						) : isPaid ? (
-							<span className="capitalize">Pro {sub.plan}</span>
+							sub.plan === "yearly" ? (
+								<Trans id="billing.plan.proYearly">Pro Yearly</Trans>
+							) : (
+								<Trans id="billing.plan.proMonthly">Pro Monthly</Trans>
+							)
 						) : (
 							<Trans id="billing.plan.free">Free</Trans>
 						)}

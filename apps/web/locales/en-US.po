@@ -3096,6 +3096,22 @@ msgstr "Primary Color"
 msgid "Prioritize the degree, relevant study, and distinctions that support the target role."
 msgstr "Prioritize the degree, relevant study, and distinctions that support the target role."
 
+#. js-lingui-explicit-id
+#: src/features/billing/plan-picker.tsx
+#: src/routes/_home/-sections/pricing.tsx
+msgid "home.pricing.pro"
+msgstr "Pro"
+
+#. js-lingui-explicit-id
+#: src/features/billing/plan-badge.tsx
+msgid "billing.badge.pro"
+msgstr "Pro"
+
+#. js-lingui-explicit-id
+#: src/routes/dashboard/settings/billing.tsx
+msgid "billing.plan.proMonthly"
+msgstr "Pro Monthly"
+
 #: src/routes/checkout/success.tsx
 msgid "Pro Monthly"
 msgstr "Pro Monthly"
@@ -3108,6 +3124,11 @@ msgstr "Pro Trial"
 #: src/routes/checkout/success.tsx
 msgid "Pro Trial"
 msgstr "Pro Trial"
+
+#. js-lingui-explicit-id
+#: src/routes/dashboard/settings/billing.tsx
+msgid "billing.plan.proYearly"
+msgstr "Pro Yearly"
 
 #: src/routes/checkout/success.tsx
 msgid "Pro Yearly"
