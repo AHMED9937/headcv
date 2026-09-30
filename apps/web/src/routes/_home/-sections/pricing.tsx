@@ -66,7 +66,7 @@ export function Pricing() {
 				</p>
 				<div className="mt-10 grid gap-6 md:grid-cols-2">
 					{/* Free */}
-					<div className="rounded-2xl border bg-card p-6 text-start sm:p-8">
+					<div className="flex flex-col rounded-2xl border bg-card p-6 text-start sm:p-8">
 						<h3 className="font-display font-semibold text-2xl">
 							<Trans id="home.pricing.free">Free</Trans>
 						</h3>
@@ -81,8 +81,7 @@ export function Pricing() {
 						</p>
 						<Button
 							nativeButton={false}
-							variant="outline"
-							className="mt-6 h-auto min-h-12 w-full whitespace-normal py-3"
+							className="mt-auto h-auto min-h-12 w-full whitespace-normal py-3 font-semibold"
 							render={<Link to="/templates" search={{}} />}
 						>
 							<Trans id="home.pricing.create">Create my free resume</Trans>
@@ -90,42 +89,40 @@ export function Pricing() {
 						<Benefits items={freeFeatures} />
 					</div>
 					{/* Pro */}
-					<div className="rounded-2xl bg-primary p-6 text-start text-primary-foreground shadow-lg sm:p-8">
+					<div className="flex flex-col rounded-2xl bg-primary p-6 text-start text-primary-foreground shadow-lg sm:p-8">
 						<div className="flex flex-wrap items-center justify-between gap-3">
 							<h3 className="font-display font-semibold text-2xl">Pro</h3>
 						</div>
 						{/* Billing toggle */}
 						<fieldset
 							aria-label={t({ id: "home.pricing.period", message: "Billing period" })}
-							className="mt-5 inline-flex max-w-full flex-wrap gap-1 rounded-xl border border-primary-foreground/20 p-1"
+							className="mt-5 inline-flex gap-1 rounded-xl border border-primary-foreground/20 p-1"
 						>
-							<Button
-								aria-pressed={billing === "monthly"}
-								onClick={() => setBilling("monthly")}
-								className={cn(
-									"h-auto min-h-11 whitespace-normal px-4 py-2",
-									billing === "monthly"
-										? "bg-primary-foreground text-primary"
-										: "bg-transparent text-primary-foreground hover:bg-primary-foreground/10",
-								)}
-							>
-								<Trans id="home.pricing.monthly">Monthly</Trans>
-							</Button>
-							<Button
-								aria-pressed={billing === "yearly"}
-								onClick={() => setBilling("yearly")}
-								className={cn(
-									"h-auto min-h-11 flex-wrap whitespace-normal px-4 py-2",
-									billing === "yearly"
-										? "bg-primary-foreground text-primary"
-										: "bg-transparent text-primary-foreground hover:bg-primary-foreground/10",
-								)}
-							>
-								<Trans id="home.pricing.yearly">Yearly</Trans>
-								<span className="rounded bg-accent px-1.5 py-0.5 text-accent-foreground text-xs">
-									<Trans id="home.pricing.discount">Save 75%</Trans>
-								</span>
-							</Button>
+							{(["monthly", "yearly"] as const).map((value) => (
+								<button
+									key={value}
+									type="button"
+									aria-pressed={billing === value}
+									onClick={() => setBilling(value)}
+									className={cn(
+										"flex min-h-9 items-center gap-1.5 rounded-lg px-3.5 font-medium text-sm transition-colors",
+										billing === value
+											? "bg-primary-foreground text-primary"
+											: "text-primary-foreground hover:bg-primary-foreground/10",
+									)}
+								>
+									{value === "monthly" ? (
+										<Trans id="home.pricing.monthly">Monthly</Trans>
+									) : (
+										<>
+											<Trans id="home.pricing.yearly">Yearly</Trans>
+											<span className="rounded bg-accent px-1.5 py-0.5 font-semibold text-accent-foreground text-xs">
+												<Trans id="home.pricing.discount">Save 75%</Trans>
+											</span>
+										</>
+									)}
+								</button>
+							))}
 						</fieldset>
 						<div aria-live="polite" aria-atomic="true" className="mt-5">
 							<p className="flex flex-wrap items-baseline gap-2">
@@ -156,7 +153,7 @@ export function Pricing() {
 						<Button
 							disabled={checkoutLoading}
 							onClick={() => handleCheckout(billing)}
-							className="mt-4 h-auto min-h-12 w-full whitespace-normal bg-accent py-3 text-accent-foreground"
+							className="mt-auto h-auto min-h-12 w-full whitespace-normal bg-accent py-3 font-semibold text-accent-foreground hover:bg-accent/90"
 						>
 							{checkoutLoading ? (
 								<Trans id="home.pricing.loading">Redirecting to checkout...</Trans>
@@ -197,7 +194,7 @@ export function Pricing() {
 						<Button
 							disabled={checkoutLoading}
 							onClick={() => handleCheckout("trial")}
-							className="col-span-2 h-auto min-h-11 whitespace-normal bg-[#152642] px-5 py-3 text-white lg:col-span-1"
+							className="col-span-2 h-auto min-h-11 whitespace-normal bg-[#152642] px-5 py-3 font-semibold text-white hover:bg-[#152642]/90 lg:col-span-1"
 						>
 							{checkoutLoading ? (
 								<Trans id="home.pricing.loading">Redirecting to checkout...</Trans>
