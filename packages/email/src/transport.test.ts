@@ -111,7 +111,7 @@ describe("sendEmail", () => {
 		);
 	});
 
-	it("does not throw if the SMTP transport itself errors", async () => {
+	it("logs and propagates SMTP transport errors", async () => {
 		resetEnv();
 		envMock.SMTP_HOST = "smtp.example.com";
 		envMock.SMTP_USER = "user";
@@ -120,7 +120,7 @@ describe("sendEmail", () => {
 		sendMail.mockRejectedValueOnce(new Error("boom"));
 
 		const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-		await expect(sendEmail({ to: "a@b.com", subject: "hi", text: "body" })).resolves.toBeUndefined();
+		await expect(sendEmail({ to: "a@b.com", subject: "hi", text: "body" })).rejects.toThrow("boom");
 		expect(errorSpy).toHaveBeenCalled();
 		errorSpy.mockRestore();
 	});
