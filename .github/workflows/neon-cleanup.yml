@@ -1,0 +1,25 @@
+name: Cleanup Neon preview branch
+
+# The Vercel-managed Neon integration creates one database branch per preview
+# deployment, named preview/<git-branch>. It only deletes that branch when the
+# last Vercel deployment for the branch is removed (weeks later via retention),
+# so on capped plans the branches pile up until preview builds fail with
+# "Resource provisioning failed". Deleting the branch as soon as its PR closes
+# keeps us safely under the cap.
+# Requires: repo variable NEON_PROJECT_ID, repo secret NEON_API_KEY.
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions: {}
+
+jobs:
+  delete-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: neondatabase/delete-branch-action@v3
+        with:
+          project_id: ${{ vars.NEON_PROJECT_ID }}
+          branch: preview/${{ github.head_ref }}
+          api_key: ${{ secrets.NEON_API_KEY }}
