@@ -11,7 +11,7 @@ import { useCheckout, useSubscription } from "@/features/billing/use-subscriptio
 
 function Benefits({ items, pro = false }: { items: string[]; pro?: boolean }) {
 	return (
-		<ul className={cn("mt-7 divide-y", pro ? "divide-primary-foreground/20" : "divide-border")}>
+		<ul className={cn("mt-3 divide-y", pro ? "divide-primary-foreground/20" : "divide-border")}>
 			{items.map((item) => (
 				<li
 					key={item}
@@ -37,11 +37,11 @@ export function Pricing() {
 	const { session } = useRouteContext({ strict: false });
 	const { trialEligible } = useSubscription({ enabled: !!session });
 	const freeFeatures = [
-		t({ id: "home.plan.resume", message: "Create and edit your resume" }),
-		t({ id: "home.plan.pdf", message: "Download your PDF" }),
-		t({ id: "home.plan.watermark", message: "Watermark-free exports" }),
-		t({ id: "home.plan.templates", message: "Every resume template included" }),
-		t({ id: "home.plan.design", message: "Your fonts, colors and layout" }),
+		t({ id: "home.plan.resume", message: "1 resume" }),
+		t({ id: "home.plan.pdf", message: "Unlimited PDF downloads" }),
+		t({ id: "home.plan.watermark", message: "No watermarks or branding" }),
+		t({ id: "home.plan.templates", message: "All resume templates" }),
+		t({ id: "home.plan.design", message: "Full design customization" }),
 	];
 	const proFeatures = getProFeatures();
 	return (
@@ -64,7 +64,46 @@ export function Pricing() {
 						The free builder is available now. Upgrade to Pro for unlimited imports and AI assistance.
 					</Trans>
 				</p>
-				<div className="mt-10 grid gap-6 md:grid-cols-2">
+				{trialEligible && (
+					<section
+						aria-labelledby="trial-heading"
+						className="mx-auto mt-10 grid max-w-4xl grid-cols-[auto_minmax(0,1fr)] items-center gap-5 rounded-2xl border border-[#c9a227] bg-linear-to-r from-[#f5e8bf] to-[#fffaf0] p-5 text-start text-[#152642] sm:p-6 lg:grid-cols-[auto_minmax(0,1fr)_auto]"
+					>
+						<div className="border-[#b39235] border-e border-dashed pe-5">
+							<bdi className="font-bold font-display text-5xl tracking-tight">
+								{i18n.number(3, {
+									style: "currency",
+									currency: "USD",
+									currencyDisplay: "narrowSymbol",
+									maximumFractionDigits: 0,
+								})}
+							</bdi>
+						</div>
+						<div className="min-w-0">
+							<p className="inline-block rounded-lg bg-[#152642] px-4 py-2 font-bold text-sm text-white uppercase tracking-widest rtl:tracking-normal">
+								<Trans id="home.offer.label">7-day trial</Trans>
+							</p>
+							<h3 id="trial-heading" className="mt-2 font-display font-semibold text-xl sm:text-2xl">
+								<Trans id="home.offer.title">Try all of Pro.</Trans>
+							</h3>
+							<p className="mt-1 text-sm leading-relaxed">
+								<Trans id="home.offer.description">Every Pro tool. Unlimited resumes.</Trans>
+							</p>
+						</div>
+						<Button
+							disabled={checkoutLoading}
+							onClick={() => handleCheckout("trial")}
+							className="col-span-2 h-auto min-h-11 whitespace-normal bg-[#152642] px-5 py-3 text-white lg:col-span-1"
+						>
+							{checkoutLoading ? (
+								<Trans id="home.pricing.loading">Redirecting to checkout...</Trans>
+							) : (
+								<Trans id="home.pricing.startTrial">Start 7-day trial</Trans>
+							)}
+						</Button>
+					</section>
+				)}
+				<div className={cn("grid gap-6 md:grid-cols-2", trialEligible ? "mt-6" : "mt-10")}>
 					{/* Free */}
 					<div className="rounded-2xl border bg-card p-6 text-start sm:p-8">
 						<h3 className="font-display font-semibold text-2xl">
@@ -87,6 +126,9 @@ export function Pricing() {
 						>
 							<Trans id="home.pricing.create">Create my free resume</Trans>
 						</Button>
+						<p className="mt-8 text-muted-foreground text-sm">
+							<Trans id="home.pricing.freeIncludes">Everything you need for a professional resume:</Trans>
+						</p>
 						<Benefits items={freeFeatures} />
 					</div>
 					{/* Pro */}
@@ -164,49 +206,12 @@ export function Pricing() {
 								<Trans id="home.pricing.getPro">Get Pro</Trans>
 							)}
 						</Button>
+						<p className="mt-8 text-primary-foreground/80 text-sm">
+							<Trans id="home.pricing.proIncludes">Includes all Free features, plus:</Trans>
+						</p>
 						<Benefits items={proFeatures} pro />
 					</div>
 				</div>
-				{/* Trial follows the subscription plans; shown once per user. */}
-				{trialEligible && (
-					<section
-						aria-labelledby="trial-heading"
-						className="mx-auto mt-6 grid max-w-4xl grid-cols-[auto_minmax(0,1fr)] items-center gap-5 rounded-2xl border border-[#c9a227] bg-linear-to-r from-[#f5e8bf] to-[#fffaf0] p-5 text-start text-[#152642] sm:p-6 lg:grid-cols-[auto_minmax(0,1fr)_auto]"
-					>
-						<div className="border-[#b39235] border-e border-dashed pe-5">
-							<bdi className="font-bold font-display text-5xl tracking-tight">
-								{i18n.number(3, {
-									style: "currency",
-									currency: "USD",
-									currencyDisplay: "narrowSymbol",
-									maximumFractionDigits: 0,
-								})}
-							</bdi>
-						</div>
-						<div className="min-w-0">
-							<p className="inline-block rounded-lg bg-[#152642] px-4 py-2 font-bold text-sm text-white uppercase tracking-widest rtl:tracking-normal">
-								<Trans id="home.offer.label">7-day trial</Trans>
-							</p>
-							<h3 id="trial-heading" className="mt-2 font-display font-semibold text-xl sm:text-2xl">
-								<Trans id="home.offer.title">Try all of Pro.</Trans>
-							</h3>
-							<p className="mt-1 text-sm leading-relaxed">
-								<Trans id="home.offer.description">Every Pro tool. Unlimited resumes.</Trans>
-							</p>
-						</div>
-						<Button
-							disabled={checkoutLoading}
-							onClick={() => handleCheckout("trial")}
-							className="col-span-2 h-auto min-h-11 whitespace-normal bg-[#152642] px-5 py-3 text-white lg:col-span-1"
-						>
-							{checkoutLoading ? (
-								<Trans id="home.pricing.loading">Redirecting to checkout...</Trans>
-							) : (
-								<Trans id="home.pricing.startTrial">Start 7-day trial</Trans>
-							)}
-						</Button>
-					</section>
-				)}
 			</div>
 		</section>
 	);

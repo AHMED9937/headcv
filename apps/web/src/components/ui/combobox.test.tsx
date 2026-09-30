@@ -2,6 +2,7 @@
 
 import type { ComboboxOption } from "./combobox";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { beforeAll, describe, expect, it } from "vitest";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
@@ -30,6 +31,15 @@ describe("Combobox", () => {
 		// The label appears inside the trigger; both label and trigger may render it,
 		// so use queryAllByText for resilience.
 		expect(screen.getAllByText("Beta").length).toBeGreaterThan(0);
+	});
+
+	it("uses theme-safe colors for a highlighted option", async () => {
+		wrap(<Combobox options={[...options]} placeholder="Pick something" />);
+		await userEvent.click(screen.getByRole("combobox"));
+		const option = screen.getByRole("option", { name: "Alpha" });
+		await userEvent.hover(option);
+		expect(option).toHaveAttribute("data-highlighted");
+		expect(option).toHaveClass("data-highlighted:bg-muted", "data-highlighted:text-foreground");
 	});
 
 	it("renders all option labels for the multi-select default values", () => {

@@ -141,32 +141,43 @@ export const createTemplateGalleryStructuredDataScript = (canonicalUrl: string, 
 
 const homeFaqJsonLdItems = [
 	{
-		question: "Is HeadCV free to use?",
+		question: "What is HeadCV and how does it work?",
 		answer:
-			"Yes. You can create and preview a CV for free without creating an account. Saving multiple CVs or syncing across devices will require a free account in the future, and some advanced features may become part of a paid plan.",
+			"HeadCV is a free, easy-to-use online resume builder for creating professional, ATS-friendly resumes quickly. Choose from 15 professional templates, customize the layout and design, and download unlimited, watermark-free PDFs. Start from a blank resume or import an existing PDF or Microsoft Word document to prefill your content.",
 	},
 	{
-		question: "Do I need to sign up before building my CV?",
+		question: "Is HeadCV really free?",
 		answer:
-			"No. You can start building your CV immediately as a guest. We only ask you to create an account after you have seen the preview or want to save your work.",
+			"Yes. Your first resume is free forever, with unlimited watermark-free PDF downloads, access to every template, and full layout and design control. No trial or credit card is required. You only pay for optional extras such as saving multiple resume versions or using AI writing assistance.",
 	},
 	{
-		question: "Is my data safe?",
+		question: "Why is HeadCV free?",
 		answer:
-			"Yes. Your CV content is stored securely, and we do not sell or share your personal information with third parties. You can delete your account and data at any time.",
+			"HeadCV is built by a small, independent team focused on helping people worldwide get hired. Optional paid features, such as saving multiple resume versions and AI writing assistance, fund continued development while keeping the free plan generous.",
 	},
 	{
-		question: "Can I export my CV to PDF?",
-		answer: "Yes. You can download a professional, ATS-friendly PDF of your CV once you are happy with the preview.",
+		question: "Can I save multiple resume versions on HeadCV?",
+		answer:
+			"Yes. One resume is free to edit and download without limits. Upgrade to a paid plan to save multiple versions at the same time for different roles or languages. If you return to the free plan, your first resume remains editable and downloadable while additional versions stay saved but locked.",
 	},
 	{
-		question: "Is HeadCV available in Arabic?",
+		question: "How does HeadCV protect my data?",
 		answer:
-			"Yes. HeadCV supports both English (left-to-right) and Arabic (right-to-left) layouts, with templates designed for each direction.",
+			"HeadCV is privacy-first and committed to GDPR compliance. We do not sell your personal data. You own your content and can delete your account and data at any time.",
 	},
 	{
-		question: "Does HeadCV use AI to write my CV?",
+		question: "Does HeadCV support multiple languages?",
 		answer:
-			"HeadCV can use AI-assisted tools when you choose to enable and configure them; the core editor and templates remain usable without AI.",
+			"Yes. You can write your resume in multiple languages and customize section labels, date formats, and page size. HeadCV supports right-to-left layouts for languages such as Arabic and Hebrew. Upgrading lets you save and manage a separate resume version for each language.",
+	},
+	{
+		question: "Are HeadCV resumes ATS-friendly?",
+		answer:
+			"Yes. HeadCV exports clean, text-based PDFs with embedded fonts and clear structure so applicant tracking systems can read your resume, including two-column templates. For very old systems, a one-column layout is the safest choice. Clear headings, relevant keywords, and impact-focused bullet points still matter most.",
+	},
+	{
+		question: "Can I import an existing resume into HeadCV?",
+		answer:
+			"Yes. Upload a PDF or Microsoft Word document and HeadCV will import its content into a clean, editable, ATS-friendly layout so you can start faster.",
 	},
 ] as const;

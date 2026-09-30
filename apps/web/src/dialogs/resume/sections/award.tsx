@@ -15,6 +15,7 @@ import {
 import { FormControl, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
 import { Input } from "@headcv/ui/components/input";
 import { Switch } from "@headcv/ui/components/switch";
+import { MonthInput } from "@/components/input/month-input";
 import { RichInput } from "@/components/input/rich-input";
 import { URLInput } from "@/components/input/url-input";
 import { useDialogStore } from "@/dialogs/store";
@@ -172,7 +173,26 @@ const AwardForm = withForm({
 					)}
 				</form.Field>
 
-				<form.AppField name="date">{(field) => <field.TextField label={<Trans>Date</Trans>} />}</form.AppField>
+				<form.Field name="date">
+					{(field) => (
+						<FormItem hasError={field.state.meta.isTouched && field.state.meta.errors.length > 0}>
+							<FormLabel>
+								<Trans>Date</Trans>
+							</FormLabel>
+							<FormControl
+								render={
+									<MonthInput
+										name={field.name}
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(event) => field.handleChange(event.target.value)}
+									/>
+								}
+							/>
+							<FormMessage errors={field.state.meta.errors} />
+						</FormItem>
+					)}
+				</form.Field>
 
 				<form.Field name="website">
 					{(field) => (

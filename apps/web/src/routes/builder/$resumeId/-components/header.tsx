@@ -10,13 +10,14 @@ import {
 	CopySimpleIcon,
 	DotsThreeIcon,
 	DownloadSimpleIcon,
+	FileTextIcon,
 	HouseSimpleIcon,
 	LockSimpleIcon,
 	LockSimpleOpenIcon,
-	PaletteIcon,
+	MagicWandIcon,
+	PencilRulerIcon,
 	PencilSimpleLineIcon,
 	SidebarSimpleIcon,
-	SparkleIcon,
 	TrashSimpleIcon,
 } from "@phosphor-icons/react";
 import { useMutation } from "@tanstack/react-query";
@@ -54,8 +55,8 @@ type BuilderHeaderProps = {
 };
 
 const workspaceTabs: { id: WorkspaceTab; label: ReactNode; icon: Icon }[] = [
-	{ id: "content", label: t`Content`, icon: PencilSimpleLineIcon },
-	{ id: "design", label: t`Design`, icon: PaletteIcon },
+	{ id: "content", label: t`Content`, icon: FileTextIcon },
+	{ id: "design", label: t`Customize`, icon: PencilRulerIcon },
 	{ id: "review", label: t`Review`, icon: CheckCircleIcon },
 	{ id: "export", label: t`Export`, icon: DownloadSimpleIcon },
 ];
@@ -227,7 +228,7 @@ export function BuilderHeader({ compact = false, workspace, progress }: BuilderH
 					className="hidden h-8 gap-1.5 md:inline-flex"
 					onClick={openThreads}
 				>
-					<SparkleIcon className="size-4" />
+					<MagicWandIcon className="size-4" />
 					<Trans>AI</Trans>
 					{hasReviewableChanges ? <span className="ml-1.5 flex size-2 rounded-full bg-white" /> : null}
 				</Button>
