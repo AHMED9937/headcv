@@ -11,10 +11,10 @@ import { useCheckout } from "./use-subscription";
 const PRO_PRICES = { monthly: 20, yearly: 5, yearlyTotal: 60, trial: 3 } as const;
 
 export const getProFeatures = () => [
-	t({ id: "home.pro.resumes", message: "Unlimited resumes" }),
-	t({ id: "home.pro.imports", message: "Unlimited imports" }),
-	t({ id: "home.pro.tracker", message: "Job Application Tracker" }),
-	t({ id: "home.pro.ai", message: "AI features" }),
+	t`Unlimited resumes`,
+	t`Unlimited imports`,
+	t`Job Application Tracker`,
+	t`AI features`,
 ];
 
 type PlanPickerProps = {
@@ -56,15 +56,15 @@ export function PlanPicker({ hideTrial = false, className }: PlanPickerProps) {
 				</div>
 			)}
 
-			<div className="rounded-2xl bg-primary p-5 text-primary-foreground shadow-lg sm:p-6">
+			<div className="rounded-2xl border border-accent/60 bg-card p-5 text-card-foreground shadow-md sm:p-6">
 				<div className="flex flex-wrap items-center justify-between gap-3">
 					<p className="flex items-center gap-2 font-display font-semibold text-xl">
-						<SparkleIcon weight="fill" className="size-5 text-accent" aria-hidden="true" />
+						<SparkleIcon weight="fill" className="size-5 text-primary" aria-hidden="true" />
 						Pro
 					</p>
 					<fieldset
 						aria-label={t({ id: "home.pricing.period", message: "Billing period" })}
-						className="inline-flex gap-1 rounded-xl border border-primary-foreground/20 p-1"
+						className="inline-flex gap-1 rounded-xl border p-1"
 					>
 						{(["yearly", "monthly"] as const).map((value) => (
 							<button
@@ -75,14 +75,14 @@ export function PlanPicker({ hideTrial = false, className }: PlanPickerProps) {
 								className={cn(
 									"flex min-h-9 items-center gap-1.5 rounded-lg px-3 font-medium text-sm transition-colors",
 									period === value
-										? "bg-primary-foreground text-primary"
-										: "text-primary-foreground hover:bg-primary-foreground/10",
+										? "bg-primary text-primary-foreground"
+										: "text-muted-foreground hover:bg-muted hover:text-foreground",
 								)}
 							>
 								{value === "yearly" ? (
 									<>
 										<Trans id="home.pricing.yearly">Yearly</Trans>
-										<span className="rounded bg-accent px-1.5 py-0.5 text-accent-foreground text-xs">
+										<span className="rounded-full bg-accent-light px-2 py-0.5 font-semibold text-primary text-xs">
 											<Trans id="home.pricing.discount">Save 75%</Trans>
 										</span>
 									</>
@@ -97,7 +97,7 @@ export function PlanPicker({ hideTrial = false, className }: PlanPickerProps) {
 				<div aria-live="polite" aria-atomic="true" className="mt-4">
 					<p className="flex flex-wrap items-baseline gap-2">
 						{period === "yearly" && (
-							<s className="text-lg text-primary-foreground/60">
+							<s className="text-lg text-muted-foreground">
 								<bdi>{money(PRO_PRICES.monthly)}</bdi>
 							</s>
 						)}
@@ -106,7 +106,7 @@ export function PlanPicker({ hideTrial = false, className }: PlanPickerProps) {
 							<Trans id="home.pricing.month">/month</Trans>
 						</span>
 					</p>
-					<p className="mt-1 text-primary-foreground/80 text-sm">
+					<p className="mt-1 text-muted-foreground text-sm">
 						{period === "yearly" ? (
 							<Trans id="billing.picker.yearlyNote">
 								Billed <bdi>{money(PRO_PRICES.yearlyTotal)}</bdi> once a year — less than a coffee a month.
@@ -117,13 +117,15 @@ export function PlanPicker({ hideTrial = false, className }: PlanPickerProps) {
 					</p>
 				</div>
 
-				<p className="mt-5 text-primary-foreground/80 text-sm">
-					<Trans id="home.pricing.proIncludes">Includes all Free features, plus:</Trans>
+				<p className="mt-5 text-muted-foreground text-sm">
+					<Trans>Includes all Free features, plus:</Trans>
 				</p>
 				<ul className="mt-3 grid gap-2 sm:grid-cols-2">
 					{getProFeatures().map((feature) => (
 						<li key={feature} className="flex items-start gap-2 text-sm">
-							<CheckIcon aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
+							<span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+								<CheckIcon weight="bold" aria-hidden="true" className="size-3.5" />
+							</span>
 							{feature}
 						</li>
 					))}
@@ -132,11 +134,11 @@ export function PlanPicker({ hideTrial = false, className }: PlanPickerProps) {
 				<Button
 					disabled={isLoading}
 					onClick={() => checkout(period)}
-					className="mt-5 h-auto min-h-12 w-full whitespace-normal bg-accent py-3 font-semibold text-accent-foreground hover:bg-accent/90"
+					className="mt-5 h-auto min-h-12 w-full whitespace-normal py-3 font-semibold"
 				>
 					{ctaLabel(period, <Trans id="home.pricing.getPro">Get Pro</Trans>)}
 				</Button>
-				<p className="mt-2 flex items-center justify-center gap-1.5 text-primary-foreground/75 text-xs">
+				<p className="mt-2 flex items-center justify-center gap-1.5 text-muted-foreground text-xs">
 					<LockSimpleIcon aria-hidden="true" className="size-3.5" />
 					<Trans id="billing.picker.reassurance">Secure checkout · Cancel anytime · Your resumes stay yours</Trans>
 				</p>

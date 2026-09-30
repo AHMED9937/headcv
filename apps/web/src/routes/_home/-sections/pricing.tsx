@@ -5,23 +5,25 @@ import { CheckIcon } from "@phosphor-icons/react";
 import { Link, useRouteContext } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@headcv/ui/components/button";
+import { Switch } from "@headcv/ui/components/switch";
 import { cn } from "@headcv/utils/style";
 import { getProFeatures } from "@/features/billing/plan-picker";
 import { useCheckout, useSubscription } from "@/features/billing/use-subscription";
 
-function Benefits({ items, pro = false }: { items: string[]; pro?: boolean }) {
+function Benefits({ items, premium = false }: { items: string[]; premium?: boolean }) {
 	return (
-		<ul className={cn("mt-3 divide-y", pro ? "divide-primary-foreground/20" : "divide-border")}>
+		<ul className="mt-4 space-y-3">
 			{items.map((item) => (
-				<li
-					key={item}
-					className="flex items-start gap-3 py-4 text-start font-medium text-sm leading-relaxed sm:text-base"
-				>
-					<CheckIcon
-						aria-hidden="true"
-						className={cn("mt-1 size-4 shrink-0", pro ? "text-primary-foreground" : "text-primary")}
-					/>
-					{item}
+				<li key={item} className="flex items-start gap-3 text-start text-sm leading-relaxed sm:text-base">
+					<span
+						className={cn(
+							"mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full",
+							premium ? "bg-primary text-primary-foreground" : "bg-secondary text-secondary-foreground",
+						)}
+					>
+						<CheckIcon weight="bold" aria-hidden="true" className="size-4" />
+					</span>
+					<span className="pt-0.5">{item}</span>
 				</li>
 			))}
 		</ul>
@@ -32,18 +34,18 @@ export function Pricing() {
 	const [billing, setBilling] = useState<"monthly" | "yearly">("yearly");
 	const { i18n } = useLingui();
 	const money = (value: number) => i18n.number(value, { style: "currency", currency: "USD", maximumFractionDigits: 0 });
-
 	const { checkout: handleCheckout, isLoading: checkoutLoading } = useCheckout();
 	const { session } = useRouteContext({ strict: false });
 	const { trialEligible } = useSubscription({ enabled: !!session });
 	const freeFeatures = [
-		t({ id: "home.plan.resume", message: "1 resume" }),
-		t({ id: "home.plan.pdf", message: "Unlimited PDF downloads" }),
-		t({ id: "home.plan.watermark", message: "No watermarks or branding" }),
-		t({ id: "home.plan.templates", message: "All resume templates" }),
-		t({ id: "home.plan.design", message: "Full design customization" }),
+		t`3 resumes`,
+		t`Unlimited PDF downloads`,
+		t`No watermarks or branding`,
+		t`All resume templates`,
+		t`Full design customization`,
 	];
 	const proFeatures = getProFeatures();
+
 	return (
 		<section
 			id="pricing"
@@ -70,14 +72,7 @@ export function Pricing() {
 						className="mx-auto mt-10 grid max-w-4xl grid-cols-[auto_minmax(0,1fr)] items-center gap-5 rounded-2xl border border-[#c9a227] bg-linear-to-r from-[#f5e8bf] to-[#fffaf0] p-5 text-start text-[#152642] sm:p-6 lg:grid-cols-[auto_minmax(0,1fr)_auto]"
 					>
 						<div className="border-[#b39235] border-e border-dashed pe-5">
-							<bdi className="font-bold font-display text-5xl tracking-tight">
-								{i18n.number(3, {
-									style: "currency",
-									currency: "USD",
-									currencyDisplay: "narrowSymbol",
-									maximumFractionDigits: 0,
-								})}
-							</bdi>
+							<bdi className="font-bold font-display text-5xl tracking-tight">{money(3)}</bdi>
 						</div>
 						<div className="min-w-0">
 							<p className="inline-block rounded-lg bg-[#152642] px-4 py-2 font-bold text-sm text-white uppercase tracking-widest rtl:tracking-normal">
@@ -103,102 +98,82 @@ export function Pricing() {
 						</Button>
 					</section>
 				)}
-				<div className={cn("grid gap-6 md:grid-cols-2", trialEligible ? "mt-6" : "mt-10")}>
+				<div className={cn("grid items-stretch gap-6 md:grid-cols-2", trialEligible ? "mt-6" : "mt-10")}>
 					{/* Free */}
-					<div className="rounded-2xl border bg-card p-6 text-start sm:p-8">
-						<h3 className="font-display font-semibold text-2xl">
+					<div className="flex h-full flex-col rounded-2xl border bg-card p-6 text-card-foreground shadow-sm sm:p-8">
+						<h3 className="font-display font-semibold text-3xl">
 							<Trans id="home.pricing.free">Free</Trans>
 						</h3>
-						<p className="mt-5 flex flex-wrap items-baseline gap-2">
+						<p className="mt-5 flex flex-wrap items-baseline gap-1">
 							<bdi className="font-semibold text-5xl">{money(0)}</bdi>
-							<span className="text-muted-foreground">
+							<span className="font-semibold">
 								<Trans id="home.pricing.month">/month</Trans>
 							</span>
 						</p>
-						<p className="mt-3 text-muted-foreground text-sm">
-							<Trans id="home.noCard">No credit card</Trans>
+						<p className="mt-2 flex flex-wrap items-center gap-2 text-muted-foreground text-sm">
+							<Trans>Free forever</Trans>
+							<span aria-hidden="true">•</span>
+							<Trans>No credit card required</Trans>
 						</p>
 						<Button
 							nativeButton={false}
 							variant="outline"
-							className="mt-6 h-auto min-h-12 w-full whitespace-normal py-3"
+							className="mt-5 h-auto min-h-14 w-full whitespace-normal py-3 font-semibold"
 							render={<Link to="/templates" search={{}} />}
 						>
 							<Trans id="home.pricing.create">Create my free resume</Trans>
 						</Button>
-						<p className="mt-8 text-muted-foreground text-sm">
-							<Trans id="home.pricing.freeIncludes">Everything you need for a professional resume:</Trans>
-						</p>
-						<Benefits items={freeFeatures} />
+						<div className="mt-9 flex-1">
+							<p className="text-muted-foreground text-sm">
+								<Trans>Everything you need for a professional resume:</Trans>
+							</p>
+							<Benefits items={freeFeatures} />
+						</div>
 					</div>
 					{/* Pro */}
-					<div className="rounded-2xl bg-primary p-6 text-start text-primary-foreground shadow-lg sm:p-8">
-						<div className="flex flex-wrap items-center justify-between gap-3">
-							<h3 className="font-display font-semibold text-2xl">Pro</h3>
-						</div>
-						{/* Billing toggle */}
-						<fieldset
-							aria-label={t({ id: "home.pricing.period", message: "Billing period" })}
-							className="mt-5 inline-flex max-w-full flex-wrap gap-1 rounded-xl border border-primary-foreground/20 p-1"
-						>
-							<Button
-								aria-pressed={billing === "monthly"}
-								onClick={() => setBilling("monthly")}
-								className={cn(
-									"h-auto min-h-11 whitespace-normal px-4 py-2",
-									billing === "monthly"
-										? "bg-primary-foreground text-primary"
-										: "bg-transparent text-primary-foreground hover:bg-primary-foreground/10",
-								)}
-							>
-								<Trans id="home.pricing.monthly">Monthly</Trans>
-							</Button>
-							<Button
-								aria-pressed={billing === "yearly"}
-								onClick={() => setBilling("yearly")}
-								className={cn(
-									"h-auto min-h-11 flex-wrap whitespace-normal px-4 py-2",
-									billing === "yearly"
-										? "bg-primary-foreground text-primary"
-										: "bg-transparent text-primary-foreground hover:bg-primary-foreground/10",
-								)}
-							>
-								<Trans id="home.pricing.yearly">Yearly</Trans>
-								<span className="rounded bg-accent px-1.5 py-0.5 text-accent-foreground text-xs">
-									<Trans id="home.pricing.discount">Save 75%</Trans>
+					<div className="flex h-full flex-col rounded-2xl border border-accent/60 bg-card p-6 text-card-foreground shadow-md sm:p-8">
+						<div className="flex items-center justify-between gap-3">
+							<h3 className="shrink-0 font-display font-semibold text-3xl">Pro</h3>
+							{/* Billing toggle */}
+							<div className="flex shrink-0 items-center gap-2.5 whitespace-nowrap">
+								<span className="rounded-full bg-accent-light px-2 py-0.5 font-semibold text-primary text-xs">
+									<Trans>-75%</Trans>
 								</span>
-							</Button>
-						</fieldset>
+								<Switch
+									checked={billing === "yearly"}
+									onCheckedChange={(checked) => setBilling(checked ? "yearly" : "monthly")}
+									aria-label={billing === "yearly" ? t`Yearly billing` : t`Monthly billing`}
+								/>
+								<span className="text-sm">
+									{billing === "yearly" ? <Trans>Yearly billing</Trans> : <Trans>Monthly billing</Trans>}
+								</span>
+							</div>
+						</div>
 						<div aria-live="polite" aria-atomic="true" className="mt-5">
-							<p className="flex flex-wrap items-baseline gap-2">
+							<p className="flex flex-wrap items-baseline gap-1">
 								<bdi className="font-semibold text-5xl">{money(billing === "yearly" ? 5 : 20)}</bdi>
-								<span>
+								<span className="font-semibold">
 									<Trans id="home.pricing.month">/month</Trans>
 								</span>
 							</p>
-							<p className="mt-3 text-sm">
+							<p className="mt-2 flex flex-wrap items-center gap-2 text-muted-foreground text-sm">
 								{billing === "yearly" ? (
-									<Trans id="home.pricing.yearTotal">
-										Planned annual total: <bdi>{money(60)}</bdi>
+									<Trans>
+										<bdi>{money(60)}</bdi> billed yearly
 									</Trans>
 								) : (
-									<Trans id="home.pricing.monthTotal">Planned monthly billing</Trans>
-								)}
-							</p>
-							<p className="mt-2 min-h-12 text-sm leading-relaxed">
-								{billing === "yearly" ? (
-									<Trans id="home.pricing.savings">
-										Save <bdi>{money(180)}</bdi> compared with 12 monthly payments.
+									<Trans>
+										<bdi>{money(20)}</bdi> billed monthly
 									</Trans>
-								) : (
-									<Trans id="home.pricing.flexible">Prefer flexibility? Choose the monthly option.</Trans>
 								)}
+								<span aria-hidden="true">•</span>
+								<Trans>Cancel anytime</Trans>
 							</p>
 						</div>
 						<Button
 							disabled={checkoutLoading}
 							onClick={() => handleCheckout(billing)}
-							className="mt-4 h-auto min-h-12 w-full whitespace-normal bg-accent py-3 text-accent-foreground"
+							className="mt-5 h-auto min-h-14 w-full whitespace-normal py-3 font-semibold"
 						>
 							{checkoutLoading ? (
 								<Trans id="home.pricing.loading">Redirecting to checkout...</Trans>
@@ -206,10 +181,12 @@ export function Pricing() {
 								<Trans id="home.pricing.getPro">Get Pro</Trans>
 							)}
 						</Button>
-						<p className="mt-8 text-primary-foreground/80 text-sm">
-							<Trans id="home.pricing.proIncludes">Includes all Free features, plus:</Trans>
-						</p>
-						<Benefits items={proFeatures} pro />
+						<div className="mt-9 flex-1">
+							<p className="text-muted-foreground text-sm">
+								<Trans>Includes all Free features, plus:</Trans>
+							</p>
+							<Benefits items={proFeatures} premium />
+						</div>
 					</div>
 				</div>
 			</div>
