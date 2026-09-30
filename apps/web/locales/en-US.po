@@ -28,6 +28,10 @@ msgstr "Created"
 msgid "Name"
 msgstr "Name"
 
+#: src/routes/_home/-sections/pricing.tsx
+msgid "-75%"
+msgstr "-75%"
+
 #. placeholder {0}: section.items.length
 #: src/routes/builder/$resumeId/-sidebar/left/sections/custom.tsx
 msgid "{0, plural, one {# item} other {# items}}"
@@ -95,6 +99,16 @@ msgstr "© {currentYear} HeadCV. All rights reserved."
 msgid "← Back to phrases"
 msgstr "← Back to phrases"
 
+#. placeholder {0}: money(20)
+#: src/routes/_home/-sections/pricing.tsx
+msgid "<0>{0}</0> billed monthly"
+msgstr "<0>{0}</0> billed monthly"
+
+#. placeholder {0}: money(60)
+#: src/routes/_home/-sections/pricing.tsx
+msgid "<0>{0}</0> billed yearly"
+msgstr "<0>{0}</0> billed yearly"
+
 #: src/routes/builder/$resumeId/-sidebar/right/sections/information.tsx
 msgid "<0>Thank you for using HeadCV! This app is a labor of love, created mostly in my spare time, with wonderful support from open-source contributors around the world.</0><1>If HeadCV has been helpful to you, and you'd like to help keep it free and open for everyone, please consider making a donation. Every little bit is appreciated!</1>"
 msgstr "<0>Thank you for using HeadCV! This app is a labor of love, created mostly in my spare time, with wonderful support from open-source contributors around the world.</0><1>If HeadCV has been helpful to you, and you'd like to help keep it free and open for everyone, please consider making a donation. Every little bit is appreciated!</1>"
@@ -110,6 +124,10 @@ msgstr "1 year"
 #: src/dialogs/api-key/create.tsx
 msgid "3 months"
 msgstr "3 months"
+
+#: src/routes/_home/-sections/pricing.tsx
+msgid "3 resumes"
+msgstr "3 resumes"
 
 #: src/dialogs/api-key/create.tsx
 msgid "6 months"
@@ -307,10 +325,6 @@ msgstr "Added"
 msgid "Additional Sections"
 msgstr "Additional Sections"
 
-#: src/routes/builder/$resumeId/-components/guided-editor.tsx
-msgid "Adjust the look without changing your content."
-msgstr "Adjust the look without changing your content."
-
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Adjust the resume for a remote-first role that values async communication and ownership."
 msgstr "Adjust the resume for a remote-first role that values async communication and ownership."
@@ -332,11 +346,6 @@ msgstr "AI"
 #: src/features/resume/builder/ai-assistant-panel.tsx
 msgid "AI agent setup is not available yet."
 msgstr "AI agent setup is not available yet."
-
-#. js-lingui-explicit-id
-#: src/features/billing/plan-picker.tsx
-msgid "home.pro.ai"
-msgstr "AI assistance for your next draft"
 
 #: src/features/resume/builder/ai-assistant-panel.tsx
 msgid "AI Assistant"
@@ -363,6 +372,10 @@ msgstr "AI Chat"
 msgid "billing.usage.chats"
 msgstr "AI Chats"
 
+#: src/features/billing/plan-picker.tsx
+msgid "AI features"
+msgstr "AI features"
+
 #: src/features/resume/builder/ai-review.tsx
 #: src/libs/resume/section.tsx
 msgid "AI Review"
@@ -380,6 +393,10 @@ msgstr "Alex Morgan"
 #: src/features/resume/builder/ai-changes.ts
 msgid "All fields"
 msgstr "All fields"
+
+#: src/routes/_home/-sections/pricing.tsx
+msgid "All resume templates"
+msgstr "All resume templates"
 
 #: src/routes/templates/index.tsx
 msgid "All templates"
@@ -432,6 +449,13 @@ msgstr "Anyone who has the resume's public URL will be able to view and download
 msgid "Anyone with the link can view and download the resume."
 msgstr "Anyone with the link can view and download the resume."
 
+#. Authentication provider display name in account settings
+#. Brand name label for Apple social sign-in button
+#: src/features/auth/components/social-auth.tsx
+#: src/features/settings/authentication/components/hooks.tsx
+msgid "Apple"
+msgstr "Apple"
+
 #: src/routes/agent/-components/patch-tool-card.tsx
 msgid "Applied"
 msgstr "Applied"
@@ -456,7 +480,7 @@ msgstr "Archive"
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
 msgid "home.faq.ats"
-msgstr "Are the templates ATS-friendly?"
+msgstr "Are HeadCV resumes ATS-friendly?"
 
 #: src/hooks/use-form-blocker.tsx
 msgid "Are you sure you want to close this dialog?"
@@ -618,7 +642,6 @@ msgstr "Billed <0>{0}</0> once a year — less than a coffee a month."
 
 #. js-lingui-explicit-id
 #: src/features/billing/plan-picker.tsx
-#: src/routes/_home/-sections/pricing.tsx
 msgid "home.pricing.period"
 msgstr "Billing period"
 
@@ -642,6 +665,11 @@ msgstr "Border Radius"
 #: src/features/resume/builder/ai-changes.ts
 msgid "Border Width"
 msgstr "Border Width"
+
+#. js-lingui-explicit-id
+#: src/routes/templates/index.tsx
+msgid "templates.seo.description"
+msgstr "Browse HeadCV's free resume templates. Choose an ATS-friendly, modern, professional, or creative CV design and start building your resume in minutes."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/hero.tsx
@@ -689,18 +717,13 @@ msgstr "By the community, for the community."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
-msgid "home.faq.pdf"
-msgstr "Can I export my resume to PDF?"
-
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/faq.tsx
 msgid "home.faq.import"
-msgstr "Can I import an existing resume?"
+msgstr "Can I import an existing resume into HeadCV?"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
-msgid "home.faq.arabic"
-msgstr "Can I use HeadCV in Arabic?"
+msgid "home.faq.versions"
+msgstr "Can I save multiple resume versions on HeadCV?"
 
 #. Account deletion confirmation dialog cancel action in danger zone
 #. Confirmation dialog button label to abort deleting a custom section in resume builder
@@ -734,6 +757,10 @@ msgstr "Can I use HeadCV in Arabic?"
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "Cancel"
 msgstr "Cancel"
+
+#: src/routes/_home/-sections/pricing.tsx
+msgid "Cancel anytime"
+msgstr "Cancel anytime"
 
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Cannot restore; the resume has changed since this edit was applied."
@@ -795,8 +822,8 @@ msgid "Check your email for a link to reset your password."
 msgstr "Check your email for a link to reset your password."
 
 #: src/features/auth/pages/register.tsx
-msgid "Check your email for a link to verify your account."
-msgstr "Check your email for a link to verify your account."
+msgid "Check your inbox for the verification link required to activate your account."
+msgstr "Check your inbox for the verification link required to activate your account."
 
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
@@ -938,11 +965,9 @@ msgstr "Contact email"
 msgid "Content"
 msgstr "Content"
 
-#. Button label to continue to dashboard after successful registration
 #. Final action button after saving backup codes
 #. Primary action button to proceed to next step in two-factor setup
 #: src/dialogs/auth/enable-two-factor.tsx
-#: src/features/auth/pages/register.tsx
 #: src/features/builder/step-actions.tsx
 msgid "Continue"
 msgstr "Continue"
@@ -1136,15 +1161,6 @@ msgstr "Create a professional, ATS-friendly resume for free with HeadCV. Choose 
 msgid "Create a Sample Resume"
 msgstr "Create a Sample Resume"
 
-#: src/routes/builder/$resumeId/-components/guided-editor.tsx
-msgid "Create an account when you are ready to keep this resume across devices."
-msgstr "Create an account when you are ready to keep this resume across devices."
-
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/pricing.tsx
-msgid "home.plan.resume"
-msgstr "Create and edit your resume"
-
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/final-cta.tsx
 #: src/routes/_home/-sections/hero.tsx
@@ -1217,6 +1233,10 @@ msgstr "Custom Section {0}"
 #: src/libs/resume/section.tsx
 msgid "Custom Sections"
 msgstr "Custom Sections"
+
+#: src/routes/builder/$resumeId/-components/header.tsx
+msgid "Customize"
+msgstr "Customize"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/tools.tsx
@@ -1324,7 +1344,6 @@ msgstr "Description"
 
 #: src/features/builder/steps.ts
 #: src/libs/resume/section.tsx
-#: src/routes/builder/$resumeId/-components/header.tsx
 msgid "Design"
 msgstr "Design"
 
@@ -1358,6 +1377,11 @@ msgstr "Disconnect"
 #: src/routes/builder/$resumeId/-sidebar/right/sections/information.tsx
 msgid "Documentation"
 msgstr "Documentation"
+
+#. js-lingui-explicit-id
+#: src/routes/_home/-sections/faq.tsx
+msgid "home.faq.languages"
+msgstr "Does HeadCV support multiple languages?"
 
 #: src/features/auth/pages/login.tsx
 msgid "Don't have an account? <0/>"
@@ -1393,11 +1417,6 @@ msgstr "Download Microsoft Word"
 #: src/routes/builder/$resumeId/-components/dock.tsx
 msgid "Download PDF"
 msgstr "Download PDF"
-
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/pricing.tsx
-msgid "home.plan.pdf"
-msgstr "Download your PDF"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/tools.tsx
@@ -1528,6 +1547,10 @@ msgstr "Email Address"
 msgid "Email not verified"
 msgstr "Email not verified"
 
+#: src/features/auth/pages/register.tsx
+msgid "Email verification is required."
+msgstr "Email verification is required."
+
 #: src/features/settings/authentication/components/two-factor.tsx
 msgid "Enable 2FA"
 msgstr "Enable 2FA"
@@ -1588,10 +1611,9 @@ msgstr "Enter your password to disable two-factor authentication. Your account w
 msgid "home.offer.description"
 msgstr "Every Pro tool. Unlimited resumes."
 
-#. js-lingui-explicit-id
 #: src/routes/_home/-sections/pricing.tsx
-msgid "home.plan.templates"
-msgstr "Every resume template included"
+msgid "Everything you need for a professional resume:"
+msgstr "Everything you need for a professional resume:"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/features.tsx
@@ -1895,6 +1917,10 @@ msgstr "Free"
 msgid "billing.plan.free"
 msgstr "Free"
 
+#: src/routes/_home/-sections/pricing.tsx
+msgid "Free forever"
+msgstr "Free forever"
+
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/hero.tsx
 msgid "home.hero.eyebrow"
@@ -1928,6 +1954,10 @@ msgstr "Frequently asked questions"
 #: src/routes/_home/-sections/tools.tsx
 msgid "home.steps.intro"
 msgstr "From a blank page to your next application, in four simple steps."
+
+#: src/routes/_home/-sections/pricing.tsx
+msgid "Full design customization"
+msgstr "Full design customization"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/tools.tsx
@@ -2046,6 +2076,11 @@ msgstr "HeadCV continues to grow thanks to its vibrant community. This project o
 msgid "home.brand"
 msgstr "HeadCV home"
 
+#. js-lingui-explicit-id
+#: src/routes/_home/-sections/faq.tsx
+msgid "home.faq.howItWorksText"
+msgstr "HeadCV is a free, easy-to-use online resume builder for creating professional, ATS-friendly resumes quickly. Choose from 15 professional templates, customize the layout and design, and download unlimited, watermark-free PDFs. Start from a blank resume or import an existing PDF or Microsoft Word document to prefill your content."
+
 #: src/routes/__root.tsx
 msgid "HeadCV is a guided CV builder that helps you create an ATS-friendly resume in minutes. Free to start; no credit card required."
 msgstr "HeadCV is a guided CV builder that helps you create an ATS-friendly resume in minutes. Free to start; no credit card required."
@@ -2054,6 +2089,21 @@ msgstr "HeadCV is a guided CV builder that helps you create an ATS-friendly resu
 #: src/routes/_home/-sections/footer.tsx
 msgid "home.footer.text"
 msgstr "HeadCV is a guided CV builder that helps you tell your story with clear layouts and a live preview."
+
+#. js-lingui-explicit-id
+#: src/routes/_home/-sections/faq.tsx
+msgid "home.faq.whyFreeText"
+msgstr "HeadCV is built by a small, independent team focused on helping people worldwide get hired. Optional paid features, such as saving multiple resume versions and AI writing assistance, fund continued development while keeping the free plan generous."
+
+#. js-lingui-explicit-id
+#: src/routes/_home/-sections/faq.tsx
+msgid "home.faq.privacyText"
+msgstr "HeadCV is privacy-first and committed to GDPR compliance. We do not sell your personal data. You own your content and can delete your account and data at any time."
+
+#. js-lingui-explicit-id
+#: src/routes/templates/index.tsx
+msgid "templates.seo.ogImageAlt"
+msgstr "HeadCV resume template gallery — ATS-friendly, modern, and professional CV designs."
 
 #. App version label in footer; includes semantic version variable
 #: src/components/ui/copyright.tsx
@@ -2160,6 +2210,11 @@ msgid "Home"
 msgstr "Home"
 
 #. js-lingui-explicit-id
+#: src/routes/_home/-sections/faq.tsx
+msgid "home.faq.privacy"
+msgstr "How does HeadCV protect my data?"
+
+#. js-lingui-explicit-id
 #: src/routes/_home/-sections/footer.tsx
 #: src/routes/_home/-sections/header.tsx
 msgid "home.nav.how"
@@ -2174,6 +2229,10 @@ msgstr "Icon"
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Identify gaps for an applicant tracking system and apply only high-confidence keyword improvements."
 msgstr "Identify gaps for an applicant tracking system and apply only high-confidence keyword improvements."
+
+#: src/features/auth/pages/register.tsx
+msgid "If this address is new, we sent a verification link. If you already have an account, sign in instead."
+msgstr "If this address is new, we sent a verification link. If you already have an account, sign in instead."
 
 #: src/dialogs/resume/import.tsx
 msgid "Import"
@@ -2190,11 +2249,6 @@ msgstr "Import an existing resume"
 msgid "home.free.importText"
 msgstr "Import an existing resume or build a new one, section by section."
 
-#. js-lingui-explicit-id
-#: src/features/billing/plan-picker.tsx
-msgid "home.pro.imports"
-msgstr "Import without limits"
-
 #: src/routes/builder/$resumeId/-components/imported-workspace.tsx
 msgid "Imported"
 msgstr "Imported"
@@ -2210,6 +2264,11 @@ msgstr "Importing…"
 #: src/components/section-tips.tsx
 msgid "Include only professional profiles that strengthen your application."
 msgstr "Include only professional profiles that strengthen your application."
+
+#: src/features/billing/plan-picker.tsx
+#: src/routes/_home/-sections/pricing.tsx
+msgid "Includes all Free features, plus:"
+msgstr "Includes all Free features, plus:"
 
 #: src/libs/resume/section.tsx
 msgid "Information"
@@ -2248,7 +2307,7 @@ msgstr "Interests"
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
 msgid "home.faq.free"
-msgstr "Is HeadCV free to use?"
+msgstr "Is HeadCV really free?"
 
 #: src/dialogs/resume/sections/certification.tsx
 #: src/features/resume/builder/ai-changes.ts
@@ -2267,6 +2326,10 @@ msgstr "Item {0}"
 #: src/features/resume/builder/ai-changes.ts
 msgid "Items"
 msgstr "Items"
+
+#: src/features/billing/plan-picker.tsx
+msgid "Job Application Tracker"
+msgstr "Job Application Tracker"
 
 #: src/components/tip-popover.tsx
 msgid "Job-specific guidance"
@@ -2289,13 +2352,16 @@ msgstr "john.doe"
 #. Example email placeholder for login identifier field
 #. Example email placeholder on forgot-password form
 #. Example email placeholder on profile settings form
-#. Example email placeholder on registration form
 #: src/features/auth/pages/forgot-password.tsx
 #: src/features/auth/pages/login.tsx
-#: src/features/auth/pages/register.tsx
 #: src/features/settings/pages/profile.tsx
 msgid "john.doe@example.com"
 msgstr "john.doe@example.com"
+
+#. Example email placeholder on registration form
+#: src/features/auth/pages/register.tsx
+msgid "john.doe@gmail.com"
+msgstr "john.doe@gmail.com"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/final-cta.tsx
@@ -2566,10 +2632,6 @@ msgstr "Make every detail yours"
 msgid "home.templates.choose"
 msgstr "Make it mine"
 
-#: src/routes/builder/$resumeId/-components/guided-editor.tsx
-msgid "Make it yours"
-msgstr "Make it yours"
-
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Make the experience section more results-oriented and remove vague responsibilities."
 msgstr "Make the experience section more results-oriented and remove vague responsibilities."
@@ -2612,9 +2674,12 @@ msgstr "Microsoft Word"
 
 #. js-lingui-explicit-id
 #: src/features/billing/plan-picker.tsx
-#: src/routes/_home/-sections/pricing.tsx
 msgid "home.pricing.monthly"
 msgstr "Monthly"
+
+#: src/routes/_home/-sections/pricing.tsx
+msgid "Monthly billing"
+msgstr "Monthly billing"
 
 #: src/routes/builder/$resumeId/-components/header.tsx
 msgid "More"
@@ -2732,9 +2797,12 @@ msgstr "No chats for this resume yet."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/counter-bar.tsx
-#: src/routes/_home/-sections/pricing.tsx
 msgid "home.noCard"
 msgstr "No credit card"
+
+#: src/routes/_home/-sections/pricing.tsx
+msgid "No credit card required"
+msgstr "No credit card required"
 
 #. Error shown when AI import endpoint returns no parsed resume data
 #: src/dialogs/resume/import.tsx
@@ -2756,6 +2824,10 @@ msgstr "No results found."
 #: src/routes/agent/-components/thread-sidebar.tsx
 msgid "No threads yet."
 msgstr "No threads yet."
+
+#: src/routes/_home/-sections/pricing.tsx
+msgid "No watermarks or branding"
+msgstr "No watermarks or branding"
 
 #: src/libs/resume/section.tsx
 msgid "Notes"
@@ -2925,17 +2997,6 @@ msgstr "Photo"
 msgid "Picture"
 msgstr "Picture"
 
-#. js-lingui-explicit-id
-#. placeholder {0}: money(60)
-#: src/routes/_home/-sections/pricing.tsx
-msgid "home.pricing.yearTotal"
-msgstr "Planned annual total: <0>{0}</0>"
-
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/pricing.tsx
-msgid "home.pricing.monthTotal"
-msgstr "Planned monthly billing"
-
 #: src/routes/dashboard/settings/route.tsx
 msgid "Plans & Billing"
 msgstr "Plans & Billing"
@@ -2984,7 +3045,6 @@ msgstr "Position"
 
 #. js-lingui-explicit-id
 #: src/features/billing/plan-picker.tsx
-#: src/routes/_home/-sections/pricing.tsx
 msgid "home.pricing.flexible"
 msgstr "Prefer flexibility? Choose the monthly option."
 
@@ -3220,6 +3280,7 @@ msgid "required"
 msgstr "required"
 
 #: src/features/auth/pages/login.tsx
+#: src/features/auth/pages/register.tsx
 #: src/features/settings/pages/profile.tsx
 msgid "Resend verification email"
 msgstr "Resend verification email"
@@ -3299,6 +3360,11 @@ msgstr "Resume ready"
 #: src/routes/_home/-sections/tools.tsx
 msgid "home.demo.downloaded"
 msgstr "Resume successfully downloaded"
+
+#. js-lingui-explicit-id
+#: src/routes/templates/index.tsx
+msgid "templates.seo.title"
+msgstr "Resume Templates | ATS-Friendly & Modern CV Designs | HeadCV"
 
 #: src/routes/builder/$resumeId/-components/header.tsx
 msgid "Resume workspace"
@@ -3388,20 +3454,9 @@ msgid "Save"
 msgstr "Save"
 
 #. js-lingui-explicit-id
-#. placeholder {0}: money(180)
-#: src/routes/_home/-sections/pricing.tsx
-msgid "home.pricing.savings"
-msgstr "Save <0>{0}</0> compared with 12 monthly payments."
-
-#. js-lingui-explicit-id
 #: src/features/billing/plan-picker.tsx
-#: src/routes/_home/-sections/pricing.tsx
 msgid "home.pricing.discount"
 msgstr "Save 75%"
-
-#: src/features/builder/steps.ts
-msgid "Save Account"
-msgstr "Save Account"
 
 #: src/dialogs/resume/index.tsx
 #: src/dialogs/resume/sections/award.tsx
@@ -3426,10 +3481,6 @@ msgstr "Save Changes"
 #: src/hooks/use-form-blocker.tsx
 msgid "Save your changes?"
 msgstr "Save your changes?"
-
-#: src/routes/builder/$resumeId/-components/guided-editor.tsx
-msgid "Save your progress"
-msgstr "Save your progress"
 
 #: src/routes/agent/-components/patch-tool-card.tsx
 msgid "Saved"
@@ -3534,6 +3585,10 @@ msgstr "Send Password Reset Email"
 #: src/features/auth/pages/forgot-password.tsx
 msgid "Sending password reset email..."
 msgstr "Sending password reset email..."
+
+#: src/features/auth/pages/register.tsx
+msgid "Sending..."
+msgstr "Sending..."
 
 #: src/components/input/rich-input.tsx
 msgid "Separator"
@@ -3649,6 +3704,10 @@ msgstr "Sign in"
 #: src/features/auth/pages/login.tsx
 msgid "Sign in"
 msgstr "Sign in"
+
+#: src/features/auth/pages/register.tsx
+msgid "Sign in instead"
+msgstr "Sign in instead"
 
 #. Call-to-action link from forgot-password page to login page
 #. Call-to-action link from registration page to login page
@@ -4053,11 +4112,6 @@ msgstr "The resume you are trying to access is password protected"
 msgid "home.template.bold"
 msgstr "The statement"
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/faq.tsx
-msgid "home.faq.atsText"
-msgstr "The templates use clear sections and readable text. For automated applications, choose a simple layout and follow the employer's file requirements. No template can guarantee an ATS score or an interview."
-
 #: src/components/input/rich-input.tsx
 msgid "The URL you entered is not valid."
 msgstr "The URL you entered is not valid."
@@ -4157,10 +4211,6 @@ msgstr "This section is reserved for your personal notes specific to this resume
 #: src/routes/agent/-components/tool-activity.tsx
 msgid "This step failed. Please try again."
 msgstr "This step failed. Please try again."
-
-#: src/features/auth/pages/register.tsx
-msgid "This step is optional, but recommended."
-msgstr "This step is optional, but recommended."
 
 #: src/libs/error-message.ts
 msgid "This thread is archived or already has an active run."
@@ -4387,15 +4437,17 @@ msgstr "Underline"
 msgid "billing.usage.unlimited"
 msgstr "Unlimited"
 
-#. js-lingui-explicit-id
 #: src/features/billing/plan-picker.tsx
-msgid "home.pro.letters"
-msgstr "Unlimited matching cover letters"
+msgid "Unlimited imports"
+msgstr "Unlimited imports"
 
-#. js-lingui-explicit-id
+#: src/routes/_home/-sections/pricing.tsx
+msgid "Unlimited PDF downloads"
+msgstr "Unlimited PDF downloads"
+
 #: src/features/billing/plan-picker.tsx
-msgid "home.pro.resumes"
-msgstr "Unlimited resumes for every opportunity"
+msgid "Unlimited resumes"
+msgstr "Unlimited resumes"
 
 #. js-lingui-explicit-id
 #: src/dialogs/billing/upgrade.tsx
@@ -4545,9 +4597,19 @@ msgstr "Usage"
 msgid "Use a clear, professional headshot with a neutral background."
 msgstr "Use a clear, professional headshot with a neutral background."
 
+#: src/features/auth/pages/register.tsx
+msgid "Use a different email"
+msgstr "Use a different email"
+
 #: src/components/section-tips.tsx
 msgid "Use a recognized and honest proficiency level."
 msgstr "Use a recognized and honest proficiency level."
+
+#. Hint under the registration email field listing accepted email domains
+#. placeholder {0}: signupEmailDomains.join(", ")
+#: src/features/auth/pages/register.tsx
+msgid "Use an address from: {0}"
+msgstr "Use an address from: {0}"
 
 #: src/components/input/color-picker.tsx
 msgid "Use color {color}"
@@ -4573,6 +4635,10 @@ msgstr "Valid URLs must start with http:// or https://."
 msgid "Value"
 msgstr "Value"
 
+#: src/features/auth/pages/register.tsx
+msgid "Verification email sent."
+msgstr "Verification email sent."
+
 #: src/features/settings/pages/profile.tsx
 msgid "Verified"
 msgstr "Verified"
@@ -4587,6 +4653,10 @@ msgstr "Verify"
 #: src/features/auth/pages/verify-2fa-backup.tsx
 msgid "Verify with a Backup Code"
 msgstr "Verify with a Backup Code"
+
+#: src/features/auth/pages/register.tsx
+msgid "Verify your email"
+msgstr "Verify your email"
 
 #: src/features/auth/pages/verify-2fa-backup.tsx
 msgid "Verifying backup code..."
@@ -4608,10 +4678,6 @@ msgstr "Verifying password..."
 #: src/routes/checkout/success.tsx
 msgid "checkout.verifying.title"
 msgstr "Verifying payment..."
-
-#: src/features/auth/pages/register.tsx
-msgid "Verifying your email is required when resetting your password."
-msgstr "Verifying your email is required when resetting your password."
 
 #. js-lingui-explicit-id
 #: src/routes/checkout/success.tsx
@@ -4637,10 +4703,9 @@ msgstr "Views"
 msgid "Volunteer"
 msgstr "Volunteer"
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/pricing.tsx
-msgid "home.plan.watermark"
-msgstr "Watermark-free exports"
+#: src/features/auth/pages/register.tsx
+msgid "We could not send the verification email. Please try again."
+msgstr "We could not send the verification email. Please try again."
 
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
@@ -4683,11 +4748,21 @@ msgstr "What do you want to do?"
 msgid "What do you want to rename this section to?"
 msgstr "What do you want to rename this section to?"
 
+#. js-lingui-explicit-id
+#: src/routes/_home/-sections/faq.tsx
+msgid "home.faq.howItWorks"
+msgstr "What is HeadCV and how does it work?"
+
 #: src/routes/builder/$resumeId/-components/header.tsx
 #: src/routes/dashboard/resumes/-components/menus/context-menu.tsx
 #: src/routes/dashboard/resumes/-components/menus/dropdown-menu.tsx
 msgid "When locked, the resume cannot be updated or deleted."
 msgstr "When locked, the resume cannot be updated or deleted."
+
+#. js-lingui-explicit-id
+#: src/routes/_home/-sections/faq.tsx
+msgid "home.faq.whyFree"
+msgstr "Why is HeadCV free?"
 
 #: src/features/builder/steps.ts
 msgid "Work Experience"
@@ -4708,9 +4783,12 @@ msgstr "Write, edit and preview your resume. No credit card needed to begin."
 
 #. js-lingui-explicit-id
 #: src/features/billing/plan-picker.tsx
-#: src/routes/_home/-sections/pricing.tsx
 msgid "home.pricing.yearly"
 msgstr "Yearly"
+
+#: src/routes/_home/-sections/pricing.tsx
+msgid "Yearly billing"
+msgstr "Yearly billing"
 
 #: src/features/resume/builder/ai-review.tsx
 msgid "Yes"
@@ -4718,27 +4796,32 @@ msgstr "Yes"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
-msgid "home.faq.pdfText"
-msgstr "Yes. Download a PDF from the builder, then update your resume and export a new copy whenever you need."
+msgid "home.faq.atsText"
+msgstr "Yes. HeadCV exports clean, text-based PDFs with embedded fonts and clear structure so applicant tracking systems can read your resume, including two-column templates. For very old systems, a one-column layout is the safest choice. Clear headings, relevant keywords, and impact-focused bullet points still matter most."
+
+#. js-lingui-explicit-id
+#: src/routes/_home/-sections/faq.tsx
+msgid "home.faq.versionsText"
+msgstr "Yes. One resume is free to edit and download without limits. Upgrade to a paid plan to save multiple versions at the same time for different roles or languages. If you return to the free plan, your first resume remains editable and downloadable while additional versions stay saved but locked."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
 msgid "home.faq.importText"
-msgstr "Yes. Import your existing resume, then review the content and formatting before downloading."
+msgstr "Yes. Upload a PDF or Microsoft Word document and HeadCV will import its content into a clean, editable, ATS-friendly layout so you can start faster."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
-msgid "home.faq.arabicText"
-msgstr "Yes. Use the language selector to switch between Arabic and English. The interface adjusts its reading direction. Preview your resume to check its language and layout before exporting."
-
-#: src/features/auth/pages/login.tsx
-msgid "You can also use your username to login."
-msgstr "You can also use your username to login."
+msgid "home.faq.languagesText"
+msgstr "Yes. You can write your resume in multiple languages and customize section labels, date formats, and page size. HeadCV supports right-to-left layouts for languages such as Arabic and Hebrew. Upgrading lets you save and manage a separate resume version for each language."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/faq.tsx
 msgid "home.faq.freeText"
-msgstr "You can build, preview and download your resume for free today. Pro plans are coming soon, and no paid subscription is currently required."
+msgstr "Yes. Your first resume is free forever, with unlimited watermark-free PDF downloads, access to every template, and full layout and design control. No trial or credit card is required. You only pay for optional extras such as saving multiple resume versions or using AI writing assistance."
+
+#: src/features/auth/pages/login.tsx
+msgid "You can also use your username to login."
+msgstr "You can also use your username to login."
 
 #: src/hooks/use-form-blocker.tsx
 msgid "You have unsaved changes in this entry."
@@ -4767,7 +4850,6 @@ msgid "billing.upgrade.resumeLimit.title"
 msgstr "You've created all your free resumes"
 
 #: src/features/auth/pages/forgot-password.tsx
-#: src/features/auth/pages/register.tsx
 msgid "You've got mail!"
 msgstr "You've got mail!"
 
@@ -4790,19 +4872,9 @@ msgstr "Your account has been deleted successfully."
 msgid "Your API key has been copied to the clipboard."
 msgstr "Your API key has been copied to the clipboard."
 
-#. js-lingui-explicit-id
-#: src/features/billing/plan-picker.tsx
-msgid "home.pro.tracker"
-msgstr "Your applications, organized"
-
 #: src/routes/builder/$resumeId/-components/preview-page.tsx
 msgid "Your changes are saved automatically."
 msgstr "Your changes are saved automatically."
-
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/pricing.tsx
-msgid "home.plan.design"
-msgstr "Your fonts, colors and layout"
 
 #: src/routes/builder/$resumeId/-components/guided-editor.tsx
 msgid "Your headline is present"

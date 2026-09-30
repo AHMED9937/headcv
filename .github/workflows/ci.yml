@@ -35,6 +35,12 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check Translation Catalogs
+        run: |
+          pnpm lingui:extract
+          git diff --exit-code -- apps/web/locales/en-US.po apps/web/locales/ar-SA.po \
+            || { echo "::error::Translation catalogs are out of sync. Run 'pnpm lingui:extract' and commit the updated .po files."; exit 1; }
+
       - name: Typecheck
         run: pnpm typecheck
 
