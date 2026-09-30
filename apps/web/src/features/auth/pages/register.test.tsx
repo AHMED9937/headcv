@@ -5,6 +5,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
+import { getLocaleMessages } from "@/libs/locale";
 
 const signUpEmail = vi.hoisted(() => vi.fn());
 
@@ -26,8 +27,9 @@ vi.mock("@tanstack/react-router", () => ({
 
 const { RegisterPage } = await import("./register");
 
-beforeAll(() => {
-	i18n.loadAndActivate({ locale: "en", messages: {} });
+beforeAll(async () => {
+	const { locale, messages } = await getLocaleMessages("en-US");
+	i18n.loadAndActivate({ locale, messages });
 });
 
 beforeEach(() => {
@@ -64,6 +66,7 @@ describe("RegisterPage", () => {
 		renderRegister();
 
 		expect(screen.getByText("Use an address from: gmail.com, outlook.com")).toBeInTheDocument();
+		expect(screen.getByPlaceholderText("john.doe@gmail.com")).toBeInTheDocument();
 	});
 
 	it("rejects an email from an untrusted domain without calling the server", async () => {

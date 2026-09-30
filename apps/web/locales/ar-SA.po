@@ -312,10 +312,6 @@ msgstr "تمت الإضافة"
 msgid "Additional Sections"
 msgstr "أقسام إضافية"
 
-#: src/routes/builder/$resumeId/-components/guided-editor.tsx
-msgid "Adjust the look without changing your content."
-msgstr "عدّل المظهر دون تغيير المحتوى."
-
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Adjust the resume for a remote-first role that values async communication and ownership."
 msgstr "قم بتعديل سيرتك الذاتية لتناسب وظيفة تتطلب العمل عن بعد وتقدر التواصل غير المتزامن وتحمل المسؤولية."
@@ -436,6 +432,13 @@ msgstr "أي شخص لديه عنوان URL العام للسيرة الذاتي
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "Anyone with the link can view and download the resume."
 msgstr "يمكن لأي شخص لديه الرابط عرض السيرة الذاتية وتنزيلها."
+
+#. Authentication provider display name in account settings
+#. Brand name label for Apple social sign-in button
+#: src/features/auth/components/social-auth.tsx
+#: src/features/settings/authentication/components/hooks.tsx
+msgid "Apple"
+msgstr "Apple"
 
 #: src/routes/agent/-components/patch-tool-card.tsx
 msgid "Applied"
@@ -647,6 +650,11 @@ msgstr "نصف قطر الحافة"
 #: src/features/resume/builder/ai-changes.ts
 msgid "Border Width"
 msgstr "عرض الإطار"
+
+#. js-lingui-explicit-id
+#: src/routes/templates/index.tsx
+msgid "templates.seo.description"
+msgstr "تصفح قوالب السيرة الذاتية المجانية من HeadCV. اختر تصميماً متوافقاً مع أنظمة تتبع المتقدمين أو عصرياً أو احترافياً أو إبداعياً، وابدأ إنشاء سيرتك الذاتية في دقائق."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/hero.tsx
@@ -1140,10 +1148,6 @@ msgstr "أنشئ سيرة ذاتية احترافية متوافقة مع ATS م
 #: src/dialogs/resume/index.tsx
 msgid "Create a Sample Resume"
 msgstr "إنشاء نموذج سيرة ذاتية"
-
-#: src/routes/builder/$resumeId/-components/guided-editor.tsx
-msgid "Create an account when you are ready to keep this resume across devices."
-msgstr "أنشئ حسابًا عندما تكون جاهزًا للاحتفاظ بهذه السيرة الذاتية على كل أجهزتك."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/pricing.tsx
@@ -2060,6 +2064,11 @@ msgstr "HeadCV منشئ سيرة ذاتية موجه يساعدك على إنش�
 msgid "home.footer.text"
 msgstr "HeadCV منشئ سيرة ذاتية موجه يساعدك على سرد قصتك بتخطيطات واضحة ومعاينة مباشرة."
 
+#. js-lingui-explicit-id
+#: src/routes/templates/index.tsx
+msgid "templates.seo.ogImageAlt"
+msgstr "معرض قوالب السيرة الذاتية من HeadCV بتصاميم عصرية واحترافية متوافقة مع أنظمة تتبع المتقدمين."
+
 #. App version label in footer; includes semantic version variable
 #: src/components/ui/copyright.tsx
 msgid "HeadCV v{__APP_VERSION__}"
@@ -2294,13 +2303,16 @@ msgstr "جون.دو"
 #. Example email placeholder for login identifier field
 #. Example email placeholder on forgot-password form
 #. Example email placeholder on profile settings form
-#. Example email placeholder on registration form
 #: src/features/auth/pages/forgot-password.tsx
 #: src/features/auth/pages/login.tsx
-#: src/features/auth/pages/register.tsx
 #: src/features/settings/pages/profile.tsx
 msgid "john.doe@example.com"
 msgstr "john.doe@example.com"
+
+#. Example email placeholder on registration form
+#: src/features/auth/pages/register.tsx
+msgid "john.doe@gmail.com"
+msgstr "john.doe@gmail.com"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/final-cta.tsx
@@ -2570,10 +2582,6 @@ msgstr "اجعل كل التفاصيل مناسبة لك"
 #: src/routes/_home/-sections/templates-showcase.tsx
 msgid "home.templates.choose"
 msgstr "اجعله لي"
-
-#: src/routes/builder/$resumeId/-components/guided-editor.tsx
-msgid "Make it yours"
-msgstr "اجعلها خاصة بك"
 
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Make the experience section more results-oriented and remove vague responsibilities."
@@ -3305,6 +3313,11 @@ msgstr "السيرة الذاتية جاهزة"
 msgid "home.demo.downloaded"
 msgstr "تم تحميل السيرة الذاتية بنجاح"
 
+#. js-lingui-explicit-id
+#: src/routes/templates/index.tsx
+msgid "templates.seo.title"
+msgstr "قوالب سيرة ذاتية مجانية وعصرية ومتوافقة مع أنظمة تتبع المتقدمين | HeadCV"
+
 #: src/routes/builder/$resumeId/-components/header.tsx
 msgid "Resume workspace"
 msgstr "مساحة عمل السيرة الذاتية"
@@ -3404,10 +3417,6 @@ msgstr "وفّر <0>{0}</0> مقارنة بـ 12 دفعة شهرية."
 msgid "home.pricing.discount"
 msgstr "وفّر 75%"
 
-#: src/features/builder/steps.ts
-msgid "Save Account"
-msgstr "حفظ الحساب"
-
 #: src/dialogs/resume/index.tsx
 #: src/dialogs/resume/sections/award.tsx
 #: src/dialogs/resume/sections/certification.tsx
@@ -3431,10 +3440,6 @@ msgstr "حفظ التّغييرات"
 #: src/hooks/use-form-blocker.tsx
 msgid "Save your changes?"
 msgstr "حفظ التغييرات؟"
-
-#: src/routes/builder/$resumeId/-components/guided-editor.tsx
-msgid "Save your progress"
-msgstr "احفظ تقدمك"
 
 #: src/routes/agent/-components/patch-tool-card.tsx
 msgid "Saved"
@@ -4553,6 +4558,12 @@ msgstr "استخدم صورة شخصية واضحة واحترافية بخلف�
 #: src/components/section-tips.tsx
 msgid "Use a recognized and honest proficiency level."
 msgstr "استخدم مستوى إتقان معترفًا به وصادقًا."
+
+#. Hint under the registration email field listing accepted email domains
+#. placeholder {0}: signupEmailDomains.join(", ")
+#: src/features/auth/pages/register.tsx
+msgid "Use an address from: {0}"
+msgstr "استخدم عنواناً من: {0}"
 
 #: src/components/input/color-picker.tsx
 msgid "Use color {color}"

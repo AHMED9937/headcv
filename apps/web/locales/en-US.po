@@ -307,10 +307,6 @@ msgstr "Added"
 msgid "Additional Sections"
 msgstr "Additional Sections"
 
-#: src/routes/builder/$resumeId/-components/guided-editor.tsx
-msgid "Adjust the look without changing your content."
-msgstr "Adjust the look without changing your content."
-
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Adjust the resume for a remote-first role that values async communication and ownership."
 msgstr "Adjust the resume for a remote-first role that values async communication and ownership."
@@ -431,6 +427,13 @@ msgstr "Anyone who has the resume's public URL will be able to view and download
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "Anyone with the link can view and download the resume."
 msgstr "Anyone with the link can view and download the resume."
+
+#. Authentication provider display name in account settings
+#. Brand name label for Apple social sign-in button
+#: src/features/auth/components/social-auth.tsx
+#: src/features/settings/authentication/components/hooks.tsx
+msgid "Apple"
+msgstr "Apple"
 
 #: src/routes/agent/-components/patch-tool-card.tsx
 msgid "Applied"
@@ -642,6 +645,11 @@ msgstr "Border Radius"
 #: src/features/resume/builder/ai-changes.ts
 msgid "Border Width"
 msgstr "Border Width"
+
+#. js-lingui-explicit-id
+#: src/routes/templates/index.tsx
+msgid "templates.seo.description"
+msgstr "Browse HeadCV's free resume templates. Choose an ATS-friendly, modern, professional, or creative CV design and start building your resume in minutes."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/hero.tsx
@@ -1135,10 +1143,6 @@ msgstr "Create a professional, ATS-friendly resume for free with HeadCV. Choose 
 #: src/dialogs/resume/index.tsx
 msgid "Create a Sample Resume"
 msgstr "Create a Sample Resume"
-
-#: src/routes/builder/$resumeId/-components/guided-editor.tsx
-msgid "Create an account when you are ready to keep this resume across devices."
-msgstr "Create an account when you are ready to keep this resume across devices."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/pricing.tsx
@@ -2055,6 +2059,11 @@ msgstr "HeadCV is a guided CV builder that helps you create an ATS-friendly resu
 msgid "home.footer.text"
 msgstr "HeadCV is a guided CV builder that helps you tell your story with clear layouts and a live preview."
 
+#. js-lingui-explicit-id
+#: src/routes/templates/index.tsx
+msgid "templates.seo.ogImageAlt"
+msgstr "HeadCV resume template gallery — ATS-friendly, modern, and professional CV designs."
+
 #. App version label in footer; includes semantic version variable
 #: src/components/ui/copyright.tsx
 msgid "HeadCV v{__APP_VERSION__}"
@@ -2289,13 +2298,16 @@ msgstr "john.doe"
 #. Example email placeholder for login identifier field
 #. Example email placeholder on forgot-password form
 #. Example email placeholder on profile settings form
-#. Example email placeholder on registration form
 #: src/features/auth/pages/forgot-password.tsx
 #: src/features/auth/pages/login.tsx
-#: src/features/auth/pages/register.tsx
 #: src/features/settings/pages/profile.tsx
 msgid "john.doe@example.com"
 msgstr "john.doe@example.com"
+
+#. Example email placeholder on registration form
+#: src/features/auth/pages/register.tsx
+msgid "john.doe@gmail.com"
+msgstr "john.doe@gmail.com"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/final-cta.tsx
@@ -2565,10 +2577,6 @@ msgstr "Make every detail yours"
 #: src/routes/_home/-sections/templates-showcase.tsx
 msgid "home.templates.choose"
 msgstr "Make it mine"
-
-#: src/routes/builder/$resumeId/-components/guided-editor.tsx
-msgid "Make it yours"
-msgstr "Make it yours"
 
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Make the experience section more results-oriented and remove vague responsibilities."
@@ -3300,6 +3308,11 @@ msgstr "Resume ready"
 msgid "home.demo.downloaded"
 msgstr "Resume successfully downloaded"
 
+#. js-lingui-explicit-id
+#: src/routes/templates/index.tsx
+msgid "templates.seo.title"
+msgstr "Resume Templates | ATS-Friendly & Modern CV Designs | HeadCV"
+
 #: src/routes/builder/$resumeId/-components/header.tsx
 msgid "Resume workspace"
 msgstr "Resume workspace"
@@ -3399,10 +3412,6 @@ msgstr "Save <0>{0}</0> compared with 12 monthly payments."
 msgid "home.pricing.discount"
 msgstr "Save 75%"
 
-#: src/features/builder/steps.ts
-msgid "Save Account"
-msgstr "Save Account"
-
 #: src/dialogs/resume/index.tsx
 #: src/dialogs/resume/sections/award.tsx
 #: src/dialogs/resume/sections/certification.tsx
@@ -3426,10 +3435,6 @@ msgstr "Save Changes"
 #: src/hooks/use-form-blocker.tsx
 msgid "Save your changes?"
 msgstr "Save your changes?"
-
-#: src/routes/builder/$resumeId/-components/guided-editor.tsx
-msgid "Save your progress"
-msgstr "Save your progress"
 
 #: src/routes/agent/-components/patch-tool-card.tsx
 msgid "Saved"
@@ -4548,6 +4553,12 @@ msgstr "Use a clear, professional headshot with a neutral background."
 #: src/components/section-tips.tsx
 msgid "Use a recognized and honest proficiency level."
 msgstr "Use a recognized and honest proficiency level."
+
+#. Hint under the registration email field listing accepted email domains
+#. placeholder {0}: signupEmailDomains.join(", ")
+#: src/features/auth/pages/register.tsx
+msgid "Use an address from: {0}"
+msgstr "Use an address from: {0}"
 
 #: src/components/input/color-picker.tsx
 msgid "Use color {color}"

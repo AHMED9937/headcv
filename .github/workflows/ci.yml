@@ -35,6 +35,11 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check Translation Catalogs
+        run: |
+          pnpm lingui:extract
+          git diff --exit-code -- apps/web/locales/en-US.po apps/web/locales/ar-SA.po
+
       - name: Typecheck
         run: pnpm typecheck
 
