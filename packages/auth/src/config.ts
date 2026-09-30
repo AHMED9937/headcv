@@ -205,6 +205,7 @@ const getAuthConfig = () => {
 					});
 				} catch (error) {
 					console.error("Failed to send verification email", error);
+					throw error;
 				}
 			},
 		},

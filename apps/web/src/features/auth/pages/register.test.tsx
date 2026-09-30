@@ -7,6 +7,7 @@ import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 
 const signUpEmail = vi.hoisted(() => vi.fn());
+const sendVerificationEmail = vi.hoisted(() => vi.fn());
 
 vi.mock("@tanstack/react-query", () => ({
 	useQuery: () => ({ data: { credential: "Password", google: "Google", apple: "Apple" }, isLoading: false }),
@@ -14,7 +15,9 @@ vi.mock("@tanstack/react-query", () => ({
 vi.mock("@/libs/orpc/client", () => ({
 	orpc: { auth: { providers: { list: { queryOptions: () => ({}) } } } },
 }));
-vi.mock("@/libs/auth/client", () => ({ authClient: { signIn: {}, signUp: { email: signUpEmail } } }));
+vi.mock("@/libs/auth/client", () => ({
+	authClient: { sendVerificationEmail, signIn: {}, signUp: { email: signUpEmail } },
+}));
 vi.mock("@tanstack/react-router", () => ({
 	Link: ({ to, children, className }: { to: string; children: React.ReactNode; className?: string }) => (
 		<a href={to} className={className}>
@@ -33,6 +36,8 @@ beforeAll(() => {
 beforeEach(() => {
 	signUpEmail.mockReset();
 	signUpEmail.mockResolvedValue({ error: null });
+	sendVerificationEmail.mockReset();
+	sendVerificationEmail.mockResolvedValue({ error: null });
 });
 
 const renderRegister = (signupEmailDomains = ["gmail.com", "outlook.com"]) =>
@@ -74,6 +79,32 @@ describe("RegisterPage", () => {
 			await screen.findByText("Please use an email from a trusted provider (gmail.com, outlook.com)."),
 		).toBeInTheDocument();
 		expect(signUpEmail).not.toHaveBeenCalled();
+	});
+
+	it("rejects a malformed email without calling the server", async () => {
+		renderRegister();
+		await fillForm("not-an-email");
+
+		expect(await screen.findByText("Enter a valid email address.")).toBeInTheDocument();
+		expect(signUpEmail).not.toHaveBeenCalled();
+	});
+
+	it("requires verification after signup and does not offer a dashboard bypass", async () => {
+		renderRegister();
+		await fillForm("john@gmail.com");
+
+		expect(await screen.findByText("Email verification is required.")).toBeInTheDocument();
+		expect(screen.queryByRole("link", { name: "Continue" })).not.toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "Resend verification email" })).toBeInTheDocument();
+		expect(screen.getByRole("link", { name: /Sign in instead/ })).toHaveAttribute("href", "/auth/login");
+	});
+
+	it("resends verification to the submitted address", async () => {
+		renderRegister();
+		await fillForm("john@gmail.com");
+		await userEvent.click(await screen.findByRole("button", { name: "Resend verification email" }));
+
+		expect(sendVerificationEmail).toHaveBeenCalledWith({ email: "john@gmail.com", callbackURL: "/dashboard" });
 	});
 
 	it("submits an email from a trusted domain", async () => {

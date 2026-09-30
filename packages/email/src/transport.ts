@@ -69,5 +69,6 @@ export const sendEmail = async (options: SendEmailOptions) => {
 		await transport.sendMail(payload);
 	} catch (error) {
 		console.error("There was an error sending mail.", error);
+		throw error;
 	}
 };

@@ -34,8 +34,10 @@ const createFormSchema = (allowedEmailDomains: readonly string[]) =>
 			}),
 		// Mirrors the server allowlist for instant feedback; the server remains the enforcer.
 		email: z
-			.email()
+			.string()
+			.trim()
 			.toLowerCase()
+			.email({ message: "Enter a valid email address." })
 			.refine((email) => isEmailDomainAllowed(email, allowedEmailDomains), {
 				message: `Please use an email from a trusted provider (${allowedEmailDomains.join(", ")}).`,
 			}),
@@ -49,7 +51,7 @@ type Props = {
 };
 
 export function RegisterPage({ disableEmailAuth, signupEmailDomains, pendingPlan }: Props) {
-	const [submitted, setSubmitted] = useState(false);
+	const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
 	const [showPassword, toggleShowPassword] = useToggle(false);
 
 	const formSchema = useMemo(() => createFormSchema(signupEmailDomains), [signupEmailDomains]);
@@ -89,12 +91,20 @@ export function RegisterPage({ disableEmailAuth, signupEmailDomains, pendingPlan
 				return;
 			}
 
-			setSubmitted(true);
+			setSubmittedEmail(value.email);
 			toast.dismiss(toastId);
 		},
 	});
 
-	if (submitted) return <PostSignupScreen pendingPlan={pendingPlan} />;
+	if (submittedEmail) {
+		return (
+			<PostSignupScreen
+				email={submittedEmail}
+				pendingPlan={pendingPlan}
+				onUseDifferentEmail={() => setSubmittedEmail(null)}
+			/>
+		);
+	}
 
 	return (
 		<>
@@ -106,6 +116,7 @@ export function RegisterPage({ disableEmailAuth, signupEmailDomains, pendingPlan
 
 			{!disableEmailAuth && (
 				<form
+					noValidate
 					className="space-y-6"
 					onSubmit={(event) => {
 						event.preventDefault();
@@ -289,38 +300,74 @@ function SignInPrompt({ pendingPlan }: { pendingPlan?: PendingPlan }) {
 	);
 }
 
-function PostSignupScreen({ pendingPlan }: { pendingPlan?: PendingPlan }) {
-	const continueUrl = pendingPlan ? `/dashboard?checkoutPlan=${pendingPlan}` : "/dashboard";
+function PostSignupScreen({
+	email,
+	pendingPlan,
+	onUseDifferentEmail,
+}: {
+	email: string;
+	pendingPlan?: PendingPlan;
+	onUseDifferentEmail: () => void;
+}) {
+	const [isResending, setIsResending] = useState(false);
+	const callbackURL = pendingPlan ? `/dashboard?checkoutPlan=${pendingPlan}` : "/dashboard";
+
+	const resendVerificationEmail = async () => {
+		setIsResending(true);
+		const { error } = await authClient.sendVerificationEmail({ email, callbackURL });
+		setIsResending(false);
+
+		if (error) {
+			toast.error(error.message || t`We could not send the verification email. Please try again.`);
+			return;
+		}
+
+		toast.success(t`Verification email sent.`);
+	};
 
 	return (
 		<>
 			<div className="space-y-1 text-center">
 				<h1 className="font-semibold text-2xl tracking-tight">
-					<Trans>You've got mail!</Trans>
+					<Trans>Verify your email</Trans>
 				</h1>
 				<p className="text-muted-foreground">
-					<Trans>Check your email for a link to verify your account.</Trans>
+					<Trans>Check your inbox for the verification link required to activate your account.</Trans>
 				</p>
 			</div>
 
 			<Alert>
 				<AlertTitle>
-					<Trans>This step is optional, but recommended.</Trans>
+					<Trans>Email verification is required.</Trans>
 				</AlertTitle>
 				<AlertDescription>
-					<Trans>Verifying your email is required when resetting your password.</Trans>
+					<Trans>
+						If this address is new, we sent a verification link. If you already have an account, sign in instead.
+					</Trans>
 				</AlertDescription>
 			</Alert>
 
-			<Button
-				nativeButton={false}
-				render={
-					<Link to={continueUrl}>
-						<Trans comment="Button label to continue to dashboard after successful registration">Continue</Trans>{" "}
-						<ArrowRightIcon />
-					</Link>
-				}
-			/>
+			<div className="space-y-3">
+				<Button className="w-full" disabled={isResending} onClick={() => void resendVerificationEmail()}>
+					{isResending ? <Trans>Sending...</Trans> : <Trans>Resend verification email</Trans>}
+				</Button>
+				<div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
+					<Button variant="link" className="h-auto px-1! py-0" onClick={onUseDifferentEmail}>
+						<Trans>Use a different email</Trans>
+					</Button>
+					<Button
+						variant="link"
+						nativeButton={false}
+						className="h-auto gap-1.5 px-1! py-0"
+						render={
+							<Link to="/auth/login" search={pendingPlan ? { plan: pendingPlan } : {}}>
+								<Trans>Sign in instead</Trans>
+								<ArrowRightIcon />
+							</Link>
+						}
+					/>
+				</div>
+			</div>
 		</>
 	);
 }

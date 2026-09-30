@@ -65,6 +65,7 @@ describe("Landing pricing", () => {
 		renderPricing();
 		expect(screen.getByText("Everything you need for a professional resume:")).toBeInTheDocument();
 		expect(screen.getByText("Includes all Free features, plus:")).toBeInTheDocument();
+		expect(screen.getByText("3 resumes")).toBeInTheDocument();
 		expect(screen.getByText("Full design customization")).toBeInTheDocument();
 		expect(screen.queryByText(/cover letter/i)).not.toBeInTheDocument();
 	});
@@ -76,12 +77,17 @@ describe("Landing pricing", () => {
 		expect(screen.getByRole("button", { name: "Get Pro" })).toBeInTheDocument();
 	});
 
-	it("preserves the subscription billing toggle", () => {
+	it("keeps the yearly toggle beside Pro and switches billing periods", () => {
 		renderPricing();
+		const billingSwitch = screen.getByRole("switch", { name: "Yearly billing" });
+		expect(billingSwitch).toBeChecked();
 		expect(screen.getByText("$5")).toBeInTheDocument();
-		fireEvent.click(screen.getByRole("button", { name: "Monthly" }));
-		expect(screen.getByText("$20")).toBeInTheDocument();
-		expect(screen.getByRole("button", { name: "Monthly" })).toHaveAttribute("aria-pressed", "true");
+
+		fireEvent.click(billingSwitch);
+		expect(billingSwitch).not.toBeChecked();
+		expect(billingSwitch).toHaveAccessibleName("Monthly billing");
+		expect(screen.getByText("Monthly billing")).toBeInTheDocument();
+		expect(screen.getAllByText("$20").length).toBeGreaterThan(0);
 	});
 
 	it("redirects unauthenticated user to login with plan when clicking Get Pro", () => {
