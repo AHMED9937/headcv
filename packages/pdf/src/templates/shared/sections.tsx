@@ -40,7 +40,7 @@ import { Bold, Div, Heading, Icon, Link, Small, Text } from "./primitives";
 import { RichText } from "./rich-text";
 import { createRtlStyleHelpers } from "./rtl";
 import { getInlineItemWebsiteUrl, shouldRenderSeparateItemWebsite } from "./section-links";
-import { hasSplitRowText, promoteSplitRowRight } from "./split-row";
+import { getEducationSplitRowContent, hasSplitRowText, promoteSplitRowRight } from "./split-row";
 import { composeStyles } from "./styles";
 
 type SectionItemsContextValue = {
@@ -486,14 +486,19 @@ const EducationSection = ({
 			<SectionItems columns={education.columns}>
 				{items.map((item) => {
 					const itemPeriod = formatDateRange(item);
-					const degreeAndGrade = [item.degree, item.grade].filter(Boolean).join(" • ");
-					const locationAndPeriod = [item.location, itemPeriod].filter(Boolean).join(" • ");
 					const gradeAndLocation = [item.grade, item.location].filter(Boolean).join(" • ");
 					const hasArea = Boolean(item.area.trim());
 					const hasDegree = Boolean(item.degree.trim());
-					const { top: headerDegreeAndGrade, bottom: headerLocationAndPeriod } = promoteSplitRowRight({
-						top: degreeAndGrade,
-						bottom: locationAndPeriod,
+					const {
+						topRight: headerDegreeAndGrade,
+						bottomLeft: headerAreaAndLocation,
+						bottomRight: headerPeriod,
+					} = getEducationSplitRowContent({
+						degree: item.degree,
+						grade: item.grade,
+						area: item.area,
+						location: item.location,
+						period: itemPeriod,
 					});
 
 					const renderInlineHeader = () => (
@@ -524,12 +529,10 @@ const EducationSection = ({
 								)}
 							</View>
 
-							{(hasArea || hasSplitRowText(headerLocationAndPeriod)) && (
+							{(hasSplitRowText(headerAreaAndLocation) || hasSplitRowText(headerPeriod)) && (
 								<View style={composeStyles(splitRowStyle)}>
-									{hasArea && <Text>{item.area}</Text>}
-									{hasSplitRowText(headerLocationAndPeriod) && (
-										<Text style={composeStyles(alignEndStyle)}>{headerLocationAndPeriod}</Text>
-									)}
+									<Text>{headerAreaAndLocation}</Text>
+									{hasSplitRowText(headerPeriod) && <Text style={composeStyles(alignEndStyle)}>{headerPeriod}</Text>}
 								</View>
 							)}
 						</>
