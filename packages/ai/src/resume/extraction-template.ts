@@ -19,14 +19,6 @@ function makeEmptyItem(shape: Record<string, unknown>): Record<string, unknown> 
 }
 
 const SECTION_ITEM_SHAPES: Record<string, Record<string, unknown>> = {
-	profiles: {
-		id: "",
-		hidden: false,
-		icon: "",
-		network: "",
-		username: "",
-		website: { url: "", label: "", inlineLink: false },
-	},
 	experience: {
 		id: "",
 		hidden: false,

@@ -24,7 +24,6 @@ type FilterableData = {
 };
 
 const primaryTitleFields = {
-	profiles: "network",
 	experience: "company",
 	education: "school",
 	projects: "name",

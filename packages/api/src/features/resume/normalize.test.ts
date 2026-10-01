@@ -72,4 +72,55 @@ describe("normalizeResumeData", () => {
 		expect(warnings).toContain('experience[0].company was missing; defaulted to ""');
 		expect(warnings).toContain("experience[0].hidden was missing; defaulted to false");
 	});
+
+	it("migrates legacy profiles into Personal Details with inferred icons", () => {
+		const { data } = normalizeResumeData({
+			sections: {
+				profiles: {
+					items: [
+						{
+							network: "LinkedIn",
+							username: "jane-doe",
+							website: { url: "https://linkedin.com/in/jane-doe" },
+						},
+					],
+				},
+			},
+		});
+
+		expect(data.basics.customFields).toEqual([
+			expect.objectContaining({
+				icon: "linkedin-logo",
+				text: "jane-doe",
+				link: "https://linkedin.com/in/jane-doe",
+			}),
+		]);
+		expect(data.sections).not.toHaveProperty("profiles");
+	});
+
+	it("deduplicates legacy profiles already present in Personal Details", () => {
+		const input = {
+			basics: {
+				customFields: [
+					{ id: "linkedin", icon: "linkedin-logo", text: "jane-doe", link: "https://linkedin.com/in/jane-doe" },
+				],
+			},
+			sections: {
+				profiles: {
+					items: [
+						{
+							network: "LinkedIn",
+							username: "jane-doe",
+							website: { url: "https://linkedin.com/in/jane-doe/" },
+						},
+					],
+				},
+			},
+		};
+
+		const first = normalizeResumeData(input).data;
+		const second = normalizeResumeData(first).data;
+		expect(first.basics.customFields).toHaveLength(1);
+		expect(second.basics.customFields).toEqual(first.basics.customFields);
+	});
 });

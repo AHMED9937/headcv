@@ -14,7 +14,7 @@ describe("getStepForSection", () => {
 	});
 
 	it("round-trips every step that edits a section", () => {
-		for (const step of ["personal-details", "profiles", "work-experience", "education", "skills", "summary"] as const) {
+		for (const step of ["personal-details", "work-experience", "education", "skills", "summary"] as const) {
 			const section = getStepSectionId(step);
 			expect(section && getStepForSection(section)).toBe(step);
 		}

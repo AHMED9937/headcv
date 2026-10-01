@@ -99,7 +99,6 @@ describe("createSectionTitleResolver", () => {
 
 		const ids = [
 			"summary",
-			"profiles",
 			"experience",
 			"education",
 			"projects",

@@ -885,9 +885,6 @@ importers:
 
   packages/import:
     dependencies:
-      '@headcv/resume':
-        specifier: workspace:*
-        version: link:../resume
       '@headcv/schema':
         specifier: workspace:*
         version: link:../schema

@@ -30,12 +30,6 @@ export const defaultResumeData: ResumeData = {
 		content: "",
 	},
 	sections: {
-		profiles: {
-			title: "",
-			columns: 1,
-			hidden: false,
-			items: [],
-		},
 		experience: {
 			title: "",
 			columns: 1,
@@ -115,7 +109,7 @@ export const defaultResumeData: ResumeData = {
 			pages: [
 				{
 					fullWidth: false,
-					main: ["profiles", "summary", "education", "experience", "projects", "volunteer", "references"],
+					main: ["summary", "education", "experience", "projects", "volunteer", "references"],
 					sidebar: ["skills", "certifications", "awards", "languages", "interests", "publications"],
 				},
 			],

@@ -4,7 +4,6 @@ import z from "zod";
 import { applyResumePatches, jsonPatchOperationSchema } from "@headcv/resume/patch";
 
 const RESUME_SECTION_FAMILIES = new Set([
-	"profiles",
 	"experience",
 	"education",
 	"projects",

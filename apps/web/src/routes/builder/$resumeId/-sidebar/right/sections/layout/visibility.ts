@@ -11,7 +11,6 @@ type ItemSectionLike = {
 };
 
 const primaryTitleFields = {
-	profiles: "network",
 	experience: "company",
 	education: "school",
 	projects: "name",

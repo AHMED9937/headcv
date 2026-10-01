@@ -9,7 +9,6 @@ import { CreateEducationDialog, UpdateEducationDialog } from "./sections/educati
 import { CreateExperienceDialog, UpdateExperienceDialog } from "./sections/experience";
 import { CreateInterestDialog, UpdateInterestDialog } from "./sections/interest";
 import { CreateLanguageDialog, UpdateLanguageDialog } from "./sections/language";
-import { CreateProfileDialog, UpdateProfileDialog } from "./sections/profile";
 import { CreateProjectDialog, UpdateProjectDialog } from "./sections/project";
 import { CreatePublicationDialog, UpdatePublicationDialog } from "./sections/publication";
 import { CreateReferenceDialog, UpdateReferenceDialog } from "./sections/reference";
@@ -24,8 +23,6 @@ export const resumeDialogRendererRegistry = defineDialogRendererRegistry("resume
 	defineDialogRenderer("resume.duplicate", ({ data }) => <DuplicateResumeDialog data={data} />),
 	defineDialogRenderer("resume.import", () => <ImportResumeDialog />),
 	defineDialogRenderer("resume.template.gallery", () => <TemplateGalleryDialog />),
-	defineDialogRenderer("resume.sections.profiles.create", ({ data }) => <CreateProfileDialog data={data} />),
-	defineDialogRenderer("resume.sections.profiles.update", ({ data }) => <UpdateProfileDialog data={data} />),
 	defineDialogRenderer("resume.sections.experience.create", ({ data }) => <CreateExperienceDialog data={data} />),
 	defineDialogRenderer("resume.sections.experience.update", ({ data }) => <UpdateExperienceDialog data={data} />),
 	defineDialogRenderer("resume.sections.education.create", ({ data }) => <CreateEducationDialog data={data} />),

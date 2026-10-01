@@ -456,33 +456,6 @@ function renderReferences(section: Sections["references"], colorHex: string): Pa
 	return paragraphs;
 }
 
-function renderProfiles(section: Sections["profiles"], colorHex: string): Paragraph[] {
-	const items = section.items.filter((item) => !item.hidden);
-	if (section.hidden || items.length === 0) return [];
-
-	const paragraphs: Paragraph[] = [sectionHeading(section.title, colorHex)];
-	const baseRun = {
-		...(bodyFont ? { font: bodyFont } : {}),
-		...(bodySize ? { size: bodySize } : {}),
-		...(textColor ? { color: textColor } : {}),
-	};
-
-	for (const item of items) {
-		const children: (TextRun | ExternalHyperlink)[] = [new TextRun({ text: item.network, bold: true, ...baseRun })];
-
-		if (item.username) {
-			children.push(new TextRun({ text: `  ${item.username}`, ...baseRun }));
-		}
-
-		paragraphs.push(new Paragraph({ spacing: { before: 60 }, children }));
-
-		const ws = websiteParagraph(item.website.url, item.website.label);
-		if (ws) paragraphs.push(ws);
-	}
-
-	return paragraphs;
-}
-
 /**
  * Mapping from built-in section type to its renderer.
  */
@@ -498,7 +471,6 @@ const sectionRenderers: Record<SectionType, (section: Sections[SectionType], col
 	publications: renderPublications as (section: Sections[SectionType], colorHex: string) => Paragraph[],
 	volunteer: renderVolunteer as (section: Sections[SectionType], colorHex: string) => Paragraph[],
 	references: renderReferences as (section: Sections[SectionType], colorHex: string) => Paragraph[],
-	profiles: renderProfiles as (section: Sections[SectionType], colorHex: string) => Paragraph[],
 };
 
 /**

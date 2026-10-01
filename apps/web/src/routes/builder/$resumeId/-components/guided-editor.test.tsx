@@ -33,8 +33,6 @@ vi.mock("@/features/builder/use-builder-step", () => ({
 		switch (stepId) {
 			case "personal-details":
 				return "basics";
-			case "profiles":
-				return "profiles";
 			case "work-experience":
 				return "experience";
 			case "education":

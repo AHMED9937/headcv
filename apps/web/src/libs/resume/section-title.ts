@@ -10,7 +10,6 @@ type SectionTranslator = {
 
 const sectionTitleMessages = {
 	summary: msg`Summary`,
-	profiles: msg`Profiles`,
 	experience: msg`Experience`,
 	education: msg`Education`,
 	projects: msg`Projects`,

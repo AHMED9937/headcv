@@ -41,7 +41,6 @@ const mergeDefaultsDeep = deepmergeCustom({
 });
 
 const sectionRequiredFieldMap = {
-	profiles: "network",
 	experience: "company",
 	education: "school",
 	projects: "name",

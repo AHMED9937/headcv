@@ -44,7 +44,6 @@ const SECTION_TYPE_OPTIONS: { value: CustomSectionType; label: MessageDescriptor
 	{ value: "experience", label: msg`Experience` },
 	{ value: "education", label: msg`Education` },
 	{ value: "projects", label: msg`Projects` },
-	{ value: "profiles", label: msg`Profiles` },
 	{ value: "skills", label: msg`Skills` },
 	{ value: "languages", label: msg`Languages` },
 	{ value: "interests", label: msg`Interests` },

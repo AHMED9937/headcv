@@ -36,6 +36,12 @@ export const sampleResumeData: ResumeData = {
 				text: "itch.io/dkowalski",
 				link: "https://itch.io/dkowalski",
 			},
+			{
+				id: "019bef5a-93e4-7746-ad39-43c470b77f4a",
+				icon: "linkedin-logo",
+				text: "linkedin.com/in/davidkowalski",
+				link: "https://linkedin.com/in/davidkowalski",
+			},
 		],
 	},
 	summary: {
@@ -46,39 +52,6 @@ export const sampleResumeData: ResumeData = {
 			"<p><strong>Passionate game developer with 5+ years of professional experience</strong> creating engaging gameplay systems and polished player experiences across multiple platforms. <a href='https://www.google.com'>Specialized</a> in Unity and Unreal Engine with strong expertise in C#, C++, and game design principles. Proven ability to collaborate effectively with cross-functional teams including designers, artists, and QA to deliver high-quality games on time and within scope.</p>",
 	},
 	sections: {
-		profiles: {
-			title: "",
-			columns: 1,
-			hidden: false,
-			items: [
-				{
-					id: "019bef5a-93e4-7746-ad39-3d42ddc9b4d8",
-					hidden: false,
-					icon: "github-logo",
-					iconColor: "",
-					network: "GitHub",
-					username: "dkowalski-dev",
-					website: {
-						url: "https://github.com/dkowalski-dev",
-						label: "github.com/dkowalski-dev",
-						inlineLink: false,
-					},
-				},
-				{
-					id: "019bef5a-93e4-7746-ad39-43c470b77f4a",
-					hidden: false,
-					icon: "linkedin-logo",
-					iconColor: "",
-					network: "LinkedIn",
-					username: "davidkowalski",
-					website: {
-						url: "https://linkedin.com/in/davidkowalski",
-						label: "linkedin.com/in/davidkowalski",
-						inlineLink: false,
-					},
-				},
-			],
-		},
 		experience: {
 			title: "",
 			columns: 1,
@@ -539,7 +512,7 @@ export const sampleResumeData: ResumeData = {
 				{
 					fullWidth: false,
 					main: ["summary", "education", "experience"],
-					sidebar: ["profiles", "skills"],
+					sidebar: ["skills"],
 				},
 				{
 					fullWidth: false,

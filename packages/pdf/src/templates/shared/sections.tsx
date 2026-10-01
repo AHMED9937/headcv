@@ -6,7 +6,6 @@ import type {
 	ExperienceItem,
 	InterestItem,
 	LanguageItem,
-	ProfileItem,
 	ProjectItem,
 	PublicationItem,
 	ReferenceItem,
@@ -329,39 +328,6 @@ const CustomSummarySection = ({
 				{items.map((item) => (
 					<SectionItem key={item.id}>
 						<RichText>{item.content}</RichText>
-					</SectionItem>
-				))}
-			</SectionItems>
-		</SectionShell>
-	);
-};
-
-const ProfileSection = ({
-	sectionId = "profiles",
-	sectionData,
-}: {
-	sectionId?: string;
-	sectionData?: ItemSection<ProfileItem>;
-} = {}) => {
-	const data = useRender();
-	const profiles = sectionData ?? data.sections.profiles;
-	const items = getVisibleItems(profiles, "profiles");
-	const inlineStyle = useTemplateStyle("inline");
-
-	if (items.length === 0) return null;
-
-	return (
-		<SectionShell sectionId={sectionId} title={profiles.title}>
-			<SectionItems columns={profiles.columns}>
-				{items.map((item) => (
-					<SectionItem key={item.id}>
-						<SectionItemHeader>
-							<View style={composeStyles(inlineStyle)}>
-								<Icon name={item.icon as IconName} />
-								<Bold>{item.network}</Bold>
-							</View>
-						</SectionItemHeader>
-						<Link src={item.website.url}>{item.username}</Link>
 					</SectionItem>
 				))}
 			</SectionItems>
@@ -1002,9 +968,6 @@ const CustomSection = ({ sectionId, showHeading = true }: { sectionId: string; s
 		.with("summary", () => (
 			<CustomSummarySection section={customSection as CustomItemSection<SummaryItem>} showHeading={showHeading} />
 		))
-		.with("profiles", () => (
-			<ProfileSection sectionId={sectionId} sectionData={customSection as CustomItemSection<ProfileItem>} />
-		))
 		.with("experience", () => (
 			<ExperienceSection sectionId={sectionId} sectionData={customSection as CustomItemSection<ExperienceItem>} />
 		))
@@ -1062,7 +1025,6 @@ export const Section = ({
 		<TemplatePlacementProvider placement={placement}>
 			{match(section)
 				.with("summary", () => <SummarySection showHeading={showHeading} />)
-				.with("profiles", () => <ProfileSection />)
 				.with("experience", () => <ExperienceSection />)
 				.with("education", () => <EducationSection />)
 				.with("projects", () => <ProjectsSection />)

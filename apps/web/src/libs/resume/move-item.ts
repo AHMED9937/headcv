@@ -37,7 +37,6 @@ type MoveTargetPage = {
  */
 function isStandardSectionId(sectionId: string): sectionId is SectionType {
 	const standardSections: SectionType[] = [
-		"profiles",
 		"experience",
 		"education",
 		"projects",

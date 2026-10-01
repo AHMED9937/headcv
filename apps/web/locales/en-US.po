@@ -200,6 +200,10 @@ msgstr "Add a keyword..."
 msgid "Add a label to the URL"
 msgstr "Add a label to the URL"
 
+#: src/routes/builder/$resumeId/-sidebar/left/sections/custom-fields.tsx
+msgid "Add a link"
+msgstr "Add a link"
+
 #: src/routes/builder/$resumeId/-sidebar/left/sections/awards.tsx
 msgid "Add a new award"
 msgstr "Add a new award"
@@ -231,10 +235,6 @@ msgstr "Add a new item"
 #: src/routes/builder/$resumeId/-sidebar/left/sections/languages.tsx
 msgid "Add a new language"
 msgstr "Add a new language"
-
-#: src/routes/builder/$resumeId/-sidebar/left/sections/profiles.tsx
-msgid "Add a new profile"
-msgstr "Add a new profile"
 
 #: src/routes/builder/$resumeId/-sidebar/left/sections/projects.tsx
 msgid "Add a new project"
@@ -740,7 +740,6 @@ msgstr "Can I save multiple resume versions on HeadCV?"
 #: src/dialogs/resume/sections/experience.tsx
 #: src/dialogs/resume/sections/interest.tsx
 #: src/dialogs/resume/sections/language.tsx
-#: src/dialogs/resume/sections/profile.tsx
 #: src/dialogs/resume/sections/project.tsx
 #: src/dialogs/resume/sections/publication.tsx
 #: src/dialogs/resume/sections/reference.tsx
@@ -1058,7 +1057,6 @@ msgstr "Cover Letter"
 #: src/dialogs/resume/sections/experience.tsx
 #: src/dialogs/resume/sections/interest.tsx
 #: src/dialogs/resume/sections/language.tsx
-#: src/dialogs/resume/sections/profile.tsx
 #: src/dialogs/resume/sections/project.tsx
 #: src/dialogs/resume/sections/publication.tsx
 #: src/dialogs/resume/sections/reference.tsx
@@ -1107,10 +1105,6 @@ msgstr "Create a new interest"
 #: src/dialogs/resume/sections/language.tsx
 msgid "Create a new language"
 msgstr "Create a new language"
-
-#: src/dialogs/resume/sections/profile.tsx
-msgid "Create a new profile"
-msgstr "Create a new profile"
 
 #: src/dialogs/resume/sections/project.tsx
 msgid "Create a new project"
@@ -1522,14 +1516,14 @@ msgstr "Education"
 msgid "Education before experience?"
 msgstr "Education before experience?"
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/tools.tsx
-msgid "home.demo.email"
-msgstr "Email"
-
 #: src/features/resume/builder/ai-changes.ts
 #: src/routes/builder/$resumeId/-sidebar/left/sections/basics.tsx
 msgid "Email"
+msgstr "Email"
+
+#. js-lingui-explicit-id
+#: src/routes/_home/-sections/tools.tsx
+msgid "home.demo.email"
 msgstr "Email"
 
 #. Label for email input on forgot-password form
@@ -1908,13 +1902,13 @@ msgid "home.templates.intro"
 msgstr "Four different looks. One next step. Pick your style and make it yours."
 
 #. js-lingui-explicit-id
-#: src/routes/_home/-sections/pricing.tsx
-msgid "home.pricing.free"
+#: src/routes/dashboard/settings/billing.tsx
+msgid "billing.plan.free"
 msgstr "Free"
 
 #. js-lingui-explicit-id
-#: src/routes/dashboard/settings/billing.tsx
-msgid "billing.plan.free"
+#: src/routes/_home/-sections/pricing.tsx
+msgid "home.pricing.free"
 msgstr "Free"
 
 #: src/routes/_home/-sections/pricing.tsx
@@ -2260,10 +2254,6 @@ msgstr "Importing your resume..."
 #: src/dialogs/resume/import.tsx
 msgid "Importing…"
 msgstr "Importing…"
-
-#: src/components/section-tips.tsx
-msgid "Include only professional profiles that strengthen your application."
-msgstr "Include only professional profiles that strengthen your application."
 
 #: src/features/billing/plan-picker.tsx
 #: src/routes/_home/-sections/pricing.tsx
@@ -2744,7 +2734,6 @@ msgstr "Neat sections. A clear story from top to bottom."
 msgid "Needs review"
 msgstr "Needs review"
 
-#: src/dialogs/resume/sections/profile.tsx
 #: src/features/resume/builder/ai-changes.ts
 msgid "Network"
 msgstr "Network"
@@ -3100,13 +3089,13 @@ msgstr "Prioritize the degree, relevant study, and distinctions that support the
 msgid "Pro Monthly"
 msgstr "Pro Monthly"
 
+#: src/routes/checkout/success.tsx
+msgid "Pro Trial"
+msgstr "Pro Trial"
+
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.plan.trial"
-msgstr "Pro Trial"
-
-#: src/routes/checkout/success.tsx
-msgid "Pro Trial"
 msgstr "Pro Trial"
 
 #: src/routes/checkout/success.tsx
@@ -3137,13 +3126,6 @@ msgstr "Proficiency"
 #: src/routes/dashboard/settings/route.tsx
 msgid "Profile"
 msgstr "Profile"
-
-#: src/dialogs/resume/sections/custom.tsx
-#: src/features/builder/steps.ts
-#: src/libs/resume/section-title.ts
-#: src/libs/resume/section.tsx
-msgid "Profiles"
-msgstr "Profiles"
 
 #: src/components/level/combobox.tsx
 msgid "Progress Bar"
@@ -3467,7 +3449,6 @@ msgstr "Save 75%"
 #: src/dialogs/resume/sections/experience.tsx
 #: src/dialogs/resume/sections/interest.tsx
 #: src/dialogs/resume/sections/language.tsx
-#: src/dialogs/resume/sections/profile.tsx
 #: src/dialogs/resume/sections/project.tsx
 #: src/dialogs/resume/sections/publication.tsx
 #: src/dialogs/resume/sections/reference.tsx
@@ -3517,6 +3498,10 @@ msgstr "Search for an icon"
 #: src/features/command-palette/pages/resumes.tsx
 msgid "Search for…"
 msgstr "Search for…"
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/custom-fields.tsx
+msgid "Search links and social profiles"
+msgstr "Search links and social profiles"
 
 #: src/components/phrase-picker.tsx
 msgid "Search phrases"
@@ -3654,7 +3639,6 @@ msgstr "Show entry"
 #: src/dialogs/resume/sections/certification.tsx
 #: src/dialogs/resume/sections/education.tsx
 #: src/dialogs/resume/sections/experience.tsx
-#: src/dialogs/resume/sections/profile.tsx
 #: src/dialogs/resume/sections/project.tsx
 #: src/dialogs/resume/sections/publication.tsx
 #: src/dialogs/resume/sections/reference.tsx
@@ -3689,10 +3673,9 @@ msgstr "Sidebar"
 msgid "Sidebar Width"
 msgstr "Sidebar Width"
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/footer.tsx
-#: src/routes/_home/-sections/header.tsx
-msgid "home.signIn"
+#. Primary action button label on login form
+#: src/features/auth/pages/login.tsx
+msgid "Sign in"
 msgstr "Sign in"
 
 #. js-lingui-explicit-id
@@ -3700,9 +3683,10 @@ msgstr "Sign in"
 msgid "checkout.signedOut.signIn"
 msgstr "Sign in"
 
-#. Primary action button label on login form
-#: src/features/auth/pages/login.tsx
-msgid "Sign in"
+#. js-lingui-explicit-id
+#: src/routes/_home/-sections/footer.tsx
+#: src/routes/_home/-sections/header.tsx
+msgid "home.signIn"
 msgstr "Sign in"
 
 #: src/features/auth/pages/register.tsx
@@ -4321,13 +4305,13 @@ msgstr "Trial"
 msgid "billing.badge.trialDays"
 msgstr "Trial · {trialDaysLeft}d left"
 
+#: src/routes/agent/-components/patch-tool-card.tsx
+msgid "Try again"
+msgstr "Try again"
+
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.retry"
-msgstr "Try again"
-
-#: src/routes/agent/-components/patch-tool-card.tsx
-msgid "Try again"
 msgstr "Try again"
 
 #. js-lingui-explicit-id
@@ -4514,10 +4498,6 @@ msgstr "Update an existing interest"
 msgid "Update an existing language"
 msgstr "Update an existing language"
 
-#: src/dialogs/resume/sections/profile.tsx
-msgid "Update an existing profile"
-msgstr "Update an existing profile"
-
 #: src/dialogs/resume/sections/project.tsx
 msgid "Update an existing project"
 msgstr "Update an existing project"
@@ -4620,7 +4600,6 @@ msgid "Use the exact credential and issuer, with a verification link when availa
 msgstr "Use the exact credential and issuer, with a verification link when available."
 
 #. Label for username input on registration form
-#: src/dialogs/resume/sections/profile.tsx
 #: src/features/auth/pages/register.tsx
 #: src/features/resume/builder/ai-changes.ts
 #: src/features/settings/pages/profile.tsx
@@ -4725,7 +4704,6 @@ msgstr "Web search complete"
 #: src/dialogs/resume/sections/certification.tsx
 #: src/dialogs/resume/sections/education.tsx
 #: src/dialogs/resume/sections/experience.tsx
-#: src/dialogs/resume/sections/profile.tsx
 #: src/dialogs/resume/sections/project.tsx
 #: src/dialogs/resume/sections/publication.tsx
 #: src/dialogs/resume/sections/reference.tsx
