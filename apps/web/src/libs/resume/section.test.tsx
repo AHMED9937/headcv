@@ -3,8 +3,10 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { i18n } from "@lingui/core";
 import { isValidElement } from "react";
+import { defaultResumeData } from "@headcv/schema/resume/default";
 import {
 	designWorkspaceSections,
+	getLayoutOrderedLeftSidebarSections,
 	getSectionIcon,
 	getSectionTitle,
 	leftSidebarSections,
@@ -50,6 +52,55 @@ describe("getSectionIcon", () => {
 });
 
 describe("sidebar section collections", () => {
+	it("orders the content editor from the page and column layout", () => {
+		const data = structuredClone(defaultResumeData);
+		data.customSections = [
+			{
+				id: "custom-projects",
+				type: "projects",
+				title: "Selected Work",
+				columns: 1,
+				hidden: false,
+				items: [],
+			},
+		];
+		data.metadata.layout.pages = [
+			{
+				fullWidth: false,
+				main: ["summary", "education", "experience", "custom-projects", "projects"],
+				sidebar: ["skills", "languages"],
+			},
+		];
+
+		expect(getLayoutOrderedLeftSidebarSections(data).slice(0, 10)).toEqual([
+			"picture",
+			"basics",
+			"summary",
+			"education",
+			"experience",
+			"custom",
+			"projects",
+			"skills",
+			"languages",
+			"interests",
+		]);
+	});
+
+	it("deduplicates the custom-section editor and retains unplaced sections", () => {
+		const data = structuredClone(defaultResumeData);
+		data.customSections = [
+			{ id: "custom-one", type: "summary", title: "One", columns: 1, hidden: false, items: [] },
+			{ id: "custom-two", type: "summary", title: "Two", columns: 1, hidden: false, items: [] },
+		];
+		data.metadata.layout.pages = [{ fullWidth: true, main: ["custom-one", "education", "custom-two"], sidebar: [] }];
+
+		const sections = getLayoutOrderedLeftSidebarSections(data);
+		expect(sections.filter((section) => section === "custom")).toHaveLength(1);
+		expect(sections).toContain("summary");
+		expect(sections).toContain("experience");
+		expect(sections.at(-1)).toBe("ai-review");
+	});
+
 	it("expose the documented left-sidebar set", () => {
 		expect(leftSidebarSections).toContain("picture");
 		expect(leftSidebarSections).toContain("basics");

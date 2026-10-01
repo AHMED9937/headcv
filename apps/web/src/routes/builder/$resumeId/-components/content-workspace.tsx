@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { useDialogStore } from "@/dialogs/store";
 import { useAiAssistant } from "@/features/resume/builder/ai-assistant";
 import { useCurrentResume } from "@/features/resume/builder/draft";
-import { leftSidebarSections } from "@/libs/resume/section";
+import { getLayoutOrderedLeftSidebarSections } from "@/libs/resume/section";
 import { getSectionComponent } from "../-sidebar/left/section-components";
 import { CustomSectionBuilder } from "../-sidebar/left/sections/custom";
 import { PersonalDetailsSectionBuilder } from "../-sidebar/left/sections/personal-details";
@@ -19,7 +19,7 @@ function useVisibleContentSections(): LeftSidebarSection[] {
 	const { hasReviewableChanges } = useAiAssistant();
 
 	return useMemo(() => {
-		const visible = leftSidebarSections.filter((type) => {
+		const visible = getLayoutOrderedLeftSidebarSections(resume.data).filter((type) => {
 			if (PERSONAL_DETAILS_SECTIONS.includes(type)) return false;
 			if (type === "custom") return true;
 			if (type === "ai-review") return false;
@@ -60,9 +60,8 @@ export function ContentWorkspacePanel({ section, onSectionChange }: ContentWorks
 		target?.scrollIntoView({ behavior: "smooth", block: "start" });
 	}, [activeSection, expandLeftSection]);
 
-	const builtInSections = visibleSections.filter((type) => type !== "custom" && type !== "ai-review");
-	const showCustom = visibleSections.includes("custom");
 	const showAiReview = visibleSections.includes("ai-review");
+	const contentSections = visibleSections.filter((type) => type !== "ai-review");
 
 	return (
 		<div className="flex h-full min-h-0 flex-col bg-background">
@@ -80,11 +79,13 @@ export function ContentWorkspacePanel({ section, onSectionChange }: ContentWorks
 
 								<PersonalDetailsSectionBuilder />
 
-								{builtInSections.map((type) => (
-									<div key={type}>{getSectionComponent(type)}</div>
-								))}
-
-								{showCustom && <CustomSectionBuilder showAdditionalSections />}
+								{contentSections.map((type) =>
+									type === "custom" ? (
+										<CustomSectionBuilder key={type} showAdditionalSections />
+									) : (
+										<div key={type}>{getSectionComponent(type)}</div>
+									),
+								)}
 							</>
 						)}
 					</div>
