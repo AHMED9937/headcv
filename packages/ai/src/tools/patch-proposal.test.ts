@@ -104,32 +104,25 @@ describe("resume patch proposals", () => {
 		expect(proposals[0]?.operations[0]?.path).toBe("/sections/skills/items/0/keywords");
 	});
 
-	it("shows appended add values in the after preview", () => {
+	it("shows appended Personal Details links in the after preview", () => {
 		const profile = {
 			id: "b2c7f28a-3df7-4b8b-a8a1-8f95a8f522e8",
-			hidden: false,
-			network: "Instagram",
-			username: "dkowalski.games",
 			icon: "instagram-logo",
-			iconColor: "",
-			website: {
-				url: "https://instagram.com/dkowalski.games",
-				label: "instagram.com/dkowalski.games",
-				inlineLink: false,
-			},
+			text: "dkowalski.games",
+			link: "https://instagram.com/dkowalski.games",
 		};
 		const proposal = resumePatchProposalSchema.parse({
 			id: "proposal-1",
 			title: "Add social profile",
-			operations: [{ op: "add", path: "/sections/profiles/items/-", value: profile }],
+			operations: [{ op: "add", path: "/basics/customFields/-", value: profile }],
 		});
 
 		const preview = buildResumePatchProposalPreview(sampleResumeData, proposal);
 
 		expect(preview.entries[0]).toMatchObject({
 			operation: "add",
-			path: "/sections/profiles/items/-",
-			label: "Profiles new item",
+			path: "/basics/customFields/-",
+			label: "Basics new item",
 			before: undefined,
 			after: profile,
 		});

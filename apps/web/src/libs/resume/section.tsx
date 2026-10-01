@@ -18,7 +18,6 @@ import {
 	ImageIcon,
 	InfoIcon,
 	LayoutIcon,
-	MessengerLogoIcon,
 	NotepadIcon,
 	PaletteIcon,
 	PhoneIcon,
@@ -58,7 +57,6 @@ export const leftSidebarSections = [
 	"picture",
 	"basics",
 	"summary",
-	"profiles",
 	"experience",
 	"education",
 	"projects",
@@ -106,7 +104,6 @@ export const getSectionTitle = (type: SidebarSection | CustomOnlyType): string =
 			.with("picture", () => t`Picture`)
 			.with("basics", () => t`Basics`)
 			.with("summary", () => t`Summary`)
-			.with("profiles", () => t`Profiles`)
 			.with("experience", () => t`Experience`)
 			.with("education", () => t`Education`)
 			.with("projects", () => t`Projects`)
@@ -150,7 +147,6 @@ export const getSectionIcon = (type: SidebarSection | CustomOnlyType, props?: Ic
 			.with("picture", () => <ImageIcon {...iconProps} />)
 			.with("basics", () => <UserIcon {...iconProps} />)
 			.with("summary", () => <ArticleIcon {...iconProps} />)
-			.with("profiles", () => <MessengerLogoIcon {...iconProps} />)
 			.with("experience", () => <BriefcaseIcon {...iconProps} />)
 			.with("education", () => <GraduationCapIcon {...iconProps} />)
 			.with("projects", () => <CodeSimpleIcon {...iconProps} />)

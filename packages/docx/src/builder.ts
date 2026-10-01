@@ -123,7 +123,6 @@ function blendWithWhite(hex: string, opacity: number): string {
 // --- Section rendering dispatch ---
 
 const BUILT_IN_SECTIONS = new Set<string>([
-	"profiles",
 	"experience",
 	"education",
 	"projects",

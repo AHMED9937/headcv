@@ -8,7 +8,6 @@ import {
 	experienceItemSchema,
 	interestItemSchema,
 	languageItemSchema,
-	profileItemSchema,
 	projectItemSchema,
 	publicationItemSchema,
 	referenceItemSchema,
@@ -35,14 +34,6 @@ export const resumeDialogSchemas = [
 		}),
 	}),
 	z.object({ type: z.literal("resume.template.gallery"), data: z.undefined() }),
-	z.object({
-		type: z.literal("resume.sections.profiles.create"),
-		data: z.object({ item: profileItemSchema.optional(), customSectionId: z.string().optional() }).optional(),
-	}),
-	z.object({
-		type: z.literal("resume.sections.profiles.update"),
-		data: z.object({ item: profileItemSchema, customSectionId: z.string().optional() }),
-	}),
 	z.object({
 		type: z.literal("resume.sections.experience.create"),
 		data: z.object({ item: experienceItemSchema.optional(), customSectionId: z.string().optional() }).optional(),

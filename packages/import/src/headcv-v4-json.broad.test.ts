@@ -217,8 +217,13 @@ describe("ReactiveResumeV4JSONImporter  broad section mapping", () => {
 		expect(result.basics.email).toBe("jane@example.com");
 		expect(result.basics.location).toBe("Berlin");
 		expect(result.basics.website.url).toBe("https://example.com");
-		expect(result.basics.customFields).toHaveLength(1);
+		expect(result.basics.customFields).toHaveLength(2);
 		expect(result.basics.customFields[0]).toMatchObject({ icon: "globe", text: "https://example.com" });
+		expect(result.basics.customFields[1]).toMatchObject({
+			icon: "github-logo",
+			text: "jane",
+			link: "https://github.com/jane",
+		});
 	});
 
 	it("maps picture with border on", () => {
@@ -240,7 +245,9 @@ describe("ReactiveResumeV4JSONImporter  broad section mapping", () => {
 		expect(result.sections.volunteer.items).toHaveLength(1);
 		expect(result.sections.interests.items).toHaveLength(1);
 		expect(result.sections.languages.items).toHaveLength(1);
-		expect(result.sections.profiles.items).toHaveLength(1);
+		expect(result.basics.customFields).toEqual(
+			expect.arrayContaining([expect.objectContaining({ text: "jane", link: "https://github.com/jane" })]),
+		);
 		expect(result.sections.projects.items).toHaveLength(1);
 		expect(result.sections.publications.items).toHaveLength(1);
 		expect(result.sections.references.items).toHaveLength(1);

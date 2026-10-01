@@ -10,14 +10,14 @@ describe("buildResumePatchProposalPreview  additional cases", () => {
 	it("shows the removed value as before with after undefined", () => {
 		const proposal = resumePatchProposalSchema.parse({
 			id: "proposal-1",
-			title: "Remove first profile",
-			operations: [{ op: "remove", path: "/sections/profiles/items/0" }],
+			title: "Remove first profile link",
+			operations: [{ op: "remove", path: "/basics/customFields/0" }],
 		});
 
 		const preview = buildResumePatchProposalPreview(sampleResumeData, proposal);
 		expect(preview.entries[0]).toMatchObject({
 			operation: "remove",
-			path: "/sections/profiles/items/0",
+			path: "/basics/customFields/0",
 			after: undefined,
 		});
 		expect(preview.entries[0]?.before).toBeDefined();

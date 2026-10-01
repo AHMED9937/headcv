@@ -205,6 +205,10 @@ msgstr "أضف كلمة رئيسية..."
 msgid "Add a label to the URL"
 msgstr "أضف وسمًا إلى عنوان URL"
 
+#: src/routes/builder/$resumeId/-sidebar/left/sections/custom-fields.tsx
+msgid "Add a link"
+msgstr ""
+
 #: src/routes/builder/$resumeId/-sidebar/left/sections/awards.tsx
 msgid "Add a new award"
 msgstr "إضافة جائزة جديدة"
@@ -236,10 +240,6 @@ msgstr "إضافة عنصر جديد"
 #: src/routes/builder/$resumeId/-sidebar/left/sections/languages.tsx
 msgid "Add a new language"
 msgstr "إضافة لغة جديدة"
-
-#: src/routes/builder/$resumeId/-sidebar/left/sections/profiles.tsx
-msgid "Add a new profile"
-msgstr "إضافة ملف تعريفي جديد"
 
 #: src/routes/builder/$resumeId/-sidebar/left/sections/projects.tsx
 msgid "Add a new project"
@@ -745,7 +745,6 @@ msgstr ""
 #: src/dialogs/resume/sections/experience.tsx
 #: src/dialogs/resume/sections/interest.tsx
 #: src/dialogs/resume/sections/language.tsx
-#: src/dialogs/resume/sections/profile.tsx
 #: src/dialogs/resume/sections/project.tsx
 #: src/dialogs/resume/sections/publication.tsx
 #: src/dialogs/resume/sections/reference.tsx
@@ -1063,7 +1062,6 @@ msgstr "خطاب التقديم"
 #: src/dialogs/resume/sections/experience.tsx
 #: src/dialogs/resume/sections/interest.tsx
 #: src/dialogs/resume/sections/language.tsx
-#: src/dialogs/resume/sections/profile.tsx
 #: src/dialogs/resume/sections/project.tsx
 #: src/dialogs/resume/sections/publication.tsx
 #: src/dialogs/resume/sections/reference.tsx
@@ -1112,10 +1110,6 @@ msgstr "إنشاء اهتمام جديد"
 #: src/dialogs/resume/sections/language.tsx
 msgid "Create a new language"
 msgstr "إنشاء لغة جديدة"
-
-#: src/dialogs/resume/sections/profile.tsx
-msgid "Create a new profile"
-msgstr "إنشاء ملف تعريفي جديد"
 
 #: src/dialogs/resume/sections/project.tsx
 msgid "Create a new project"
@@ -2266,10 +2260,6 @@ msgstr "جاري استيراد سيرتك الذاتية..."
 msgid "Importing…"
 msgstr "جارٍ الاستيراد…"
 
-#: src/components/section-tips.tsx
-msgid "Include only professional profiles that strengthen your application."
-msgstr "أضف فقط الملفات المهنية التي تقوّي طلبك."
-
 #: src/features/billing/plan-picker.tsx
 #: src/routes/_home/-sections/pricing.tsx
 msgid "Includes all Free features, plus:"
@@ -2749,7 +2739,6 @@ msgstr "أقسام منظمة. قصة واضحة من الأعلى إلى الأ
 msgid "Needs review"
 msgstr "بحاجة إلى مراجعة"
 
-#: src/dialogs/resume/sections/profile.tsx
 #: src/features/resume/builder/ai-changes.ts
 msgid "Network"
 msgstr "الشبكة"
@@ -3143,13 +3132,6 @@ msgstr "مدى الإتقان"
 msgid "Profile"
 msgstr "الملف الشخصي"
 
-#: src/dialogs/resume/sections/custom.tsx
-#: src/features/builder/steps.ts
-#: src/libs/resume/section-title.ts
-#: src/libs/resume/section.tsx
-msgid "Profiles"
-msgstr "الملفات الشخصية"
-
 #: src/components/level/combobox.tsx
 msgid "Progress Bar"
 msgstr "شريط التقدّم"
@@ -3472,7 +3454,6 @@ msgstr "وفّر 75%"
 #: src/dialogs/resume/sections/experience.tsx
 #: src/dialogs/resume/sections/interest.tsx
 #: src/dialogs/resume/sections/language.tsx
-#: src/dialogs/resume/sections/profile.tsx
 #: src/dialogs/resume/sections/project.tsx
 #: src/dialogs/resume/sections/publication.tsx
 #: src/dialogs/resume/sections/reference.tsx
@@ -3522,6 +3503,10 @@ msgstr "ابحث عن أيقونة"
 #: src/features/command-palette/pages/resumes.tsx
 msgid "Search for…"
 msgstr "ابحث عن…"
+
+#: src/routes/builder/$resumeId/-sidebar/left/sections/custom-fields.tsx
+msgid "Search links and social profiles"
+msgstr ""
 
 #: src/components/phrase-picker.tsx
 msgid "Search phrases"
@@ -3659,7 +3644,6 @@ msgstr "إظهار الإدخال"
 #: src/dialogs/resume/sections/certification.tsx
 #: src/dialogs/resume/sections/education.tsx
 #: src/dialogs/resume/sections/experience.tsx
-#: src/dialogs/resume/sections/profile.tsx
 #: src/dialogs/resume/sections/project.tsx
 #: src/dialogs/resume/sections/publication.tsx
 #: src/dialogs/resume/sections/reference.tsx
@@ -4519,10 +4503,6 @@ msgstr "تحديث اهتمام موجود"
 msgid "Update an existing language"
 msgstr "تحديث لغة موجودة"
 
-#: src/dialogs/resume/sections/profile.tsx
-msgid "Update an existing profile"
-msgstr "تحديث ملف تعريفي موجود"
-
 #: src/dialogs/resume/sections/project.tsx
 msgid "Update an existing project"
 msgstr "تحديث مشروع موجود"
@@ -4625,7 +4605,6 @@ msgid "Use the exact credential and issuer, with a verification link when availa
 msgstr "استخدم الاسم الدقيق للشهادة والجهة المصدِرة، مع رابط تحقق إن وُجد."
 
 #. Label for username input on registration form
-#: src/dialogs/resume/sections/profile.tsx
 #: src/features/auth/pages/register.tsx
 #: src/features/resume/builder/ai-changes.ts
 #: src/features/settings/pages/profile.tsx
@@ -4730,7 +4709,6 @@ msgstr "اكتمل البحث في الويب"
 #: src/dialogs/resume/sections/certification.tsx
 #: src/dialogs/resume/sections/education.tsx
 #: src/dialogs/resume/sections/experience.tsx
-#: src/dialogs/resume/sections/profile.tsx
 #: src/dialogs/resume/sections/project.tsx
 #: src/dialogs/resume/sections/publication.tsx
 #: src/dialogs/resume/sections/reference.tsx

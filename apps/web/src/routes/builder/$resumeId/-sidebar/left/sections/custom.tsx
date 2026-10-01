@@ -61,7 +61,6 @@ function getItemTitle(type: CustomSectionType, item: CustomSectionItemType): str
 				message: "Summary",
 			});
 		})
-		.with("profiles", () => ("network" in item ? item.network : ""))
 		.with("experience", () => ("company" in item ? item.company : ""))
 		.with("education", () => ("school" in item ? item.school : ""))
 		.with("projects", () => ("name" in item ? item.name : ""))
@@ -95,7 +94,6 @@ function getItemTitle(type: CustomSectionType, item: CustomSectionItemType): str
 function getItemSubtitle(type: CustomSectionType, item: CustomSectionItemType): string | undefined {
 	return match(type)
 		.with("summary", () => undefined)
-		.with("profiles", () => ("username" in item ? item.username : undefined))
 		.with("experience", () => ("position" in item ? item.position : undefined))
 		.with("education", () => ("degree" in item ? item.degree : undefined))
 		.with("projects", () => ("startDate" in item || "period" in item ? formatDateRange(item) : undefined))

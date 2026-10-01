@@ -1,8 +1,8 @@
 import type { ResumeData } from "@headcv/schema/resume/data";
 import { flattenError, ZodError, z } from "zod";
-import { getNetworkIcon } from "@headcv/resume/icons";
 import { resumeDataSchema } from "@headcv/schema/resume/data";
 import { defaultResumeData } from "@headcv/schema/resume/default";
+import { resolveLinkIcon } from "@headcv/schema/resume/social-links";
 import { formatPeriod, formatSingleDate, normalizeMonthDate } from "@headcv/utils/date";
 import { arrayToHtmlList, toHtmlDescription } from "@headcv/utils/html";
 import { parseLevel } from "@headcv/utils/level";
@@ -421,22 +421,17 @@ export class JSONResumeImporter {
 			};
 		}
 
-		// Map profiles (from basics.profiles) to profiles section
 		if (jsonResume.basics?.profiles && jsonResume.basics.profiles.length > 0) {
-			result.sections.profiles = {
-				...defaultResumeData.sections.profiles,
-				items: jsonResume.basics.profiles
-					.filter((profile) => profile.network)
+			result.basics.customFields.push(
+				...jsonResume.basics.profiles
+					.filter((profile) => profile.network || profile.url)
 					.map((profile) => ({
 						id: generateId(),
-						hidden: false,
-						icon: getNetworkIcon(profile.network),
-						iconColor: "",
-						network: profile.network || "",
-						username: profile.username || "",
-						website: createItemWebsite(profile.url, profile.username || profile.network),
+						icon: resolveLinkIcon(profile.network, profile.url),
+						text: profile.username || profile.network || profile.url || "",
+						link: profile.url || "",
 					})),
-			};
+			);
 		}
 
 		return resumeDataSchema.parse(result);

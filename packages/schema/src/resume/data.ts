@@ -78,8 +78,17 @@ export const pictureSchema = z.object({
 export const customFieldSchema = z.object({
 	id: z.string().describe("The unique identifier for the custom field. Usually generated as a UUID."),
 	icon: iconSchema,
-	text: z.string().describe("The text to display for the custom field."),
-	link: z.string().describe("If the custom field should be a link, the URL to link to.").catch(""),
+	text: z
+		.string()
+		.describe(
+			"The text to display for the custom field. For a social or profile link (LinkedIn, GitHub, X, portfolio, etc.), use the handle or a short display label.",
+		),
+	link: z
+		.string()
+		.describe(
+			"If the custom field should be a link, the URL to link to. Social and profile links (LinkedIn, GitHub, personal website, etc.) are represented as custom fields with their URL here.",
+		)
+		.catch(""),
 });
 
 export const basicsSchema = z.object({
@@ -196,14 +205,6 @@ export const languageItemSchema = baseItemSchema.extend({
 		),
 });
 
-export const profileItemSchema = baseItemSchema.extend({
-	icon: iconSchema,
-	iconColor: iconColorSchema,
-	network: z.string().min(1).describe("The name of the network or platform."),
-	username: z.string().describe("The username of the author on the network or platform."),
-	website: itemWebsiteSchema.describe("The link to the profile of the author on the network or platform, if any."),
-});
-
 export const projectItemSchema = baseItemSchema.extend({
 	name: z.string().min(1).describe("The name of the project."),
 	...dateRangeFields,
@@ -301,10 +302,6 @@ export const languagesSectionSchema = baseSectionSchema.extend({
 	items: z.array(languageItemSchema).describe("The items to display in the languages section."),
 });
 
-export const profilesSectionSchema = baseSectionSchema.extend({
-	items: z.array(profileItemSchema).describe("The items to display in the profiles section."),
-});
-
 export const projectsSectionSchema = baseSectionSchema.extend({
 	items: z.array(projectItemSchema).describe("The items to display in the projects section."),
 });
@@ -326,7 +323,6 @@ export const volunteerSectionSchema = baseSectionSchema.extend({
 });
 
 export const sectionsSchema = z.object({
-	profiles: profilesSectionSchema.describe("The section to display the profiles of the author."),
 	experience: experienceSectionSchema.describe("The section to display the experience of the author."),
 	education: educationSectionSchema.describe("The section to display the education of the author."),
 	projects: projectsSectionSchema.describe("The section to display the projects of the author."),
@@ -346,7 +342,6 @@ export type SectionItem<T extends SectionType = SectionType> = SectionData<T>["i
 
 export const sectionTypeSchema = z.enum([
 	"summary",
-	"profiles",
 	"experience",
 	"education",
 	"projects",
@@ -369,7 +364,6 @@ export const customSectionItemSchema = z.union([
 	// cover letter items will match it and lose the 'recipient' field.
 	coverLetterItemSchema,
 	summaryItemSchema,
-	profileItemSchema,
 	experienceItemSchema,
 	educationItemSchema,
 	projectItemSchema,
@@ -427,12 +421,12 @@ export const pageLayoutSchema = z.object({
 	main: z
 		.array(z.string())
 		.describe(
-			"The items to display in the main column of the page. A string array of section IDs (experience, education, projects, skills, languages, interests, awards, certifications, publications, volunteer, references, profiles, summary or UUIDs for custom sections).",
+			"The items to display in the main column of the page. A string array of section IDs (experience, education, projects, skills, languages, interests, awards, certifications, publications, volunteer, references, summary or UUIDs for custom sections).",
 		),
 	sidebar: z
 		.array(z.string())
 		.describe(
-			"The items to display in the sidebar column of the page. A string array of section IDs (experience, education, projects, skills, languages, interests, awards, certifications, publications, volunteer, references, profiles, summary or UUIDs for custom sections).",
+			"The items to display in the sidebar column of the page. A string array of section IDs (experience, education, projects, skills, languages, interests, awards, certifications, publications, volunteer, references, summary or UUIDs for custom sections).",
 		),
 });
 
@@ -556,7 +550,6 @@ export type EducationItem = z.infer<typeof educationItemSchema>;
 export type ExperienceItem = z.infer<typeof experienceItemSchema>;
 export type InterestItem = z.infer<typeof interestItemSchema>;
 export type LanguageItem = z.infer<typeof languageItemSchema>;
-export type ProfileItem = z.infer<typeof profileItemSchema>;
 export type ProjectItem = z.infer<typeof projectItemSchema>;
 export type PublicationItem = z.infer<typeof publicationItemSchema>;
 export type ReferenceItem = z.infer<typeof referenceItemSchema>;
@@ -568,7 +561,6 @@ export type EducationSection = z.infer<typeof educationSectionSchema>;
 export type ExperienceSection = z.infer<typeof experienceSectionSchema>;
 export type InterestsSection = z.infer<typeof interestsSectionSchema>;
 export type LanguagesSection = z.infer<typeof languagesSectionSchema>;
-export type ProfilesSection = z.infer<typeof profilesSectionSchema>;
 export type ProjectsSection = z.infer<typeof projectsSectionSchema>;
 export type PublicationsSection = z.infer<typeof publicationsSectionSchema>;
 export type ReferencesSection = z.infer<typeof referencesSectionSchema>;

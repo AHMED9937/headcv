@@ -194,7 +194,6 @@ describe("ImportedWorkspace", () => {
 
 		const visibleSections = [
 			"summary",
-			"profiles",
 			"experience",
 			"education",
 			"skills",

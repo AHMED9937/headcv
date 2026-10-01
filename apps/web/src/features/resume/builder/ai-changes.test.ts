@@ -141,10 +141,10 @@ describe("getSectionDiffs", () => {
 	});
 });
 
-describe("getAffectedSectionFromPath for profiles and customSections", () => {
-	it("detects /sections/profiles paths", () => {
-		expect(getAffectedSectionFromPath("/sections/profiles/items/0/username")).toBe("profiles");
-		expect(getAffectedSectionFromPath("/sections/profiles/title")).toBe("profiles");
+describe("getAffectedSectionFromPath for Personal Details and customSections", () => {
+	it("detects /basics/customFields paths", () => {
+		expect(getAffectedSectionFromPath("/basics/customFields/0/link")).toBe("basics");
+		expect(getAffectedSectionFromPath("/basics/customFields/0/text")).toBe("basics");
 	});
 
 	it("detects /customSections paths", () => {
@@ -153,9 +153,9 @@ describe("getAffectedSectionFromPath for profiles and customSections", () => {
 	});
 });
 
-describe("getSectionValueFromResumeData for profiles and custom", () => {
-	it("returns sections.profiles for profiles", () => {
-		expect(getSectionValueFromResumeData(defaultResumeData, "profiles")).toBe(defaultResumeData.sections.profiles);
+describe("getSectionValueFromResumeData for Personal Details and custom", () => {
+	it("returns basics for Personal Details", () => {
+		expect(getSectionValueFromResumeData(defaultResumeData, "basics")).toBe(defaultResumeData.basics);
 	});
 
 	it("returns customSections for custom", () => {
@@ -199,19 +199,22 @@ describe("getAffectedPreviewSectionIds for custom sections", () => {
 	});
 });
 
-describe("getSectionDiffs for profiles and custom", () => {
-	it("diffs a profiles item change", () => {
-		const snapshotData = structuredClone(defaultResumeData) as never;
-		(snapshotData as typeof defaultResumeData).sections.profiles.items = [
-			{ id: "p-1", username: "alice", network: "LinkedIn", icon: "linkedin" },
-		] as never;
-		const currentData = structuredClone(snapshotData) as never;
-		(currentData as typeof defaultResumeData).sections.profiles.items[0].username = "alice2";
-		const operations = [{ op: "replace", path: "/sections/profiles/items/0/username", value: "alice2" }] as const;
-		const diffs = getSectionDiffs(operations as never, snapshotData, currentData, "profiles");
-		expect(diffs).toEqual([
-			{ path: "/sections/profiles/items/0/username", before: "alice", after: "alice2", op: "replace" },
-		]);
+describe("getSectionDiffs for Personal Details and custom", () => {
+	it("diffs a Personal Details link change", () => {
+		const snapshotData = structuredClone(defaultResumeData);
+		snapshotData.basics.customFields = [
+			{ id: "p-1", icon: "linkedin-logo", text: "alice", link: "https://linkedin.com/in/alice" },
+		];
+		const currentData = structuredClone(snapshotData);
+		currentData.basics.customFields[0] = {
+			id: "p-1",
+			icon: "linkedin-logo",
+			text: "alice2",
+			link: "https://linkedin.com/in/alice",
+		};
+		const operations = [{ op: "replace", path: "/basics/customFields/0/text", value: "alice2" }] as const;
+		const diffs = getSectionDiffs(operations as never, snapshotData, currentData, "basics");
+		expect(diffs).toEqual([{ path: "/basics/customFields/0/text", before: "alice", after: "alice2", op: "replace" }]);
 	});
 
 	it("diffs a custom section add", () => {

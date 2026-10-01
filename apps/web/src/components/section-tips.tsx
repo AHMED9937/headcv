@@ -5,8 +5,6 @@ function getSectionTips(type: string): string[] {
 	switch (type) {
 		case "basics":
 			return [t`Keep contact details current and professional; include only links you actively maintain.`];
-		case "profiles":
-			return [t`Include only professional profiles that strengthen your application.`];
 		case "experience":
 			return [t`Start with an action, show your contribution, and quantify the result when possible.`];
 		case "education":

@@ -2,6 +2,7 @@ import type { ResumeData } from "@headcv/schema/resume/data";
 import { ORPCError } from "@orpc/client";
 import { resumeDataSchema } from "@headcv/schema/resume/data";
 import { defaultResumeData } from "@headcv/schema/resume/default";
+import { GENERIC_LINK_ICON, iconForNetwork, iconForUrl } from "@headcv/schema/resume/social-links";
 import { normalizeMonthDate, parsePeriod } from "@headcv/utils/date";
 import { generateId } from "@headcv/utils/string";
 
@@ -36,7 +37,6 @@ const itemDefaults = {
 	},
 	skills: { icon: "", iconColor: "", name: "", proficiency: "", level: 0, keywords: [] },
 	languages: { language: "", fluency: "", level: 0 },
-	profiles: { icon: "", iconColor: "", network: "", username: "", website: websiteDefaults },
 	projects: { name: "", startDate: "", endDate: "", website: websiteDefaults, description: "" },
 	awards: { title: "", awarder: "", date: "", website: websiteDefaults, description: "" },
 	certifications: { title: "", issuer: "", date: "", website: websiteDefaults, description: "" },
@@ -72,7 +72,6 @@ const meaningfulFields: Record<SectionName, readonly string[]> = {
 	],
 	skills: ["name", "proficiency", "keywords"],
 	languages: ["language", "fluency", "level"],
-	profiles: ["network", "username", "website"],
 	projects: ["name", "description", "startDate", "endDate", "period", "website"],
 	awards: ["title", "awarder", "date", "description", "website"],
 	certifications: ["title", "issuer", "date", "description", "website"],
@@ -179,7 +178,6 @@ function normalizeSectionItems(name: SectionName, raw: unknown, warnings: string
 			education: "school",
 			skills: "name",
 			languages: "language",
-			profiles: "network",
 			projects: "name",
 			awards: "title",
 			certifications: "title",
@@ -200,7 +198,43 @@ function normalizeCustomFields(raw: unknown, warnings: string[]): UnknownRecord[
 		const item = fillItem(value, { icon: "", text: "", link: "" }, `basics.customFields[${index}]`, warnings);
 		if (!item) return [];
 		delete item.hidden;
+		if (!isMeaningful(item.icon) && isMeaningful(item.link)) {
+			const inferred = iconForUrl(item.link as string);
+			if (inferred) item.icon = inferred;
+		}
 		return isMeaningful(item.text) || isMeaningful(item.link) ? [item] : [];
+	});
+}
+
+function legacyProfilesToCustomFields(raw: unknown, warnings: string[]): UnknownRecord[] {
+	const items = isRecord(raw) && Array.isArray(raw.items) ? raw.items : Array.isArray(raw) ? raw : [];
+	return items.flatMap((value, index) => {
+		if (!isRecord(value)) {
+			warnings.push(`sections.profiles[${index}] was not an object; filtered out`);
+			return [];
+		}
+		const network = typeof value.network === "string" ? value.network.trim() : "";
+		const username = typeof value.username === "string" ? value.username.trim() : "";
+		const website = isRecord(value.website) ? value.website : {};
+		const url = typeof website.url === "string" ? website.url : "";
+		const label = typeof website.label === "string" ? website.label.trim() : "";
+		const text = label || username || network;
+		if (!isMeaningful(text) && !isMeaningful(url)) return [];
+		const existingIcon = typeof value.icon === "string" ? value.icon : "";
+		const icon = iconForNetwork(network) || iconForUrl(url) || existingIcon || GENERIC_LINK_ICON;
+		return [{ id: generateId(), icon, text, link: url }];
+	});
+}
+
+function deduplicateCustomFields(fields: UnknownRecord[]): UnknownRecord[] {
+	const seen = new Set<string>();
+	return fields.filter((field) => {
+		const link = typeof field.link === "string" ? field.link.trim().toLowerCase().replace(/\/$/, "") : "";
+		const text = typeof field.text === "string" ? field.text.trim().toLowerCase() : "";
+		const key = link || `${text}:${String(field.icon ?? "")}`;
+		if (!key || seen.has(key)) return false;
+		seen.add(key);
+		return true;
 	});
 }
 
@@ -258,10 +292,11 @@ export function normalizeResumeData(input: unknown): { data: ResumeData; warning
 				label: typeof basics.website.label === "string" ? basics.website.label : "",
 			}
 		: { ...defaultResumeData.basics.website };
-	base.basics.customFields = normalizeCustomFields(
-		basics.customFields,
-		warnings,
-	) as ResumeData["basics"]["customFields"];
+	const sections = isRecord(input.sections) ? input.sections : {};
+	base.basics.customFields = deduplicateCustomFields([
+		...normalizeCustomFields(basics.customFields, warnings),
+		...legacyProfilesToCustomFields(sections.profiles, warnings),
+	]) as ResumeData["basics"]["customFields"];
 
 	const summary = isRecord(input.summary) ? input.summary : {};
 	base.summary = {
@@ -270,7 +305,6 @@ export function normalizeResumeData(input: unknown): { data: ResumeData; warning
 		hidden: typeof summary.hidden === "boolean" ? summary.hidden : false,
 		content: typeof summary.content === "string" ? summary.content : "",
 	};
-	const sections = isRecord(input.sections) ? input.sections : {};
 	for (const name of Object.keys(itemDefaults) as SectionName[]) {
 		const source = isRecord(sections[name]) ? sections[name] : {};
 		const target = base.sections[name];

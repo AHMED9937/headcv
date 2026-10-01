@@ -2,6 +2,7 @@ import type { ResumeData } from "@headcv/schema/resume/data";
 import type { Template } from "@headcv/schema/templates";
 import z, { flattenError, ZodError } from "zod";
 import { resumeDataSchema } from "@headcv/schema/resume/data";
+import { resolveLinkIcon } from "@headcv/schema/resume/social-links";
 import { templateSchema } from "@headcv/schema/templates";
 import { parseColorString } from "@headcv/utils/color";
 import { parsePeriod } from "@headcv/utils/date";
@@ -432,12 +433,22 @@ export class ReactiveResumeV4JSONImporter {
 						url: v4Data.basics.url?.href ?? "",
 						label: v4Data.basics.url?.label ?? "",
 					},
-					customFields: (v4Data.basics.customFields ?? []).map((field) => ({
-						id: field.id ?? generateId(),
-						icon: field.icon ?? "",
-						text: field.text ?? "",
-						link: "",
-					})),
+					customFields: [
+						...(v4Data.basics.customFields ?? []).map((field) => ({
+							id: field.id ?? generateId(),
+							icon: field.icon ?? "",
+							text: field.text ?? "",
+							link: "",
+						})),
+						...(v4Data.sections.profiles?.items ?? [])
+							.filter((item) => item.network || item.url?.href)
+							.map((item) => ({
+								id: item.id ?? generateId(),
+								icon: resolveLinkIcon(item.network, item.url?.href),
+								text: item.username || item.network || item.url?.label || item.url?.href || "",
+								link: item.url?.href ?? "",
+							})),
+					],
 				},
 				summary: {
 					title: v4Data.sections.summary?.name ?? "",
@@ -446,26 +457,6 @@ export class ReactiveResumeV4JSONImporter {
 					content: v4Data.sections.summary?.content ?? "",
 				},
 				sections: {
-					profiles: {
-						title: v4Data.sections.profiles?.name ?? "",
-						columns: v4Data.sections.profiles?.columns ?? 1,
-						hidden: !(v4Data.sections.profiles?.visible ?? true),
-						items: (v4Data.sections.profiles?.items ?? [])
-							.filter((item) => item.network && item.network.length > 0)
-							.map((item) => ({
-								id: item.id ?? generateId(),
-								hidden: !(item.visible ?? true),
-								icon: item.icon ?? "",
-								iconColor: "",
-								network: item.network ?? "",
-								username: item.username ?? "",
-								website: {
-									url: item.url?.href ?? "",
-									label: item.url?.label ?? "",
-									inlineLink: false,
-								},
-							})),
-					},
 					experience: {
 						title: v4Data.sections.experience?.name ?? "",
 						columns: v4Data.sections.experience?.columns ?? 1,

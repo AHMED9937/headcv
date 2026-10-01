@@ -12,9 +12,10 @@ describe("buildAiExtractionTemplate", () => {
 		}
 	});
 
-	it("populates the customFields with a single empty entry", () => {
+	it("puts extracted profile links in Personal Details only", () => {
 		const template = buildAiExtractionTemplate();
 		expect(template.basics.customFields).toEqual([{ id: "", icon: "", text: "", link: "" }]);
+		expect(template.sections).not.toHaveProperty("profiles");
 	});
 
 	it("does not mutate defaultResumeData", () => {

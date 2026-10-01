@@ -12,7 +12,6 @@ export type SectionTitleResolver = (input: SectionTitleResolverInput) => string;
 
 const defaultEnglishSectionTitles: Record<"summary" | SectionType, string> = {
 	summary: "Summary",
-	profiles: "Profiles",
 	experience: "Experience",
 	education: "Education",
 	projects: "Projects",

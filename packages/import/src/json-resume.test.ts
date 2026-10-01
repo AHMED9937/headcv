@@ -112,22 +112,20 @@ describe("JSONResumeImporter.parse", () => {
 		expect(skill.level).toBeGreaterThan(0);
 	});
 
-	it("maps profiles from basics.profiles into the profiles section", () => {
+	it("maps profiles from basics.profiles into Personal Details links", () => {
 		const json = JSON.stringify({
 			basics: {
 				profiles: [
 					{ network: "GitHub", username: "janedoe", url: "https://github.com/janedoe" },
-					{ username: "no-network" }, // missing network → filtered
+					{ username: "no-network" },
 				],
 			},
 		});
 
 		const result = importer.parse(json);
-		expect(result.sections.profiles.items).toHaveLength(1);
-
-		const profile = result.sections.profiles.items[0]!;
-		expect(profile.network).toBe("GitHub");
-		expect(profile.username).toBe("janedoe");
+		expect(result.basics.customFields).toEqual([
+			expect.objectContaining({ icon: "github-logo", text: "janedoe", link: "https://github.com/janedoe" }),
+		]);
 	});
 
 	it("imports a picture URL from basics.image", () => {

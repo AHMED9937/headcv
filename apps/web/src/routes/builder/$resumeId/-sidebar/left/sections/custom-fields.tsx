@@ -1,9 +1,12 @@
 import type { basicsSchema } from "@headcv/schema/resume/data";
+import type { SocialLink } from "@headcv/schema/resume/social-links";
 import type z from "zod";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { DotsSixVerticalIcon, LinkIcon, ListPlusIcon, XIcon } from "@phosphor-icons/react";
 import { Reorder, useDragControls } from "motion/react";
+import { useState } from "react";
+import { socialLinks } from "@headcv/schema/resume/social-links";
 import { Button } from "@headcv/ui/components/button";
 import { FormControl, FormItem } from "@headcv/ui/components/form";
 import { Input } from "@headcv/ui/components/input";
@@ -135,22 +138,81 @@ export const CustomFieldsSection = withForm({
 								</CustomFieldItem>
 							))}
 						</Reorder.Group>
-						<Button
-							variant="ghost"
-							onClick={() => {
-								customFieldsField.pushValue({ id: generateId(), icon: "acorn", text: "", link: "" });
-								void form.handleSubmit();
-							}}
-						>
-							<ListPlusIcon />
-							<Trans>Add a custom field</Trans>
-						</Button>
+						<div className="flex flex-wrap gap-2">
+							<Button
+								variant="ghost"
+								onClick={() => {
+									customFieldsField.pushValue({ id: generateId(), icon: "acorn", text: "", link: "" });
+									void form.handleSubmit();
+								}}
+							>
+								<ListPlusIcon />
+								<Trans>Add a custom field</Trans>
+							</Button>
+							<SocialLinkPicker
+								onSelect={(link) => {
+									customFieldsField.pushValue({ id: generateId(), icon: link.icon, text: link.label, link: "" });
+									void form.handleSubmit();
+								}}
+							/>
+						</div>
 					</div>
 				)}
 			</form.Field>
 		);
 	},
 });
+
+type SocialLinkPickerProps = {
+	onSelect: (link: SocialLink) => void;
+};
+
+export function SocialLinkPicker({ onSelect }: SocialLinkPickerProps) {
+	const [open, setOpen] = useState(false);
+	const [query, setQuery] = useState("");
+	const filteredLinks = socialLinks.filter((link) =>
+		`${link.label} ${link.key}`.toLowerCase().includes(query.toLowerCase()),
+	);
+
+	return (
+		<Popover open={open} onOpenChange={setOpen}>
+			<PopoverTrigger
+				render={
+					<Button type="button" variant="ghost">
+						<LinkIcon />
+						<Trans>Add a link</Trans>
+					</Button>
+				}
+			/>
+			<PopoverContent align="start" className="w-72 p-2">
+				<Input
+					value={query}
+					onChange={(event) => setQuery(event.target.value)}
+					placeholder={t`Search links and social profiles`}
+					aria-label={t`Search links and social profiles`}
+				/>
+				<div className="mt-2 max-h-64 overflow-y-auto">
+					{filteredLinks.map((link) => (
+						<Button
+							key={link.key}
+							type="button"
+							variant="ghost"
+							className="w-full justify-start"
+							onClick={() => {
+								onSelect(link);
+								setOpen(false);
+								setQuery("");
+							}}
+						>
+							<i aria-hidden="true" className={`ph ph-${link.icon}`} />
+							{link.label}
+						</Button>
+					))}
+				</div>
+			</PopoverContent>
+		</Popover>
+	);
+}
 
 type CustomFieldItemProps = {
 	field: CustomField;

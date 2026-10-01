@@ -7,7 +7,6 @@ export type BuilderStepId =
 	| "setup"
 	| "template"
 	| "personal-details"
-	| "profiles"
 	| "work-experience"
 	| "education"
 	| "skills"
@@ -26,7 +25,6 @@ export const BUILDER_STEPS: BuilderStep[] = [
 	{ id: "setup", required: true },
 	{ id: "template", required: true },
 	{ id: "personal-details", required: true },
-	{ id: "profiles", required: false },
 	{ id: "work-experience", required: true },
 	{ id: "education", required: false },
 	{ id: "skills", required: false },
@@ -42,7 +40,6 @@ export function getStepLabel(stepId: BuilderStepId): string {
 		.with("setup", () => t`Setup`)
 		.with("template", () => t`Template`)
 		.with("personal-details", () => t`Personal Details`)
-		.with("profiles", () => t`Profiles`)
 		.with("work-experience", () => t`Work Experience`)
 		.with("education", () => t`Education`)
 		.with("skills", () => t`Skills`)
@@ -62,8 +59,6 @@ export function isStepComplete(stepId: BuilderStepId, resume: Resume): boolean {
 			return !!resume.data.metadata?.template;
 		case "personal-details":
 			return !!resume.data.basics?.name?.trim() && !!resume.data.basics?.headline?.trim();
-		case "profiles":
-			return resume.data.sections?.profiles?.items?.length > 0;
 		case "work-experience":
 			return resume.data.sections?.experience?.items?.length > 0;
 		case "education":
@@ -121,8 +116,6 @@ export function getStepSectionId(stepId: BuilderStepId): LeftSidebarSection | nu
 	switch (stepId) {
 		case "personal-details":
 			return "basics";
-		case "profiles":
-			return "profiles";
 		case "work-experience":
 			return "experience";
 		case "education":
