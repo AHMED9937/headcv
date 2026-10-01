@@ -1521,14 +1521,14 @@ msgstr "التعليم"
 msgid "Education before experience?"
 msgstr "التعليم قبل الخبرة؟"
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/tools.tsx
-msgid "home.demo.email"
-msgstr "البريد الإلكتروني"
-
 #: src/features/resume/builder/ai-changes.ts
 #: src/routes/builder/$resumeId/-sidebar/left/sections/basics.tsx
 msgid "Email"
+msgstr "البريد الإلكتروني"
+
+#. js-lingui-explicit-id
+#: src/routes/_home/-sections/tools.tsx
+msgid "home.demo.email"
 msgstr "البريد الإلكتروني"
 
 #. Label for email input on forgot-password form
@@ -1907,14 +1907,14 @@ msgid "home.templates.intro"
 msgstr "أربع مظاهر مختلفة. خطوة واحدة إلى الأمام. اختر أسلوبك واجعله ملكك."
 
 #. js-lingui-explicit-id
-#: src/routes/_home/-sections/pricing.tsx
-msgid "home.pricing.free"
-msgstr "مجانًا"
-
-#. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.plan.free"
 msgstr "مجانية"
+
+#. js-lingui-explicit-id
+#: src/routes/_home/-sections/pricing.tsx
+msgid "home.pricing.free"
+msgstr "مجانًا"
 
 #: src/routes/_home/-sections/pricing.tsx
 msgid "Free forever"
@@ -3094,13 +3094,13 @@ msgstr "قدّم الدرجة العلمية والدراسة ذات الصلة 
 msgid "Pro Monthly"
 msgstr "Pro الشهري"
 
+#: src/routes/checkout/success.tsx
+msgid "Pro Trial"
+msgstr "تجربة Pro"
+
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.plan.trial"
-msgstr "تجربة Pro"
-
-#: src/routes/checkout/success.tsx
-msgid "Pro Trial"
 msgstr "تجربة Pro"
 
 #: src/routes/checkout/success.tsx
@@ -3678,21 +3678,21 @@ msgstr "الشريط الجانبي<<<<<<< HEAD"
 msgid "Sidebar Width"
 msgstr "عرض الشريط الجانبي"
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/footer.tsx
-#: src/routes/_home/-sections/header.tsx
-msgid "home.signIn"
-msgstr "تسجيل الدخول"
+#. Primary action button label on login form
+#: src/features/auth/pages/login.tsx
+msgid "Sign in"
+msgstr "تسجّل الدخول"
 
 #. js-lingui-explicit-id
 #: src/routes/checkout/success.tsx
 msgid "checkout.signedOut.signIn"
 msgstr "تسجيل الدخول"
 
-#. Primary action button label on login form
-#: src/features/auth/pages/login.tsx
-msgid "Sign in"
-msgstr "تسجّل الدخول"
+#. js-lingui-explicit-id
+#: src/routes/_home/-sections/footer.tsx
+#: src/routes/_home/-sections/header.tsx
+msgid "home.signIn"
+msgstr "تسجيل الدخول"
 
 #: src/features/auth/pages/register.tsx
 msgid "Sign in instead"
@@ -4310,13 +4310,13 @@ msgstr "تجريبي"
 msgid "billing.badge.trialDays"
 msgstr "تجريبي · متبقٍ {trialDaysLeft} يوم"
 
+#: src/routes/agent/-components/patch-tool-card.tsx
+msgid "Try again"
+msgstr "حاول مجددًا"
+
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.retry"
-msgstr "حاول مجددًا"
-
-#: src/routes/agent/-components/patch-tool-card.tsx
-msgid "Try again"
 msgstr "حاول مجددًا"
 
 #. js-lingui-explicit-id

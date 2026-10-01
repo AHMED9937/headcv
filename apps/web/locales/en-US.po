@@ -1516,14 +1516,14 @@ msgstr "Education"
 msgid "Education before experience?"
 msgstr "Education before experience?"
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/tools.tsx
-msgid "home.demo.email"
-msgstr "Email"
-
 #: src/features/resume/builder/ai-changes.ts
 #: src/routes/builder/$resumeId/-sidebar/left/sections/basics.tsx
 msgid "Email"
+msgstr "Email"
+
+#. js-lingui-explicit-id
+#: src/routes/_home/-sections/tools.tsx
+msgid "home.demo.email"
 msgstr "Email"
 
 #. Label for email input on forgot-password form
@@ -1902,13 +1902,13 @@ msgid "home.templates.intro"
 msgstr "Four different looks. One next step. Pick your style and make it yours."
 
 #. js-lingui-explicit-id
-#: src/routes/_home/-sections/pricing.tsx
-msgid "home.pricing.free"
+#: src/routes/dashboard/settings/billing.tsx
+msgid "billing.plan.free"
 msgstr "Free"
 
 #. js-lingui-explicit-id
-#: src/routes/dashboard/settings/billing.tsx
-msgid "billing.plan.free"
+#: src/routes/_home/-sections/pricing.tsx
+msgid "home.pricing.free"
 msgstr "Free"
 
 #: src/routes/_home/-sections/pricing.tsx
@@ -3089,13 +3089,13 @@ msgstr "Prioritize the degree, relevant study, and distinctions that support the
 msgid "Pro Monthly"
 msgstr "Pro Monthly"
 
+#: src/routes/checkout/success.tsx
+msgid "Pro Trial"
+msgstr "Pro Trial"
+
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.plan.trial"
-msgstr "Pro Trial"
-
-#: src/routes/checkout/success.tsx
-msgid "Pro Trial"
 msgstr "Pro Trial"
 
 #: src/routes/checkout/success.tsx
@@ -3673,10 +3673,9 @@ msgstr "Sidebar"
 msgid "Sidebar Width"
 msgstr "Sidebar Width"
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/footer.tsx
-#: src/routes/_home/-sections/header.tsx
-msgid "home.signIn"
+#. Primary action button label on login form
+#: src/features/auth/pages/login.tsx
+msgid "Sign in"
 msgstr "Sign in"
 
 #. js-lingui-explicit-id
@@ -3684,9 +3683,10 @@ msgstr "Sign in"
 msgid "checkout.signedOut.signIn"
 msgstr "Sign in"
 
-#. Primary action button label on login form
-#: src/features/auth/pages/login.tsx
-msgid "Sign in"
+#. js-lingui-explicit-id
+#: src/routes/_home/-sections/footer.tsx
+#: src/routes/_home/-sections/header.tsx
+msgid "home.signIn"
 msgstr "Sign in"
 
 #: src/features/auth/pages/register.tsx
@@ -4305,13 +4305,13 @@ msgstr "Trial"
 msgid "billing.badge.trialDays"
 msgstr "Trial · {trialDaysLeft}d left"
 
+#: src/routes/agent/-components/patch-tool-card.tsx
+msgid "Try again"
+msgstr "Try again"
+
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.retry"
-msgstr "Try again"
-
-#: src/routes/agent/-components/patch-tool-card.tsx
-msgid "Try again"
 msgstr "Try again"
 
 #. js-lingui-explicit-id
