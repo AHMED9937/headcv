@@ -19,7 +19,11 @@ vi.mock("../shared/section-base", () => ({
 	SectionBase: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 vi.mock("../shared/section-item", () => ({
-	SectionItem: ({ title }: { title: string }) => <div data-testid="summary-entry">{title}</div>,
+	SectionItem: ({ item, title }: { item: { hidden: boolean }; title: string }) => (
+		<div data-testid="summary-entry" data-hidden={item.hidden}>
+			{title}
+		</div>
+	),
 	SectionAddItemButton: ({ children, onAdd }: { children: React.ReactNode; onAdd: () => void }) => (
 		<button type="button" onClick={onAdd}>
 			{children}
@@ -33,6 +37,7 @@ beforeAll(() => i18n.loadAndActivate({ locale: "en", messages: {} }));
 beforeEach(() => {
 	vi.clearAllMocks();
 	summary.content = "<p>Twenty years of experience.</p>";
+	summary.hidden = false;
 });
 
 function renderSummary() {
@@ -47,6 +52,13 @@ describe("SummarySectionBuilder", () => {
 	it("renders persisted summary content as an entry row", () => {
 		renderSummary();
 		expect(screen.getByTestId("summary-entry")).toHaveTextContent("Twenty years of experience.");
+	});
+
+	it("keeps a hidden summary rendered as a hidden entry", () => {
+		summary.hidden = true;
+		renderSummary();
+
+		expect(screen.getByTestId("summary-entry")).toHaveAttribute("data-hidden", "true");
 	});
 
 	it("opens the existing summary in the shared inline editor", async () => {

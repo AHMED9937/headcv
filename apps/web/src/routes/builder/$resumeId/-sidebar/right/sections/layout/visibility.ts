@@ -70,7 +70,7 @@ const hasItems = (section: ItemSectionLike): boolean => {
 };
 
 export const isVisibleEditorSection = (sectionId: string, data: ResumeData): boolean => {
-	if (sectionId === "summary") return !data.summary.hidden && data.summary.content.trim().length > 0;
+	if (sectionId === "summary") return data.summary.content.trim().length > 0;
 
 	const builtInSection = getBuiltInSection(sectionId, data);
 	if (builtInSection) return hasItems(builtInSection);
@@ -79,6 +79,19 @@ export const isVisibleEditorSection = (sectionId: string, data: ResumeData): boo
 	if (customSection) return hasItems(customSection as ItemSectionLike);
 
 	return false;
+};
+
+export const isHiddenEditorSection = (sectionId: string, data: ResumeData): boolean => {
+	if (sectionId === "summary") return data.summary.hidden;
+
+	const builtInSection = getBuiltInSection(sectionId, data);
+	if (builtInSection) return builtInSection.hidden;
+
+	return data.customSections.find((section) => section.id === sectionId)?.hidden ?? false;
+};
+
+export const filterEditorLayoutSectionIds = (sectionIds: string[], data: ResumeData): string[] => {
+	return sectionIds.filter((sectionId) => isVisibleEditorSection(sectionId, data));
 };
 
 export const filterVisibleLayoutSectionIds = (sectionIds: string[], data: ResumeData): string[] => {

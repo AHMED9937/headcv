@@ -22,7 +22,7 @@ import { cn } from "@headcv/utils/style";
 import { templates } from "@/dialogs/resume/template/data";
 import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
 import { resolveLayoutSectionTitle } from "./title";
-import { filterVisibleLayoutSectionIds } from "./visibility";
+import { filterEditorLayoutSectionIds, isHiddenEditorSection } from "./visibility";
 
 type ColumnId = "main" | "sidebar";
 
@@ -234,8 +234,8 @@ export function LayoutPages() {
 						pageIndex={pageIndex}
 						page={{
 							...page,
-							main: filterVisibleLayoutSectionIds(page.main, resume.data),
-							sidebar: filterVisibleLayoutSectionIds(page.sidebar, resume.data),
+							main: filterEditorLayoutSectionIds(page.main, resume.data),
+							sidebar: filterEditorLayoutSectionIds(page.sidebar, resume.data),
 						}}
 						canDelete={layout.pages.length > 1}
 						sidebarPosition={templateSidebarPosition}
@@ -405,6 +405,7 @@ type LayoutItemContentProps = HTMLAttributes<HTMLDivElement> & {
 function LayoutItemContent({ id, ref, isDragging, isOverlay, className, style, ...rest }: LayoutItemContentProps) {
 	const resume = useCurrentResume();
 	const title = resume ? resolveLayoutSectionTitle(resume.data, id) : id;
+	const isHidden = resume ? isHiddenEditorSection(id, resume.data) : false;
 
 	return (
 		<div
@@ -417,6 +418,7 @@ function LayoutItemContent({ id, ref, isDragging, isOverlay, className, style, .
 				"hover:bg-secondary/40 active:cursor-grabbing active:border-primary/60 active:bg-secondary/40",
 				"data-[overlay=true]:cursor-grabbing data-[overlay=true]:border-primary/60 data-[overlay=true]:bg-background",
 				"data-[dragging=true]:cursor-grabbing data-[dragging=true]:border-primary/60 data-[dragging=true]:bg-background",
+				isHidden && "opacity-50",
 				className,
 			)}
 			{...rest}

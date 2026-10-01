@@ -1,7 +1,12 @@
 import type { ResumeData } from "@headcv/schema/resume/data";
 import { describe, expect, it } from "vitest";
 import { defaultResumeData } from "@headcv/schema/resume/default";
-import { filterVisibleLayoutSectionIds, isVisibleEditorSection } from "./visibility";
+import {
+	filterEditorLayoutSectionIds,
+	filterVisibleLayoutSectionIds,
+	isHiddenEditorSection,
+	isVisibleEditorSection,
+} from "./visibility";
 
 const createResumeData = (): ResumeData => structuredClone(defaultResumeData);
 
@@ -26,6 +31,16 @@ describe("isVisibleEditorSection", () => {
 		data.sections.experience.hidden = true;
 		data.sections.experience.items = [{ hidden: false, company: "HeadCV" }] as never;
 		expect(isVisibleEditorSection("experience", data)).toBe(false);
+	});
+
+	it("keeps a hidden summary available to the editor", () => {
+		const data = createResumeData();
+		data.summary.content = "<p>Available for staff roles.</p>";
+		data.summary.hidden = true;
+
+		expect(isVisibleEditorSection("summary", data)).toBe(true);
+		expect(isHiddenEditorSection("summary", data)).toBe(true);
+		expect(filterEditorLayoutSectionIds(["summary"], data)).toEqual(["summary"]);
 	});
 });
 

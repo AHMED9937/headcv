@@ -1,4 +1,4 @@
-import type { SectionType } from "@headcv/schema/resume/data";
+import type { ResumeData, SectionType } from "@headcv/schema/resume/data";
 import type { IconProps } from "@phosphor-icons/react";
 import { t } from "@lingui/core/macro";
 import {
@@ -71,6 +71,45 @@ export const leftSidebarSections = [
 	"custom",
 	"ai-review",
 ] as const satisfies readonly LeftSidebarSection[];
+
+const layoutSectionIds = new Set<LeftSidebarSection>(
+	leftSidebarSections.filter(
+		(section) => section !== "picture" && section !== "basics" && section !== "custom" && section !== "ai-review",
+	),
+);
+
+/**
+ * Orders the content editor from the resume layout while retaining editor-only
+ * sections and sections that are not currently placed on a page.
+ *
+ * Custom layout IDs share one editor card, so that card takes the position of
+ * the first custom section in the layout.
+ */
+export function getLayoutOrderedLeftSidebarSections(data: ResumeData): LeftSidebarSection[] {
+	const ordered: LeftSidebarSection[] = ["picture", "basics"];
+	const seen = new Set<LeftSidebarSection>(ordered);
+	const customSectionIds = new Set(data.customSections.map((section) => section.id));
+
+	const add = (section: LeftSidebarSection | undefined) => {
+		if (!section || seen.has(section)) return;
+		seen.add(section);
+		ordered.push(section);
+	};
+
+	for (const page of data.metadata.layout.pages) {
+		for (const sectionId of [...page.main, ...page.sidebar]) {
+			if (layoutSectionIds.has(sectionId as LeftSidebarSection)) {
+				add(sectionId as LeftSidebarSection);
+			} else if (customSectionIds.has(sectionId)) {
+				add("custom");
+			}
+		}
+	}
+
+	for (const section of leftSidebarSections) add(section);
+
+	return ordered;
+}
 
 export const rightSidebarSections = [
 	"template",

@@ -7,9 +7,10 @@ import { getInitials } from "@headcv/utils/string";
 import { cn } from "@headcv/utils/style";
 import { BuilderStepActions } from "@/features/builder/step-actions";
 import { getStepSectionId, useBuilderStep } from "@/features/builder/use-builder-step";
+import { useCurrentResume } from "@/features/resume/builder/draft";
 import { getResumePreviewSectionId, requestResumePreviewSection } from "@/features/resume/preview/preview-navigation";
 import { UserDropdownMenu } from "@/features/user/dropdown-menu";
-import { getSectionIcon, getSectionTitle, leftSidebarSections } from "@/libs/resume/section";
+import { getLayoutOrderedLeftSidebarSections, getSectionIcon, getSectionTitle } from "@/libs/resume/section";
 import { BuilderSidebarEdge } from "../../-components/edge";
 import { useSectionStore } from "../../-store/section";
 import { useBuilderSidebar } from "../../-store/sidebar";
@@ -18,6 +19,7 @@ import { PersonalDetailsSectionBuilder } from "./sections/personal-details";
 
 export function BuilderSidebarLeft({ guided = false }: { guided?: boolean }) {
 	const scrollAreaRef = useRef<HTMLDivElement | null>(null);
+	const resume = useCurrentResume();
 	const { currentStep } = useBuilderStep();
 	const expandLeftSection = useSectionStore((state) => state.expandLeftSection);
 	const guidedSection = getStepSectionId(currentStep);
@@ -25,7 +27,7 @@ export function BuilderSidebarLeft({ guided = false }: { guided?: boolean }) {
 		? guidedSection
 			? [guidedSection]
 			: []
-		: leftSidebarSections.filter((section) => section !== "ai-review");
+		: getLayoutOrderedLeftSidebarSections(resume.data).filter((section) => section !== "ai-review");
 
 	useEffect(() => {
 		const sectionId = getStepSectionId(currentStep);
@@ -39,7 +41,7 @@ export function BuilderSidebarLeft({ guided = false }: { guided?: boolean }) {
 
 	return (
 		<>
-			{!guided && <SidebarEdge scrollAreaRef={scrollAreaRef} />}
+			{!guided && <SidebarEdge scrollAreaRef={scrollAreaRef} sections={sections} />}
 
 			<div className={cn("flex h-full flex-col bg-background", !guided && "sm:ms-12")}>
 				<div
@@ -67,9 +69,10 @@ export function BuilderSidebarLeft({ guided = false }: { guided?: boolean }) {
 
 type SidebarEdgeProps = {
 	scrollAreaRef: React.RefObject<HTMLDivElement | null>;
+	sections: LeftSidebarSection[];
 };
 
-function SidebarEdge({ scrollAreaRef }: SidebarEdgeProps) {
+function SidebarEdge({ scrollAreaRef, sections }: SidebarEdgeProps) {
 	const toggleSidebar = useBuilderSidebar((state) => state.toggleSidebar);
 
 	const scrollToSection = useCallback(
@@ -91,19 +94,17 @@ function SidebarEdge({ scrollAreaRef }: SidebarEdgeProps) {
 			<div className="flex min-h-0 w-full flex-1 flex-col items-center gap-y-2 overflow-hidden">
 				<div className="no-scrollbar min-h-0 w-full flex-1 overflow-y-auto overflow-x-hidden">
 					<div className="flex min-h-full flex-col items-center justify-center gap-y-2">
-						{leftSidebarSections
-							.filter((section) => section !== "ai-review")
-							.map((section) => (
-								<Button
-									key={section}
-									size="icon"
-									variant="ghost"
-									title={getSectionTitle(section)}
-									onClick={() => scrollToSection(section)}
-								>
-									{getSectionIcon(section)}
-								</Button>
-							))}
+						{sections.map((section) => (
+							<Button
+								key={section}
+								size="icon"
+								variant="ghost"
+								title={getSectionTitle(section)}
+								onClick={() => scrollToSection(section)}
+							>
+								{getSectionIcon(section)}
+							</Button>
+						))}
 					</div>
 				</div>
 

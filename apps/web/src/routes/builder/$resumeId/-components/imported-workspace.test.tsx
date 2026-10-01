@@ -64,7 +64,17 @@ vi.mock("@/features/resume/builder/draft", () => ({
 			summary: { title: "Summary", columns: 1, hidden: false, content: "" },
 			sections: { experience: { items: [] }, education: { items: [] } },
 			customSections: [],
-			metadata: {},
+			metadata: {
+				layout: {
+					pages: [
+						{
+							fullWidth: false,
+							main: ["summary", "education", "experience", "projects", "volunteer", "references"],
+							sidebar: ["skills", "languages", "awards", "certifications", "publications", "interests"],
+						},
+					],
+				},
+			},
 		},
 	}),
 }));
@@ -194,16 +204,17 @@ describe("ImportedWorkspace", () => {
 
 		const visibleSections = [
 			"summary",
-			"experience",
 			"education",
+			"experience",
+			"volunteer",
+			"references",
 			"skills",
 			"languages",
 			"awards",
 			"certifications",
 			"publications",
-			"volunteer",
-			"references",
 		];
+		expect(screen.getAllByTestId(/^content-section-/).map((element) => element.textContent)).toEqual(visibleSections);
 		for (const sectionId of visibleSections) {
 			expect(screen.getByTestId(`content-section-${sectionId}`)).toBeInTheDocument();
 		}
