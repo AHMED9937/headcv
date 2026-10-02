@@ -28,6 +28,7 @@
 	--accent: #c9a227;
 	/* Gold for large text only (>=24px, or >=18.66px bold): 3:1 on --bg and white. */
 	--accent-strong: #ad8428;
+	--brand-logo-background: #152642;
 	--accent-light: #f5efe6;
 	--success: #10b981;
 	--success-light: #d1fae5;
@@ -171,6 +172,7 @@
 	--color-primary-foreground: var(--primary-foreground);
 	--color-primary-dark: var(--primary-dark);
 	--color-primary-light: var(--primary-light);
+	--color-brand-logo-background: var(--brand-logo-background);
 	--color-secondary: var(--secondary);
 	--color-secondary-foreground: var(--secondary-foreground);
 	--color-muted: var(--muted);
