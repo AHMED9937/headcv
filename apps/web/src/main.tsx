@@ -27,7 +27,7 @@ function App() {
 	if (error) {
 		return (
 			<div className="mx-auto flex h-svh max-w-md flex-col items-center justify-center gap-y-4 px-4 text-center">
-				<BrandIcon className="h-10 w-auto" />
+				<BrandIcon className="h-14 w-auto" />
 				<p className="text-muted-foreground">{error.message}</p>
 				<button
 					type="button"
