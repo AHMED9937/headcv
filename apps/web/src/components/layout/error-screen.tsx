@@ -8,7 +8,7 @@ import { Button } from "@headcv/ui/components/button";
 export function ErrorScreen({ error, reset }: ErrorComponentProps) {
 	return (
 		<div className="mx-auto flex h-svh max-w-md flex-col items-center justify-center gap-y-4">
-			<BrandIcon className="size-12" />
+			<BrandIcon className="size-14" />
 
 			<Alert>
 				<WarningIcon />

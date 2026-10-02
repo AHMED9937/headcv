@@ -82,7 +82,7 @@ function RouteComponent() {
 			<header className="sticky top-0 z-50 flex h-14 items-center justify-between border-b bg-background/95 px-4 backdrop-blur">
 				{/* Signed-in users are sent home to their resumes, not the marketing page. */}
 				<Link to="/dashboard/resumes" aria-label={t`Go to your resumes`} className="flex items-center">
-					<BrandIcon className="h-8 w-auto" />
+					<BrandIcon className="h-10 w-auto" />
 				</Link>
 
 				<div className="flex items-center gap-3">

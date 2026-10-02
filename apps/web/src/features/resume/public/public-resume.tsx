@@ -49,7 +49,7 @@ export function PublicResumeRoute() {
 				</div>
 
 				<footer className="flex justify-center print:hidden">
-					<BrandIcon className="size-8 opacity-60" />
+					<BrandIcon className="size-10 opacity-60" />
 				</footer>
 			</div>
 
