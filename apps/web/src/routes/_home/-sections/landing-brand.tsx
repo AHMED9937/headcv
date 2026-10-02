@@ -1,4 +1,3 @@
-import { BrandIcon } from "@headcv/ui/components/brand-icon";
 import { cn } from "@headcv/utils/style";
 
 /**
@@ -8,7 +7,7 @@ import { cn } from "@headcv/utils/style";
 export function LandingBrand({ className }: { className?: string }) {
 	return (
 		<span dir="ltr" className={cn("inline-flex shrink-0 items-center gap-2.5", className)}>
-			<BrandIcon alt="" aria-hidden="true" className="size-14" />
+			<img src="/brand/headcv-logo.png" alt="" width={56} height={56} className="size-14 shrink-0 object-contain" />
 			<span className="whitespace-nowrap font-bold font-display text-[1.35rem] text-primary leading-none tracking-[-0.045em]">
 				Head<span className="text-accent-strong">CV</span>
 			</span>

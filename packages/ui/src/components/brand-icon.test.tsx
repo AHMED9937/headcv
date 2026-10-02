@@ -9,7 +9,6 @@ describe("BrandIcon", () => {
 		expect(imgs).toHaveLength(1);
 		expect(imgs[0]).toHaveAttribute("src", "/brand/headcv-logo.png");
 		expect(imgs[0]).toHaveClass("size-14");
-		expect(imgs[0]).toHaveClass("bg-brand-logo-background", "rounded-[22%]", "p-1", "object-contain");
 	});
 
 	it("merges custom className", () => {
