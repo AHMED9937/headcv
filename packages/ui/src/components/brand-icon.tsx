@@ -1,24 +1,7 @@
 import { cn } from "@headcv/utils/style";
 
-type Props = React.ComponentProps<"img"> & {
-	variant?: "logo" | "icon";
-};
+type Props = React.ComponentProps<"img">;
 
-export function BrandIcon({ variant = "logo", className, ...props }: Props) {
-	return (
-		<>
-			<img
-				src={`/${variant}/dark.svg`}
-				alt="HeadCV"
-				className={cn("hidden size-12 dark:block", className)}
-				{...props}
-			/>
-			<img
-				src={`/${variant}/light.svg`}
-				alt="HeadCV"
-				className={cn("block size-12 dark:hidden", className)}
-				{...props}
-			/>
-		</>
-	);
+export function BrandIcon({ className, ...props }: Props) {
+	return <img src="/brand/headcv-logo.png" alt="HeadCV" className={cn("size-12", className)} {...props} />;
 }

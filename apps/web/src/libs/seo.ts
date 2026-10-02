@@ -44,7 +44,7 @@ const createStructuredDataScript = (id: string, data: JsonLd) => ({
 });
 
 export const getRootStructuredData = (canonicalUrl: string, locale = "en"): JsonLd[] => {
-	const appLogo = `${canonicalUrl}brand/headcv-mark.png`;
+	const appLogo = `${canonicalUrl}brand/headcv-logo.png`;
 	const appBanner = `${canonicalUrl}opengraph/banner.jpg`;
 	const organizationId = `${canonicalUrl}#organization`;
 

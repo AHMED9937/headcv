@@ -20,7 +20,7 @@ import {
 void React;
 
 const appName = "HeadCV";
-const logoUrl = "https://headcv.com/icon/dark.svg";
+const logoUrl = "https://headcv.com/brand/headcv-logo.png";
 
 const colors = {
 	bg: "#f5efe6",

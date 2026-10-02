@@ -57,7 +57,7 @@ describe("getRootStructuredData", () => {
 			"@type": "Organization",
 			name: "HeadCV",
 			url: canonicalUrl,
-			logo: `${canonicalUrl}brand/headcv-mark.png`,
+			logo: `${canonicalUrl}brand/headcv-logo.png`,
 		});
 		expect(schemas[1]).toMatchObject({
 			"@type": "WebSite",
@@ -71,7 +71,7 @@ describe("getRootStructuredData", () => {
 			applicationCategory: "BusinessApplication",
 			operatingSystem: "Web",
 			isAccessibleForFree: true,
-			image: `${canonicalUrl}brand/headcv-mark.png`,
+			image: `${canonicalUrl}brand/headcv-logo.png`,
 			screenshot: `${canonicalUrl}opengraph/banner.jpg`,
 			offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
 		});

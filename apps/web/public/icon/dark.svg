@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <title>HeadCV</title>
-  <rect width="100" height="100" rx="22" fill="#E8E0D6"/>
-  <path d="M29 27v46M29 50h35M64 27v46" stroke="#152642" stroke-width="11" stroke-linecap="round"/>
-  <path d="M70 0h30v30L70 0Z" fill="#1E3A5F"/>
-  <path d="m64 75 7 7 15-18" stroke="#AD8428" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>

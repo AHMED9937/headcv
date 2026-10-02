@@ -324,10 +324,7 @@ export function buildMcpServerCard(appVersion: string) {
 			websiteUrl: "https://headcv.com",
 			description:
 				"HeadCV is a guided resume builder. Use this MCP server to interact with your resume using an LLM of your choice.",
-			icons: [
-				{ src: "https://headcv.com/icon/light.svg", mimeType: "image/svg+xml", theme: "light" as const },
-				{ src: "https://headcv.com/icon/dark.svg", mimeType: "image/svg+xml", theme: "dark" as const },
-			],
+			icons: [{ src: "https://headcv.com/brand/headcv-logo.png", mimeType: "image/png" }],
 		},
 		tools,
 		prompts,
