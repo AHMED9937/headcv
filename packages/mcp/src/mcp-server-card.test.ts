@@ -15,9 +15,8 @@ describe("buildMcpServerCard", () => {
 		expect(card.serverInfo.websiteUrl).toBe("https://headcv.com");
 	});
 
-	it("exposes light + dark theme icons", () => {
-		const themes = card.serverInfo.icons.map((icon) => icon.theme).sort();
-		expect(themes).toEqual(["dark", "light"]);
+	it("exposes the canonical HeadCV logo", () => {
+		expect(card.serverInfo.icons).toEqual([{ src: "https://headcv.com/brand/headcv-logo.png", mimeType: "image/png" }]);
 	});
 
 	it("requires authentication with oauth2 + bearer schemes", () => {

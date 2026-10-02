@@ -9,7 +9,7 @@ import { buttonVariants } from "@headcv/ui/components/button";
 export function NotFoundScreen({ routeId }: NotFoundRouteProps) {
 	return (
 		<div className="mx-auto flex h-svh max-w-md flex-col items-center justify-center gap-y-4">
-			<BrandIcon variant="logo" className="size-12" />
+			<BrandIcon className="size-12" />
 
 			<Alert>
 				<WarningIcon />

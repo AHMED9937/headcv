@@ -3,39 +3,16 @@ import { describe, expect, it } from "vitest";
 import { BrandIcon } from "./brand-icon";
 
 describe("BrandIcon", () => {
-	it("renders two img elements (light + dark variants)", () => {
+	it("renders one canonical logo image", () => {
 		render(<BrandIcon />);
 		const imgs = screen.getAllByAltText("HeadCV");
-		expect(imgs).toHaveLength(2);
+		expect(imgs).toHaveLength(1);
+		expect(imgs[0]).toHaveAttribute("src", "/brand/headcv-logo.png");
 	});
 
-	it("uses 'logo' as default variant", () => {
-		render(<BrandIcon />);
-		const imgs = screen.getAllByAltText("HeadCV");
-		expect(imgs.some((img) => img.getAttribute("src") === "/logo/dark.svg")).toBe(true);
-		expect(imgs.some((img) => img.getAttribute("src") === "/logo/light.svg")).toBe(true);
-	});
-
-	it("uses 'icon' variant when specified", () => {
-		render(<BrandIcon variant="icon" />);
-		const imgs = screen.getAllByAltText("HeadCV");
-		expect(imgs.some((img) => img.getAttribute("src") === "/icon/dark.svg")).toBe(true);
-		expect(imgs.some((img) => img.getAttribute("src") === "/icon/light.svg")).toBe(true);
-	});
-
-	it("merges custom className on both imgs", () => {
+	it("merges custom className", () => {
 		render(<BrandIcon className="my-custom" />);
 		const imgs = screen.getAllByAltText("HeadCV");
-		for (const img of imgs) {
-			expect(img).toHaveClass("my-custom");
-		}
-	});
-
-	it("hides dark variant by default (light mode); dark mode reveals it via dark:block", () => {
-		render(<BrandIcon />);
-		const imgs = screen.getAllByAltText("HeadCV");
-		const darkImg = imgs.find((img) => img.getAttribute("src") === "/logo/dark.svg");
-		expect(darkImg).toHaveClass("hidden");
-		expect(darkImg).toHaveClass("dark:block");
+		expect(imgs[0]).toHaveClass("my-custom");
 	});
 });

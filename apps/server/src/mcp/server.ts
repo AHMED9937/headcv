@@ -30,18 +30,7 @@ export async function createMcpServer(request: Request) {
 			websiteUrl: "https://headcv.com",
 			description:
 				"HeadCV is a free and open-source resume builder. Use this MCP server to interact with your resume using an LLM of your choice.",
-			icons: [
-				{
-					src: "https://headcv.com/icon/light.svg",
-					mimeType: "image/svg+xml",
-					theme: "light",
-				},
-				{
-					src: "https://headcv.com/icon/dark.svg",
-					mimeType: "image/svg+xml",
-					theme: "dark",
-				},
-			],
+			icons: [{ src: "https://headcv.com/brand/headcv-logo.png", mimeType: "image/png" }],
 		},
 		{
 			instructions: [

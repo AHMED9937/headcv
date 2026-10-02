@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 40" fill="none">
-  <title>HeadCV</title>
-  <rect x="2" y="2" width="36" height="36" rx="9" fill="#1E3A5F"/>
-  <path d="M12 11v18M12 20h14M26 11v18" stroke="#F8FAFC" stroke-width="4" stroke-linecap="round"/>
-  <path d="M29 2h9v9L29 2Z" fill="#F4E9C9"/>
-  <path d="m25 30 3 3 7-8" stroke="#D6B65B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="48" y="28" font-family="'Inter Variable', Inter, sans-serif" font-size="20" font-weight="800" fill="#1E3A5F">Head<tspan fill="#AD8428">CV</tspan></text>
-</svg>

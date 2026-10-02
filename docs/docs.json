@@ -2,7 +2,7 @@
 	"$schema": "https://mintlify.com/docs.json",
 	"theme": "mint",
 	"name": "HeadCV",
-	"favicon": "/favicon.svg",
+	"favicon": "https://headcv.com/brand/headcv-logo.png",
 	"description": "A privacy-minded resume builder that is customizable, portable, open-source, and free to use.",
 	"seo": {
 		"indexing": "navigable",
@@ -128,8 +128,8 @@
 		}
 	},
 	"logo": {
-		"light": "/logo/light.svg",
-		"dark": "/logo/dark.svg"
+		"light": "https://headcv.com/brand/headcv-logo.png",
+		"dark": "https://headcv.com/brand/headcv-logo.png"
 	},
 	"navbar": {
 		"links": [
