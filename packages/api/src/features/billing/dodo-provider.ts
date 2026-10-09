@@ -11,6 +11,7 @@ import type {
 	CheckoutSessionDetails,
 	CheckoutSessionResult,
 	CustomerPortalResult,
+	LocalizedPricing,
 	NormalizedWebhookEvent,
 	PaymentProvider,
 	SubscriptionInfo,
@@ -18,6 +19,12 @@ import type {
 import DodoPayments from "dodopayments";
 import { env } from "@headcv/env/server";
 import { CHECKOUT_THEME_CONFIG } from "./checkout-theme";
+import { minorToMajor } from "./currency";
+
+// The SDK's billing-address country is an ISO-3166 string-literal union; derive it from the
+// call signatures so a validated two-letter code can be passed without a fragile deep import.
+type CheckoutBillingAddress = NonNullable<Parameters<DodoPayments["checkoutSessions"]["create"]>[0]["billing_address"]>;
+type PreviewBillingAddress = NonNullable<Parameters<DodoPayments["checkoutSessions"]["preview"]>[0]["billing_address"]>;
 
 // ---------------------------------------------------------------------------
 // Plan → Dodo product ID mapping
@@ -85,6 +92,7 @@ export class DodoPaymentsProvider implements PaymentProvider {
 		returnUrl: string;
 		metadata?: Record<string, string>;
 		theme?: CheckoutTheme;
+		country?: string;
 	}): Promise<CheckoutSessionResult> {
 		const client = getClient();
 		const productId = getProductId(params.plan);
@@ -97,6 +105,9 @@ export class DodoPaymentsProvider implements PaymentProvider {
 				...(params.customerId ? { customer_id: params.customerId } : {}),
 			},
 			return_url: params.returnUrl,
+			// Pin the billing country so the subscription's currency is deterministic before it
+			// locks at the first charge, instead of depending on what the customer later picks.
+			...(params.country ? { billing_address: { country: params.country } as CheckoutBillingAddress } : {}),
 			...(params.metadata ? { metadata: params.metadata } : {}),
 			customization: {
 				theme: params.theme ?? "light",
@@ -108,6 +119,33 @@ export class DodoPaymentsProvider implements PaymentProvider {
 			checkoutUrl: session.checkout_url ?? "",
 			sessionId: session.session_id ?? "",
 		};
+	}
+
+	async getLocalizedPricing(country: string): Promise<LocalizedPricing | null> {
+		const productId = env.DODO_PRODUCT_MONTHLY_ID ?? env.DODO_PRODUCT_YEARLY_ID ?? env.DODO_PRODUCT_TRIAL_ID;
+		if (!productId) return null;
+
+		try {
+			const client = getClient();
+			const preview = await client.checkoutSessions.preview({
+				product_cart: [{ product_id: productId, quantity: 1 }],
+				billing_address: { country } as PreviewBillingAddress,
+			});
+
+			const item = preview.product_cart?.[0];
+			if (!item) return null;
+
+			// `discounted_price` is the list price converted to the local currency (pre-tax);
+			// `og_price` is the USD list price. Their ratio is the exact multiplier Dodo applies.
+			const local = minorToMajor(item.discounted_price, item.currency);
+			const base = minorToMajor(item.og_price, item.og_currency);
+			const rate = base > 0 ? local / base : 0;
+			if (!Number.isFinite(rate) || rate <= 0) return null;
+
+			return { currency: item.currency, rate };
+		} catch {
+			return null;
+		}
 	}
 
 	async getCustomerPortalUrl(params: { customerId: string; returnUrl: string }): Promise<CustomerPortalResult> {

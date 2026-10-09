@@ -8,6 +8,21 @@ import { checkoutThemeFromCookie } from "./checkout-theme";
 import { getPaymentProvider } from "./provider.js";
 import { billingService, entitlementService, getEffectiveAccess, getPlanLimits, hasUsedTrial } from "./service";
 
+/**
+ * Resolve the visitor's ISO-3166 country for adaptive-currency pricing, in order of trust:
+ * Vercel's edge header (production) → Cloudflare's header (Cloudflare-fronted self-host) →
+ * the GEO_COUNTRY env fallback (local dev / single-region self-host). Returns undefined when
+ * none resolve, which keeps the UI on USD.
+ */
+function detectCountry(headers: Headers): string | undefined {
+	const raw = headers.get("x-vercel-ip-country") ?? headers.get("cf-ipcountry") ?? env.GEO_COUNTRY;
+	return raw && /^[A-Za-z]{2}$/.test(raw) ? raw.toUpperCase() : undefined;
+}
+
+const USD_PRICING = { currency: "USD", rate: 1 } as const;
+const PRICING_TTL_MS = 6 * 60 * 60 * 1000;
+const localizedPricingCache = new Map<string, { value: { currency: string; rate: number }; expires: number }>();
+
 export const billingRouter = {
 	/** Public: returns available pricing plans and their limits. */
 	getPlans: publicProcedure
@@ -51,6 +66,34 @@ export const billingRouter = {
 					},
 				],
 			};
+		}),
+
+	/**
+	 * Public: the visitor's adaptive-currency pricing (currency + USD→local multiplier), so the
+	 * pricing UI shows the exact local price Dodo will charge. Falls back to USD for US / unknown
+	 * country / any provider error. Cached per country.
+	 */
+	getLocalizedPricing: publicProcedure
+		.route({
+			method: "GET",
+			path: "/billing/localized-pricing",
+			tags: ["Billing"],
+			operationId: "getLocalizedPricing",
+			summary: "Get adaptive-currency pricing for the visitor",
+		})
+		.handler(async ({ context }) => {
+			const country = detectCountry(context.reqHeaders);
+			if (!country || country === "US") return USD_PRICING;
+
+			const cached = localizedPricingCache.get(country);
+			if (cached && cached.expires > Date.now()) return cached.value;
+
+			const provider = getPaymentProvider();
+			const pricing = (await provider.getLocalizedPricing?.(country)) ?? null;
+			// A USD result means no local price applied — keep the UI on the USD defaults.
+			const value = pricing && pricing.currency !== "USD" ? pricing : { ...USD_PRICING };
+			localizedPricingCache.set(country, { value, expires: Date.now() + PRICING_TTL_MS });
+			return value;
 		}),
 
 	/** Protected: get the authenticated user's current subscription + usage. */
@@ -120,14 +163,18 @@ export const billingRouter = {
 			}
 
 			try {
-				const provider = getPaymentProvider(input.country);
+				// epay is still a stub, so route everyone to Dodo. The visitor's country only seeds
+				// Dodo's adaptive-currency billing address so the charge matches the displayed price.
+				const provider = getPaymentProvider();
 				const returnUrl = `${env.APP_URL}/checkout/success`;
+				const country = input.country ?? detectCountry(context.reqHeaders);
 
 				const result = await provider.createCheckoutSession({
 					plan: input.plan,
 					customerEmail: context.user.email,
 					customerName: context.user.name,
 					returnUrl,
+					...(country ? { country } : {}),
 					metadata: { userId: context.user.id },
 					theme: checkoutThemeFromCookie(parseCookies(context.reqHeaders.get("cookie") ?? "").get("theme")),
 				});

@@ -1,11 +1,14 @@
 import type { ResumeData, SectionType } from "@headcv/schema/resume/data";
 import type { Template } from "@headcv/schema/templates";
+import type { LoadedPicture } from "./picture";
 import {
+	AlignmentType,
 	BorderStyle,
 	convertMillimetersToTwip,
 	Document,
 	ExternalHyperlink,
 	HeadingLevel,
+	ImageRun,
 	Paragraph,
 	ShadingType,
 	Table,
@@ -159,7 +162,12 @@ function renderSection(sectionId: string, data: ResumeData, colorHex: string): P
 
 // --- Header ---
 
-function buildHeader(data: ResumeData, colorHex: string, textColorHex: string): Paragraph[] {
+function buildHeader(
+	data: ResumeData,
+	colorHex: string,
+	textColorHex: string,
+	picture?: LoadedPicture | null,
+): Paragraph[] {
 	const paragraphs: Paragraph[] = [];
 	const { basics } = data;
 	const headingFont = data.metadata.typography.heading.fontFamily || "Calibri";
@@ -167,6 +175,26 @@ function buildHeader(data: ResumeData, colorHex: string, textColorHex: string): 
 	// h2 = calc(var(--page-heading-font-size) * 1.25pt)
 	const nameSize = ptToHalfPt(data.metadata.typography.heading.fontSize * 1.25);
 	const bodySize = ptToHalfPt(data.metadata.typography.body.fontSize);
+
+	if (picture) {
+		paragraphs.push(
+			new Paragraph({
+				alignment: AlignmentType.CENTER,
+				spacing: { after: 120 },
+				children: [
+					new ImageRun({
+						type: picture.type,
+						data: picture.data,
+						transformation: {
+							width: picture.widthPx,
+							height: picture.heightPx,
+							...(picture.rotation ? { rotation: picture.rotation } : {}),
+						},
+					}),
+				],
+			}),
+		);
+	}
 
 	if (basics.name) {
 		paragraphs.push(
@@ -365,7 +393,7 @@ function buildTwoColumnTable(
  * - Page margins and fixed DOCX page format from `metadata.page`; free-form exports as A4
  * - Primary, text, and background colors from `metadata.design.colors`
  */
-export function buildDocument(data: ResumeData): Document {
+export function buildDocument(data: ResumeData, picture?: LoadedPicture | null): Document {
 	const colorHex = getColorHex(data.metadata.design.colors.primary, "DC2626");
 	const textColorHex = getColorHex(data.metadata.design.colors.text, "000000");
 	const bgColorHex = getColorHex(data.metadata.design.colors.background, "FFFFFF");
@@ -415,7 +443,7 @@ export function buildDocument(data: ResumeData): Document {
 			textColorHex,
 			primaryColorHex: colorHex,
 		});
-		documentChildren.push(...buildHeader(data, colorHex, textColorHex));
+		documentChildren.push(...buildHeader(data, colorHex, textColorHex, picture));
 	}
 
 	// Process each page in the layout
@@ -447,7 +475,7 @@ export function buildDocument(data: ResumeData): Document {
 
 			const mainParagraphs: Paragraph[] = [];
 			if (templateConfig.headerPosition === "main-only") {
-				mainParagraphs.push(...buildHeader(data, colorHex, textColorHex));
+				mainParagraphs.push(...buildHeader(data, colorHex, textColorHex, picture));
 			}
 			for (const sectionId of layoutPage.main) {
 				mainParagraphs.push(...renderSection(sectionId, data, colorHex));
@@ -465,7 +493,7 @@ export function buildDocument(data: ResumeData): Document {
 
 			const sidebarParagraphs: Paragraph[] = [];
 			if (templateConfig.headerPosition === "sidebar-only") {
-				sidebarParagraphs.push(...buildHeader(data, sidebarHeadingColorHex, sidebarTextColorHex));
+				sidebarParagraphs.push(...buildHeader(data, sidebarHeadingColorHex, sidebarTextColorHex, picture));
 			}
 			for (const sectionId of layoutPage.sidebar) {
 				sidebarParagraphs.push(...renderSection(sectionId, data, sidebarHeadingColorHex));

@@ -70,4 +70,19 @@ describe("buildDocument", () => {
 		data.metadata.typography.heading.fontFamily = "";
 		expect(() => buildDocument(data)).not.toThrow();
 	});
+
+	it("embeds the profile photo when one is supplied", () => {
+		const picture = {
+			data: new Uint8Array([0x89, 0x50, 0x4e, 0x47]).buffer,
+			type: "png" as const,
+			widthPx: 96,
+			heightPx: 96,
+			rotation: 0,
+		};
+		expect(() => buildDocument(defaultResumeData, picture)).not.toThrow();
+	});
+
+	it("omits the photo when none is supplied", () => {
+		expect(() => buildDocument(defaultResumeData, null)).not.toThrow();
+	});
 });

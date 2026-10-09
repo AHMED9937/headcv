@@ -26,6 +26,13 @@ export interface CustomerPortalResult {
 	portalUrl: string;
 }
 
+export interface LocalizedPricing {
+	/** ISO 4217 code the provider will charge this visitor in (e.g. "EUR"). */
+	currency: string;
+	/** Multiplier from the USD list price to the local charge, incl. the provider's FX conversion. */
+	rate: number;
+}
+
 export interface SubscriptionInfo {
 	providerSubscriptionId: string;
 	status: string;
@@ -51,7 +58,16 @@ export interface PaymentProvider {
 		metadata?: Record<string, string>;
 		/** The app theme the user is on, so hosted checkout can match it. */
 		theme?: CheckoutTheme;
+		/** ISO 3166-1 alpha-2 visitor country, seeding adaptive-currency so the charge matches the UI. */
+		country?: string;
 	}): Promise<CheckoutSessionResult>;
+
+	/**
+	 * Preview the adaptive-currency rate for a visitor's country so the pricing UI can show
+	 * the exact local price the provider will charge. Optional: a provider without adaptive
+	 * currency returns `null` and the UI stays in USD.
+	 */
+	getLocalizedPricing?(country: string): Promise<LocalizedPricing | null>;
 
 	getCustomerPortalUrl(params: { customerId: string; returnUrl: string }): Promise<CustomerPortalResult>;
 

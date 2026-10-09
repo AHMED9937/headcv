@@ -8,7 +8,7 @@ import { Button } from "@headcv/ui/components/button";
 import { Switch } from "@headcv/ui/components/switch";
 import { cn } from "@headcv/utils/style";
 import { getProFeatures } from "@/features/billing/plan-picker";
-import { useCheckout, useSubscription } from "@/features/billing/use-subscription";
+import { useCheckout, useLocalizedPricing, useSubscription } from "@/features/billing/use-subscription";
 
 function Benefits({ items, premium = false }: { items: string[]; premium?: boolean }) {
 	return (
@@ -33,7 +33,8 @@ function Benefits({ items, premium = false }: { items: string[]; premium?: boole
 export function Pricing() {
 	const [billing, setBilling] = useState<"monthly" | "yearly">("yearly");
 	const { i18n } = useLingui();
-	const money = (value: number) => i18n.number(value, { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+	const { currency, rate } = useLocalizedPricing();
+	const money = (value: number) => i18n.number(value * rate, { style: "currency", currency, maximumFractionDigits: 0 });
 	const { checkout: handleCheckout, isLoading: checkoutLoading } = useCheckout();
 	const { session } = useRouteContext({ strict: false });
 	const { trialEligible } = useSubscription({ enabled: !!session });
