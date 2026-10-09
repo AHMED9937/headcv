@@ -19,12 +19,15 @@ import type {
 import DodoPayments from "dodopayments";
 import { env } from "@headcv/env/server";
 import { CHECKOUT_THEME_CONFIG } from "./checkout-theme";
+import { getCurrencyForCountry, SUPPORTED_LOCAL_CURRENCIES } from "./country-currency.js";
 import { minorToMajor } from "./currency";
 
-// The SDK's billing-address country is an ISO-3166 string-literal union; derive it from the
-// call signatures so a validated two-letter code can be passed without a fragile deep import.
+// The SDK's billing-address/country/currency fields are string-literal unions; derive them
+// from the call signatures so validated runtime strings can be passed without fragile deep imports.
 type CheckoutBillingAddress = NonNullable<Parameters<DodoPayments["checkoutSessions"]["create"]>[0]["billing_address"]>;
 type PreviewBillingAddress = NonNullable<Parameters<DodoPayments["checkoutSessions"]["preview"]>[0]["billing_address"]>;
+type CheckoutCurrency = NonNullable<Parameters<DodoPayments["checkoutSessions"]["create"]>[0]["billing_currency"]>;
+type PreviewCurrency = NonNullable<Parameters<DodoPayments["checkoutSessions"]["preview"]>[0]["billing_currency"]>;
 
 // ---------------------------------------------------------------------------
 // Plan → Dodo product ID mapping
@@ -97,6 +100,9 @@ export class DodoPaymentsProvider implements PaymentProvider {
 		const client = getClient();
 		const productId = getProductId(params.plan);
 
+		// Pin both country and currency so the hosted checkout matches the price we displayed.
+		const billingCurrency = params.country ? getCurrencyForCountry(params.country) : undefined;
+
 		const session = await client.checkoutSessions.create({
 			product_cart: [{ product_id: productId, quantity: 1 }],
 			customer: {
@@ -105,9 +111,8 @@ export class DodoPaymentsProvider implements PaymentProvider {
 				...(params.customerId ? { customer_id: params.customerId } : {}),
 			},
 			return_url: params.returnUrl,
-			// Pin the billing country so the subscription's currency is deterministic before it
-			// locks at the first charge, instead of depending on what the customer later picks.
 			...(params.country ? { billing_address: { country: params.country } as CheckoutBillingAddress } : {}),
+			...(billingCurrency ? { billing_currency: billingCurrency as CheckoutCurrency } : {}),
 			...(params.metadata ? { metadata: params.metadata } : {}),
 			customization: {
 				theme: params.theme ?? "light",
@@ -122,6 +127,9 @@ export class DodoPaymentsProvider implements PaymentProvider {
 	}
 
 	async getLocalizedPricing(country: string): Promise<LocalizedPricing | null> {
+		const currency = getCurrencyForCountry(country);
+		if (!currency || !SUPPORTED_LOCAL_CURRENCIES.has(currency)) return null;
+
 		const productId = env.DODO_PRODUCT_MONTHLY_ID ?? env.DODO_PRODUCT_YEARLY_ID ?? env.DODO_PRODUCT_TRIAL_ID;
 		if (!productId) return null;
 
@@ -130,10 +138,11 @@ export class DodoPaymentsProvider implements PaymentProvider {
 			const preview = await client.checkoutSessions.preview({
 				product_cart: [{ product_id: productId, quantity: 1 }],
 				billing_address: { country } as PreviewBillingAddress,
+				billing_currency: currency as PreviewCurrency,
 			});
 
 			const item = preview.product_cart?.[0];
-			if (!item) return null;
+			if (!item || item.currency !== currency) return null;
 
 			// `discounted_price` is the list price converted to the local currency (pre-tax);
 			// `og_price` is the USD list price. Their ratio is the exact multiplier Dodo applies.
@@ -141,6 +150,10 @@ export class DodoPaymentsProvider implements PaymentProvider {
 			const base = minorToMajor(item.og_price, item.og_currency);
 			const rate = base > 0 ? local / base : 0;
 			if (!Number.isFinite(rate) || rate <= 0) return null;
+
+			// Dodo sometimes returns a foreign currency with a 1:1 "rate" when it cannot
+			// actually localize the price. Treat that as "no localization available".
+			if (item.currency !== "USD" && rate === 1) return null;
 
 			return { currency: item.currency, rate };
 		} catch {

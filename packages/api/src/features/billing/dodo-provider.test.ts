@@ -25,6 +25,7 @@ const { CHECKOUT_THEME_CONFIG, checkoutThemeFromCookie } = await import("./check
 const baseParams = { plan: "monthly" as const, customerEmail: "a@example.com", returnUrl: "https://app.test/done" };
 
 const sentBody = () => createSession.mock.calls.at(-1)?.[0];
+const sentPreview = () => previewSession.mock.calls.at(-1)?.[0];
 const sentCustomization = () => sentBody()?.customization;
 
 beforeEach(() => {
@@ -46,16 +47,18 @@ describe("DodoPaymentsProvider.createCheckoutSession", () => {
 		expect(sentCustomization()?.theme).toBe("light");
 	});
 
-	it("pins billing_address.country when a country is supplied", async () => {
+	it("pins billing_address.country and billing_currency when a country is supplied", async () => {
 		await new DodoPaymentsProvider().createCheckoutSession({ ...baseParams, country: "EG" });
 
 		expect(sentBody()?.billing_address).toEqual({ country: "EG" });
+		expect(sentBody()?.billing_currency).toBe("EGP");
 	});
 
-	it("omits billing_address when no country is supplied", async () => {
+	it("omits billing_address and billing_currency when no country is supplied", async () => {
 		await new DodoPaymentsProvider().createCheckoutSession(baseParams);
 
 		expect(sentBody()?.billing_address).toBeUndefined();
+		expect(sentBody()?.billing_currency).toBeUndefined();
 	});
 });
 
@@ -67,9 +70,32 @@ describe("DodoPaymentsProvider.getLocalizedPricing", () => {
 
 		const result = await new DodoPaymentsProvider().getLocalizedPricing("EG");
 
+		expect(sentPreview()?.billing_currency).toBe("EGP");
+		expect(sentPreview()?.billing_address).toEqual({ country: "EG" });
 		expect(result?.currency).toBe("EGP");
 		// 1083.20 EGP ÷ 20.00 USD = 54.16
 		expect(result?.rate).toBeCloseTo(54.16, 2);
+	});
+
+	it("returns null for unsupported countries", async () => {
+		expect(await new DodoPaymentsProvider().getLocalizedPricing("AQ")).toBeNull();
+		expect(previewSession).not.toHaveBeenCalled();
+	});
+
+	it("returns null when the preview returns a mismatched currency", async () => {
+		previewSession.mockResolvedValue({
+			product_cart: [{ currency: "EUR", og_currency: "USD", discounted_price: 18_00, og_price: 2000 }],
+		});
+
+		expect(await new DodoPaymentsProvider().getLocalizedPricing("EG")).toBeNull();
+	});
+
+	it("returns null when the preview returns a fake 1:1 conversion", async () => {
+		previewSession.mockResolvedValue({
+			product_cart: [{ currency: "EUR", og_currency: "USD", discounted_price: 2000, og_price: 2000 }],
+		});
+
+		expect(await new DodoPaymentsProvider().getLocalizedPricing("DE")).toBeNull();
 	});
 
 	it("returns null (UI stays in USD) when the preview call fails", async () => {

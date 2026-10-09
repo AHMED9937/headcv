@@ -106,8 +106,11 @@ function createProvider(key: string): PaymentProvider {
 	}
 }
 
-export function getPaymentProvider(country?: string): PaymentProvider {
-	const key = country?.toUpperCase() === "EG" ? "epay" : "dodo";
+export function getPaymentProvider(_country?: string): PaymentProvider {
+	// EPAY is still an unimplemented stub. Route every country through Dodo until
+	// the EPAY integration is ready; the country parameter is preserved so the
+	// factory can switch back to provider-specific routing later.
+	const key = "dodo";
 
 	const cached = providerCache.get(key);
 	if (cached) return cached;

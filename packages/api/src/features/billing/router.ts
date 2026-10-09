@@ -88,7 +88,7 @@ export const billingRouter = {
 			const cached = localizedPricingCache.get(country);
 			if (cached && cached.expires > Date.now()) return cached.value;
 
-			const provider = getPaymentProvider();
+			const provider = getPaymentProvider(country);
 			const pricing = (await provider.getLocalizedPricing?.(country)) ?? null;
 			// A USD result means no local price applied — keep the UI on the USD defaults.
 			const value = pricing && pricing.currency !== "USD" ? pricing : { ...USD_PRICING };
