@@ -20,12 +20,6 @@ import DodoPayments from "dodopayments";
 import { env } from "@headcv/env/server";
 import { CHECKOUT_THEME_CONFIG } from "./checkout-theme";
 import { getCurrencyForCountry, SUPPORTED_LOCAL_CURRENCIES } from "./country-currency.js";
-import { minorToMajor } from "./currency";
-
-// The SDK's preview billing-address/country/currency fields are string-literal unions; derive them
-// from the call signature so validated runtime strings can be passed without fragile deep imports.
-type PreviewBillingAddress = NonNullable<Parameters<DodoPayments["checkoutSessions"]["preview"]>[0]["billing_address"]>;
-type PreviewCurrency = NonNullable<Parameters<DodoPayments["checkoutSessions"]["preview"]>[0]["billing_currency"]>;
 
 // ---------------------------------------------------------------------------
 // Plan → Dodo product ID mapping
@@ -54,6 +48,36 @@ function getProductId(plan: "monthly" | "yearly" | "trial"): string {
 	const id = map[plan];
 	if (!id) throw new Error(`No Dodo product ID configured for plan: ${plan}`);
 	return id;
+}
+
+// ---------------------------------------------------------------------------
+// FX rates for adaptive-currency display
+// ---------------------------------------------------------------------------
+
+const FX_TTL_MS = 60 * 60 * 1000;
+let fxCache: { rates: Record<string, number>; expires: number } | null = null;
+
+/** Resets the FX cache. Exported for tests. */
+export function resetFxCache(): void {
+	fxCache = null;
+}
+
+async function getFxRate(currency: string): Promise<number | null> {
+	if (!fxCache || fxCache.expires <= Date.now()) {
+		try {
+			const res = await fetch("https://open.er-api.com/v6/latest/USD");
+			if (!res.ok) return null;
+			const data = (await res.json()) as { rates?: Record<string, number> };
+			if (!data.rates) return null;
+			fxCache = { rates: data.rates, expires: Date.now() + FX_TTL_MS };
+		} catch {
+			return null;
+		}
+	}
+
+	const rate = fxCache.rates[currency];
+	if (typeof rate !== "number" || !Number.isFinite(rate) || rate <= 0) return null;
+	return rate;
 }
 
 // ---------------------------------------------------------------------------
@@ -125,37 +149,10 @@ export class DodoPaymentsProvider implements PaymentProvider {
 		const currency = getCurrencyForCountry(country);
 		if (!currency || !SUPPORTED_LOCAL_CURRENCIES.has(currency)) return null;
 
-		const productId = env.DODO_PRODUCT_MONTHLY_ID ?? env.DODO_PRODUCT_YEARLY_ID ?? env.DODO_PRODUCT_TRIAL_ID;
-		if (!productId) return null;
+		const rate = await getFxRate(currency);
+		if (!rate || !Number.isFinite(rate) || rate <= 0) return null;
 
-		try {
-			const client = getClient();
-			const preview = await client.checkoutSessions.preview({
-				product_cart: [{ product_id: productId, quantity: 1 }],
-				billing_address: { country } as PreviewBillingAddress,
-				billing_currency: currency as PreviewCurrency,
-			});
-
-			const item = preview.product_cart?.[0];
-			if (!item || item.currency !== currency) return null;
-
-			// When adaptive pricing can't localize, Dodo echoes the base amount unchanged
-			// (discounted_price === og_price). Compare the RAW minor amounts, not the scaled
-			// rate: for a 2-decimal currency the rate would be 1, but for a 0-decimal currency
-			// (JPY/KRW/VND) it would be 100 and slip past a `rate === 1` check.
-			if (item.currency !== "USD" && item.discounted_price === item.og_price) return null;
-
-			// `discounted_price` is the list price converted to the local currency (pre-tax);
-			// `og_price` is the USD list price. Their ratio is the exact multiplier Dodo applies.
-			const local = minorToMajor(item.discounted_price, item.currency);
-			const base = minorToMajor(item.og_price, item.og_currency);
-			const rate = base > 0 ? local / base : 0;
-			if (!Number.isFinite(rate) || rate <= 0) return null;
-
-			return { currency: item.currency, rate };
-		} catch {
-			return null;
-		}
+		return { currency, rate };
 	}
 
 	async getCustomerPortalUrl(params: { customerId: string; returnUrl: string }): Promise<CustomerPortalResult> {
