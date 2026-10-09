@@ -127,6 +127,12 @@ export const billingRouter = {
 		})
 		.handler(async ({ context }) => {
 			const country = await detectCountry(context.reqHeaders);
+			console.log("[diagnostic] localized-pricing", {
+				country,
+				cfIpCountry: context.reqHeaders.get("cf-ipcountry"),
+				vercelIpCountry: context.reqHeaders.get("x-vercel-ip-country"),
+				forwardedFor: context.reqHeaders.get("x-forwarded-for"),
+			});
 			if (!country || country === "US") return USD_PRICING;
 
 			const cached = localizedPricingCache.get(country);
