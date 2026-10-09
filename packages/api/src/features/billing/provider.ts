@@ -58,8 +58,6 @@ export interface PaymentProvider {
 		metadata?: Record<string, string>;
 		/** The app theme the user is on, so hosted checkout can match it. */
 		theme?: CheckoutTheme;
-		/** ISO 3166-1 alpha-2 visitor country, seeding adaptive-currency so the charge matches the UI. */
-		country?: string;
 	}): Promise<CheckoutSessionResult>;
 
 	/**

@@ -22,11 +22,9 @@ import { CHECKOUT_THEME_CONFIG } from "./checkout-theme";
 import { getCurrencyForCountry, SUPPORTED_LOCAL_CURRENCIES } from "./country-currency.js";
 import { minorToMajor } from "./currency";
 
-// The SDK's billing-address/country/currency fields are string-literal unions; derive them
-// from the call signatures so validated runtime strings can be passed without fragile deep imports.
-type CheckoutBillingAddress = NonNullable<Parameters<DodoPayments["checkoutSessions"]["create"]>[0]["billing_address"]>;
+// The SDK's preview billing-address/country/currency fields are string-literal unions; derive them
+// from the call signature so validated runtime strings can be passed without fragile deep imports.
 type PreviewBillingAddress = NonNullable<Parameters<DodoPayments["checkoutSessions"]["preview"]>[0]["billing_address"]>;
-type CheckoutCurrency = NonNullable<Parameters<DodoPayments["checkoutSessions"]["create"]>[0]["billing_currency"]>;
 type PreviewCurrency = NonNullable<Parameters<DodoPayments["checkoutSessions"]["preview"]>[0]["billing_currency"]>;
 
 // ---------------------------------------------------------------------------
@@ -95,14 +93,13 @@ export class DodoPaymentsProvider implements PaymentProvider {
 		returnUrl: string;
 		metadata?: Record<string, string>;
 		theme?: CheckoutTheme;
-		country?: string;
 	}): Promise<CheckoutSessionResult> {
 		const client = getClient();
 		const productId = getProductId(params.plan);
 
-		// Pin both country and currency so the hosted checkout matches the price we displayed.
-		const billingCurrency = params.country ? getCurrencyForCountry(params.country) : undefined;
-
+		// Let Dodo use the customer's browser IP geolocation to pick the currency.
+		// This is more accurate than server-side detection, which can be routed through
+		// a different country (e.g. Vercel's edge) than the actual user.
 		const session = await client.checkoutSessions.create({
 			product_cart: [{ product_id: productId, quantity: 1 }],
 			customer: {
@@ -111,8 +108,6 @@ export class DodoPaymentsProvider implements PaymentProvider {
 				...(params.customerId ? { customer_id: params.customerId } : {}),
 			},
 			return_url: params.returnUrl,
-			...(params.country ? { billing_address: { country: params.country } as CheckoutBillingAddress } : {}),
-			...(billingCurrency ? { billing_currency: billingCurrency as CheckoutCurrency } : {}),
 			...(params.metadata ? { metadata: params.metadata } : {}),
 			customization: {
 				theme: params.theme ?? "light",

@@ -142,7 +142,6 @@ export const billingRouter = {
 		.input(
 			z.object({
 				plan: z.enum(["monthly", "yearly", "trial"]),
-				country: z.string().length(2).optional(),
 			}),
 		)
 		.errors({
@@ -163,18 +162,16 @@ export const billingRouter = {
 			}
 
 			try {
-				// epay is still a stub, so route everyone to Dodo. The visitor's country only seeds
-				// Dodo's adaptive-currency billing address so the charge matches the displayed price.
+				// epay is still a stub, so route everyone to Dodo. Dodo uses the customer's
+				// browser IP to resolve the adaptive-currency billing country/currency.
 				const provider = getPaymentProvider();
 				const returnUrl = `${env.APP_URL}/checkout/success`;
-				const country = input.country ?? detectCountry(context.reqHeaders);
 
 				const result = await provider.createCheckoutSession({
 					plan: input.plan,
 					customerEmail: context.user.email,
 					customerName: context.user.name,
 					returnUrl,
-					...(country ? { country } : {}),
 					metadata: { userId: context.user.id },
 					theme: checkoutThemeFromCookie(parseCookies(context.reqHeaders.get("cookie") ?? "").get("theme")),
 				});

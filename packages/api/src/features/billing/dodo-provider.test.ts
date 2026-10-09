@@ -47,14 +47,7 @@ describe("DodoPaymentsProvider.createCheckoutSession", () => {
 		expect(sentCustomization()?.theme).toBe("light");
 	});
 
-	it("pins billing_address.country and billing_currency when a country is supplied", async () => {
-		await new DodoPaymentsProvider().createCheckoutSession({ ...baseParams, country: "EG" });
-
-		expect(sentBody()?.billing_address).toEqual({ country: "EG" });
-		expect(sentBody()?.billing_currency).toBe("EGP");
-	});
-
-	it("omits billing_address and billing_currency when no country is supplied", async () => {
+	it("does not pin billing_address or billing_currency; Dodo uses browser IP geolocation", async () => {
 		await new DodoPaymentsProvider().createCheckoutSession(baseParams);
 
 		expect(sentBody()?.billing_address).toBeUndefined();
