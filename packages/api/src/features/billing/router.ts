@@ -10,12 +10,15 @@ import { billingService, entitlementService, getEffectiveAccess, getPlanLimits, 
 
 /**
  * Resolve the visitor's ISO-3166 country for adaptive-currency pricing, in order of trust:
- * Vercel's edge header (production) → Cloudflare's header (Cloudflare-fronted self-host) →
+ * Cloudflare's edge header (Cloudflare-fronted production) → Vercel's edge header →
  * the GEO_COUNTRY env fallback (local dev / single-region self-host). Returns undefined when
  * none resolve, which keeps the UI on USD.
+ *
+ * Cloudflare is preferred because when Cloudflare sits in front of Vercel, its header reflects
+ * the actual visitor IP; Vercel may see the Cloudflare edge instead.
  */
 function detectCountry(headers: Headers): string | undefined {
-	const raw = headers.get("x-vercel-ip-country") ?? headers.get("cf-ipcountry") ?? env.GEO_COUNTRY;
+	const raw = headers.get("cf-ipcountry") ?? headers.get("x-vercel-ip-country") ?? env.GEO_COUNTRY;
 	return raw && /^[A-Za-z]{2}$/.test(raw) ? raw.toUpperCase() : undefined;
 }
 
