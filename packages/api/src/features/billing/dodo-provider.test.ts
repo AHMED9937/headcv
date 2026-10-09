@@ -70,6 +70,42 @@ describe("DodoPaymentsProvider.getLocalizedPricing", () => {
 		expect(result?.rate).toBeCloseTo(54.16, 2);
 	});
 
+	it("pins billing_currency + country for a non-EG Arab market (SA → SAR)", async () => {
+		previewSession.mockResolvedValue({
+			product_cart: [{ currency: "SAR", og_currency: "USD", discounted_price: 7500, og_price: 2000 }],
+		});
+
+		const result = await new DodoPaymentsProvider().getLocalizedPricing("SA");
+
+		expect(sentPreview()?.billing_currency).toBe("SAR");
+		expect(sentPreview()?.billing_address).toEqual({ country: "SA" });
+		expect(result?.currency).toBe("SAR");
+		// 75.00 SAR ÷ 20.00 USD = 3.75
+		expect(result?.rate).toBeCloseTo(3.75, 2);
+	});
+
+	it("handles a real 0-decimal conversion (JP → JPY)", async () => {
+		previewSession.mockResolvedValue({
+			// ¥3000 (0 decimals) vs $20.00 (cents); rate = 3000 / 20 = 150
+			product_cart: [{ currency: "JPY", og_currency: "USD", discounted_price: 3000, og_price: 2000 }],
+		});
+
+		const result = await new DodoPaymentsProvider().getLocalizedPricing("JP");
+
+		expect(result?.currency).toBe("JPY");
+		expect(result?.rate).toBeCloseTo(150, 2);
+	});
+
+	it("rejects an unconverted 0-decimal echo (raw amounts equal) instead of showing a 100x rate", async () => {
+		// Adaptive off: Dodo echoes the base integer (2000) as JPY. A scaled-rate check would
+		// read this as rate 100 and wrongly localize; the raw-equality guard must reject it.
+		previewSession.mockResolvedValue({
+			product_cart: [{ currency: "JPY", og_currency: "USD", discounted_price: 2000, og_price: 2000 }],
+		});
+
+		expect(await new DodoPaymentsProvider().getLocalizedPricing("JP")).toBeNull();
+	});
+
 	it("returns null for unsupported countries", async () => {
 		expect(await new DodoPaymentsProvider().getLocalizedPricing("AQ")).toBeNull();
 		expect(previewSession).not.toHaveBeenCalled();

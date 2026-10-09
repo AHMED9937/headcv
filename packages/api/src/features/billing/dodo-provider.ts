@@ -139,16 +139,18 @@ export class DodoPaymentsProvider implements PaymentProvider {
 			const item = preview.product_cart?.[0];
 			if (!item || item.currency !== currency) return null;
 
+			// When adaptive pricing can't localize, Dodo echoes the base amount unchanged
+			// (discounted_price === og_price). Compare the RAW minor amounts, not the scaled
+			// rate: for a 2-decimal currency the rate would be 1, but for a 0-decimal currency
+			// (JPY/KRW/VND) it would be 100 and slip past a `rate === 1` check.
+			if (item.currency !== "USD" && item.discounted_price === item.og_price) return null;
+
 			// `discounted_price` is the list price converted to the local currency (pre-tax);
 			// `og_price` is the USD list price. Their ratio is the exact multiplier Dodo applies.
 			const local = minorToMajor(item.discounted_price, item.currency);
 			const base = minorToMajor(item.og_price, item.og_currency);
 			const rate = base > 0 ? local / base : 0;
 			if (!Number.isFinite(rate) || rate <= 0) return null;
-
-			// Dodo sometimes returns a foreign currency with a 1:1 "rate" when it cannot
-			// actually localize the price. Treat that as "no localization available".
-			if (item.currency !== "USD" && rate === 1) return null;
 
 			return { currency: item.currency, rate };
 		} catch {

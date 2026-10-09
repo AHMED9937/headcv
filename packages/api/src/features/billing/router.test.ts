@@ -16,6 +16,7 @@ vi.mock("@headcv/env/server", () => ({
 }));
 
 const { detectCountry } = await import("./router");
+const { getPaymentProvider } = await import("./provider");
 
 const originalFetch = globalThis.fetch;
 
@@ -79,5 +80,22 @@ describe("detectCountry", () => {
 		(fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("network"));
 
 		expect(await detectCountry(headers)).toBeUndefined();
+	});
+});
+
+describe("localized-pricing provider routing", () => {
+	// Pricing must resolve to a provider that implements getLocalizedPricing. The factory
+	// currently routes every country (incl. EG) to Dodo; if it ever routed EG to the epay
+	// stub (which has no getLocalizedPricing), Egypt would silently fall back to USD.
+	it("uses the Dodo provider, which implements getLocalizedPricing", () => {
+		const provider = getPaymentProvider();
+		expect(provider.name).toBe("dodo");
+		expect(typeof provider.getLocalizedPricing).toBe("function");
+	});
+
+	it("routes every country, including EG, to a provider that can price", () => {
+		const provider = getPaymentProvider("EG");
+		expect(provider.name).toBe("dodo");
+		expect(typeof provider.getLocalizedPricing).toBe("function");
 	});
 });
