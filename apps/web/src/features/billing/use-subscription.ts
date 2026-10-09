@@ -2,9 +2,11 @@ import { t } from "@lingui/core/macro";
 import { ORPCError } from "@orpc/client";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useRouteContext } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { client, orpc } from "@/libs/orpc/client";
+
+const CHECKOUT_REDIRECT_TIMEOUT_MS = 10_000;
 
 export type CheckoutPlan = "monthly" | "yearly" | "trial";
 
@@ -63,8 +65,20 @@ export function useSubscription({ enabled = true }: { enabled?: boolean } = {}) 
 /** Starts checkout; anonymous visitors are sent to login with the plan intent preserved. */
 export function useCheckout() {
 	const [pendingPlan, setPendingPlan] = useState<CheckoutPlan | null>(null);
+	const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const navigate = useNavigate();
 	const { session } = useRouteContext({ strict: false });
+
+	useEffect(() => {
+		// When the user returns via the browser back button, some browsers restore the page
+		// from the back-forward cache (bfcache) with the previous loading state still set.
+		// Reset it so buttons don't stay stuck on "Redirecting to checkout...".
+		const handlePageShow = (event: PageTransitionEvent) => {
+			if (event.persisted) setPendingPlan(null);
+		};
+		window.addEventListener("pageshow", handlePageShow);
+		return () => window.removeEventListener("pageshow", handlePageShow);
+	}, []);
 
 	const checkout = async (plan: CheckoutPlan) => {
 		if (!session) {
@@ -73,10 +87,21 @@ export function useCheckout() {
 		}
 
 		setPendingPlan(plan);
+		redirectTimeoutRef.current = setTimeout(() => setPendingPlan(null), CHECKOUT_REDIRECT_TIMEOUT_MS);
+
 		try {
 			const result = await client.billing.createCheckoutSession({ plan });
+			if (redirectTimeoutRef.current) {
+				clearTimeout(redirectTimeoutRef.current);
+				redirectTimeoutRef.current = null;
+			}
+			if (!result.checkoutUrl) throw new Error("Missing checkout URL");
 			window.location.href = result.checkoutUrl;
 		} catch (error) {
+			if (redirectTimeoutRef.current) {
+				clearTimeout(redirectTimeoutRef.current);
+				redirectTimeoutRef.current = null;
+			}
 			setPendingPlan(null);
 			toast.error(
 				error instanceof ORPCError && error.code === "TRIAL_ALREADY_USED"
