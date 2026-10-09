@@ -8,6 +8,21 @@ import { client, orpc } from "@/libs/orpc/client";
 
 export type CheckoutPlan = "monthly" | "yearly" | "trial";
 
+export type LocalizedPricing = { currency: string; rate: number };
+const USD_PRICING: LocalizedPricing = { currency: "USD", rate: 1 };
+
+/**
+ * The visitor's adaptive-currency pricing: the currency to display and the USD→local
+ * multiplier. Falls back to USD while loading or on any error, so prices always render.
+ */
+export function useLocalizedPricing(): LocalizedPricing {
+	const { data } = useQuery({
+		...orpc.billing.getLocalizedPricing.queryOptions({ input: {} }),
+		staleTime: 60 * 60 * 1000,
+	});
+	return data ?? USD_PRICING;
+}
+
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 /** Share of a limited quota at which usage meters start warning. */

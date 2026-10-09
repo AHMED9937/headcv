@@ -8,6 +8,7 @@ import { PlanPicker } from "./plan-picker";
 
 vi.mock("./use-subscription", () => ({
 	useCheckout: () => ({ checkout: vi.fn(), pendingPlan: null, isLoading: false }),
+	useLocalizedPricing: () => ({ currency: "USD", rate: 1 }),
 }));
 
 beforeAll(() => {

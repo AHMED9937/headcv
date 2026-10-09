@@ -139,6 +139,14 @@ export const env = createEnv({
 		EPAY_API_KEY: z.string().min(1).optional(),
 		EPAY_WEBHOOK_KEY: z.string().min(1).optional(),
 
+		// Geo: ISO-3166 alpha-2 fallback used for adaptive-currency pricing when the request
+		// carries no geo header (local dev, or a single-region self-host). Vercel's
+		// `x-vercel-ip-country` always wins in production.
+		GEO_COUNTRY: z
+			.string()
+			.regex(/^[A-Za-z]{2}$/)
+			.optional(),
+
 		// Feature Flags
 		FLAG_DISABLE_SIGNUPS: z.stringbool().default(false),
 		FLAG_DISABLE_EMAIL_AUTH: z.stringbool().default(false),

@@ -32,6 +32,7 @@ const subscription = vi.hoisted(() => ({ trialEligible: true }));
 vi.mock("@/features/billing/use-subscription", async (importOriginal) => ({
 	...(await importOriginal<typeof import("@/features/billing/use-subscription")>()),
 	useSubscription: () => subscription,
+	useLocalizedPricing: () => ({ currency: "USD", rate: 1 }),
 }));
 
 afterEach(() => {

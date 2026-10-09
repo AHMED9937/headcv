@@ -11,10 +11,11 @@ vi.mock("@headcv/env/server", () => ({
 }));
 
 const createSession = vi.hoisted(() => vi.fn());
+const previewSession = vi.hoisted(() => vi.fn());
 
 vi.mock("dodopayments", () => ({
 	default: class {
-		checkoutSessions = { create: createSession };
+		checkoutSessions = { create: createSession, preview: previewSession };
 	},
 }));
 
@@ -23,10 +24,12 @@ const { CHECKOUT_THEME_CONFIG, checkoutThemeFromCookie } = await import("./check
 
 const baseParams = { plan: "monthly" as const, customerEmail: "a@example.com", returnUrl: "https://app.test/done" };
 
-const sentCustomization = () => createSession.mock.calls.at(-1)?.[0].customization;
+const sentBody = () => createSession.mock.calls.at(-1)?.[0];
+const sentCustomization = () => sentBody()?.customization;
 
 beforeEach(() => {
 	createSession.mockReset();
+	previewSession.mockReset();
 	createSession.mockResolvedValue({ checkout_url: "https://test.dodopayments.com/c", session_id: "cks_1" });
 });
 
@@ -41,6 +44,38 @@ describe("DodoPaymentsProvider.createCheckoutSession", () => {
 		await new DodoPaymentsProvider().createCheckoutSession(baseParams);
 
 		expect(sentCustomization()?.theme).toBe("light");
+	});
+
+	it("pins billing_address.country when a country is supplied", async () => {
+		await new DodoPaymentsProvider().createCheckoutSession({ ...baseParams, country: "EG" });
+
+		expect(sentBody()?.billing_address).toEqual({ country: "EG" });
+	});
+
+	it("omits billing_address when no country is supplied", async () => {
+		await new DodoPaymentsProvider().createCheckoutSession(baseParams);
+
+		expect(sentBody()?.billing_address).toBeUndefined();
+	});
+});
+
+describe("DodoPaymentsProvider.getLocalizedPricing", () => {
+	it("derives the local currency and USD→local rate from the checkout preview", async () => {
+		previewSession.mockResolvedValue({
+			product_cart: [{ currency: "EGP", og_currency: "USD", discounted_price: 108_320, og_price: 2000 }],
+		});
+
+		const result = await new DodoPaymentsProvider().getLocalizedPricing("EG");
+
+		expect(result?.currency).toBe("EGP");
+		// 1083.20 EGP ÷ 20.00 USD = 54.16
+		expect(result?.rate).toBeCloseTo(54.16, 2);
+	});
+
+	it("returns null (UI stays in USD) when the preview call fails", async () => {
+		previewSession.mockRejectedValue(new Error("network"));
+
+		expect(await new DodoPaymentsProvider().getLocalizedPricing("EG")).toBeNull();
 	});
 });
 

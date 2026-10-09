@@ -6,7 +6,7 @@ import { CheckIcon, LockSimpleIcon, SparkleIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Button } from "@headcv/ui/components/button";
 import { cn } from "@headcv/utils/style";
-import { useCheckout } from "./use-subscription";
+import { useCheckout, useLocalizedPricing } from "./use-subscription";
 
 const PRO_PRICES = { monthly: 20, yearly: 5, yearlyTotal: 60, trial: 3 } as const;
 
@@ -28,7 +28,8 @@ export function PlanPicker({ hideTrial = false, className }: PlanPickerProps) {
 	const [period, setPeriod] = useState<"monthly" | "yearly">("yearly");
 	const { checkout, pendingPlan, isLoading } = useCheckout();
 	const { i18n } = useLingui();
-	const money = (value: number) => i18n.number(value, { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+	const { currency, rate } = useLocalizedPricing();
+	const money = (value: number) => i18n.number(value * rate, { style: "currency", currency, maximumFractionDigits: 0 });
 
 	const ctaLabel = (plan: CheckoutPlan, label: React.ReactNode) =>
 		pendingPlan === plan ? <Trans id="home.pricing.loading">Redirecting to checkout...</Trans> : label;
