@@ -8,18 +8,59 @@ import { checkoutThemeFromCookie } from "./checkout-theme";
 import { getPaymentProvider } from "./provider.js";
 import { billingService, entitlementService, getEffectiveAccess, getPlanLimits, hasUsedTrial } from "./service";
 
+const IP_GEO_TTL_MS = 24 * 60 * 60 * 1000;
+const ipCountryCache = new Map<string, { country: string | undefined; expires: number }>();
+
+function isPrivateIp(ip: string): boolean {
+	// Fast-path for common local/cloud values that should never be geolocated.
+	if (ip === "127.0.0.1" || ip === "::1" || ip.startsWith("10.") || ip.startsWith("192.168.")) {
+		return true;
+	}
+	// 172.16.0.0/12
+	if (/^172\.(1[6-9]|2\d|3[0-1])\./.test(ip)) return true;
+	// fc00::/7 (IPv6 ULA)
+	if (/^fc/.test(ip) || /^fd/.test(ip)) return true;
+	return false;
+}
+
+async function resolveCountryFromIp(ip: string): Promise<string | undefined> {
+	try {
+		const res = await fetch(`https://ipwho.is/${encodeURIComponent(ip)}`);
+		if (!res.ok) return undefined;
+		const data = (await res.json()) as { country_code?: string };
+		const code = data.country_code;
+		if (code && /^[A-Za-z]{2}$/.test(code)) return code.toUpperCase();
+	} catch {
+		// Network/rate-limit: fall through to undefined.
+	}
+	return undefined;
+}
+
 /**
  * Resolve the visitor's ISO-3166 country for adaptive-currency pricing, in order of trust:
- * Cloudflare's edge header (Cloudflare-fronted production) → Vercel's edge header →
- * the GEO_COUNTRY env fallback (local dev / single-region self-host). Returns undefined when
- * none resolve, which keeps the UI on USD.
+ * 1. Trusted proxy headers (Cloudflare / Vercel) when present.
+ * 2. The first public IP in X-Forwarded-For via a geolocation service.
+ * 3. The GEO_COUNTRY env fallback (local dev / single-region self-host).
  *
- * Cloudflare is preferred because when Cloudflare sits in front of Vercel, its header reflects
- * the actual visitor IP; Vercel may see the Cloudflare edge instead.
+ * Returns undefined when nothing resolves, which keeps the UI on USD.
  */
-function detectCountry(headers: Headers): string | undefined {
-	const raw = headers.get("cf-ipcountry") ?? headers.get("x-vercel-ip-country") ?? env.GEO_COUNTRY;
-	return raw && /^[A-Za-z]{2}$/.test(raw) ? raw.toUpperCase() : undefined;
+export async function detectCountry(headers: Headers): Promise<string | undefined> {
+	const proxyCountry = headers.get("cf-ipcountry") ?? headers.get("x-vercel-ip-country");
+	if (proxyCountry && /^[A-Za-z]{2}$/.test(proxyCountry)) return proxyCountry.toUpperCase();
+
+	const forwarded = headers.get("x-forwarded-for");
+	const ip = forwarded?.split(",")[0]?.trim();
+	if (ip && !isPrivateIp(ip)) {
+		const cached = ipCountryCache.get(ip);
+		if (cached && cached.expires > Date.now()) return cached.country;
+
+		const country = await resolveCountryFromIp(ip);
+		ipCountryCache.set(ip, { country, expires: Date.now() + IP_GEO_TTL_MS });
+		return country;
+	}
+
+	const envCountry = env.GEO_COUNTRY;
+	return envCountry && /^[A-Za-z]{2}$/.test(envCountry) ? envCountry.toUpperCase() : undefined;
 }
 
 const USD_PRICING = { currency: "USD", rate: 1 } as const;
@@ -85,7 +126,7 @@ export const billingRouter = {
 			summary: "Get adaptive-currency pricing for the visitor",
 		})
 		.handler(async ({ context }) => {
-			const country = detectCountry(context.reqHeaders);
+			const country = await detectCountry(context.reqHeaders);
 			if (!country || country === "US") return USD_PRICING;
 
 			const cached = localizedPricingCache.get(country);
