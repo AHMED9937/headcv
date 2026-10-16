@@ -167,7 +167,7 @@ const PublicationForm = withForm({
 										name={field.name}
 										value={field.state.value}
 										onBlur={field.handleBlur}
-										onChange={(event) => field.handleChange(event.target.value)}
+										onValueChange={field.handleChange}
 									/>
 								}
 							/>

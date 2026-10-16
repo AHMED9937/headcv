@@ -12,12 +12,15 @@ type FieldFrameProps = {
 };
 
 type TextFieldProps = FieldFrameProps &
-	Omit<React.ComponentProps<typeof Input>, "children" | "defaultValue" | "name" | "onBlur" | "onChange" | "value">;
+	Omit<
+		React.ComponentProps<typeof Input>,
+		"children" | "defaultValue" | "name" | "onBlur" | "onChange" | "onInput" | "value"
+	>;
 
 type InputGroupTextFieldProps = FieldFrameProps &
 	Omit<
 		React.ComponentProps<typeof InputGroupInput>,
-		"children" | "defaultValue" | "name" | "onBlur" | "onChange" | "value"
+		"children" | "defaultValue" | "name" | "onBlur" | "onChange" | "onInput" | "value"
 	>;
 
 type NumberFieldProps = FieldFrameProps &
@@ -32,6 +35,7 @@ function TextField({ label, description, formItemClassName, ...props }: TextFiel
 	const field = useFieldContext<string>();
 
 	const hasError = field.state.meta.isTouched && field.state.meta.errors.length > 0;
+	const syncValue = (element: HTMLInputElement) => field.handleChange(element.value);
 
 	return (
 		<FormItem hasError={hasError} className={formItemClassName}>
@@ -40,10 +44,14 @@ function TextField({ label, description, formItemClassName, ...props }: TextFiel
 				render={
 					<Input
 						{...props}
-						name={field.name}
+						autoComplete={props.autoComplete ?? "off"}
+						name={`resume-${field.name}`}
 						value={field.state.value}
-						onBlur={field.handleBlur}
-						onChange={(event) => field.handleChange(event.target.value)}
+						onBlur={(event) => {
+							syncValue(event.currentTarget);
+							field.handleBlur();
+						}}
+						onInput={(event) => syncValue(event.currentTarget)}
 					/>
 				}
 			/>
@@ -57,6 +65,7 @@ function InputGroupTextField({ label, description, formItemClassName, ...props }
 	const field = useFieldContext<string>();
 
 	const hasError = field.state.meta.isTouched && field.state.meta.errors.length > 0;
+	const syncValue = (element: HTMLInputElement) => field.handleChange(element.value);
 
 	return (
 		<FormItem hasError={hasError} className={formItemClassName}>
@@ -65,10 +74,14 @@ function InputGroupTextField({ label, description, formItemClassName, ...props }
 				render={
 					<InputGroupInput
 						{...props}
-						name={field.name}
+						autoComplete={props.autoComplete ?? "off"}
+						name={`resume-${field.name}`}
 						value={field.state.value}
-						onBlur={field.handleBlur}
-						onChange={(event) => field.handleChange(event.target.value)}
+						onBlur={(event) => {
+							syncValue(event.currentTarget);
+							field.handleBlur();
+						}}
+						onInput={(event) => syncValue(event.currentTarget)}
 					/>
 				}
 			/>

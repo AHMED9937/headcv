@@ -199,7 +199,7 @@ const ExperienceForm = withForm({
 										name={field.name}
 										value={field.state.value}
 										onBlur={field.handleBlur}
-										onChange={(event) => field.handleChange(event.target.value)}
+										onValueChange={field.handleChange}
 									/>
 								}
 							/>
@@ -220,7 +220,7 @@ const ExperienceForm = withForm({
 										name={field.name}
 										value={field.state.value}
 										onBlur={field.handleBlur}
-										onChange={(event) => field.handleChange(event.target.value)}
+										onValueChange={field.handleChange}
 									/>
 								}
 							/>
@@ -413,7 +413,7 @@ const RoleFields = withForm({
 											name={field.name}
 											value={field.state.value}
 											onBlur={field.handleBlur}
-											onChange={(event) => field.handleChange(event.target.value)}
+											onValueChange={field.handleChange}
 										/>
 									}
 								/>
@@ -434,7 +434,7 @@ const RoleFields = withForm({
 											name={field.name}
 											value={field.state.value}
 											onBlur={field.handleBlur}
-											onChange={(event) => field.handleChange(event.target.value)}
+											onValueChange={field.handleChange}
 										/>
 									}
 								/>
