@@ -605,6 +605,11 @@ msgstr "Back to entries"
 msgid "Back to Login"
 msgstr "Back to Login"
 
+#. Button label on the sign-in error page
+#: src/features/auth/pages/auth-error.tsx
+msgid "Back to sign in"
+msgstr "Back to sign in"
+
 #: src/routes/builder/$resumeId/-components/guided-editor.tsx
 msgid "Back to step"
 msgstr "Back to step"
@@ -979,6 +984,11 @@ msgstr "Continue where you left off"
 #: src/dialogs/resume/import.tsx
 msgid "Continue where you left off by importing an existing resume from a PDF or Microsoft Word file."
 msgstr "Continue where you left off by importing an existing resume from a PDF or Microsoft Word file."
+
+#. Label for the Google sign-in/sign-up button
+#: src/features/auth/components/social-auth.tsx
+msgid "Continue with Google"
+msgstr "Continue with Google"
 
 #: src/routes/agent/-components/thread-workspace.tsx
 msgid "Conversation copied."
@@ -2035,8 +2045,6 @@ msgid "Go to…"
 msgstr "Go to…"
 
 #. Authentication provider display name in account settings
-#. Brand name label for Google social sign-in button
-#: src/features/auth/components/social-auth.tsx
 #: src/features/settings/authentication/components/hooks.tsx
 msgid "Google"
 msgstr "Google"
@@ -2759,6 +2767,10 @@ msgstr "New Password"
 #: src/routes/builder/$resumeId/-sidebar/left/shared/section-item.tsx
 msgid "New Section"
 msgstr "New Section"
+
+#: src/features/auth/pages/auth-error.tsx
+msgid "New sign-ups are currently closed."
+msgstr "New sign-ups are currently closed."
 
 #: src/routes/agent/-components/thread-sidebar.tsx
 msgid "New thread"
@@ -3802,6 +3814,10 @@ msgstr "Slug"
 msgid "Something went wrong while analyzing your resume."
 msgstr "Something went wrong while analyzing your resume."
 
+#: src/features/auth/pages/auth-error.tsx
+msgid "Something went wrong while signing you in. Please try again."
+msgstr "Something went wrong while signing you in. Please try again."
+
 #: src/libs/error-message.ts
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "Something went wrong. Please try again."
@@ -4686,10 +4702,18 @@ msgstr "Volunteer"
 msgid "We could not send the verification email. Please try again."
 msgstr "We could not send the verification email. Please try again."
 
+#: src/features/auth/pages/auth-error.tsx
+msgid "We couldn't connect this sign-in method to your account. Sign in with your email and password, then try again."
+msgstr "We couldn't connect this sign-in method to your account. Sign in with your email and password, then try again."
+
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.error"
 msgstr "We couldn't load your plan right now."
+
+#: src/features/auth/pages/auth-error.tsx
+msgid "We couldn't sign you in"
+msgstr "We couldn't sign you in"
 
 #. js-lingui-explicit-id
 #: src/routes/checkout/success.tsx
@@ -4952,6 +4976,10 @@ msgstr "Your resume has been updated successfully."
 #: src/routes/builder/$resumeId/-sidebar/right/sections/sharing.tsx
 msgid "Your resume's public link is currently protected by a password. Share the password only with people you trust."
 msgstr "Your resume's public link is currently protected by a password. Share the password only with people you trust."
+
+#: src/features/auth/pages/auth-error.tsx
+msgid "Your sign-in session expired. Please try again."
+msgstr "Your sign-in session expired. Please try again."
 
 #: src/routes/builder/$resumeId/-sidebar/left/sections/manage-photo-dialog.tsx
 msgid "Zoom"
