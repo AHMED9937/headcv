@@ -5,6 +5,7 @@ import { Button } from "@headcv/ui/components/button";
 import { Separator } from "@headcv/ui/components/separator";
 import { getInitials } from "@headcv/utils/string";
 import { cn } from "@headcv/utils/style";
+import { getAddedOptionalSections } from "@/features/builder/additional-sections";
 import { BuilderStepActions } from "@/features/builder/step-actions";
 import { getStepSectionId, useBuilderStep } from "@/features/builder/use-builder-step";
 import { useCurrentResume } from "@/features/resume/builder/draft";
@@ -25,7 +26,9 @@ export function BuilderSidebarLeft({ guided = false }: { guided?: boolean }) {
 	const guidedSection = getStepSectionId(currentStep);
 	const sections = guided
 		? guidedSection
-			? [guidedSection]
+			? guidedSection === "custom"
+				? [guidedSection, ...getAddedOptionalSections(resume.data)]
+				: [guidedSection]
 			: []
 		: getLayoutOrderedLeftSidebarSections(resume.data).filter((section) => section !== "ai-review");
 

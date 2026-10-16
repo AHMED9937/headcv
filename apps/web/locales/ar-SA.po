@@ -269,6 +269,10 @@ msgstr "أضف نبذة"
 msgid "Add and test an AI provider before starting a chat."
 msgstr "أضف مزوّد ذكاء اصطناعي واختبره قبل بدء المحادثة."
 
+#: src/features/builder/additional-sections.tsx
+msgid "Add another"
+msgstr "إضافة أخرى"
+
 #: src/components/input/rich-input.tsx
 msgid "Add Column After"
 msgstr "إضافة عمود بعد"
@@ -321,10 +325,6 @@ msgstr "إضافة المحدد"
 #: src/routes/_home/-sections/tools.tsx
 msgid "home.steps.details"
 msgstr "أضف خبراتك"
-
-#: src/features/builder/additional-sections.tsx
-msgid "Added"
-msgstr "تمت الإضافة"
 
 #: src/features/builder/steps.ts
 msgid "Additional Sections"
