@@ -173,7 +173,9 @@ export function BuilderHeader({ compact = false, workspace, progress }: BuilderH
 								</span>
 							</div>
 							<div className="my-1 h-px bg-border/60" />
-							<div className="max-h-80 space-y-0.5 overflow-y-auto">
+							{/* No inner height cap: the popup already fits the viewport and scrolls, and a nested
+							    cap clipped the last step ("Export") behind its own scrollbar. */}
+							<div className="space-y-0.5">
 								{guidedSteps.map((step, index) => {
 									const isCurrent = step.id === progress.currentStep;
 									const isCompleted = isStepComplete(step.id, resume);

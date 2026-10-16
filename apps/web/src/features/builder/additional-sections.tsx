@@ -1,4 +1,4 @@
-import type { SectionType } from "@headcv/schema/resume/data";
+import type { ResumeData, SectionType } from "@headcv/schema/resume/data";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { PlusIcon } from "@phosphor-icons/react";
@@ -7,7 +7,7 @@ import { useDialogStore } from "@/dialogs/store";
 import { useCurrentResume, useUpdateResumeData } from "@/features/resume/builder/draft";
 import { getSectionIcon, getSectionTitle } from "@/libs/resume/section";
 
-const OPTIONAL_SECTIONS: SectionType[] = [
+export const OPTIONAL_SECTIONS: SectionType[] = [
 	"projects",
 	"languages",
 	"interests",
@@ -17,6 +17,13 @@ const OPTIONAL_SECTIONS: SectionType[] = [
 	"volunteer",
 	"references",
 ];
+
+export function getAddedOptionalSections(data: ResumeData): SectionType[] {
+	return OPTIONAL_SECTIONS.filter((type) => {
+		const section = data.sections[type];
+		return !section.hidden && section.items.length > 0;
+	});
+}
 
 export function AdditionalSections() {
 	const resume = useCurrentResume();
@@ -65,9 +72,10 @@ export function AdditionalSections() {
 							</div>
 
 							<div className="flex items-center gap-2">
-								<Button size="sm" variant="outline" disabled={hasItems && !isHidden} onClick={() => handleAdd(type)}>
+								{/* Stays enabled once a section has entries so more can be added. */}
+								<Button size="sm" variant="outline" onClick={() => handleAdd(type)}>
 									<PlusIcon className="size-3.5" />
-									{hasItems && !isHidden ? t`Added` : t`Add`}
+									{hasItems && !isHidden ? t`Add another` : t`Add`}
 								</Button>
 
 								{!isHidden && !hasItems && (
