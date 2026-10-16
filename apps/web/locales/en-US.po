@@ -264,6 +264,10 @@ msgstr "Add a summary"
 msgid "Add and test an AI provider before starting a chat."
 msgstr "Add and test an AI provider before starting a chat."
 
+#: src/features/builder/additional-sections.tsx
+msgid "Add another"
+msgstr "Add another"
+
 #: src/components/input/rich-input.tsx
 msgid "Add Column After"
 msgstr "Add Column After"
@@ -316,10 +320,6 @@ msgstr "Add selected"
 #: src/routes/_home/-sections/tools.tsx
 msgid "home.steps.details"
 msgstr "Add your experience"
-
-#: src/features/builder/additional-sections.tsx
-msgid "Added"
-msgstr "Added"
 
 #: src/features/builder/steps.ts
 msgid "Additional Sections"
