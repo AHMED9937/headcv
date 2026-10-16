@@ -878,10 +878,6 @@ msgstr "اختر من قوالبنا، مع مساحة لخبراتك وشخصي
 msgid "Choose icon"
 msgstr "اختر أيقونة"
 
-#: src/components/input/month-input.tsx
-msgid "Choose month"
-msgstr "اختر الشهر"
-
 #: src/components/section-tips.tsx
 msgid "Choose specific interests that add useful context or show commitment."
 msgstr "اختر اهتمامات محددة تضيف سياقًا مفيدًا أو تُظهر الالتزام."
@@ -906,6 +902,10 @@ msgstr "خطوط نظيفة. خبراتك تأخذ الصدارة."
 #: src/components/input/rich-input.tsx
 msgid "Clear"
 msgstr "واضح"
+
+#: src/components/input/month-input.tsx
+msgid "Clear date"
+msgstr "مسح التاريخ"
 
 #: src/dialogs/resume/import.tsx
 msgid "Click here to select a file to import"
@@ -2785,6 +2785,10 @@ msgstr "موضوع جديد"
 msgid "Next"
 msgstr "التالي"
 
+#: src/components/input/month-input.tsx
+msgid "Next year"
+msgstr "السنة التالية"
+
 #: src/features/resume/builder/ai-review.tsx
 msgid "No"
 msgstr "لا"
@@ -3087,6 +3091,10 @@ msgstr "اضغط على <0>Enter</0> لفتح"
 #: src/routes/builder/$resumeId/-components/mobile-view-switch.tsx
 msgid "Preview"
 msgstr "معاينة"
+
+#: src/components/input/month-input.tsx
+msgid "Previous year"
+msgstr "السنة السابقة"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/footer.tsx

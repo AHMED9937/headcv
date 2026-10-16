@@ -7,14 +7,7 @@ import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { MonthInput } from "./month-input";
 
-const showPicker = vi.fn();
-
 beforeEach(() => {
-	showPicker.mockReset();
-	Object.defineProperty(HTMLInputElement.prototype, "showPicker", {
-		configurable: true,
-		value: showPicker,
-	});
 	i18n.loadAndActivate({ locale: "en", messages: {} });
 });
 
@@ -26,21 +19,32 @@ const renderMonthInput = (props: React.ComponentProps<typeof MonthInput> = {}) =
 	);
 
 describe("MonthInput", () => {
-	it("opens the month picker when the field is clicked", async () => {
+	it("opens the application month picker when the field is clicked", async () => {
 		renderMonthInput();
 		await userEvent.click(screen.getByLabelText("Start date"));
-		expect(showPicker).toHaveBeenCalledTimes(1);
+		expect(screen.getByRole("button", { name: "Jan" })).toBeInTheDocument();
 	});
 
-	it("opens the month picker when the calendar button is clicked", async () => {
-		renderMonthInput();
-		await userEvent.click(screen.getByRole("button", { name: "Choose month" }));
-		expect(showPicker).toHaveBeenCalledTimes(1);
+	it("returns a canonical YYYY-MM value when a month is selected", async () => {
+		const onValueChange = vi.fn();
+		renderMonthInput({ onValueChange });
+		await userEvent.click(screen.getByLabelText("Start date"));
+		await userEvent.click(screen.getByRole("button", { name: "Mar" }));
+		expect(onValueChange).toHaveBeenCalledWith(`${new Date().getFullYear()}-03`);
+	});
+
+	it("shows and can clear the formatted selected month", async () => {
+		const onValueChange = vi.fn();
+		renderMonthInput({ value: "2021-12", onValueChange });
+		expect(screen.getByLabelText("Start date")).toHaveValue("December 2021");
+		await userEvent.click(screen.getByLabelText("Start date"));
+		await userEvent.click(screen.getByRole("button", { name: "Clear date" }));
+		expect(onValueChange).toHaveBeenCalledWith("");
 	});
 
 	it("does not open the picker when the field is disabled", async () => {
 		renderMonthInput({ disabled: true });
 		await userEvent.click(screen.getByLabelText("Start date"));
-		expect(showPicker).not.toHaveBeenCalled();
+		expect(screen.queryByRole("button", { name: "Jan" })).not.toBeInTheDocument();
 	});
 });

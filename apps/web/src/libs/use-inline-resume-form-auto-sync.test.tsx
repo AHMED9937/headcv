@@ -27,15 +27,11 @@ function TestForm({ mode }: { mode: "create" | "update" }) {
 		onSubmit: async () => {},
 	});
 
-	const name = useStore(form.store, (state) => state.values.name);
-
 	return (
 		<div>
-			<input
-				data-testid="name-input"
-				value={name}
-				onChange={(event) => form.setFieldValue("name", event.target.value)}
-			/>
+			<form.AppField name="name">
+				{(field) => <field.TextField data-testid="name-input" aria-label="Name" />}
+			</form.AppField>
 			<button type="button" data-testid="submit" onClick={() => form.handleSubmit()}>
 				Submit
 			</button>
@@ -131,7 +127,7 @@ describe("useInlineResumeFormAutoSync", () => {
 		const input = screen.getByTestId("name-input");
 
 		await act(async () => {
-			fireEvent.change(input, { target: { value: "Updated" } });
+			fireEvent.input(input, { target: { value: "Updated" } });
 		});
 
 		act(() => {
@@ -143,6 +139,29 @@ describe("useInlineResumeFormAutoSync", () => {
 			sectionType: "experience",
 			itemId: "item-1",
 			values: { id: "item-1", hidden: false, name: "Updated" },
+		});
+	});
+
+	it("synchronizes browser autofill replacement into the live preview", async () => {
+		render(
+			<Wrapper mode="update">
+				<TestForm mode="update" />
+			</Wrapper>,
+		);
+
+		const input = screen.getByTestId("name-input");
+		expect(input).toHaveAttribute("autocomplete", "off");
+		expect(input).toHaveAttribute("name", "resume-name");
+
+		await act(async () => {
+			fireEvent.input(input, {
+				target: { value: "Ahmed Mohamed" },
+				inputType: "insertReplacementText",
+			});
+		});
+
+		expect(useInlineEditPreviewOverrideStore.getState().override).toMatchObject({
+			values: { name: "Ahmed Mohamed" },
 		});
 	});
 
@@ -251,7 +270,7 @@ describe("React Compiler hook-order safety", () => {
 		);
 
 		await act(async () => {
-			fireEvent.change(screen.getByTestId("name-input"), { target: { value: "A" } });
+			fireEvent.input(screen.getByTestId("name-input"), { target: { value: "A" } });
 		});
 
 		act(() => {

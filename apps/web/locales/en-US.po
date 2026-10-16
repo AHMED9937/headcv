@@ -873,10 +873,6 @@ msgstr "Choose from our resume templates, with room for your experience and pers
 msgid "Choose icon"
 msgstr "Choose icon"
 
-#: src/components/input/month-input.tsx
-msgid "Choose month"
-msgstr "Choose month"
-
 #: src/components/section-tips.tsx
 msgid "Choose specific interests that add useful context or show commitment."
 msgstr "Choose specific interests that add useful context or show commitment."
@@ -901,6 +897,10 @@ msgstr "Clean lines. Your experience takes the lead."
 #: src/components/input/rich-input.tsx
 msgid "Clear"
 msgstr "Clear"
+
+#: src/components/input/month-input.tsx
+msgid "Clear date"
+msgstr "Clear date"
 
 #: src/dialogs/resume/import.tsx
 msgid "Click here to select a file to import"
@@ -2780,6 +2780,10 @@ msgstr "New thread"
 msgid "Next"
 msgstr "Next"
 
+#: src/components/input/month-input.tsx
+msgid "Next year"
+msgstr "Next year"
+
 #: src/features/resume/builder/ai-review.tsx
 msgid "No"
 msgstr "No"
@@ -3082,6 +3086,10 @@ msgstr "Press <0>Enter</0> to open"
 #: src/routes/builder/$resumeId/-components/mobile-view-switch.tsx
 msgid "Preview"
 msgstr "Preview"
+
+#: src/components/input/month-input.tsx
+msgid "Previous year"
+msgstr "Previous year"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/footer.tsx

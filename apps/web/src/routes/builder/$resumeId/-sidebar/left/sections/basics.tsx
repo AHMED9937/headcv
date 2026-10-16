@@ -69,11 +69,18 @@ export function BasicsSectionForm({ value, onChange }: BasicsSectionFormProps = 
 						<FormControl
 							render={
 								<Input
+									autoComplete="name"
 									name={field.name}
 									value={field.state.value}
-									onBlur={field.handleBlur}
-									onChange={(e) => {
-										field.handleChange(e.target.value);
+									onBlur={(event) => {
+										if (event.currentTarget.value !== field.state.value) {
+											field.handleChange(event.currentTarget.value);
+											void form.handleSubmit();
+										}
+										field.handleBlur();
+									}}
+									onInput={(event) => {
+										field.handleChange(event.currentTarget.value);
 										void form.handleSubmit();
 									}}
 								/>
@@ -93,11 +100,18 @@ export function BasicsSectionForm({ value, onChange }: BasicsSectionFormProps = 
 						<FormControl
 							render={
 								<Input
+									autoComplete="off"
 									name={field.name}
 									value={field.state.value}
-									onBlur={field.handleBlur}
-									onChange={(e) => {
-										field.handleChange(e.target.value);
+									onBlur={(event) => {
+										if (event.currentTarget.value !== field.state.value) {
+											field.handleChange(event.currentTarget.value);
+											void form.handleSubmit();
+										}
+										field.handleBlur();
+									}}
+									onInput={(event) => {
+										field.handleChange(event.currentTarget.value);
 										void form.handleSubmit();
 									}}
 								/>
@@ -118,11 +132,18 @@ export function BasicsSectionForm({ value, onChange }: BasicsSectionFormProps = 
 							render={
 								<Input
 									type="email"
+									autoComplete="email"
 									name={field.name}
 									value={field.state.value}
-									onBlur={field.handleBlur}
-									onChange={(e) => {
-										field.handleChange(e.target.value);
+									onBlur={(event) => {
+										if (event.currentTarget.value !== field.state.value) {
+											field.handleChange(event.currentTarget.value);
+											void form.handleSubmit();
+										}
+										field.handleBlur();
+									}}
+									onInput={(event) => {
+										field.handleChange(event.currentTarget.value);
 										void form.handleSubmit();
 									}}
 								/>
@@ -142,11 +163,18 @@ export function BasicsSectionForm({ value, onChange }: BasicsSectionFormProps = 
 						<FormControl
 							render={
 								<Input
+									autoComplete="tel"
 									name={field.name}
 									value={field.state.value}
-									onBlur={field.handleBlur}
-									onChange={(e) => {
-										field.handleChange(e.target.value);
+									onBlur={(event) => {
+										if (event.currentTarget.value !== field.state.value) {
+											field.handleChange(event.currentTarget.value);
+											void form.handleSubmit();
+										}
+										field.handleBlur();
+									}}
+									onInput={(event) => {
+										field.handleChange(event.currentTarget.value);
 										void form.handleSubmit();
 									}}
 								/>
@@ -166,11 +194,18 @@ export function BasicsSectionForm({ value, onChange }: BasicsSectionFormProps = 
 						<FormControl
 							render={
 								<Input
+									autoComplete="address-level2"
 									name={field.name}
 									value={field.state.value}
-									onBlur={field.handleBlur}
-									onChange={(e) => {
-										field.handleChange(e.target.value);
+									onBlur={(event) => {
+										if (event.currentTarget.value !== field.state.value) {
+											field.handleChange(event.currentTarget.value);
+											void form.handleSubmit();
+										}
+										field.handleBlur();
+									}}
+									onInput={(event) => {
+										field.handleChange(event.currentTarget.value);
 										void form.handleSubmit();
 									}}
 								/>
@@ -188,6 +223,7 @@ export function BasicsSectionForm({ value, onChange }: BasicsSectionFormProps = 
 							<Trans>Website</Trans>
 						</FormLabel>
 						<URLInput
+							autoComplete="url"
 							name={field.name}
 							value={field.state.value}
 							onChange={(value) => {
