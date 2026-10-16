@@ -70,7 +70,7 @@ describe("LoginPage", () => {
 	it("offers Google and Apple sign-in, and no passkey unless it is enabled", () => {
 		renderLogin();
 
-		expect(screen.getByRole("button", { name: "Google" })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "Continue with Google" })).toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "Apple" })).toBeInTheDocument();
 		expect(screen.queryByRole("button", { name: "Passkey" })).toBeNull();
 	});

@@ -10,6 +10,7 @@ import { Alert, AlertDescription, AlertTitle } from "@headcv/ui/components/alert
 import { Button } from "@headcv/ui/components/button";
 import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
 import { Input } from "@headcv/ui/components/input";
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@headcv/ui/components/input-group";
 import { ANY_EMAIL_DOMAIN, isEmailDomainAllowed } from "@headcv/utils/email-domain";
 import { authClient } from "@/libs/auth/client";
 import { useAppForm } from "@/libs/tanstack-form";
@@ -222,10 +223,10 @@ export function RegisterPage({ disableEmailAuth, signupEmailDomains, pendingPlan
 								<FormLabel>
 									<Trans comment="Label for password input on registration form">Password</Trans>
 								</FormLabel>
-								<div className="flex items-center gap-x-1.5">
+								<InputGroup>
 									<FormControl
 										render={
-											<Input
+											<InputGroupInput
 												min={6}
 												max={64}
 												type={showPassword ? "text" : "password"}
@@ -238,25 +239,26 @@ export function RegisterPage({ disableEmailAuth, signupEmailDomains, pendingPlan
 										}
 									/>
 
-									<Button
-										size="icon"
-										variant="ghost"
-										onClick={toggleShowPassword}
-										aria-label={
-											showPassword
-												? t({
-														comment: "Accessible label for button that hides password in registration form",
-														message: "Hide password",
-													})
-												: t({
-														comment: "Accessible label for button that reveals password in registration form",
-														message: "Show password",
-													})
-										}
-									>
-										{showPassword ? <EyeIcon /> : <EyeSlashIcon />}
-									</Button>
-								</div>
+									<InputGroupAddon align="inline-end">
+										<InputGroupButton
+											size="icon-xs"
+											onClick={toggleShowPassword}
+											aria-label={
+												showPassword
+													? t({
+															comment: "Accessible label for button that hides password in registration form",
+															message: "Hide password",
+														})
+													: t({
+															comment: "Accessible label for button that reveals password in registration form",
+															message: "Show password",
+														})
+											}
+										>
+											{showPassword ? <EyeIcon /> : <EyeSlashIcon />}
+										</InputGroupButton>
+									</InputGroupAddon>
+								</InputGroup>
 								<FormMessage errors={field.state.meta.errors} />
 							</FormItem>
 						)}
@@ -272,7 +274,7 @@ export function RegisterPage({ disableEmailAuth, signupEmailDomains, pendingPlan
 				</form>
 			)}
 
-			<SocialAuth requestSignUp pendingPlan={pendingPlan} />
+			<SocialAuth pendingPlan={pendingPlan} />
 
 			{disableEmailAuth && <SignInPrompt pendingPlan={pendingPlan} />}
 		</>

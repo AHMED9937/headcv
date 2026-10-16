@@ -26,6 +26,7 @@ import { Route as AuthResetPasswordRouteImport } from "./routes/auth/reset-passw
 import { Route as AuthRegisterRouteImport } from "./routes/auth/register";
 import { Route as AuthLoginRouteImport } from "./routes/auth/login";
 import { Route as AuthForgotPasswordRouteImport } from "./routes/auth/forgot-password";
+import { Route as AuthErrorRouteImport } from "./routes/auth/error";
 import { Route as UsernameSlugRouteImport } from "./routes/$username/$slug";
 import { Route as DashboardSettingsRouteRouteImport } from "./routes/dashboard/settings/route";
 import { Route as BuilderResumeIdRouteRouteImport } from "./routes/builder/$resumeId/route";
@@ -120,6 +121,11 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: "/forgot-password",
   getParentRoute: () => AuthRouteRoute,
 } as any);
+const AuthErrorRoute = AuthErrorRouteImport.update({
+  id: "/error",
+  path: "/error",
+  getParentRoute: () => AuthRouteRoute,
+} as any);
 const UsernameSlugRoute = UsernameSlugRouteImport.update({
   id: "/$username/$slug",
   path: "/$username/$slug",
@@ -177,6 +183,7 @@ export interface FileRoutesByFullPath {
   "/builder/$resumeId": typeof BuilderResumeIdRouteRouteWithChildren;
   "/dashboard/settings": typeof DashboardSettingsRouteRouteWithChildren;
   "/$username/$slug": typeof UsernameSlugRoute;
+  "/auth/error": typeof AuthErrorRoute;
   "/auth/forgot-password": typeof AuthForgotPasswordRoute;
   "/auth/login": typeof AuthLoginRoute;
   "/auth/register": typeof AuthRegisterRoute;
@@ -200,6 +207,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   "/dashboard/settings": typeof DashboardSettingsRouteRouteWithChildren;
   "/$username/$slug": typeof UsernameSlugRoute;
+  "/auth/error": typeof AuthErrorRoute;
   "/auth/forgot-password": typeof AuthForgotPasswordRoute;
   "/auth/login": typeof AuthLoginRoute;
   "/auth/register": typeof AuthRegisterRoute;
@@ -229,6 +237,7 @@ export interface FileRoutesById {
   "/builder/$resumeId": typeof BuilderResumeIdRouteRouteWithChildren;
   "/dashboard/settings": typeof DashboardSettingsRouteRouteWithChildren;
   "/$username/$slug": typeof UsernameSlugRoute;
+  "/auth/error": typeof AuthErrorRoute;
   "/auth/forgot-password": typeof AuthForgotPasswordRoute;
   "/auth/login": typeof AuthLoginRoute;
   "/auth/register": typeof AuthRegisterRoute;
@@ -259,6 +268,7 @@ export interface FileRouteTypes {
     | "/builder/$resumeId"
     | "/dashboard/settings"
     | "/$username/$slug"
+    | "/auth/error"
     | "/auth/forgot-password"
     | "/auth/login"
     | "/auth/register"
@@ -282,6 +292,7 @@ export interface FileRouteTypes {
   to:
     | "/dashboard/settings"
     | "/$username/$slug"
+    | "/auth/error"
     | "/auth/forgot-password"
     | "/auth/login"
     | "/auth/register"
@@ -310,6 +321,7 @@ export interface FileRouteTypes {
     | "/builder/$resumeId"
     | "/dashboard/settings"
     | "/$username/$slug"
+    | "/auth/error"
     | "/auth/forgot-password"
     | "/auth/login"
     | "/auth/register"
@@ -465,6 +477,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport;
       parentRoute: typeof AuthRouteRoute;
     };
+    "/auth/error": {
+      id: "/auth/error";
+      path: "/error";
+      fullPath: "/auth/error";
+      preLoaderRoute: typeof AuthErrorRouteImport;
+      parentRoute: typeof AuthRouteRoute;
+    };
     "/$username/$slug": {
       id: "/$username/$slug";
       path: "/$username/$slug";
@@ -544,6 +563,7 @@ const HomeRouteRouteWithChildren = HomeRouteRoute._addFileChildren(
 );
 
 interface AuthRouteRouteChildren {
+  AuthErrorRoute: typeof AuthErrorRoute;
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute;
   AuthLoginRoute: typeof AuthLoginRoute;
   AuthRegisterRoute: typeof AuthRegisterRoute;
@@ -555,6 +575,7 @@ interface AuthRouteRouteChildren {
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthErrorRoute: AuthErrorRoute,
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,

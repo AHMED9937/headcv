@@ -10,6 +10,7 @@ import z from "zod";
 import { Button } from "@headcv/ui/components/button";
 import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
 import { Input } from "@headcv/ui/components/input";
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@headcv/ui/components/input-group";
 import { authClient } from "@/libs/auth/client";
 import { client, orpc } from "@/libs/orpc/client";
 import { useAppForm } from "@/libs/tanstack-form";
@@ -202,10 +203,10 @@ export function LoginPage({ disableEmailAuth, disableSignups, pendingPlan }: Pro
 										}
 									/>
 								</div>
-								<div className="flex items-center gap-x-1.5">
+								<InputGroup>
 									<FormControl
 										render={
-											<Input
+											<InputGroupInput
 												min={6}
 												max={64}
 												type={showPassword ? "text" : "password"}
@@ -218,25 +219,26 @@ export function LoginPage({ disableEmailAuth, disableSignups, pendingPlan }: Pro
 										}
 									/>
 
-									<Button
-										size="icon"
-										variant="ghost"
-										onClick={toggleShowPassword}
-										aria-label={
-											showPassword
-												? t({
-														comment: "Accessible label for button that hides the password in login form",
-														message: "Hide password",
-													})
-												: t({
-														comment: "Accessible label for button that reveals the password in login form",
-														message: "Show password",
-													})
-										}
-									>
-										{showPassword ? <EyeIcon /> : <EyeSlashIcon />}
-									</Button>
-								</div>
+									<InputGroupAddon align="inline-end">
+										<InputGroupButton
+											size="icon-xs"
+											onClick={toggleShowPassword}
+											aria-label={
+												showPassword
+													? t({
+															comment: "Accessible label for button that hides the password in login form",
+															message: "Hide password",
+														})
+													: t({
+															comment: "Accessible label for button that reveals the password in login form",
+															message: "Show password",
+														})
+											}
+										>
+											{showPassword ? <EyeIcon /> : <EyeSlashIcon />}
+										</InputGroupButton>
+									</InputGroupAddon>
+								</InputGroup>
 								<FormMessage errors={field.state.meta.errors} />
 							</FormItem>
 						)}
