@@ -23,6 +23,7 @@ import { isEmailDomainAllowed } from "@headcv/utils/email-domain";
 import { rateLimitConfig, TRUSTED_IP_HEADERS } from "@headcv/utils/rate-limit";
 import { generateId, toUsername } from "@headcv/utils/string";
 import { isAllowedOAuthRedirectUri } from "@headcv/utils/url-security.node";
+import { revokeUnverifiedCredentials, TRUSTED_SOCIAL_PROVIDERS } from "./account-linking";
 import { createGithubProfileMapper, createProfileMapper } from "./oauth-profile";
 import { getTrustedOrigins } from "./trusted-origins";
 
@@ -236,9 +237,25 @@ const getAuthConfig = () => {
 		account: {
 			accountLinking: {
 				enabled: true,
-				trustedProviders: ["google", "apple", "github", "linkedin"],
+				trustedProviders: [...TRUSTED_SOCIAL_PROVIDERS],
+				// Linking to an unverified local account is allowed only because the hook below first
+				// removes that account's unverified password (pre-account-takeover guard).
+				requireLocalEmailVerified: false,
 			},
 		},
+
+		databaseHooks: {
+			account: {
+				create: {
+					before: async (account, ctx) => {
+						if (ctx) await revokeUnverifiedCredentials(account, ctx.context.internalAdapter);
+					},
+				},
+			},
+		},
+
+		// Failed OAuth callbacks land on our branded page, not Better Auth's default one.
+		onAPIError: { errorURL: `${authBaseUrl}/auth/error` },
 
 		socialProviders: {
 			google: {

@@ -1,14 +1,7 @@
 import type { RouterOutput } from "@/libs/orpc/client";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import {
-	AppleLogoIcon,
-	FingerprintIcon,
-	GithubLogoIcon,
-	GoogleLogoIcon,
-	LinkedinLogoIcon,
-	VaultIcon,
-} from "@phosphor-icons/react";
+import { AppleLogoIcon, FingerprintIcon, GithubLogoIcon, LinkedinLogoIcon, VaultIcon } from "@phosphor-icons/react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -23,28 +16,25 @@ type PendingPlan = "monthly" | "yearly" | "trial";
 const PENDING_PLAN_KEY = "headcv_pending_plan";
 
 type SocialAuthProps = {
-	requestSignUp?: boolean;
 	pendingPlan?: PendingPlan;
 };
 
 type SocialSignInOptions = {
 	provider: string;
 	callbackURL: string;
-	requestSignUp?: true;
+	requestSignUp: true;
 };
 
-function getSocialSignInOptions(
-	provider: string,
-	requestSignUp: boolean,
-	pendingPlan?: PendingPlan,
-): SocialSignInOptions {
+/**
+ * "Continue with <provider>" behaves the same on Login and Register: an existing account is
+ * signed in, a new one is created. The server still blocks sign-ups when FLAG_DISABLE_SIGNUPS is set.
+ */
+export function getSocialSignInOptions(provider: string, pendingPlan?: PendingPlan): SocialSignInOptions {
 	const callbackURL = pendingPlan ? `/dashboard?checkoutPlan=${pendingPlan}` : "/dashboard";
-	const options: SocialSignInOptions = { provider, callbackURL };
-	if (requestSignUp) options.requestSignUp = true;
-	return options;
+	return { provider, callbackURL, requestSignUp: true };
 }
 
-export function SocialAuth({ requestSignUp = false, pendingPlan }: SocialAuthProps) {
+export function SocialAuth({ pendingPlan }: SocialAuthProps) {
 	const { data: providers = {}, isLoading } = useQuery(orpc.auth.providers.list.queryOptions());
 
 	// The password form isn't a button here; with nothing else enabled, drop the divider too.
@@ -63,12 +53,32 @@ export function SocialAuth({ requestSignUp = false, pendingPlan }: SocialAuthPro
 				<hr className="flex-1" />
 			</div>
 
-			{isLoading ? (
-				<SocialAuthSkeleton />
-			) : (
-				<SocialAuthButtons providers={providers} requestSignUp={requestSignUp} pendingPlan={pendingPlan} />
-			)}
+			{isLoading ? <SocialAuthSkeleton /> : <SocialAuthButtons providers={providers} pendingPlan={pendingPlan} />}
 		</>
+	);
+}
+
+/** Google's official multicolour "G" (brand guidelines require the unaltered mark). */
+function GoogleMark() {
+	return (
+		<svg viewBox="0 0 48 48" aria-hidden="true" className="size-4">
+			<path
+				fill="#EA4335"
+				d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
+			/>
+			<path
+				fill="#4285F4"
+				d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
+			/>
+			<path
+				fill="#FBBC05"
+				d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"
+			/>
+			<path
+				fill="#34A853"
+				d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
+			/>
+		</svg>
 	);
 }
 
@@ -85,11 +95,10 @@ function SocialAuthSkeleton() {
 
 type SocialAuthButtonsProps = {
 	providers: RouterOutput["auth"]["providers"]["list"];
-	requestSignUp: boolean;
 	pendingPlan?: PendingPlan;
 };
 
-function SocialAuthButtons({ providers, requestSignUp, pendingPlan }: SocialAuthButtonsProps) {
+function SocialAuthButtons({ providers, pendingPlan }: SocialAuthButtonsProps) {
 	const router = useRouter();
 
 	const handleSocialLogin = async (provider: string) => {
@@ -100,7 +109,7 @@ function SocialAuthButtons({ providers, requestSignUp, pendingPlan }: SocialAuth
 			sessionStorage.setItem(PENDING_PLAN_KEY, pendingPlan);
 		}
 
-		const { error } = await authClient.signIn.social(getSocialSignInOptions(provider, requestSignUp, pendingPlan));
+		const { error } = await authClient.signIn.social(getSocialSignInOptions(provider, pendingPlan));
 
 		if (error) {
 			toast.error(
@@ -173,12 +182,10 @@ function SocialAuthButtons({ providers, requestSignUp, pendingPlan }: SocialAuth
 	return (
 		<div className="grid grid-cols-2 gap-4">
 			{"google" in providers && (
-				<Button
-					onClick={() => handleSocialLogin("google")}
-					className="flex-1 bg-[#4285F4] text-white hover:bg-[#4285F4]/80"
-				>
-					<GoogleLogoIcon />
-					<Trans comment="Brand name label for Google social sign-in button">Google</Trans>
+				// Full width like the primary button; neutral outline + official mark per Google's branding rules.
+				<Button variant="outline" onClick={() => handleSocialLogin("google")} className="col-span-full">
+					<GoogleMark />
+					<Trans comment="Label for the Google sign-in/sign-up button">Continue with Google</Trans>
 				</Button>
 			)}
 
