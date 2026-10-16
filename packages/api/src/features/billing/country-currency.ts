@@ -11,7 +11,7 @@
  */
 
 /** ISO-3166 alpha-2 country code → ISO-4217 currency code. */
-export const COUNTRY_CURRENCY: Record<string, string> = {
+const COUNTRY_CURRENCY: Record<string, string> = {
 	// Middle East / North Africa
 	EG: "EGP",
 	SA: "SAR",
