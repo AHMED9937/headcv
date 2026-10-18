@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@headcv/env/server", () => ({
 	env: {
@@ -11,27 +11,41 @@ vi.mock("@headcv/env/server", () => ({
 }));
 
 const createSession = vi.hoisted(() => vi.fn());
-const previewSession = vi.hoisted(() => vi.fn());
 
 vi.mock("dodopayments", () => ({
 	default: class {
-		checkoutSessions = { create: createSession, preview: previewSession };
+		checkoutSessions = { create: createSession };
 	},
 }));
 
-const { DodoPaymentsProvider } = await import("./dodo-provider");
+const originalFetch = globalThis.fetch;
+
+const { DodoPaymentsProvider, resetFxCache } = await import("./dodo-provider");
 const { CHECKOUT_THEME_CONFIG, checkoutThemeFromCookie } = await import("./checkout-theme");
 
 const baseParams = { plan: "monthly" as const, customerEmail: "a@example.com", returnUrl: "https://app.test/done" };
 
 const sentBody = () => createSession.mock.calls.at(-1)?.[0];
-const sentPreview = () => previewSession.mock.calls.at(-1)?.[0];
 const sentCustomization = () => sentBody()?.customization;
+
+function mockFxRates(rates: Record<string, number>) {
+	(globalThis.fetch as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+		ok: true,
+		json: async () => ({ rates }),
+	});
+}
 
 beforeEach(() => {
 	createSession.mockReset();
-	previewSession.mockReset();
 	createSession.mockResolvedValue({ checkout_url: "https://test.dodopayments.com/c", session_id: "cks_1" });
+	globalThis.fetch = vi.fn();
+	vi.stubGlobal("fetch", globalThis.fetch);
+	resetFxCache();
+});
+
+afterEach(() => {
+	globalThis.fetch = originalFetch;
+	vi.unstubAllGlobals();
 });
 
 describe("DodoPaymentsProvider.createCheckoutSession", () => {
@@ -56,43 +70,47 @@ describe("DodoPaymentsProvider.createCheckoutSession", () => {
 });
 
 describe("DodoPaymentsProvider.getLocalizedPricing", () => {
-	it("derives the local currency and USD→local rate from the checkout preview", async () => {
-		previewSession.mockResolvedValue({
-			product_cart: [{ currency: "EGP", og_currency: "USD", discounted_price: 108_320, og_price: 2000 }],
-		});
+	it("fetches the USD→EGP rate from the FX API and returns it", async () => {
+		mockFxRates({ EGP: 52.37 });
 
 		const result = await new DodoPaymentsProvider().getLocalizedPricing("EG");
 
-		expect(sentPreview()?.billing_currency).toBe("EGP");
-		expect(sentPreview()?.billing_address).toEqual({ country: "EG" });
 		expect(result?.currency).toBe("EGP");
-		// 1083.20 EGP ÷ 20.00 USD = 54.16
-		expect(result?.rate).toBeCloseTo(54.16, 2);
+		expect(result?.rate).toBeCloseTo(52.37, 2);
+		expect(fetch).toHaveBeenCalledWith("https://open.er-api.com/v6/latest/USD");
 	});
 
-	it("returns null for unsupported countries", async () => {
+	it("returns SAR for Saudi Arabia", async () => {
+		mockFxRates({ SAR: 3.75 });
+
+		const result = await new DodoPaymentsProvider().getLocalizedPricing("SA");
+
+		expect(result?.currency).toBe("SAR");
+		expect(result?.rate).toBeCloseTo(3.75, 2);
+	});
+
+	it("returns EUR for Germany", async () => {
+		mockFxRates({ EUR: 0.92 });
+
+		const result = await new DodoPaymentsProvider().getLocalizedPricing("DE");
+
+		expect(result?.currency).toBe("EUR");
+		expect(result?.rate).toBeCloseTo(0.92, 2);
+	});
+
+	it("returns null for unsupported countries without calling the FX API", async () => {
 		expect(await new DodoPaymentsProvider().getLocalizedPricing("AQ")).toBeNull();
-		expect(previewSession).not.toHaveBeenCalled();
+		expect(fetch).not.toHaveBeenCalled();
 	});
 
-	it("returns null when the preview returns a mismatched currency", async () => {
-		previewSession.mockResolvedValue({
-			product_cart: [{ currency: "EUR", og_currency: "USD", discounted_price: 18_00, og_price: 2000 }],
-		});
+	it("returns null when the FX API response is missing the target currency", async () => {
+		mockFxRates({ USD: 1 });
 
 		expect(await new DodoPaymentsProvider().getLocalizedPricing("EG")).toBeNull();
 	});
 
-	it("returns null when the preview returns a fake 1:1 conversion", async () => {
-		previewSession.mockResolvedValue({
-			product_cart: [{ currency: "EUR", og_currency: "USD", discounted_price: 2000, og_price: 2000 }],
-		});
-
-		expect(await new DodoPaymentsProvider().getLocalizedPricing("DE")).toBeNull();
-	});
-
-	it("returns null (UI stays in USD) when the preview call fails", async () => {
-		previewSession.mockRejectedValue(new Error("network"));
+	it("returns null (UI stays in USD) when the FX API call fails", async () => {
+		(fetch as unknown as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error("network"));
 
 		expect(await new DodoPaymentsProvider().getLocalizedPricing("EG")).toBeNull();
 	});

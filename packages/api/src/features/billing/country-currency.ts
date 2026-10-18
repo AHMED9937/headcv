@@ -1,29 +1,24 @@
 /**
  * Country → currency mapping for Dodo adaptive-currency pricing.
  *
- * These are the currencies we explicitly ask Dodo to price in for a given
- * visitor country. Dodo may still fall back to USD (or return a fake
- * conversion) for any unsupported pair; the provider validates the preview
- * response and keeps the UI on USD when that happens.
+ * Only currencies Dodo accepts as a checkout `billing_currency` belong here.
+ * Each entry was verified with Dodo's checkout preview (scripts/verify-adaptive-currency.mjs);
+ * unsupported currencies return HTTP 400 and must NOT be listed — the visitor gets USD instead.
  *
- * Keep this list conservative and expand it only after testing the target
- * country/currency with Dodo's checkout preview endpoint.
+ * Known-unsupported (do not re-add): KWD, BHD, OMR, JOD, TND, DZD, LBP, IQD, ARS, COP, KES, GHS.
+ * Dodo supports those *countries* for checkout, but cannot bill in their local currency, so
+ * those visitors see USD and are charged in USD.
  */
 
-/** ISO-3166 alpha-2 country code → ISO-4217 currency code. */
-const COUNTRY_CURRENCY: Record<string, string> = {
+/** ISO-3166 alpha-2 country code → ISO-4217 currency code (Dodo adaptive-currency supported). */
+export const COUNTRY_CURRENCY: Record<string, string> = {
 	// Middle East / North Africa
 	EG: "EGP",
 	SA: "SAR",
 	AE: "AED",
 	QA: "QAR",
-	KW: "KWD",
-	BH: "BHD",
-	OM: "OMR",
-	JO: "JOD",
 	TR: "TRY",
 	MA: "MAD",
-	TN: "TND",
 
 	// Europe
 	GB: "GBP",
@@ -67,15 +62,11 @@ const COUNTRY_CURRENCY: Record<string, string> = {
 	CA: "CAD",
 	MX: "MXN",
 	BR: "BRL",
-	AR: "ARS",
 	CL: "CLP",
-	CO: "COP",
 
 	// Africa
 	ZA: "ZAR",
 	NG: "NGN",
-	KE: "KES",
-	GH: "GHS",
 };
 
 /** All currencies we are willing to show in the pricing UI. */

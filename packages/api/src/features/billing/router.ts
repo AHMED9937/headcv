@@ -127,18 +127,14 @@ export const billingRouter = {
 		})
 		.handler(async ({ context }) => {
 			const country = await detectCountry(context.reqHeaders);
-			console.log("[diagnostic] localized-pricing", {
-				country,
-				cfIpCountry: context.reqHeaders.get("cf-ipcountry"),
-				vercelIpCountry: context.reqHeaders.get("x-vercel-ip-country"),
-				forwardedFor: context.reqHeaders.get("x-forwarded-for"),
-			});
 			if (!country || country === "US") return USD_PRICING;
 
 			const cached = localizedPricingCache.get(country);
 			if (cached && cached.expires > Date.now()) return cached.value;
 
-			const provider = getPaymentProvider(country);
+			// Always price via Dodo. Routing by country here would send EG to the epay stub,
+			// which has no getLocalizedPricing, silently forcing Egypt back to USD.
+			const provider = getPaymentProvider();
 			const pricing = (await provider.getLocalizedPricing?.(country)) ?? null;
 			// A USD result means no local price applied — keep the UI on the USD defaults.
 			const value = pricing && pricing.currency !== "USD" ? pricing : { ...USD_PRICING };
