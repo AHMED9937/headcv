@@ -79,8 +79,9 @@ const promptsDir = join(root, "packages", "ai", "src", "prompts");
 if (existsSync(promptsDir)) {
 	cpSync(promptsDir, join(serverFuncDir, "prompts"), { recursive: true, force: true });
 }
+// Only copy index.html for the SPA fallback — the CDN serves all other assets.
 mkdirSync(join(serverFuncDir, "apps", "web", "dist"), { recursive: true });
-cpSync(webDist, join(serverFuncDir, "apps", "web", "dist"), { recursive: true, force: true });
+cpSync(join(webDist, "index.html"), join(serverFuncDir, "apps", "web", "dist", "index.html"));
 
 // Function configuration.
 writeFileSync(
@@ -88,7 +89,7 @@ writeFileSync(
 	JSON.stringify({
 		runtime: "nodejs24.x",
 		handler: "index.mjs",
-		maxDuration: 300,
+		maxDuration: 60,
 	}),
 );
 
