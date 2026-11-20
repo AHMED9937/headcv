@@ -11,6 +11,7 @@ import { useDialogStore } from "@/dialogs/store";
 import { BuilderStepActions } from "@/features/builder/step-actions";
 import { getStepSectionId, useBuilderStep } from "@/features/builder/use-builder-step";
 import { useAiAssistant } from "@/features/resume/builder/ai-assistant";
+import { AiFabClearance } from "@/features/resume/builder/ai-fab-clearance";
 import { useCurrentResume } from "@/features/resume/builder/draft";
 import { BuilderSidebarLeft } from "../-sidebar/left";
 import { AiReviewSectionBuilder } from "../-sidebar/left/sections/ai-review";
@@ -51,6 +52,7 @@ export function GuidedEditor() {
 					<div className="space-y-4 p-4">
 						{currentStep === "review" && <GuidedReview />}
 						{currentStep === "export" && <ExportSectionBuilder />}
+						<AiFabClearance />
 					</div>
 				</ScrollArea>
 			)}
@@ -67,7 +69,10 @@ function GuidedScrollPanel({ children }: { children: ReactNode }) {
 	return (
 		<div className="flex h-full min-h-0 flex-col bg-background">
 			<ScrollArea className="min-h-0 flex-1">
-				<div className="space-y-4 p-4">{children}</div>
+				<div className="space-y-4 p-4">
+					{children}
+					<AiFabClearance />
+				</div>
 			</ScrollArea>
 		</div>
 	);

@@ -89,15 +89,17 @@ export function AiAssistantFab() {
 
 	if (open) return null;
 
+	// Single-pane layouts (below lg, see BuilderSplitView) put it over the editor itself, so there it is
+	// icon-only and lifts above bottom-pinned controls that opt in with `data-fab-avoid` (step bar, preview dock).
 	return (
 		<div
-			className="fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6"
+			className="fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6 max-lg:[:root:has([data-fab-avoid])_&]:bottom-22"
 			style={{ transform: `translate3d(${offset.x}px, ${offset.y}px, 0)` }}
 		>
 			<Button
 				size="lg"
 				className={cn(
-					"relative h-12 touch-none select-none gap-2 rounded-full px-5 shadow-xl",
+					"relative size-12 touch-none select-none gap-2 rounded-full px-0 shadow-xl lg:w-auto lg:px-5",
 					hasReviewableChanges
 						? "bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700"
 						: "bg-primary text-primary-foreground hover:bg-primary/90",
@@ -111,7 +113,7 @@ export function AiAssistantFab() {
 				aria-label={t`Open AI assistant`}
 			>
 				<ChatCircleDotsIcon className="size-5" />
-				<span className="font-semibold">
+				<span className="hidden font-semibold lg:inline">
 					<Trans>AI Chat</Trans>
 				</span>
 				{hasReviewableChanges ? (

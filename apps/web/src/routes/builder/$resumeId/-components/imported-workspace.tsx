@@ -1,17 +1,15 @@
 import type { ReactNode } from "react";
 import type { DesignWorkspaceSection, LeftSidebarSection } from "@/libs/resume/section";
-import type { MobileBuilderView } from "./mobile-view-switch";
 import type { WorkspaceTab } from "./workspace-search";
 import { Trans } from "@lingui/react/macro";
 import { CheckCircleIcon, DownloadSimpleIcon } from "@phosphor-icons/react";
-import { useState } from "react";
 import { ScrollArea } from "@headcv/ui/components/scroll-area";
+import { AiFabClearance } from "@/features/resume/builder/ai-fab-clearance";
 import { useCurrentResume } from "@/features/resume/builder/draft";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { ExportSectionBuilder } from "../-sidebar/right/sections/export";
 import { ContentWorkspacePanel } from "./content-workspace";
 import { DesignWorkspacePanel } from "./design-workspace";
-import { MobileViewSwitch } from "./mobile-view-switch";
+import { BuilderSplitView } from "./split-view";
 
 type Props = {
 	tab: WorkspaceTab;
@@ -32,9 +30,6 @@ export function ImportedWorkspace({
 	onDesignSectionChange,
 	preview,
 }: Props) {
-	const isMobile = useIsMobile();
-	const [mobileView, setMobileView] = useState<MobileBuilderView>("editor");
-
 	const editor = (
 		<div className="flex h-full min-h-0 flex-col bg-background">
 			{tab === "content" ? (
@@ -50,6 +45,7 @@ export function ImportedWorkspace({
 					<div className="space-y-4 p-4 sm:p-6">
 						{tab === "review" && <ImportReview isImported={isImported} />}
 						{tab === "export" && <ExportPanel isImported={isImported} />}
+						<AiFabClearance />
 					</div>
 				</ScrollArea>
 			)}
@@ -58,17 +54,7 @@ export function ImportedWorkspace({
 
 	return (
 		<div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-			{isMobile ? (
-				<div className="flex min-h-0 flex-1 flex-col">
-					<MobileViewSwitch value={mobileView} onChange={setMobileView} />
-					<div className="min-h-0 flex-1">{mobileView === "editor" ? editor : preview}</div>
-				</div>
-			) : (
-				<div className="grid min-h-0 flex-1 grid-cols-[minmax(25rem,45%)_minmax(0,1fr)] overflow-hidden">
-					<div className="min-h-0 border-e">{editor}</div>
-					<div className="min-h-0 bg-muted/30">{preview}</div>
-				</div>
-			)}
+			<BuilderSplitView editor={editor} preview={preview} />
 		</div>
 	);
 }

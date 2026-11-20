@@ -82,7 +82,7 @@ export function BuilderDock({ pageScale, onZoomIn, onZoomOut, onFit }: BuilderDo
 	}, [resume]);
 
 	return (
-		<div className="absolute inset-x-0 bottom-4 z-10 flex items-center justify-center">
+		<div data-fab-avoid className="absolute inset-x-0 bottom-4 z-10 flex items-center justify-center">
 			<m.div
 				initial={{ opacity: 0, y: -18 }}
 				animate={{ opacity: 0.6, y: 0 }}

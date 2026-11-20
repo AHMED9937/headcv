@@ -8,6 +8,7 @@ import { cn } from "@headcv/utils/style";
 import { getAddedOptionalSections } from "@/features/builder/additional-sections";
 import { BuilderStepActions } from "@/features/builder/step-actions";
 import { getStepSectionId, useBuilderStep } from "@/features/builder/use-builder-step";
+import { AiFabClearance } from "@/features/resume/builder/ai-fab-clearance";
 import { useCurrentResume } from "@/features/resume/builder/draft";
 import { getResumePreviewSectionId, requestResumePreviewSection } from "@/features/resume/preview/preview-navigation";
 import { UserDropdownMenu } from "@/features/user/dropdown-menu";
@@ -62,6 +63,7 @@ export function BuilderSidebarLeft({ guided = false }: { guided?: boolean }) {
 								<Separator />
 							</Fragment>
 						))}
+						<AiFabClearance />
 					</div>
 				</div>
 				<BuilderStepActions />

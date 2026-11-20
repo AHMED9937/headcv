@@ -46,6 +46,17 @@ describe("useIsMobile", () => {
 		expect(result.current).toBe(true);
 	});
 
+	it("is already correct on the first render, so phones never paint the desktop layout first", () => {
+		matches = true;
+		const renders: boolean[] = [];
+		renderHook(() => {
+			const isMobile = useIsMobile();
+			renders.push(isMobile);
+			return isMobile;
+		});
+		expect(renders[0]).toBe(true);
+	});
+
 	it("uses the documented mobile breakpoint of 768px", () => {
 		renderHook(() => useIsMobile());
 		expect(window.matchMedia).toHaveBeenCalledWith("(max-width: 767px)");
@@ -55,12 +66,15 @@ describe("useIsMobile", () => {
 		const { result } = renderHook(() => useIsMobile());
 		expect(result.current).toBe(false);
 
+		// As in a browser, the list's `matches` is already updated when "change" fires.
 		act(() => {
+			matches = true;
 			for (const listener of listeners) listener({ matches: true });
 		});
 		expect(result.current).toBe(true);
 
 		act(() => {
+			matches = false;
 			for (const listener of listeners) listener({ matches: false });
 		});
 		expect(result.current).toBe(false);
