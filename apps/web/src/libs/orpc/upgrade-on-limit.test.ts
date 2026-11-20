@@ -29,6 +29,20 @@ describe("openUpgradeOnLimit", () => {
 		});
 	});
 
+	it("opens the upgrade dialog for the Pro-only delete gate via the structured reason", () => {
+		openUpgradeOnLimit(
+			new ORPCError("UPGRADE_REQUIRED", {
+				message: "Deleting resumes is a Pro feature. Upgrade your plan to delete resumes.",
+				data: { reason: "delete-pro" },
+			}),
+		);
+
+		expect(useDialogStore.getState().activeDialog).toEqual({
+			type: "billing.upgrade",
+			data: { reason: "delete-pro" },
+		});
+	});
+
 	it("ignores unrelated errors", () => {
 		openUpgradeOnLimit(new ORPCError("FORBIDDEN"));
 		openUpgradeOnLimit(new Error("UPGRADE_REQUIRED"));

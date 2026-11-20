@@ -89,6 +89,27 @@ describe("entitlementService.getResumeAllowance", () => {
 	});
 });
 
+describe("entitlementService.canDeleteResume", () => {
+	beforeEach(() => {
+		dbState.subscription = activeSubscription("free");
+	});
+
+	it("blocks free users from deleting resumes", async () => {
+		dbState.subscription = activeSubscription("free");
+		await expect(entitlementService.canDeleteResume("user-1")).resolves.toBe(false);
+	});
+
+	it("allows paid users to delete resumes", async () => {
+		dbState.subscription = activeSubscription("monthly");
+		await expect(entitlementService.canDeleteResume("user-1")).resolves.toBe(true);
+	});
+
+	it("blocks a user whose paid plan has lapsed (treated as free)", async () => {
+		dbState.subscription = { ...activeSubscription("monthly"), status: "on_hold" };
+		await expect(entitlementService.canDeleteResume("user-1")).resolves.toBe(false);
+	});
+});
+
 describe("getEffectiveAccess", () => {
 	const HOUR = 60 * 60 * 1000;
 	const active = (periodEndOffsetMs: number) => ({

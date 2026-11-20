@@ -30,6 +30,9 @@ const PLAN_LIMITS: Record<PlanSlug, PlanLimits> = {
 /** Shared by every resume-creating path; the web client maps "resume limit" to its upgrade prompt. */
 export const RESUME_LIMIT_MESSAGE = "Free plan resume limit reached. Upgrade your plan for unlimited resumes.";
 
+/** Deleting a resume is a Pro-only capability; the web client maps this to its upgrade prompt. */
+export const RESUME_DELETE_PAID_MESSAGE = "Deleting resumes is a Pro feature. Upgrade your plan to delete resumes.";
+
 export function getPlanLimits(plan: string): PlanLimits {
 	return PLAN_LIMITS[plan as PlanSlug] ?? PLAN_LIMITS.free;
 }
@@ -215,6 +218,16 @@ export const entitlementService = {
 		const limits = getEffectiveAccess(sub) === "paid" ? getPlanLimits(sub.plan) : PLAN_LIMITS.free;
 		const used = await this.countResumes(userId);
 		return { used, limit: limits.resumes, canCreate: limits.resumes === -1 || used < limits.resumes };
+	},
+
+	/**
+	 * Whether the user may delete a resume. Deletion is a paid-only capability:
+	 * free (or lapsed-to-free) users keep their resumes but cannot remove them individually.
+	 * Account deletion (which erases all data) stays available to everyone — see auth service.
+	 */
+	async canDeleteResume(userId: string): Promise<boolean> {
+		const sub = await billingService.getSubscription(userId);
+		return getEffectiveAccess(sub) === "paid";
 	},
 
 	/** Check if the user can start an AI chat. */

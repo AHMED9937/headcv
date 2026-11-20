@@ -15,7 +15,7 @@ import { applyResumePatches, ResumePatchError } from "@headcv/resume/patch";
 import { upgradeLegacyResumeTypography } from "@headcv/resume/readability";
 import { defaultResumeData } from "@headcv/schema/resume/default";
 import { generateId } from "@headcv/utils/string";
-import { entitlementService, RESUME_LIMIT_MESSAGE } from "../billing/service";
+import { entitlementService, RESUME_DELETE_PAID_MESSAGE, RESUME_LIMIT_MESSAGE } from "../billing/service";
 import { getStorageService } from "../storage/service";
 import { grantResumeAccess, hasResumeAccess } from "./access";
 import { assertCanView, isOwner, redactResumeForViewer, shouldCountForStatistics } from "./access-policy";
@@ -556,13 +556,25 @@ export const resumeService = {
 	},
 
 	delete: async (input: { id: string; userId: string }) => {
+		// Deletion is a paid-only capability. Resolved server-side from the verified user id —
+		// never trust a client flag. Every delete path (REST + MCP tool) funnels through here.
+		const canDelete = await entitlementService.canDeleteResume(input.userId);
+
 		await db.transaction(async (tx) => {
 			const [resume] = await tx
 				.select({ isLocked: schema.resume.isLocked })
 				.from(schema.resume)
 				.where(and(eq(schema.resume.id, input.id), eq(schema.resume.userId, input.userId)));
 
+			// Ownership/existence first (never reveal a resume to someone who can't act on it),
+			// then the plan gate, then the lock guard.
 			if (!resume) throw new ORPCError("NOT_FOUND");
+			if (!canDelete) {
+				throw new ORPCError("UPGRADE_REQUIRED", {
+					message: RESUME_DELETE_PAID_MESSAGE,
+					data: { reason: "delete-pro" },
+				});
+			}
 			if (resume.isLocked) throw new ORPCError("RESUME_LOCKED");
 
 			await tx.delete(schema.resume).where(and(eq(schema.resume.id, input.id), eq(schema.resume.userId, input.userId)));

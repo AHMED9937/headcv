@@ -3,6 +3,7 @@ import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
 	CopySimpleIcon,
+	CrownSimpleIcon,
 	FolderOpenIcon,
 	LockSimpleIcon,
 	LockSimpleOpenIcon,
@@ -20,6 +21,7 @@ import {
 	DropdownMenuTrigger,
 } from "@headcv/ui/components/dropdown-menu";
 import { useDialogStore } from "@/dialogs/store";
+import { useSubscription } from "@/features/billing/use-subscription";
 import { useConfirm } from "@/hooks/use-confirm";
 import { getResumeErrorMessage } from "@/libs/error-message";
 import { orpc } from "@/libs/orpc/client";
@@ -32,6 +34,7 @@ type Props = Omit<React.ComponentProps<typeof DropdownMenuContent>, "children"> 
 export function ResumeDropdownMenu({ resume, children, ...props }: Props) {
 	const confirm = useConfirm();
 	const { openDialog } = useDialogStore();
+	const { isPaid } = useSubscription();
 
 	const { mutate: deleteResume } = useMutation(orpc.resume.delete.mutationOptions());
 	const { mutate: setLockedResume } = useMutation(orpc.resume.setLocked.mutationOptions());
@@ -120,10 +123,18 @@ export function ResumeDropdownMenu({ resume, children, ...props }: Props) {
 
 				<DropdownMenuSeparator />
 
-				<DropdownMenuItem variant="destructive" disabled={resume.isLocked} onClick={handleDelete}>
-					<TrashSimpleIcon />
-					<Trans comment="Resume card dropdown destructive action to remove a resume">Delete</Trans>
-				</DropdownMenuItem>
+				{isPaid ? (
+					<DropdownMenuItem variant="destructive" disabled={resume.isLocked} onClick={handleDelete}>
+						<TrashSimpleIcon />
+						<Trans comment="Resume card dropdown destructive action to remove a resume">Delete</Trans>
+					</DropdownMenuItem>
+				) : (
+					<DropdownMenuItem onClick={() => openDialog("billing.upgrade", { reason: "delete-pro" })}>
+						<TrashSimpleIcon />
+						<Trans comment="Resume card dropdown action; deleting is a Pro feature for free users">Delete</Trans>
+						<CrownSimpleIcon weight="fill" aria-hidden="true" className="ml-auto size-3.5 text-primary" />
+					</DropdownMenuItem>
+				)}
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);

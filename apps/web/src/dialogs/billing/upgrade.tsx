@@ -18,6 +18,8 @@ export function UpgradeDialog({ data }: DialogProps<"billing.upgrade">) {
 						<Trans id="billing.upgrade.aiLimit.title">You've used all your free AI chats</Trans>
 					) : data.reason === "resume-limit" ? (
 						<Trans id="billing.upgrade.resumeLimit.title">You've created all your free resumes</Trans>
+					) : data.reason === "delete-pro" ? (
+						<Trans id="billing.upgrade.deletePro.title">Deleting resumes is a Pro feature</Trans>
 					) : isTrial ? (
 						<Trans id="billing.upgrade.trial.title">Keep Pro after your trial</Trans>
 					) : (
@@ -34,6 +36,11 @@ export function UpgradeDialog({ data }: DialogProps<"billing.upgrade">) {
 						<Trans id="billing.upgrade.resumeLimit.description">
 							{sub.usage.resumesUsed} of {sub.usage.resumesLimit} free resumes used. Tailor a resume to every job you
 							apply for — Pro removes the limit.
+						</Trans>
+					) : data.reason === "delete-pro" ? (
+						<Trans id="billing.upgrade.deletePro.description">
+							Free resumes are yours to keep, but removing them is a Pro feature. Upgrade to delete resumes you no
+							longer need — plus unlimited resumes, cover letters, imports and AI assistance.
 						</Trans>
 					) : isTrial && trialDaysLeft !== null ? (
 						<Trans id="billing.upgrade.trial.description">

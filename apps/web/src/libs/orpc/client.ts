@@ -9,7 +9,10 @@ import { useDialogStore } from "@/dialogs/store";
 /** Quota errors open the upgrade dialog at the moment of need instead of a dead-end error. */
 export const openUpgradeOnLimit = (error: unknown) => {
 	if (typeof window === "undefined" || !(error instanceof ORPCError) || error.code !== "UPGRADE_REQUIRED") return;
-	const reason = /resume limit/i.test(error.message) ? "resume-limit" : "ai-limit";
+	// Prefer the structured reason the server sends; fall back to the message for older throwers.
+	const dataReason = (error.data as { reason?: string } | undefined)?.reason;
+	const reason =
+		dataReason === "delete-pro" ? "delete-pro" : /resume limit/i.test(error.message) ? "resume-limit" : "ai-limit";
 	useDialogStore.getState().openDialog("billing.upgrade", { reason });
 };
 
