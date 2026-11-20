@@ -35,11 +35,13 @@ export function PlanPicker({ hideTrial = false, className }: PlanPickerProps) {
 		pendingPlan === plan ? <Trans id="home.pricing.loading">Redirecting to checkout...</Trans> : label;
 
 	return (
-		<div className={cn("space-y-4", className)}>
+		// A container, not the viewport, drives the layout: the picker is reused in a narrow dialog and on
+		// the wide billing page, and localized prices (e.g. "EGP 161") vary in width.
+		<div className={cn("@container space-y-4", className)}>
 			{!hideTrial && (
-				<div className="flex flex-wrap items-center gap-4 rounded-2xl border border-[#c9a227] bg-linear-to-r from-[#f5e8bf] to-[#fffaf0] p-4 text-[#152642]">
+				<div className="grid @sm:grid-cols-[auto_minmax(0,1fr)] @xl:grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 rounded-2xl border border-[#c9a227] bg-linear-to-r from-[#f5e8bf] to-[#fffaf0] p-4 text-[#152642]">
 					<bdi className="font-bold font-display text-3xl">{money(PRO_PRICES.trial)}</bdi>
-					<div className="min-w-0 flex-1">
+					<div className="min-w-0">
 						<p className="font-semibold">
 							<Trans id="home.offer.title">Try all of Pro.</Trans>
 						</p>
@@ -50,7 +52,7 @@ export function PlanPicker({ hideTrial = false, className }: PlanPickerProps) {
 					<Button
 						disabled={isLoading}
 						onClick={() => checkout("trial")}
-						className="h-auto min-h-11 whitespace-normal bg-[#152642] px-5 py-2 text-white hover:bg-[#152642]/90"
+						className="@sm:col-span-2 @xl:col-span-1 h-auto min-h-11 whitespace-normal bg-[#152642] px-5 py-2 text-white hover:bg-[#152642]/90"
 					>
 						{ctaLabel("trial", <Trans id="home.pricing.startTrial">Start 7-day trial</Trans>)}
 					</Button>

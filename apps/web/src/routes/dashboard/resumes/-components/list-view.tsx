@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { RouterOutput } from "@/libs/orpc/client";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
@@ -43,13 +44,10 @@ export function ListView({ resumes }: Props) {
 					onClick={handleCreateResume}
 				>
 					<PlusIcon />
-					<div className="min-w-80 truncate">
-						<Trans>Create a new resume</Trans>
-					</div>
-
-					<p className="text-xs opacity-60">
-						<Trans>Start building your resume from scratch</Trans>
-					</p>
+					<RowLabel
+						title={<Trans>Create a new resume</Trans>}
+						description={<Trans>Start building your resume from scratch</Trans>}
+					/>
 				</Button>
 			</m.div>
 
@@ -67,14 +65,10 @@ export function ListView({ resumes }: Props) {
 					onClick={handleImportResume}
 				>
 					<DownloadSimpleIcon />
-
-					<div className="min-w-80 truncate">
-						<Trans>Import an existing resume</Trans>
-					</div>
-
-					<p className="text-xs opacity-60">
-						<Trans>Continue where you left off</Trans>
-					</p>
+					<RowLabel
+						title={<Trans>Import an existing resume</Trans>}
+						description={<Trans>Continue where you left off</Trans>}
+					/>
 				</Button>
 			</m.div>
 
@@ -97,6 +91,19 @@ export function ListView({ resumes }: Props) {
 	);
 }
 
+/**
+ * Row title + secondary line. Buttons are `whitespace-nowrap`, so both lines must be able to shrink and
+ * truncate: stacked on phones, aligned in columns from `sm` up.
+ */
+function RowLabel({ title, description }: { title: ReactNode; description: ReactNode }) {
+	return (
+		<span className="flex min-w-0 flex-1 flex-col sm:flex-row sm:items-center sm:gap-x-4">
+			<span className="truncate sm:min-w-80">{title}</span>
+			<span className="truncate text-xs opacity-60">{description}</span>
+		</span>
+	);
+}
+
 function ResumeListItem({ resume }: { resume: Resume }) {
 	const { i18n } = useLingui();
 
@@ -110,15 +117,11 @@ function ResumeListItem({ resume }: { resume: Resume }) {
 				size="lg"
 				variant="ghost"
 				nativeButton={false}
-				className="h-12 w-full flex-1 justify-start gap-x-4 text-start"
+				className="h-12 w-full min-w-0 flex-1 justify-start gap-x-4 text-start"
 				render={
 					<Link to="/builder/$resumeId" params={{ resumeId: resume.id }}>
 						<div className="size-3" />
-						<div className="min-w-80 truncate">{resume.name}</div>
-
-						<p className="text-xs opacity-60">
-							<Trans>Last updated on {updatedAt}</Trans>
-						</p>
+						<RowLabel title={resume.name} description={<Trans>Last updated on {updatedAt}</Trans>} />
 					</Link>
 				}
 			/>
