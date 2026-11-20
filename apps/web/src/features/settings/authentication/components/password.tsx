@@ -28,7 +28,7 @@ export function PasswordSection() {
 			initial={{ opacity: 0, y: -20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.2, delay: 0.1, ease: "easeOut" }}
-			className="flex items-center justify-between gap-x-4 will-change-[transform,opacity]"
+			className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 will-change-[transform,opacity]"
 		>
 			<h2 className="flex items-center gap-x-3 font-medium text-base">
 				<PasswordIcon />

@@ -42,7 +42,7 @@ export function SocialProviderSection({ provider, name, animationDelay = 0 }: So
 		>
 			<Separator />
 
-			<div className="mt-4 flex items-center justify-between gap-x-4">
+			<div className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
 				<h2 className="flex items-center gap-x-3 font-medium text-base">
 					{providerIcon}
 					{providerName}

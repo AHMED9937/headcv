@@ -36,7 +36,7 @@ export function TwoFactorSection() {
 		>
 			<Separator />
 
-			<div className="mt-4 flex items-center justify-between gap-x-4">
+			<div className="mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
 				<h2 className="flex items-center gap-x-3 font-medium text-base">
 					{hasTwoFactor ? <LockOpenIcon /> : <KeyIcon />}
 					<Trans>Two-Factor Authentication</Trans>

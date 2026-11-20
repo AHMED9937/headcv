@@ -18,6 +18,7 @@ vi.mock("@/features/resume/builder/draft", () => ({
 }));
 
 const { TemplateGalleryDialog } = await import("./gallery");
+const { templates } = await import("./data");
 
 beforeAll(() => {
 	i18n.loadAndActivate({ locale: "en", messages: {} });
@@ -52,6 +53,13 @@ describe("TemplateGalleryDialog", () => {
 		renderGallery();
 		expect(screen.getByText("Template Gallery")).toBeInTheDocument();
 		expect(screen.getByText(/range of resume templates/)).toBeInTheDocument();
+	});
+
+	it("shows each description inline on touch screens, which can't hover to open the details card", () => {
+		renderGallery();
+		// Before, the description only existed inside the hover card, so tapping a tile selected it unseen.
+		const description = screen.getByText(i18n._(templates.ditto.description));
+		expect(description).toHaveClass("hidden", "pointer-coarse:line-clamp-3");
 	});
 
 	it("renders one tile per template", () => {
