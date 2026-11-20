@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { DesignWorkspaceSection } from "@/libs/resume/section";
 import type { BuilderSearch } from "./workspace-search";
 import { Trans } from "@lingui/react/macro";
@@ -10,6 +11,7 @@ import { useDialogStore } from "@/dialogs/store";
 import { BuilderStepActions } from "@/features/builder/step-actions";
 import { getStepSectionId, useBuilderStep } from "@/features/builder/use-builder-step";
 import { useAiAssistant } from "@/features/resume/builder/ai-assistant";
+import { AiFabClearance } from "@/features/resume/builder/ai-fab-clearance";
 import { useCurrentResume } from "@/features/resume/builder/draft";
 import { BuilderSidebarLeft } from "../-sidebar/left";
 import { AiReviewSectionBuilder } from "../-sidebar/left/sections/ai-review";
@@ -30,7 +32,13 @@ export function GuidedEditor() {
 			/^resume\.sections\.[^.]+\.(create|update)$/.test(state.activeDialog?.type ?? ""),
 	);
 
-	if (showingInlineEditor) return <InlineSectionEditor />;
+	if (showingInlineEditor) {
+		return (
+			<GuidedScrollPanel>
+				<InlineSectionEditor />
+			</GuidedScrollPanel>
+		);
+	}
 	// The AI banner's Review button targets `section=ai-review`; the step-based flow shows it in place of the step.
 	if (section === "ai-review" && hasReviewableChanges) return <GuidedAiReview />;
 	if (sectionId) return <BuilderSidebarLeft guided />;
@@ -40,14 +48,32 @@ export function GuidedEditor() {
 			{currentStep === "design" ? (
 				<GuidedDesign />
 			) : (
-				<ScrollArea className="flex-1">
+				<ScrollArea className="min-h-0 flex-1">
 					<div className="space-y-4 p-4">
 						{currentStep === "review" && <GuidedReview />}
 						{currentStep === "export" && <ExportSectionBuilder />}
+						<AiFabClearance />
 					</div>
 				</ScrollArea>
 			)}
 			<BuilderStepActions />
+		</div>
+	);
+}
+
+/**
+ * The guided pane has a fixed height, so content taller than it must scroll here rather than be clipped.
+ * base-ui's ScrollArea root doesn't clip on its own; `min-h-0` lets it shrink to the pane and scroll.
+ */
+function GuidedScrollPanel({ children }: { children: ReactNode }) {
+	return (
+		<div className="flex h-full min-h-0 flex-col bg-background">
+			<ScrollArea className="min-h-0 flex-1">
+				<div className="space-y-4 p-4">
+					{children}
+					<AiFabClearance />
+				</div>
+			</ScrollArea>
 		</div>
 	);
 }
@@ -116,24 +142,20 @@ function GuidedAiReview() {
 	}, [expandLeftSection]);
 
 	return (
-		<div className="flex h-full min-h-0 flex-col bg-background">
-			<ScrollArea className="flex-1">
-				<div className="space-y-4 p-4">
-					<Button
-						variant="ghost"
-						size="sm"
-						onClick={() => {
-							void navigate({
-								search: (previous: BuilderSearch) => ({ ...previous, section: undefined, reviewSection: undefined }),
-							});
-						}}
-					>
-						<ArrowLeftIcon aria-hidden="true" />
-						<Trans>Back to step</Trans>
-					</Button>
-					<AiReviewSectionBuilder />
-				</div>
-			</ScrollArea>
-		</div>
+		<GuidedScrollPanel>
+			<Button
+				variant="ghost"
+				size="sm"
+				onClick={() => {
+					void navigate({
+						search: (previous: BuilderSearch) => ({ ...previous, section: undefined, reviewSection: undefined }),
+					});
+				}}
+			>
+				<ArrowLeftIcon aria-hidden="true" />
+				<Trans>Back to step</Trans>
+			</Button>
+			<AiReviewSectionBuilder />
+		</GuidedScrollPanel>
 	);
 }

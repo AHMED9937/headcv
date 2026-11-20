@@ -33,4 +33,16 @@ describe("PlanPicker", () => {
 		expect(screen.getByText("Unlimited imports")).toBeInTheDocument();
 		expect(screen.queryByText(/cover letter/i)).not.toBeInTheDocument();
 	});
+
+	it("stacks the trial offer by container width so a long localized price can't crush its copy", () => {
+		renderPicker();
+		const trialButton = screen.getByRole("button", { name: "Start 7-day trial" });
+		const offer = trialButton.parentElement as HTMLElement;
+
+		// The old flex-wrap row let the copy shrink to ~0 before the button wrapped ("Try / all / of / Pro.").
+		expect(offer).toHaveClass("grid");
+		expect(offer).not.toHaveClass("flex-wrap");
+		expect(offer.parentElement).toHaveClass("@container");
+		expect(trialButton).toHaveClass("@sm:col-span-2");
+	});
 });

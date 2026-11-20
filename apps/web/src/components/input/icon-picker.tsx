@@ -109,7 +109,8 @@ export function IconPicker({ value, onChange, popoverProps, ...props }: IconPick
 			<PopoverContent align="start" className="h-[326px] w-[290px] gap-0 p-0">
 				<IconSearchInput value={search} onChange={setSearch} />
 
-				<div className="size-[290px]">
+				{/* Follows the popup, which is capped to the viewport; the grid scrolls sideways on tiny screens. */}
+				<div className="h-[290px] w-full">
 					<Grid
 						key={search}
 						rowCount={rowCount}

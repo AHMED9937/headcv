@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { i18n } from "@lingui/core";
@@ -20,7 +20,11 @@ vi.mock("@/features/resume/builder/ai-assistant", () => ({
 }));
 
 vi.mock("@headcv/ui/components/scroll-area", () => ({
-	ScrollArea: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+	ScrollArea: ({ children, className }: { children: React.ReactNode; className?: string }) => (
+		<div data-testid="scroll-area" className={className}>
+			{children}
+		</div>
+	),
 }));
 
 vi.mock("../-sidebar/left/sections/ai-review", () => ({
@@ -110,6 +114,27 @@ describe("GuidedEditor", () => {
 
 		expect(screen.getByTestId("inline-section-editor")).toBeInTheDocument();
 		expect(screen.queryByTestId("builder-sidebar-left")).not.toBeInTheDocument();
+	});
+
+	it("keeps the inline editor scrollable so long forms and Done are not clipped on phones", () => {
+		mockedUseBuilderStep.mockReturnValue({ currentStep: "work-experience" });
+		useDialogStore.setState({
+			open: false,
+			presentation: "inline",
+			activeDialog: { type: "resume.sections.experience.create", data: undefined },
+			onBeforeClose: null,
+		});
+
+		render(
+			<I18nProvider i18n={i18n}>
+				<GuidedEditor />
+			</I18nProvider>,
+		);
+
+		const scrollArea = screen.getByTestId("scroll-area");
+		expect(within(scrollArea).getByTestId("inline-section-editor")).toBeInTheDocument();
+		// base-ui's ScrollArea root doesn't clip; without min-h-0 it grows to the form's height instead of scrolling.
+		expect(scrollArea).toHaveClass("min-h-0");
 	});
 
 	it("renders the export step when the current step is export", () => {

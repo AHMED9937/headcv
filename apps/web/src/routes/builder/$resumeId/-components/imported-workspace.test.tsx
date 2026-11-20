@@ -78,8 +78,9 @@ vi.mock("@/features/resume/builder/draft", () => ({
 		},
 	}),
 }));
-vi.mock("@/hooks/use-mobile", () => ({
-	useIsMobile: () => mobileState.value,
+// BuilderSplitView decides single-pane vs split from this media query.
+vi.mock("@headcv/ui/hooks/use-media-query", () => ({
+	useMediaQuery: () => mobileState.value,
 }));
 vi.mock("@/features/resume/builder/ai-assistant", () => ({
 	useAiAssistant: () => aiAssistantMock,

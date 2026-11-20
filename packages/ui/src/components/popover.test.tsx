@@ -113,4 +113,15 @@ describe("PopoverContent", () => {
 		);
 		expect(screen.getByText("visible")).toHaveClass("my-class");
 	});
+
+	it("never grows wider than the space the positioner has left on screen", () => {
+		render(
+			<Popover open>
+				<PopoverTrigger>Open</PopoverTrigger>
+				<PopoverContent className="w-[290px]">wide content</PopoverContent>
+			</Popover>,
+		);
+		// A fixed-width popup (e.g. the 290px icon picker) used to overflow the smallest phones.
+		expect(screen.getByText("wide content")).toHaveClass("w-[290px]", "max-w-(--available-width)");
+	});
 });

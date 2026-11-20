@@ -4,6 +4,7 @@ import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { PaletteIcon } from "@phosphor-icons/react";
 import { Fragment, useEffect, useRef } from "react";
+import { AiFabClearance } from "@/features/resume/builder/ai-fab-clearance";
 import { designWorkspaceSections } from "@/libs/resume/section";
 import { getSectionComponent } from "../-sidebar/right/section-components";
 import { StaticSectionsProvider } from "../-sidebar/right/shared/section-base";
@@ -61,6 +62,7 @@ export function DesignWorkspacePanel({ section, onSectionChange, status }: Desig
 							<Fragment key={type}>{getSectionComponent(type)}</Fragment>
 						))}
 					</StaticSectionsProvider>
+					<AiFabClearance />
 				</div>
 			</div>
 		</div>

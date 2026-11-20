@@ -101,6 +101,11 @@ function TemplateCard({ id, metadata, isActive, onSelect }: TemplateCardProps) {
 					<span className="font-bold leading-loose tracking-tight">{metadata.name}</span>
 				</div>
 
+				{/* Touch screens can't hover, so they get the hover card's description inline. */}
+				<p className="pointer-coarse:line-clamp-3 hidden text-center text-muted-foreground text-xs leading-snug">
+					{i18n.t(metadata.description)}
+				</p>
+
 				<HoverCardContent
 					side="right"
 					sideOffset={-32}

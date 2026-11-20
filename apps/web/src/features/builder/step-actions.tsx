@@ -8,13 +8,14 @@ export function BuilderStepActions() {
 		useBuilderStep();
 
 	return (
-		<div className="flex items-center justify-between gap-3 border-t bg-background p-4">
+		// Wraps on narrow phones instead of clipping Continue; `data-fab-avoid` lifts the AI FAB above it.
+		<div data-fab-avoid className="flex flex-wrap items-center justify-between gap-3 border-t bg-background p-4">
 			<Button variant="ghost" disabled={!previousStep} onClick={goBack}>
 				<ArrowLeftIcon className="size-4" />
 				{t`Back`}
 			</Button>
 
-			<div className="flex items-center gap-2">
+			<div className="ms-auto flex flex-wrap items-center justify-end gap-2">
 				{!isCurrentStepSkipped && (
 					<Button variant="outline" onClick={skipStep}>
 						{t`Skip / Not applicable`}

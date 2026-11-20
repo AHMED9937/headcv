@@ -2,6 +2,7 @@ import type { LeftSidebarSection } from "@/libs/resume/section";
 import { useEffect, useMemo, useRef } from "react";
 import { useDialogStore } from "@/dialogs/store";
 import { useAiAssistant } from "@/features/resume/builder/ai-assistant";
+import { AiFabClearance } from "@/features/resume/builder/ai-fab-clearance";
 import { useCurrentResume } from "@/features/resume/builder/draft";
 import { getLayoutOrderedLeftSidebarSections } from "@/libs/resume/section";
 import { getSectionComponent } from "../-sidebar/left/section-components";
@@ -88,6 +89,7 @@ export function ContentWorkspacePanel({ section, onSectionChange }: ContentWorks
 								)}
 							</>
 						)}
+						<AiFabClearance />
 					</div>
 				</BuilderSectionNavigationProvider>
 			</div>
