@@ -60,7 +60,37 @@ export const localeSchema = z.union([
 
 export type Locale = z.infer<typeof localeSchema>;
 
-export const defaultLocale: Locale = "en-US";
+/**
+ * Locales the web UI ships translations for; automatic detection only ever picks one of these.
+ * To add a language, list it here, in the web app's `localeMap` (type-checked) and in its catalog loader.
+ */
+export const supportedLocales = ["en-US", "ar-SA"] as const satisfies readonly Locale[];
+
+export type SupportedLocale = (typeof supportedLocales)[number];
+
+export const defaultLocale: SupportedLocale = "en-US";
+
+/** Base language of a BCP 47 tag, e.g. "ar-EG" → "ar". Also accepts "_" separators ("ar_EG"). */
+const getLanguage = (tag: string) => tag.trim().split(/[-_]/)[0]?.toLowerCase() ?? "";
+
+/**
+ * Picks the UI locale from a visitor's ordered language preferences: `navigator.languages` in the
+ * browser, or the q-sorted `Accept-Language` header on the server. The first preference we support
+ * wins, matched exactly or else by base language (ar, ar-EG and ar-MA all give ar-SA).
+ * If none is supported, the default locale is used.
+ */
+export function negotiateLocale(preferred: readonly string[]): SupportedLocale {
+	for (const tag of preferred) {
+		const normalized = tag.trim().replaceAll("_", "-").toLowerCase();
+		const match =
+			supportedLocales.find((locale) => locale.toLowerCase() === normalized) ??
+			supportedLocales.find((locale) => getLanguage(locale) === getLanguage(normalized));
+
+		if (match) return match;
+	}
+
+	return defaultLocale;
+}
 
 export function isLocale(value: unknown): value is Locale {
 	return localeSchema.safeParse(value).success;
@@ -84,6 +114,5 @@ const RTL_LANGUAGES = new Set([
 ]);
 
 export function isRTL(locale: string): boolean {
-	const language = locale.split("-")[0]?.toLowerCase() ?? "";
-	return RTL_LANGUAGES.has(language);
+	return RTL_LANGUAGES.has(getLanguage(locale));
 }
