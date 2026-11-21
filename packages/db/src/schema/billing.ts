@@ -26,7 +26,7 @@ export const userSubscription = pg.pgTable(
 		providerSubscriptionId: pg.text("provider_subscription_id"),
 
 		// Plan details
-		plan: pg.text("plan").notNull().default("free"), // 'free' | 'monthly' | 'yearly' ('trial' = retired $3 weekly product)
+		plan: pg.text("plan").notNull().default("free"), // 'free' | 'monthly' | 'yearly' | 'trial_pass' ('trial' = retired weekly product)
 		status: pg.text("status").notNull().default("active"), // 'active' | 'on_hold' | 'cancelled' | 'expired' | 'failed' | 'pending'
 
 		// Billing period
@@ -34,10 +34,12 @@ export const userSubscription = pg.pgTable(
 		currentPeriodEnd: pg.timestamp("current_period_end", { withTimezone: true }),
 		cancelAtPeriodEnd: pg.boolean("cancel_at_period_end").notNull().default(false),
 
-		// The 7-day trial opens a monthly/yearly subscription once per user; set on first trial activation.
+		// The 7-day trial can be used once per user; set on first trial activation.
 		trialUsedAt: pg.timestamp("trial_used_at", { withTimezone: true }),
-		// When that trial converts into the chosen plan (from the provider's subscription).
+		// End of a trial that opened a monthly/yearly subscription (PR #35 model, before the one-time pass).
 		trialEndsAt: pg.timestamp("trial_ends_at", { withTimezone: true }),
+		// Set once the "your trial has ended" email for a one-time pass has gone out (also the job's claim).
+		trialEndedEmailAt: pg.timestamp("trial_ended_email_at", { withTimezone: true }),
 
 		// Provider metadata (raw webhook data for debugging)
 		metadata: pg.jsonb("metadata"),

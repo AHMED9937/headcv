@@ -5,7 +5,7 @@ import { useNavigate, useRouteContext } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { client, orpc } from "@/libs/orpc/client";
-import { checkoutErrorMessage, toCheckoutInput } from "./checkout-plan";
+import { checkoutErrorMessage } from "./checkout-plan";
 
 export type { CheckoutPlan } from "./checkout-plan";
 
@@ -39,7 +39,7 @@ export function useSubscription({ enabled = true }: { enabled?: boolean } = {}) 
 	const sub = query.data;
 
 	const isPaid = sub?.effectiveAccess === "paid";
-	// The server reports a trial end only while one is running; the trial already continues as the chosen plan.
+	// The server reports a trial end only while a trial is running.
 	const isTrial = isPaid && !!sub?.trialEndsAt;
 	const trialDaysLeft =
 		isTrial && sub?.trialEndsAt
@@ -60,8 +60,9 @@ export function useSubscription({ enabled = true }: { enabled?: boolean } = {}) 
 		nearLimit,
 		// Unknown (loading or signed out) stays eligible; the server enforces the rule.
 		trialEligible: sub?.trialEligible ?? true,
-		// Anyone with Pro (trial included) changes plans in the portal; a second checkout would double-bill.
-		showUpgrade: !!sub && !isPaid,
+		// Subscribers change plans in the portal (a second checkout would double-bill). The one-time trial pass
+		// never renews, so its holders may pick a plan to keep Pro.
+		showUpgrade: !!sub && (!isPaid || sub.plan === "trial_pass"),
 	};
 }
 
@@ -93,7 +94,7 @@ export function useCheckout() {
 		redirectTimeoutRef.current = setTimeout(() => setPendingPlan(null), CHECKOUT_REDIRECT_TIMEOUT_MS);
 
 		try {
-			const result = await client.billing.createCheckoutSession(toCheckoutInput(plan));
+			const result = await client.billing.createCheckoutSession({ plan });
 			if (redirectTimeoutRef.current) {
 				clearTimeout(redirectTimeoutRef.current);
 				redirectTimeoutRef.current = null;

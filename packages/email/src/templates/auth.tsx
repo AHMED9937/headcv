@@ -44,7 +44,8 @@ interface AuthEmailLayoutProps {
 	outro: string;
 }
 
-function AuthEmailLayout({
+/** HeadCV's branded email card, shared by account and billing emails. */
+export function AuthEmailLayout({
 	preview,
 	eyebrow,
 	heading,

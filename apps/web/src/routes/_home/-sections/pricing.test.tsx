@@ -49,17 +49,34 @@ function renderPricing() {
 	);
 }
 
+const tab = (name: RegExp) => screen.getByRole("button", { name });
+
 describe("Landing pricing", () => {
-	it("shows the compact $3 trial before the plans without repeated duration or arrows", () => {
+	it("offers the trial as a third tab beside Yearly and Monthly, with no separate banner", () => {
 		renderPricing();
-		const trial = screen.getByRole("region", { name: "Try all of Pro." });
-		expect(within(trial).getByText("$3")).toBeInTheDocument();
-		expect(within(trial).getByText("7-day trial")).toBeInTheDocument();
-		expect(trial.textContent).not.toMatch(/US|for 7 days|→/);
-		expect(
-			trial.compareDocumentPosition(screen.getByRole("heading", { name: "Pro" })) & Node.DOCUMENT_POSITION_FOLLOWING,
-		).toBeTruthy();
-		expect(within(trial).getByRole("button", { name: "Start 7-day trial" })).toBeInTheDocument();
+		const periods = within(screen.getByRole("group", { name: "Billing period" }));
+
+		expect(periods.getAllByRole("button").map((button) => button.textContent)).toEqual([
+			"YearlySave 75%",
+			"Monthly",
+			"7-day trial",
+		]);
+		expect(screen.queryByText("Try all of Pro.")).not.toBeInTheDocument();
+	});
+
+	it("shows the trial as a one-time $3 with no auto-renewal, and starts it from the Pro button", () => {
+		renderPricing();
+		fireEvent.click(tab(/^7-day trial$/));
+
+		expect(tab(/^7-day trial$/)).toHaveAttribute("aria-pressed", "true");
+		expect(screen.getByText("$3")).toBeInTheDocument();
+		expect(screen.getByText("one-time")).toBeInTheDocument();
+		expect(screen.getByText(/No auto-renewal/)).toHaveTextContent(
+			"7 days of every Pro tool. No auto-renewal: nothing is charged after.",
+		);
+
+		fireEvent.click(screen.getByRole("button", { name: "Start 7-day trial" }));
+		expect(navigateMock).toHaveBeenLastCalledWith({ to: "/auth/login", search: { plan: "trial" } });
 	});
 
 	it("describes the Free and Pro plans without cover-letter benefits", () => {
@@ -71,23 +88,21 @@ describe("Landing pricing", () => {
 		expect(screen.queryByText(/cover letter/i)).not.toBeInTheDocument();
 	});
 
-	it("hides the trial offer from users who already used it", () => {
+	it("hides the trial tab from users who already used it", () => {
 		subscription.trialEligible = false;
 		renderPricing();
-		expect(screen.queryByRole("region", { name: "Try all of Pro." })).not.toBeInTheDocument();
+		expect(screen.queryByRole("button", { name: /7-day trial/ })).not.toBeInTheDocument();
 		expect(screen.getByRole("button", { name: "Get Pro" })).toBeInTheDocument();
 	});
 
-	it("keeps the yearly toggle beside Pro and switches billing periods", () => {
+	it("starts on Yearly and switches billing periods with the tabs", () => {
 		renderPricing();
-		const billingSwitch = screen.getByRole("switch", { name: "Yearly billing" });
-		expect(billingSwitch).toBeChecked();
+		expect(tab(/Yearly/)).toHaveAttribute("aria-pressed", "true");
 		expect(screen.getByText("$5")).toBeInTheDocument();
 
-		fireEvent.click(billingSwitch);
-		expect(billingSwitch).not.toBeChecked();
-		expect(billingSwitch).toHaveAccessibleName("Monthly billing");
-		expect(screen.getByText("Monthly billing")).toBeInTheDocument();
+		fireEvent.click(tab(/Monthly/));
+		expect(tab(/Monthly/)).toHaveAttribute("aria-pressed", "true");
+		expect(tab(/Yearly/)).toHaveAttribute("aria-pressed", "false");
 		expect(screen.getAllByText("$20").length).toBeGreaterThan(0);
 	});
 
@@ -95,27 +110,5 @@ describe("Landing pricing", () => {
 		renderPricing();
 		fireEvent.click(screen.getByRole("button", { name: "Get Pro" }));
 		expect(navigateMock).toHaveBeenCalledWith({ to: "/auth/login", search: { plan: "yearly" } });
-	});
-
-	it("redirects unauthenticated user to login with the trial on the selected plan", () => {
-		renderPricing();
-		const startTrial = screen.getByRole("button", { name: "Start 7-day trial" });
-
-		fireEvent.click(startTrial);
-		expect(navigateMock).toHaveBeenLastCalledWith({ to: "/auth/login", search: { plan: "yearly-trial" } });
-
-		fireEvent.click(screen.getByRole("switch", { name: "Yearly billing" }));
-		fireEvent.click(startTrial);
-		expect(navigateMock).toHaveBeenLastCalledWith({ to: "/auth/login", search: { plan: "monthly-trial" } });
-	});
-
-	it("says what the trial turns into for the selected billing period", () => {
-		renderPricing();
-		const trial = screen.getByRole("region", { name: "Try all of Pro." });
-		const terms = () => within(trial).getByText(/Cancel anytime during the trial/);
-		expect(terms()).toHaveTextContent("Then $60/year. Cancel anytime during the trial.");
-
-		fireEvent.click(screen.getByRole("switch", { name: "Yearly billing" }));
-		expect(terms()).toHaveTextContent("Then $20/month. Cancel anytime during the trial.");
 	});
 });

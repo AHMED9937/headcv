@@ -91,15 +91,15 @@ describe("useCheckout", () => {
 		expect(toastError).toHaveBeenCalledWith("Could not start checkout. Please try again.");
 	});
 
-	it("asks for the trial on the plan the user chose, and buys outright otherwise", async () => {
+	it("sends the chosen plan, including the one-time trial", async () => {
 		createCheckoutSession.mockResolvedValue({ checkoutUrl: "https://checkout.dodopayments.com/s/abc" });
 
 		const { result } = renderHook(() => useCheckout());
-		await act(async () => result.current.checkout("yearly-trial"));
-		expect(createCheckoutSession).toHaveBeenLastCalledWith({ plan: "yearly", trial: true });
+		await act(async () => result.current.checkout("trial"));
+		expect(createCheckoutSession).toHaveBeenLastCalledWith({ plan: "trial" });
 
 		await act(async () => result.current.checkout("monthly"));
-		expect(createCheckoutSession).toHaveBeenLastCalledWith({ plan: "monthly", trial: false });
+		expect(createCheckoutSession).toHaveBeenLastCalledWith({ plan: "monthly" });
 	});
 
 	it("shows a specific error for an already-used trial", async () => {
@@ -107,7 +107,7 @@ describe("useCheckout", () => {
 		createCheckoutSession.mockRejectedValue(new ORPCError("TRIAL_ALREADY_USED", { message: "Trial used" }));
 
 		const { result } = renderHook(() => useCheckout());
-		await act(async () => result.current.checkout("monthly-trial"));
+		await act(async () => result.current.checkout("trial"));
 
 		expect(toastError).toHaveBeenCalledWith(
 			"You've already used your 7-day trial. Choose monthly or yearly to keep going.",
@@ -169,16 +169,16 @@ describe("useSubscription", () => {
 		return result.current;
 	};
 
-	it("shows a running trial on the plan it turns into, without offering another plan", async () => {
+	it("shows a running trial pass and lets its holder move to a plan, since nothing renews", async () => {
 		const state = await renderSubscription({
-			plan: "yearly",
+			plan: "trial_pass",
 			effectiveAccess: "paid",
 			trialEndsAt: new Date(Date.now() + 3.5 * DAY).toISOString(),
 		});
-		expect(state).toMatchObject({ isPaid: true, isTrial: true, trialDaysLeft: 4, showUpgrade: false });
+		expect(state).toMatchObject({ isPaid: true, isTrial: true, trialDaysLeft: 4, showUpgrade: true });
 	});
 
-	it("treats a converted trial as the plan itself", async () => {
+	it("offers subscribers no second plan", async () => {
 		const state = await renderSubscription({ plan: "monthly", effectiveAccess: "paid" });
 		expect(state).toMatchObject({ isPaid: true, isTrial: false, trialDaysLeft: null, showUpgrade: false });
 	});

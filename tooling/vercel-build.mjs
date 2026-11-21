@@ -143,6 +143,9 @@ writeFileSync(
 				check: true,
 			},
 		],
+		// Vercel Cron (Build Output API): daily works on every plan. Ends one-time 7-day trial passes and
+		// sends their "trial ended" email; access itself already ends on time without it.
+		crons: [{ path: "/api/cron/trial-pass", schedule: "0 8 * * *" }],
 	}),
 );
 

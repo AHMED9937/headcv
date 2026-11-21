@@ -28,6 +28,7 @@
 		"@headcv/ai": "workspace:*",
 		"@headcv/auth": "workspace:*",
 		"@headcv/db": "workspace:*",
+		"@headcv/email": "workspace:*",
 		"@headcv/env": "workspace:*",
 		"@headcv/pdf": "workspace:*",
 		"@headcv/resume": "workspace:*",

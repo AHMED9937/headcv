@@ -12,7 +12,7 @@ import { Button } from "@headcv/ui/components/button";
 import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
 import { Input } from "@headcv/ui/components/input";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@headcv/ui/components/input-group";
-import { checkoutErrorMessage, toCheckoutInput } from "@/features/billing/checkout-plan";
+import { checkoutErrorMessage } from "@/features/billing/checkout-plan";
 import { authClient } from "@/libs/auth/client";
 import { client, orpc } from "@/libs/orpc/client";
 import { useAppForm } from "@/libs/tanstack-form";
@@ -104,7 +104,7 @@ export function LoginPage({ disableEmailAuth, disableSignups, pendingPlan }: Pro
 				// If the user arrived with a plan intent, start checkout immediately
 				if (pendingPlan) {
 					try {
-						const checkout = await client.billing.createCheckoutSession(toCheckoutInput(pendingPlan));
+						const checkout = await client.billing.createCheckoutSession({ plan: pendingPlan });
 						window.location.href = checkout.checkoutUrl;
 						return;
 					} catch (error) {

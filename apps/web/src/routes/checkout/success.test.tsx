@@ -42,7 +42,7 @@ function renderPage() {
 
 describe("Checkout success page", () => {
 	it("shows progress immediately, then the activated plan", async () => {
-		mocks.verify.mockResolvedValue({ activated: true, plan: "yearly", status: "active", trial: false });
+		mocks.verify.mockResolvedValue({ activated: true, plan: "yearly", status: "active", trialEndsAt: null });
 		renderPage();
 
 		expect(screen.getByRole("heading", { name: "Verifying payment..." })).toBeInTheDocument();
@@ -51,13 +51,19 @@ describe("Checkout success page", () => {
 		expect(screen.getByRole("link", { name: "Go to Dashboard" })).toHaveAttribute("href", "/dashboard");
 	});
 
-	it("confirms a started trial and the plan it turns into", async () => {
-		mocks.verify.mockResolvedValue({ activated: true, plan: "monthly", status: "active", trial: true });
+	it("confirms a started trial, when it ends, and that nothing renews", async () => {
+		const endsAt = new Date("2026-11-28T10:00:00Z");
+		mocks.verify.mockResolvedValue({
+			activated: true,
+			plan: "trial_pass",
+			status: "active",
+			trialEndsAt: endsAt.toISOString(),
+		});
 		renderPage();
 
 		expect(
 			await screen.findByText(
-				/Your 7-day Pro trial has started\. It continues as Pro Monthly unless you cancel before it ends\./,
+				`Your 7-day Pro trial has started. It ends on ${endsAt.toLocaleDateString()}, and nothing renews.`,
 			),
 		).toBeInTheDocument();
 	});

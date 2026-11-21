@@ -33,10 +33,6 @@ msgstr "تم الإنشاء"
 msgid "Name"
 msgstr "الاسم"
 
-#: src/routes/_home/-sections/pricing.tsx
-msgid "-75%"
-msgstr "-٧٥٪"
-
 #. placeholder {0}: section.items.length
 #: src/routes/builder/$resumeId/-sidebar/left/sections/custom.tsx
 msgid "{0, plural, one {# item} other {# items}}"
@@ -86,10 +82,9 @@ msgid "billing.plan.trialLeft"
 msgstr "متبقٍ {trialDaysLeft} أيام في فترتك التجريبية."
 
 #. js-lingui-explicit-id
-#. placeholder {0}: planLabel(sub.plan)
 #: src/routes/dashboard/settings/billing.tsx
-msgid "billing.plan.trialThen"
-msgstr "متبقٍ {trialDaysLeft} أيام في فترتك التجريبية. بعدها يبدأ {0} في {trialEnd} — يمكنك الإلغاء في أي وقت قبل ذلك."
+msgid "billing.plan.trialPass"
+msgstr "متبقٍ {trialDaysLeft} أيام في فترتك التجريبية. تنتهي في {trialEnd} ولن يتجدد أي شيء تلقائيًا."
 
 #. js-lingui-explicit-id
 #: src/features/billing/plan-picker.tsx
@@ -140,9 +135,14 @@ msgid "6 months"
 msgstr "6 أشهر"
 
 #. js-lingui-explicit-id
-#: src/routes/_home/-sections/pricing.tsx
-msgid "home.offer.label"
-msgstr "تجربة لمدة 7 أيام"
+#: src/features/billing/plan-picker.tsx
+msgid "billing.trial.note"
+msgstr "7 أيام من كل أدوات Pro. بلا تجديد تلقائي: لن يُخصم أي مبلغ بعدها."
+
+#. js-lingui-explicit-id
+#: src/features/billing/plan-picker.tsx
+msgid "billing.tabs.trial"
+msgstr "تجربة 7 أيام"
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/templates-showcase.tsx
@@ -1612,11 +1612,6 @@ msgstr "أدخِل كلمة المرور الخاصة بك لتأكيد إعدا
 msgid "Enter your password to disable two-factor authentication. Your account will be less secure without 2FA enabled."
 msgstr "أدخِل كلمة المرور الخاصة بك لتعطيل المصادقة الثنائية. سيكون حسابك أقل أمانًا بدون تمكين المصادقة الثنائية (2FA)."
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/pricing.tsx
-msgid "home.offer.description"
-msgstr "كل أدوات النسخة الاحترافية. سير ذاتية غير محدودة."
-
 #: src/routes/_home/-sections/pricing.tsx
 msgid "Everything you need for a professional resume:"
 msgstr "كل ما تحتاجه لإنشاء سيرة ذاتية احترافية:"
@@ -2408,6 +2403,11 @@ msgstr "احتفظ بهذه التغييرات أو تراجع عنها قبل �
 msgid "Keep or revert this update before requesting another AI change."
 msgstr "احتفظ بهذا التحديث أو تراجع عنه قبل طلب تغيير آخر من الذكاء الاصطناعي."
 
+#. js-lingui-explicit-id
+#: src/routes/dashboard/settings/billing.tsx
+msgid "billing.upgrade.keepPro"
+msgstr "احتفظ بـ Pro بعد الفترة التجريبية"
+
 #: src/components/section-tips.tsx
 msgid "Keep this entry relevant, specific, and easy to scan."
 msgstr "اجعل هذا الإدخال ذا صلة ومحددًا وسهل القراءة السريعة."
@@ -2667,10 +2667,6 @@ msgstr "مايكروسوفت وورد"
 msgid "home.pricing.monthly"
 msgstr "شهريًا"
 
-#: src/routes/_home/-sections/pricing.tsx
-msgid "Monthly billing"
-msgstr "الفوترة الشهرية"
-
 #: src/routes/builder/$resumeId/-components/header.tsx
 msgid "More"
 msgstr "المزيد"
@@ -2834,6 +2830,11 @@ msgstr "ملاحظات"
 #: src/routes/_home/-sections/tools.tsx
 msgid "home.demo.one"
 msgstr "عمود واحد"
+
+#. js-lingui-explicit-id
+#: src/features/billing/plan-picker.tsx
+msgid "billing.trial.oneTime"
+msgstr "دفعة واحدة"
 
 #. Resume card context menu action to open the resume editor
 #. Resume card dropdown action to open the resume editor
@@ -4118,18 +4119,6 @@ msgstr "عنوان URL الذي أدخلته غير صالح."
 msgid "Theme"
 msgstr "السمة"
 
-#. js-lingui-explicit-id
-#. placeholder {0}: money(PRO_PRICES.monthly)
-#: src/features/billing/plan-picker.tsx
-msgid "billing.trial.thenMonthly"
-msgstr "بعدها <0>{0}</0>/شهر. يمكنك الإلغاء في أي وقت خلال الفترة التجريبية."
-
-#. js-lingui-explicit-id
-#. placeholder {0}: money(PRO_PRICES.yearlyTotal)
-#: src/features/billing/plan-picker.tsx
-msgid "billing.trial.thenYearly"
-msgstr "بعدها <0>{0}</0>/سنة. يمكنك الإلغاء في أي وقت خلال الفترة التجريبية."
-
 #: src/dialogs/auth/enable-two-factor.tsx
 msgid "Then, enter the 6 digit code that the app provides to continue."
 msgstr "بعد ذلك، أدخِل الرمز المكوَّن من 6 أرقام الذي يقدّمه التطبيق للمتابعة."
@@ -4337,12 +4326,6 @@ msgstr "حاول مجددًا"
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.retry"
 msgstr "حاول مجددًا"
-
-#. js-lingui-explicit-id
-#: src/features/billing/plan-picker.tsx
-#: src/routes/_home/-sections/pricing.tsx
-msgid "home.offer.title"
-msgstr "جرّب كل مزايا النسخة الاحترافية."
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/statistics.tsx
 msgid "Turn on public sharing to track how many times your resume has been viewed or downloaded. Only you can see your resume's statistics."
@@ -4796,10 +4779,6 @@ msgstr "اكتب وحرّر وشاهد معاينة سيرتك الذاتية. �
 msgid "home.pricing.yearly"
 msgstr "سنويًا"
 
-#: src/routes/_home/-sections/pricing.tsx
-msgid "Yearly billing"
-msgstr "الفوترة السنوية"
-
 #: src/features/resume/builder/ai-review.tsx
 msgid "Yes"
 msgstr "نعم"
@@ -4879,10 +4858,9 @@ msgid "checkout.success.plan"
 msgstr "خطة {0} مفعّلة. استمتع بسير ذاتية ومحادثات ذكاء اصطناعي بلا حدود!"
 
 #. js-lingui-explicit-id
-#. placeholder {0}: planLabel(plan)
 #: src/routes/checkout/success.tsx
-msgid "checkout.success.trial"
-msgstr "بدأت فترتك التجريبية لـ Pro لمدة 7 أيام. ستستمر بعدها بخطة {0} ما لم تُلغِها قبل انتهائها."
+msgid "checkout.success.trialPass"
+msgstr "بدأت فترتك التجريبية لـ Pro لمدة 7 أيام. تنتهي في {trialEnd} ولن يتجدد أي شيء تلقائيًا."
 
 #: src/features/settings/pages/danger-zone.tsx
 msgid "Your account has been deleted successfully."

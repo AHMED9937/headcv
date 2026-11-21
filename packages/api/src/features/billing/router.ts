@@ -188,9 +188,8 @@ export const billingRouter = {
 		})
 		.input(
 			z.object({
-				plan: z.enum(["monthly", "yearly"]),
-				/** Open with the one-time 7-day trial; the chosen plan bills automatically when it ends. */
-				trial: z.boolean().default(false),
+				/** "trial" is the one-time $3 pass: 7 days of Pro, once per user, nothing renews. */
+				plan: z.enum(["monthly", "yearly", "trial"]),
 			}),
 		)
 		.errors({
@@ -210,19 +209,22 @@ export const billingRouter = {
 		.handler(async ({ context, input }) => {
 			const sub = await billingService.getSubscription(context.user.id);
 
-			// A second checkout would start a second subscription billed alongside the first (and overwrite
-			// the row tracking it below). Plan changes and cancellations go through the customer portal.
-			if (getEffectiveAccess(sub) === "paid") {
+			if (input.plan === "trial" && hasUsedTrial(sub)) {
+				throw new ORPCError("TRIAL_ALREADY_USED", {
+					message: "The 7-day trial can only be used once. Choose a monthly or yearly plan.",
+				});
+			}
+
+			// A second checkout would start a second subscription billed alongside the first. Plan changes go
+			// through the customer portal. The trial pass never renews, so its holders may buy a plan.
+			const hasPro = getEffectiveAccess(sub) === "paid";
+			if (hasPro && sub.plan !== "trial_pass") {
 				throw new ORPCError("ALREADY_SUBSCRIBED", {
 					message: "You already have Pro. Manage your plan from billing settings.",
 				});
 			}
 
-			if (input.trial && hasUsedTrial(sub)) {
-				throw new ORPCError("TRIAL_ALREADY_USED", {
-					message: "The 7-day trial can only be used once. Choose a monthly or yearly plan.",
-				});
-			}
+			const plan = input.plan === "trial" ? ("trial_pass" as const) : input.plan;
 
 			try {
 				// epay is still a stub, so route everyone to Dodo. Dodo uses the customer's
@@ -231,8 +233,7 @@ export const billingRouter = {
 				const returnUrl = `${env.APP_URL}/checkout/success`;
 
 				const result = await provider.createCheckoutSession({
-					plan: input.plan,
-					trial: input.trial,
+					plan,
 					customerEmail: context.user.email,
 					customerName: context.user.name,
 					returnUrl,
@@ -240,19 +241,25 @@ export const billingRouter = {
 					theme: checkoutThemeFromCookie(parseCookies(context.reqHeaders.get("cookie") ?? "").get("theme")),
 				});
 
-				// Persist the provider customer association so webhooks can map back
-				await billingService.upsertSubscription({
-					userId: context.user.id,
-					provider: provider.name,
-					providerCustomerId: null,
-					providerSubscriptionId: "",
-					plan: "free", // stays free until webhook confirms
-					status: "pending",
-					currentPeriodStart: null,
-					currentPeriodEnd: null,
-					cancelAtPeriodEnd: false,
-					metadata: { sessionId: result.sessionId, pendingPlan: input.plan, trial: input.trial },
-				});
+				// Remember the checkout so the webhook and success page can map it back.
+				const pending = { sessionId: result.sessionId, pendingPlan: plan };
+				if (hasPro) {
+					// A pass holder keeps the days left on the pass until the new plan is confirmed.
+					await billingService.addPendingCheckout(context.user.id, pending);
+				} else {
+					await billingService.upsertSubscription({
+						userId: context.user.id,
+						provider: provider.name,
+						providerCustomerId: null,
+						providerSubscriptionId: "",
+						plan: "free", // stays free until webhook confirms
+						status: "pending",
+						currentPeriodStart: null,
+						currentPeriodEnd: null,
+						cancelAtPeriodEnd: false,
+						metadata: pending,
+					});
+				}
 
 				return { checkoutUrl: result.checkoutUrl };
 			} catch (error) {
@@ -283,19 +290,16 @@ export const billingRouter = {
 		})
 		.handler(async ({ context }) => {
 			const sub = await billingService.getSubscription(context.user.id);
-
-			// Already active — nothing to do
-			if (sub.status === "active" && sub.plan !== "free") {
-				return { activated: true, plan: sub.plan, status: "active", trial: getTrialEnd(sub) !== null };
-			}
-
-			// No pending checkout to verify
 			const meta = sub.metadata as Record<string, unknown> | null;
 			const sessionId = meta?.sessionId as string | undefined;
 			const pendingPlan = meta?.pendingPlan as string | undefined;
 
-			if (!sessionId) {
-				return { activated: false, plan: sub.plan, status: sub.status, trial: false };
+			// Nothing waiting to be verified: report the current state. Checked before "already active" so a
+			// pass holder's new plan is activated, not mistaken for the pass they already have.
+			if (!sessionId || meta?.paymentVerified === true) {
+				const active = sub.status === "active" && sub.plan !== "free";
+				const trialEndsAt = getTrialEnd(sub)?.toISOString() ?? null;
+				return { activated: active, plan: sub.plan, status: sub.status, trialEndsAt };
 			}
 
 			// Verify with Dodo
@@ -303,12 +307,24 @@ export const billingRouter = {
 			const session = await provider.getCheckoutSession(sessionId);
 
 			if (!session || session.paymentStatus !== "succeeded") {
-				return { activated: false, plan: sub.plan, status: session?.paymentStatus ?? "unknown", trial: false };
+				return { activated: false, plan: sub.plan, status: session?.paymentStatus ?? "unknown", trialEndsAt: null };
 			}
 
-			// Payment succeeded — activate. A trial is recorded as used now; its end date arrives with the webhook.
+			// Payment succeeded — activate.
 			const plan = (pendingPlan ?? "monthly") as PlanSlug;
-			const trial = meta?.trial === true;
+			const metadata = { ...meta, paymentVerified: true };
+
+			if (plan === "trial_pass") {
+				const endsAt = await billingService.startTrialPass({
+					userId: context.user.id,
+					provider: provider.name,
+					providerCustomerId: session.customerId,
+					startedAt: new Date(),
+					metadata,
+				});
+				await entitlementService.resetUsage(context.user.id);
+				return { activated: true, plan, status: "active", trialEndsAt: endsAt.toISOString() };
+			}
 
 			await billingService.upsertSubscription({
 				userId: context.user.id,
@@ -320,13 +336,12 @@ export const billingRouter = {
 				currentPeriodStart: new Date(),
 				currentPeriodEnd: null, // will be set by webhook renewal
 				cancelAtPeriodEnd: false,
-				metadata: { ...meta, paymentVerified: true },
-				...(trial && { trial: { endsAt: null } }),
+				metadata,
 			});
 
 			await entitlementService.resetUsage(context.user.id);
 
-			return { activated: true, plan, status: "active", trial };
+			return { activated: true, plan, status: "active", trialEndsAt: null };
 		}),
 
 	/** Protected: get the customer portal URL for managing subscription. */

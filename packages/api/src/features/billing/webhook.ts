@@ -27,10 +27,13 @@ import { billingService, entitlementService, getEffectiveAccess } from "./servic
 // Types
 // ---------------------------------------------------------------------------
 
+/** Subscription and payment payloads share the fields used here (payments carry product_cart). */
 interface DodoSubscriptionData {
-	subscription_id?: string;
+	subscription_id?: string | null;
+	payment_id?: string;
 	customer?: { customer_id?: string; email?: string };
 	product_id?: string;
+	product_cart?: Array<{ product_id: string }> | null;
 	status?: string;
 	created_at?: string;
 	next_billing_date?: string;
@@ -166,6 +169,34 @@ async function handleSubscriptionActive(data: DodoSubscriptionData, eventType = 
 	});
 
 	// Reset usage counters on activation
+	await entitlementService.resetUsage(userId);
+}
+
+/** The one-time 7-day trial pass was paid: Pro from the payment time, with nothing to renew. */
+async function handleTrialPassPaid(data: DodoSubscriptionData) {
+	// Subscription payments (first charges, renewals) are handled by the subscription.* events.
+	if (data.subscription_id) return;
+	if (!data.product_cart?.some((item) => getPlanForProductId(item.product_id) === "trial_pass")) return;
+
+	const userId = await findUserForSubscriptionEvent(data);
+	if (!userId) throw new Error(`[billing-webhook] payment.succeeded: cannot find user for pass ${data.payment_id}`);
+
+	// Checkout refuses a pass to anyone already paying; if one slips through, keep their plan and ask for a refund.
+	const existing = await billingService.getSubscription(userId);
+	if (getEffectiveAccess(existing) === "paid" && existing.plan !== "trial_pass") {
+		console.error(
+			`[billing-webhook] TRIAL PASS PAID BY SUBSCRIBER user=${userId} payment=${data.payment_id}: refund it`,
+		);
+		return;
+	}
+
+	await billingService.startTrialPass({
+		userId,
+		provider: "dodo",
+		providerCustomerId: data.customer?.customer_id ?? null,
+		startedAt: data.created_at ? new Date(data.created_at) : new Date(),
+		metadata: data,
+	});
 	await entitlementService.resetUsage(userId);
 }
 
@@ -340,6 +371,9 @@ export async function processDodoWebhook(rawBody: string, headers: Record<string
 
 async function routeEvent(eventType: string, data: DodoSubscriptionData) {
 	switch (eventType) {
+		case "payment.succeeded":
+			await handleTrialPassPaid(data);
+			break;
 		case "subscription.active":
 			await handleSubscriptionActive(data);
 			break;

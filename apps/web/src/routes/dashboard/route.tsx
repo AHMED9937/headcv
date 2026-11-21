@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@headcv/ui/components/avatar";
 import { BrandIcon } from "@headcv/ui/components/brand-icon";
 import { getInitials } from "@headcv/utils/string";
-import { checkoutErrorMessage, isCheckoutPlan, toCheckoutInput } from "@/features/billing/checkout-plan";
+import { checkoutErrorMessage, isCheckoutPlan } from "@/features/billing/checkout-plan";
 import { PlanBadge } from "@/features/billing/plan-badge";
 import { UserDropdownMenu } from "@/features/user/dropdown-menu";
 import { client } from "@/libs/orpc/client";
@@ -58,7 +58,7 @@ function useAutoCheckout() {
 
 		if (!isCheckoutPlan(plan)) return;
 		started.current = true;
-		const input = toCheckoutInput(plan);
+		const input = { plan };
 
 		const startCheckout = async () => {
 			try {

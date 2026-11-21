@@ -34,9 +34,8 @@ export interface LocalizedPricing {
 }
 
 export interface CheckoutSessionParams {
-	plan: "monthly" | "yearly";
-	/** Open with the one-time 7-day trial, after which the chosen plan bills automatically. */
-	trial: boolean;
+	/** A subscription plan, or the one-time 7-day trial pass (a single charge with nothing to renew). */
+	plan: "monthly" | "yearly" | "trial_pass";
 	customerEmail: string;
 	customerName?: string;
 	customerId?: string;

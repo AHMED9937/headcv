@@ -16,7 +16,8 @@ vi.mock("@headcv/db/client", () => ({
 	},
 }));
 
-const { entitlementService, getEffectiveAccess, getPlanLimits, getTrialEnd, hasUsedTrial } = await import("./service");
+const { billingService, entitlementService, getEffectiveAccess, getPlanLimits, getTrialEnd, hasUsedTrial } =
+	await import("./service");
 
 const activeSubscription = (plan: string) => ({
 	userId: "user-1",
@@ -34,6 +35,7 @@ describe("hasUsedTrial", () => {
 
 	it("blocks users who are on the trial or already had it", () => {
 		expect(hasUsedTrial({ plan: "trial", trialUsedAt: null })).toBe(true);
+		expect(hasUsedTrial({ plan: "trial_pass", trialUsedAt: null })).toBe(true);
 		expect(hasUsedTrial({ plan: "free", trialUsedAt: new Date("2026-01-01") })).toBe(true);
 		expect(hasUsedTrial({ plan: "monthly", trialUsedAt: new Date("2026-01-01") })).toBe(true);
 	});
@@ -65,12 +67,47 @@ describe("getTrialEnd", () => {
 	it("reads the retired $3 weekly trial from its period end", () => {
 		expect(getTrialEnd({ ...trialing, plan: "trial", trialEndsAt: null })).toEqual(trialing.currentPeriodEnd);
 	});
+
+	it("reads a running 7-day pass from its period end", () => {
+		expect(getTrialEnd({ ...trialing, plan: "trial_pass", trialEndsAt: null })).toEqual(trialing.currentPeriodEnd);
+	});
+});
+
+describe("billingService.startTrialPass", () => {
+	it("grants exactly 7 days from the payment, as a pass with no subscription and the trial marked used", async () => {
+		const upsert = vi.spyOn(billingService, "upsertSubscription").mockResolvedValue(undefined as never);
+		const startedAt = new Date("2026-11-21T10:00:00Z");
+
+		const endsAt = await billingService.startTrialPass({
+			userId: "user-1",
+			provider: "dodo",
+			providerCustomerId: "cus_1",
+			startedAt,
+			metadata: { payment_id: "pay_1" },
+		});
+
+		expect(endsAt).toEqual(new Date("2026-11-28T10:00:00Z"));
+		expect(upsert).toHaveBeenCalledWith(
+			expect.objectContaining({
+				userId: "user-1",
+				plan: "trial_pass",
+				status: "active",
+				providerSubscriptionId: "",
+				currentPeriodStart: startedAt,
+				currentPeriodEnd: endsAt,
+				cancelAtPeriodEnd: false,
+				trial: { endsAt: null },
+			}),
+		);
+		upsert.mockRestore();
+	});
 });
 
 describe("getPlanLimits", () => {
 	it("gives free users 3 resumes and every paid plan unlimited", () => {
 		expect(getPlanLimits("free").resumes).toBe(3);
 		expect(getPlanLimits("trial").resumes).toBe(-1);
+		expect(getPlanLimits("trial_pass").resumes).toBe(-1);
 		expect(getPlanLimits("monthly").resumes).toBe(-1);
 		expect(getPlanLimits("yearly").resumes).toBe(-1);
 		expect(getPlanLimits("unknown").resumes).toBe(3);
@@ -137,5 +174,12 @@ describe("getEffectiveAccess", () => {
 	it("keeps Pro until the end of a period whose cancellation is scheduled", () => {
 		expect(getEffectiveAccess({ ...active(5 * 24 * HOUR), status: "cancelled", cancelAtPeriodEnd: true })).toBe("paid");
 		expect(getEffectiveAccess({ ...active(-HOUR), status: "cancelled", cancelAtPeriodEnd: true })).toBe("free");
+	});
+
+	it("ends a 7-day pass exactly on time, since nothing renews it", () => {
+		const pass = (periodEndOffsetMs: number) => ({ ...active(periodEndOffsetMs), plan: "trial_pass" });
+		expect(getEffectiveAccess(pass(HOUR))).toBe("paid");
+		expect(getEffectiveAccess(pass(-60 * 1000))).toBe("free");
+		expect(getEffectiveAccess({ ...pass(HOUR), currentPeriodEnd: null })).toBe("free");
 	});
 });

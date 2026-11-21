@@ -34,7 +34,7 @@ function CheckoutSuccess() {
 	const paymentUnsuccessful = !!status && UNSUCCESSFUL_STATUSES.has(status);
 	const [state, setState] = useState<ActivationState>(paymentUnsuccessful ? "not-completed" : "verifying");
 	const [plan, setPlan] = useState("");
-	const [trial, setTrial] = useState(false);
+	const [trialEnd, setTrialEnd] = useState<string | null>(null);
 	const attempts = useRef(0);
 	const timer = useRef<number | undefined>(undefined);
 
@@ -43,7 +43,7 @@ function CheckoutSuccess() {
 			const result = await client.billing.verifyAndActivate({});
 			if (result.activated) {
 				setPlan(result.plan);
-				setTrial(result.trial);
+				setTrialEnd(result.trialEndsAt ? new Date(result.trialEndsAt).toLocaleDateString() : null);
 				setState("activated");
 				// Refresh the plan badge and billing page everywhere.
 				void queryClient.invalidateQueries({ queryKey: orpc.billing.getSubscription.key() });
@@ -111,9 +111,9 @@ function CheckoutSuccess() {
 						icon={<CheckCircleIcon className="mx-auto size-16 text-green-600" weight="fill" aria-hidden="true" />}
 						title={<Trans id="checkout.success.title">Welcome to Pro!</Trans>}
 						description={
-							trial ? (
-								<Trans id="checkout.success.trial">
-									Your 7-day Pro trial has started. It continues as {planLabel(plan)} unless you cancel before it ends.
+							trialEnd ? (
+								<Trans id="checkout.success.trialPass">
+									Your 7-day Pro trial has started. It ends on {trialEnd}, and nothing renews.
 								</Trans>
 							) : (
 								<Trans id="checkout.success.plan">

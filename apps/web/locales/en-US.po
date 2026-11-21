@@ -28,10 +28,6 @@ msgstr "Created"
 msgid "Name"
 msgstr "Name"
 
-#: src/routes/_home/-sections/pricing.tsx
-msgid "-75%"
-msgstr "-75%"
-
 #. placeholder {0}: section.items.length
 #: src/routes/builder/$resumeId/-sidebar/left/sections/custom.tsx
 msgid "{0, plural, one {# item} other {# items}}"
@@ -81,10 +77,9 @@ msgid "billing.plan.trialLeft"
 msgstr "{trialDaysLeft} days left in your trial."
 
 #. js-lingui-explicit-id
-#. placeholder {0}: planLabel(sub.plan)
 #: src/routes/dashboard/settings/billing.tsx
-msgid "billing.plan.trialThen"
-msgstr "{trialDaysLeft} days left in your trial. Then {0} begins on {trialEnd} — cancel anytime before."
+msgid "billing.plan.trialPass"
+msgstr "{trialDaysLeft} days left in your trial. It ends on {trialEnd}, and nothing renews."
 
 #. js-lingui-explicit-id
 #: src/features/billing/plan-picker.tsx
@@ -135,8 +130,13 @@ msgid "6 months"
 msgstr "6 months"
 
 #. js-lingui-explicit-id
-#: src/routes/_home/-sections/pricing.tsx
-msgid "home.offer.label"
+#: src/features/billing/plan-picker.tsx
+msgid "billing.trial.note"
+msgstr "7 days of every Pro tool. No auto-renewal: nothing is charged after."
+
+#. js-lingui-explicit-id
+#: src/features/billing/plan-picker.tsx
+msgid "billing.tabs.trial"
 msgstr "7-day trial"
 
 #. js-lingui-explicit-id
@@ -1607,11 +1607,6 @@ msgstr "Enter your password to confirm setting up two-factor authentication. Whe
 msgid "Enter your password to disable two-factor authentication. Your account will be less secure without 2FA enabled."
 msgstr "Enter your password to disable two-factor authentication. Your account will be less secure without 2FA enabled."
 
-#. js-lingui-explicit-id
-#: src/routes/_home/-sections/pricing.tsx
-msgid "home.offer.description"
-msgstr "Every Pro tool. Unlimited resumes."
-
 #: src/routes/_home/-sections/pricing.tsx
 msgid "Everything you need for a professional resume:"
 msgstr "Everything you need for a professional resume:"
@@ -2403,6 +2398,11 @@ msgstr "Keep or revert these changes before requesting another AI update."
 msgid "Keep or revert this update before requesting another AI change."
 msgstr "Keep or revert this update before requesting another AI change."
 
+#. js-lingui-explicit-id
+#: src/routes/dashboard/settings/billing.tsx
+msgid "billing.upgrade.keepPro"
+msgstr "Keep Pro after your trial"
+
 #: src/components/section-tips.tsx
 msgid "Keep this entry relevant, specific, and easy to scan."
 msgstr "Keep this entry relevant, specific, and easy to scan."
@@ -2662,10 +2662,6 @@ msgstr "Microsoft Word"
 msgid "home.pricing.monthly"
 msgstr "Monthly"
 
-#: src/routes/_home/-sections/pricing.tsx
-msgid "Monthly billing"
-msgstr "Monthly billing"
-
 #: src/routes/builder/$resumeId/-components/header.tsx
 msgid "More"
 msgstr "More"
@@ -2829,6 +2825,11 @@ msgstr "Notes"
 #: src/routes/_home/-sections/tools.tsx
 msgid "home.demo.one"
 msgstr "One column"
+
+#. js-lingui-explicit-id
+#: src/features/billing/plan-picker.tsx
+msgid "billing.trial.oneTime"
+msgstr "one-time"
 
 #. Resume card context menu action to open the resume editor
 #. Resume card dropdown action to open the resume editor
@@ -4113,18 +4114,6 @@ msgstr "The URL you entered is not valid."
 msgid "Theme"
 msgstr "Theme"
 
-#. js-lingui-explicit-id
-#. placeholder {0}: money(PRO_PRICES.monthly)
-#: src/features/billing/plan-picker.tsx
-msgid "billing.trial.thenMonthly"
-msgstr "Then <0>{0}</0>/month. Cancel anytime during the trial."
-
-#. js-lingui-explicit-id
-#. placeholder {0}: money(PRO_PRICES.yearlyTotal)
-#: src/features/billing/plan-picker.tsx
-msgid "billing.trial.thenYearly"
-msgstr "Then <0>{0}</0>/year. Cancel anytime during the trial."
-
 #: src/dialogs/auth/enable-two-factor.tsx
 msgid "Then, enter the 6 digit code that the app provides to continue."
 msgstr "Then, enter the 6 digit code that the app provides to continue."
@@ -4332,12 +4321,6 @@ msgstr "Try again"
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.retry"
 msgstr "Try again"
-
-#. js-lingui-explicit-id
-#: src/features/billing/plan-picker.tsx
-#: src/routes/_home/-sections/pricing.tsx
-msgid "home.offer.title"
-msgstr "Try all of Pro."
 
 #: src/routes/builder/$resumeId/-sidebar/right/sections/statistics.tsx
 msgid "Turn on public sharing to track how many times your resume has been viewed or downloaded. Only you can see your resume's statistics."
@@ -4791,10 +4774,6 @@ msgstr "Write, edit and preview your resume. No credit card needed to begin."
 msgid "home.pricing.yearly"
 msgstr "Yearly"
 
-#: src/routes/_home/-sections/pricing.tsx
-msgid "Yearly billing"
-msgstr "Yearly billing"
-
 #: src/features/resume/builder/ai-review.tsx
 msgid "Yes"
 msgstr "Yes"
@@ -4874,10 +4853,9 @@ msgid "checkout.success.plan"
 msgstr "Your {0} plan is active. Enjoy unlimited resumes and AI chats!"
 
 #. js-lingui-explicit-id
-#. placeholder {0}: planLabel(plan)
 #: src/routes/checkout/success.tsx
-msgid "checkout.success.trial"
-msgstr "Your 7-day Pro trial has started. It continues as {0} unless you cancel before it ends."
+msgid "checkout.success.trialPass"
+msgstr "Your 7-day Pro trial has started. It ends on {trialEnd}, and nothing renews."
 
 #: src/features/settings/pages/danger-zone.tsx
 msgid "Your account has been deleted successfully."

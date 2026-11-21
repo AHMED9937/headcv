@@ -1,0 +1,1 @@
+ALTER TABLE "user_subscription" ADD COLUMN "trial_ended_email_at" timestamp with time zone;
