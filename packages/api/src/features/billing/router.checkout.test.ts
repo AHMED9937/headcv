@@ -11,7 +11,12 @@ vi.mock("@headcv/auth/config", () => ({
 }));
 vi.mock("@headcv/db/client", () => ({ db: {} }));
 
-const billing = vi.hoisted(() => ({ getSubscription: vi.fn(), upsertSubscription: vi.fn() }));
+const billing = vi.hoisted(() => ({
+	getSubscription: vi.fn(),
+	upsertSubscription: vi.fn(),
+	addPendingCheckout: vi.fn(),
+	startTrialPass: vi.fn(),
+}));
 const entitlements = vi.hoisted(() => ({ getUsage: vi.fn(), getResumeAllowance: vi.fn(), resetUsage: vi.fn() }));
 vi.mock("./service", async (importOriginal) => ({
 	...(await importOriginal<typeof import("./service")>()),
@@ -30,13 +35,21 @@ const DAY = 24 * 60 * 60 * 1000;
 const freeUser = {
 	plan: "free",
 	status: "active",
+	providerSubscriptionId: "" as string | null,
 	cancelAtPeriodEnd: false,
-	currentPeriodStart: null,
-	currentPeriodEnd: null,
+	currentPeriodStart: null as Date | null,
+	currentPeriodEnd: null as Date | null,
 	trialUsedAt: null as Date | null,
 	trialEndsAt: null as Date | null,
 	metadata: null as Record<string, unknown> | null,
 };
+
+const passHolder = (daysLeft: number) => ({
+	...freeUser,
+	plan: "trial_pass",
+	currentPeriodEnd: new Date(Date.now() + daysLeft * DAY),
+	trialUsedAt: new Date(),
+});
 
 const checkout = (input: Record<string, unknown>) =>
 	call(billingRouter.createCheckoutSession, input as never, { context });
@@ -55,41 +68,33 @@ describe("billing.createCheckoutSession", () => {
 		expect(provider.createCheckoutSession).not.toHaveBeenCalled();
 	});
 
-	it("opens the one-time trial on the plan the user chose", async () => {
-		await expect(checkout({ plan: "yearly", trial: true })).resolves.toEqual({ checkoutUrl: "https://dodo.test/c" });
+	it("sells the 7-day trial as the one-time pass", async () => {
+		await expect(checkout({ plan: "trial" })).resolves.toEqual({ checkoutUrl: "https://dodo.test/c" });
 
-		expect(provider.createCheckoutSession).toHaveBeenCalledWith(
-			expect.objectContaining({ plan: "yearly", trial: true }),
-		);
+		expect(provider.createCheckoutSession).toHaveBeenCalledWith(expect.objectContaining({ plan: "trial_pass" }));
 		expect(billing.upsertSubscription).toHaveBeenCalledWith(
-			expect.objectContaining({
-				status: "pending",
-				metadata: { sessionId: "cks_1", pendingPlan: "yearly", trial: true },
-			}),
+			expect.objectContaining({ status: "pending", metadata: { sessionId: "cks_1", pendingPlan: "trial_pass" } }),
 		);
 	});
 
-	it("bills the plan in full when no trial is asked for", async () => {
+	it("sells Monthly and Yearly as plain subscriptions", async () => {
 		await checkout({ plan: "monthly" });
-		expect(provider.createCheckoutSession).toHaveBeenCalledWith(
-			expect.objectContaining({ plan: "monthly", trial: false }),
-		);
+		expect(provider.createCheckoutSession).toHaveBeenCalledWith(expect.objectContaining({ plan: "monthly" }));
 	});
 
 	it("refuses a second trial", async () => {
 		billing.getSubscription.mockResolvedValue({ ...freeUser, trialUsedAt: new Date("2026-11-01") });
 
-		await expect(checkout({ plan: "monthly", trial: true })).rejects.toMatchObject({ code: "TRIAL_ALREADY_USED" });
+		await expect(checkout({ plan: "trial" })).rejects.toMatchObject({ code: "TRIAL_ALREADY_USED" });
 		expect(provider.createCheckoutSession).not.toHaveBeenCalled();
 	});
 
-	it("refuses a second subscription while the user is paying, trial included, and keeps their access", async () => {
+	it("refuses a second subscription to anyone already paying for one, and keeps their access", async () => {
 		billing.getSubscription.mockResolvedValue({
 			...freeUser,
 			plan: "monthly",
+			providerSubscriptionId: "sub_1",
 			currentPeriodEnd: new Date(Date.now() + 5 * DAY),
-			trialUsedAt: new Date(),
-			trialEndsAt: new Date(Date.now() + 5 * DAY),
 		});
 
 		await expect(checkout({ plan: "yearly" })).rejects.toMatchObject({ code: "ALREADY_SUBSCRIBED" });
@@ -97,55 +102,73 @@ describe("billing.createCheckoutSession", () => {
 		expect(billing.upsertSubscription).not.toHaveBeenCalled();
 	});
 
-	it("no longer sells the retired $3 weekly trial plan", async () => {
-		await expect(checkout({ plan: "trial" })).rejects.toMatchObject({ code: "BAD_REQUEST" });
+	it("lets a pass holder buy a plan without losing the days left on the pass", async () => {
+		billing.getSubscription.mockResolvedValue(passHolder(3));
+
+		await expect(checkout({ plan: "yearly" })).resolves.toEqual({ checkoutUrl: "https://dodo.test/c" });
+
+		expect(provider.createCheckoutSession).toHaveBeenCalledWith(expect.objectContaining({ plan: "yearly" }));
+		expect(billing.addPendingCheckout).toHaveBeenCalledWith("user-1", { sessionId: "cks_1", pendingPlan: "yearly" });
+		expect(billing.upsertSubscription).not.toHaveBeenCalled();
+	});
+
+	it("rejects the retired paid-trial checkout choices from older pages", async () => {
+		await expect(checkout({ plan: "yearly-trial" })).rejects.toMatchObject({ code: "BAD_REQUEST" });
 		expect(provider.createCheckoutSession).not.toHaveBeenCalled();
 	});
 });
 
 describe("billing.verifyAndActivate", () => {
-	it("records the trial when the success page activates a trial checkout before the webhook", async () => {
+	const paid = { sessionId: "cks_1", paymentStatus: "succeeded", customerId: "cus_1", subscriptionId: null };
+	const verify = () => call(billingRouter.verifyAndActivate, {}, { context });
+
+	it("starts the pass when the success page confirms the payment before the webhook", async () => {
 		billing.getSubscription.mockResolvedValue({
 			...freeUser,
 			status: "pending",
-			metadata: { sessionId: "cks_1", pendingPlan: "yearly", trial: true },
+			metadata: { sessionId: "cks_1", pendingPlan: "trial_pass" },
 		});
-		provider.getCheckoutSession.mockResolvedValue({
-			sessionId: "cks_1",
-			paymentStatus: "succeeded",
-			customerId: "cus_1",
-			subscriptionId: "sub_1",
-		});
+		provider.getCheckoutSession.mockResolvedValue(paid);
+		const endsAt = new Date(Date.now() + 7 * DAY);
+		billing.startTrialPass.mockResolvedValue(endsAt);
 
-		await expect(call(billingRouter.verifyAndActivate, {}, { context })).resolves.toMatchObject({
+		await expect(verify()).resolves.toMatchObject({
 			activated: true,
-			plan: "yearly",
-			trial: true,
+			plan: "trial_pass",
+			trialEndsAt: endsAt.toISOString(),
 		});
+		expect(billing.startTrialPass).toHaveBeenCalledWith(
+			expect.objectContaining({ userId: "user-1", providerCustomerId: "cus_1" }),
+		);
+		expect(billing.upsertSubscription).not.toHaveBeenCalled();
+	});
+
+	it("activates the plan a pass holder bought, even while the pass is still running", async () => {
+		billing.getSubscription.mockResolvedValue({
+			...passHolder(3),
+			metadata: { sessionId: "cks_1", pendingPlan: "monthly", paymentVerified: false },
+		});
+		provider.getCheckoutSession.mockResolvedValue({ ...paid, subscriptionId: "sub_1" });
+
+		await expect(verify()).resolves.toMatchObject({ activated: true, plan: "monthly", trialEndsAt: null });
 		expect(billing.upsertSubscription).toHaveBeenCalledWith(
-			expect.objectContaining({ plan: "yearly", status: "active", trial: { endsAt: null } }),
+			expect.objectContaining({ plan: "monthly", status: "active", providerSubscriptionId: "sub_1" }),
 		);
 	});
 });
 
 describe("billing.getSubscription", () => {
-	it("tells the client when a running trial ends", async () => {
-		const trialEndsAt = new Date(Date.now() + 4 * DAY);
-		billing.getSubscription.mockResolvedValue({
-			...freeUser,
-			plan: "yearly",
-			currentPeriodEnd: trialEndsAt,
-			trialUsedAt: new Date(),
-			trialEndsAt,
-		});
+	it("tells a pass holder when the pass ends", async () => {
+		const pass = passHolder(4);
+		billing.getSubscription.mockResolvedValue(pass);
 		entitlements.getUsage.mockResolvedValue({ aiChatsUsed: 0 });
 		entitlements.getResumeAllowance.mockResolvedValue({ used: 1, limit: -1, canCreate: true });
 
 		await expect(call(billingRouter.getSubscription, {}, { context })).resolves.toMatchObject({
-			plan: "yearly",
+			plan: "trial_pass",
 			effectiveAccess: "paid",
 			trialEligible: false,
-			trialEndsAt: trialEndsAt.toISOString(),
+			trialEndsAt: pass.currentPeriodEnd.toISOString(),
 		});
 	});
 });

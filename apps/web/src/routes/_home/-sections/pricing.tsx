@@ -1,3 +1,4 @@
+import type { CheckoutPlan } from "@/features/billing/use-subscription";
 import { t } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react";
 import { Trans } from "@lingui/react/macro";
@@ -5,9 +6,8 @@ import { CheckIcon } from "@phosphor-icons/react";
 import { Link, useRouteContext } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@headcv/ui/components/button";
-import { Switch } from "@headcv/ui/components/switch";
 import { cn } from "@headcv/utils/style";
-import { getProFeatures, TrialTerms } from "@/features/billing/plan-picker";
+import { getProFeatures, PlanTabs, TrialNote, TrialPrice } from "@/features/billing/plan-picker";
 import { useCheckout, useLocalizedPricing, useSubscription } from "@/features/billing/use-subscription";
 
 function Benefits({ items, premium = false }: { items: string[]; premium?: boolean }) {
@@ -31,13 +31,14 @@ function Benefits({ items, premium = false }: { items: string[]; premium?: boole
 }
 
 export function Pricing() {
-	const [billing, setBilling] = useState<"monthly" | "yearly">("yearly");
+	const [choice, setChoice] = useState<CheckoutPlan>("yearly");
 	const { i18n } = useLingui();
 	const { currency, rate } = useLocalizedPricing();
 	const money = (value: number) => i18n.number(value * rate, { style: "currency", currency, maximumFractionDigits: 0 });
 	const { checkout: handleCheckout, isLoading: checkoutLoading } = useCheckout();
 	const { session } = useRouteContext({ strict: false });
 	const { trialEligible } = useSubscription({ enabled: !!session });
+	const plan = !trialEligible && choice === "trial" ? "yearly" : choice;
 	const freeFeatures = [
 		t`3 resumes`,
 		t`Unlimited PDF downloads`,
@@ -67,42 +68,7 @@ export function Pricing() {
 						The free builder is available now. Upgrade to Pro for unlimited imports and AI assistance.
 					</Trans>
 				</p>
-				{trialEligible && (
-					<section
-						aria-labelledby="trial-heading"
-						className="mx-auto mt-10 grid max-w-4xl grid-cols-[auto_minmax(0,1fr)] items-center gap-5 rounded-2xl border border-[#c9a227] bg-linear-to-r from-[#f5e8bf] to-[#fffaf0] p-5 text-start text-[#152642] sm:p-6 lg:grid-cols-[auto_minmax(0,1fr)_auto]"
-					>
-						<div className="border-[#b39235] border-e border-dashed pe-5">
-							<bdi className="font-bold font-display text-5xl tracking-tight">{money(3)}</bdi>
-						</div>
-						<div className="min-w-0">
-							<p className="inline-block rounded-lg bg-[#152642] px-4 py-2 font-bold text-sm text-white uppercase tracking-widest rtl:tracking-normal">
-								<Trans id="home.offer.label">7-day trial</Trans>
-							</p>
-							<h3 id="trial-heading" className="mt-2 font-display font-semibold text-xl sm:text-2xl">
-								<Trans id="home.offer.title">Try all of Pro.</Trans>
-							</h3>
-							<p className="mt-1 text-sm leading-relaxed">
-								<Trans id="home.offer.description">Every Pro tool. Unlimited resumes.</Trans>
-							</p>
-							<p aria-live="polite" className="mt-1 text-sm leading-relaxed">
-								<TrialTerms period={billing} money={money} />
-							</p>
-						</div>
-						<Button
-							disabled={checkoutLoading}
-							onClick={() => handleCheckout(`${billing}-trial`)}
-							className="col-span-2 h-auto min-h-11 whitespace-normal bg-[#152642] px-5 py-3 text-white lg:col-span-1"
-						>
-							{checkoutLoading ? (
-								<Trans id="home.pricing.loading">Redirecting to checkout...</Trans>
-							) : (
-								<Trans id="home.pricing.startTrial">Start 7-day trial</Trans>
-							)}
-						</Button>
-					</section>
-				)}
-				<div className={cn("grid items-stretch gap-6 md:grid-cols-2", trialEligible ? "mt-6" : "mt-10")}>
+				<div className="mt-10 grid items-stretch gap-6 md:grid-cols-2">
 					{/* Free */}
 					<div className="flex h-full flex-col rounded-2xl border bg-card p-6 text-card-foreground shadow-sm sm:p-8">
 						<h3 className="font-display font-semibold text-3xl">
@@ -136,51 +102,53 @@ export function Pricing() {
 					</div>
 					{/* Pro */}
 					<div className="flex h-full flex-col rounded-2xl border border-accent/60 bg-card p-6 text-card-foreground shadow-md sm:p-8">
-						<div className="flex items-center justify-between gap-3">
+						<div className="flex flex-wrap items-center justify-between gap-3">
 							<h3 className="shrink-0 font-display font-semibold text-3xl">Pro</h3>
-							{/* Billing toggle */}
-							<div className="flex shrink-0 items-center gap-2.5 whitespace-nowrap">
-								<span className="rounded-full bg-accent-light px-2 py-0.5 font-semibold text-primary text-xs">
-									<Trans>-75%</Trans>
-								</span>
-								<Switch
-									checked={billing === "yearly"}
-									onCheckedChange={(checked) => setBilling(checked ? "yearly" : "monthly")}
-									aria-label={billing === "yearly" ? t`Yearly billing` : t`Monthly billing`}
-								/>
-								<span className="text-sm">
-									{billing === "yearly" ? <Trans>Yearly billing</Trans> : <Trans>Monthly billing</Trans>}
-								</span>
-							</div>
+							<PlanTabs value={plan} onChange={setChoice} showTrial={trialEligible} />
 						</div>
 						<div aria-live="polite" aria-atomic="true" className="mt-5">
-							<p className="flex flex-wrap items-baseline gap-1">
-								<bdi className="font-semibold text-5xl">{money(billing === "yearly" ? 5 : 20)}</bdi>
-								<span className="font-semibold">
-									<Trans id="home.pricing.month">/month</Trans>
-								</span>
-							</p>
-							<p className="mt-2 flex flex-wrap items-center gap-2 text-muted-foreground text-sm">
-								{billing === "yearly" ? (
-									<Trans>
-										<bdi>{money(60)}</bdi> billed yearly
-									</Trans>
-								) : (
-									<Trans>
-										<bdi>{money(20)}</bdi> billed monthly
-									</Trans>
-								)}
-								<span aria-hidden="true">•</span>
-								<Trans>Cancel anytime</Trans>
-							</p>
+							{plan === "trial" ? (
+								<>
+									<p className="flex flex-wrap items-baseline gap-1">
+										<TrialPrice money={money} className="font-semibold text-5xl" suffixClassName="font-semibold" />
+									</p>
+									<p className="mt-2 text-muted-foreground text-sm">
+										<TrialNote />
+									</p>
+								</>
+							) : (
+								<>
+									<p className="flex flex-wrap items-baseline gap-1">
+										<bdi className="font-semibold text-5xl">{money(plan === "yearly" ? 5 : 20)}</bdi>
+										<span className="font-semibold">
+											<Trans id="home.pricing.month">/month</Trans>
+										</span>
+									</p>
+									<p className="mt-2 flex flex-wrap items-center gap-2 text-muted-foreground text-sm">
+										{plan === "yearly" ? (
+											<Trans>
+												<bdi>{money(60)}</bdi> billed yearly
+											</Trans>
+										) : (
+											<Trans>
+												<bdi>{money(20)}</bdi> billed monthly
+											</Trans>
+										)}
+										<span aria-hidden="true">•</span>
+										<Trans>Cancel anytime</Trans>
+									</p>
+								</>
+							)}
 						</div>
 						<Button
 							disabled={checkoutLoading}
-							onClick={() => handleCheckout(billing)}
+							onClick={() => handleCheckout(plan)}
 							className="mt-5 h-auto min-h-14 w-full whitespace-normal py-3 font-semibold"
 						>
 							{checkoutLoading ? (
 								<Trans id="home.pricing.loading">Redirecting to checkout...</Trans>
+							) : plan === "trial" ? (
+								<Trans id="home.pricing.startTrial">Start 7-day trial</Trans>
 							) : (
 								<Trans id="home.pricing.getPro">Get Pro</Trans>
 							)}

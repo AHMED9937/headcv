@@ -581,6 +581,9 @@ importers:
       '@headcv/db':
         specifier: workspace:*
         version: link:../db
+      '@headcv/email':
+        specifier: workspace:*
+        version: link:../email
       '@headcv/env':
         specifier: workspace:*
         version: link:../env

@@ -31,10 +31,13 @@ class WebhookSignatureError extends Error {
 }
 
 /** Maps a Dodo product ID back to our plan; the webhook's product is the source of truth. */
-export function getPlanForProductId(productId: string | undefined): "monthly" | "yearly" | "trial" | null {
+export function getPlanForProductId(
+	productId: string | undefined,
+): "monthly" | "yearly" | "trial" | "trial_pass" | null {
 	if (!productId) return null;
 	if (productId === env.DODO_PRODUCT_MONTHLY_ID) return "monthly";
 	if (productId === env.DODO_PRODUCT_YEARLY_ID) return "yearly";
+	if (productId === env.DODO_PRODUCT_TRIAL_PASS_ID) return "trial_pass";
 	// The retired $3 weekly product is no longer sold; mapped only for its subscriptions still winding down.
 	if (productId === env.DODO_PRODUCT_TRIAL_ID) return "trial";
 	return null;
@@ -44,6 +47,7 @@ function getProductId(plan: CheckoutSessionParams["plan"]): string {
 	const map: Record<string, string | undefined> = {
 		monthly: env.DODO_PRODUCT_MONTHLY_ID,
 		yearly: env.DODO_PRODUCT_YEARLY_ID,
+		trial_pass: env.DODO_PRODUCT_TRIAL_PASS_ID,
 	};
 	const id = map[plan];
 	if (!id) throw new Error(`No Dodo product ID configured for plan: ${plan}`);
@@ -118,9 +122,9 @@ export class DodoPaymentsProvider implements PaymentProvider {
 		// a different country (e.g. Vercel's edge) than the actual user.
 		const session = await client.checkoutSessions.create({
 			product_cart: [{ product_id: productId, quantity: 1 }],
-			// The paid 7-day trial lives on each plan's price, then the plan bills on its own. A trial checkout
-			// leaves it untouched: sending trial_period_days would also skip Dodo's "Prevent Trial Misuse" check.
-			...(params.trial ? {} : { subscription_data: { trial_period_days: 0 } }),
+			// The trial is its own one-time product, so a subscription never opens with one, even if a trial is
+			// left on the plan's price in the Dodo dashboard.
+			...(params.plan === "trial_pass" ? {} : { subscription_data: { trial_period_days: 0 } }),
 			customer: {
 				email: params.customerEmail,
 				...(params.customerName ? { name: params.customerName } : {}),

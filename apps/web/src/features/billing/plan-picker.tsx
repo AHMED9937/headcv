@@ -17,120 +17,140 @@ export const getProFeatures = () => [
 	t`AI features`,
 ];
 
-type BillingPeriod = "monthly" | "yearly";
+type Money = (usd: number) => string;
 
-/** What the trial turns into, shown wherever one can start so the price after it is never a surprise. */
-export function TrialTerms({ period, money }: { period: BillingPeriod; money: (usd: number) => string }) {
-	return period === "yearly" ? (
-		<Trans id="billing.trial.thenYearly">
-			Then <bdi>{money(PRO_PRICES.yearlyTotal)}</bdi>/year. Cancel anytime during the trial.
-		</Trans>
-	) : (
-		<Trans id="billing.trial.thenMonthly">
-			Then <bdi>{money(PRO_PRICES.monthly)}</bdi>/month. Cancel anytime during the trial.
-		</Trans>
+type PlanTabsProps = {
+	value: CheckoutPlan;
+	onChange: (plan: CheckoutPlan) => void;
+	/** The one-time trial tab, only for users who have never used it. */
+	showTrial: boolean;
+};
+
+/** Yearly / Monthly / 7-day trial tabs, shared by the landing pricing and the in-app picker. */
+export function PlanTabs({ value, onChange, showTrial }: PlanTabsProps) {
+	const plans: CheckoutPlan[] = showTrial ? ["yearly", "monthly", "trial"] : ["yearly", "monthly"];
+
+	return (
+		<fieldset
+			aria-label={t({ id: "home.pricing.period", message: "Billing period" })}
+			className="inline-flex flex-wrap gap-1 rounded-xl border p-1"
+		>
+			{plans.map((plan) => (
+				<button
+					key={plan}
+					type="button"
+					aria-pressed={value === plan}
+					onClick={() => onChange(plan)}
+					className={cn(
+						"flex min-h-9 items-center gap-1.5 rounded-lg px-3 font-medium text-sm transition-colors",
+						value === plan
+							? "bg-primary text-primary-foreground"
+							: "text-muted-foreground hover:bg-muted hover:text-foreground",
+					)}
+				>
+					{plan === "yearly" ? (
+						<>
+							<Trans id="home.pricing.yearly">Yearly</Trans>
+							<span className="rounded-full bg-accent-light px-2 py-0.5 font-semibold text-primary text-xs">
+								<Trans id="home.pricing.discount">Save 75%</Trans>
+							</span>
+						</>
+					) : plan === "monthly" ? (
+						<Trans id="home.pricing.monthly">Monthly</Trans>
+					) : (
+						<Trans id="billing.tabs.trial">7-day trial</Trans>
+					)}
+				</button>
+			))}
+		</fieldset>
 	);
 }
 
+/** The trial tab's price: a single $3 charge in the visitor's currency. */
+export function TrialPrice({
+	money,
+	className,
+	suffixClassName,
+}: {
+	money: Money;
+	className?: string;
+	suffixClassName?: string;
+}) {
+	return (
+		<>
+			<bdi className={className}>{money(PRO_PRICES.trial)}</bdi>
+			<span className={suffixClassName}>
+				<Trans id="billing.trial.oneTime">one-time</Trans>
+			</span>
+		</>
+	);
+}
+
+/** What the trial is, and the promise that nothing follows it. */
+export function TrialNote() {
+	return <Trans id="billing.trial.note">7 days of every Pro tool. No auto-renewal: nothing is charged after.</Trans>;
+}
+
 type PlanPickerProps = {
-	/** Hide the $3 trial offer (e.g. for users who already used it). */
+	/** Hide the one-time trial (e.g. for users who already used it). */
 	hideTrial?: boolean;
 	className?: string;
 };
 
 /** Pro plan picker shared by the upgrade dialog and billing settings. */
 export function PlanPicker({ hideTrial = false, className }: PlanPickerProps) {
-	const [period, setPeriod] = useState<BillingPeriod>("yearly");
+	const [choice, setChoice] = useState<CheckoutPlan>("yearly");
+	const plan = hideTrial && choice === "trial" ? "yearly" : choice;
 	const { checkout, pendingPlan, isLoading } = useCheckout();
 	const { i18n } = useLingui();
 	const { currency, rate } = useLocalizedPricing();
 	const money = (value: number) => i18n.number(value * rate, { style: "currency", currency, maximumFractionDigits: 0 });
 
-	const ctaLabel = (plan: CheckoutPlan, label: React.ReactNode) =>
-		pendingPlan === plan ? <Trans id="home.pricing.loading">Redirecting to checkout...</Trans> : label;
-
 	return (
 		<div className={cn("space-y-4", className)}>
-			{!hideTrial && (
-				<div className="flex flex-wrap items-center gap-4 rounded-2xl border border-[#c9a227] bg-linear-to-r from-[#f5e8bf] to-[#fffaf0] p-4 text-[#152642]">
-					<bdi className="font-bold font-display text-3xl">{money(PRO_PRICES.trial)}</bdi>
-					<div className="min-w-0 flex-1">
-						<p className="font-semibold">
-							<Trans id="home.offer.title">Try all of Pro.</Trans>
-						</p>
-						<p aria-live="polite" className="text-sm">
-							<TrialTerms period={period} money={money} />
-						</p>
-					</div>
-					<Button
-						disabled={isLoading}
-						onClick={() => checkout(`${period}-trial`)}
-						className="h-auto min-h-11 whitespace-normal bg-[#152642] px-5 py-2 text-white hover:bg-[#152642]/90"
-					>
-						{ctaLabel(`${period}-trial`, <Trans id="home.pricing.startTrial">Start 7-day trial</Trans>)}
-					</Button>
-				</div>
-			)}
-
 			<div className="rounded-2xl border border-accent/60 bg-card p-5 text-card-foreground shadow-md sm:p-6">
 				<div className="flex flex-wrap items-center justify-between gap-3">
 					<p className="flex items-center gap-2 font-display font-semibold text-xl">
 						<SparkleIcon weight="fill" className="size-5 text-primary" aria-hidden="true" />
 						Pro
 					</p>
-					<fieldset
-						aria-label={t({ id: "home.pricing.period", message: "Billing period" })}
-						className="inline-flex gap-1 rounded-xl border p-1"
-					>
-						{(["yearly", "monthly"] as const).map((value) => (
-							<button
-								key={value}
-								type="button"
-								aria-pressed={period === value}
-								onClick={() => setPeriod(value)}
-								className={cn(
-									"flex min-h-9 items-center gap-1.5 rounded-lg px-3 font-medium text-sm transition-colors",
-									period === value
-										? "bg-primary text-primary-foreground"
-										: "text-muted-foreground hover:bg-muted hover:text-foreground",
-								)}
-							>
-								{value === "yearly" ? (
-									<>
-										<Trans id="home.pricing.yearly">Yearly</Trans>
-										<span className="rounded-full bg-accent-light px-2 py-0.5 font-semibold text-primary text-xs">
-											<Trans id="home.pricing.discount">Save 75%</Trans>
-										</span>
-									</>
-								) : (
-									<Trans id="home.pricing.monthly">Monthly</Trans>
-								)}
-							</button>
-						))}
-					</fieldset>
+					<PlanTabs value={plan} onChange={setChoice} showTrial={!hideTrial} />
 				</div>
 
 				<div aria-live="polite" aria-atomic="true" className="mt-4">
-					<p className="flex flex-wrap items-baseline gap-2">
-						{period === "yearly" && (
-							<s className="text-lg text-muted-foreground">
-								<bdi>{money(PRO_PRICES.monthly)}</bdi>
-							</s>
-						)}
-						<bdi className="font-semibold text-4xl">{money(PRO_PRICES[period])}</bdi>
-						<span>
-							<Trans id="home.pricing.month">/month</Trans>
-						</span>
-					</p>
-					<p className="mt-1 text-muted-foreground text-sm">
-						{period === "yearly" ? (
-							<Trans id="billing.picker.yearlyNote">
-								Billed <bdi>{money(PRO_PRICES.yearlyTotal)}</bdi> once a year — less than a coffee a month.
-							</Trans>
-						) : (
-							<Trans id="home.pricing.flexible">Prefer flexibility? Choose the monthly option.</Trans>
-						)}
-					</p>
+					{plan === "trial" ? (
+						<>
+							<p className="flex flex-wrap items-baseline gap-2">
+								<TrialPrice money={money} className="font-semibold text-4xl" />
+							</p>
+							<p className="mt-1 text-muted-foreground text-sm">
+								<TrialNote />
+							</p>
+						</>
+					) : (
+						<>
+							<p className="flex flex-wrap items-baseline gap-2">
+								{plan === "yearly" && (
+									<s className="text-lg text-muted-foreground">
+										<bdi>{money(PRO_PRICES.monthly)}</bdi>
+									</s>
+								)}
+								<bdi className="font-semibold text-4xl">{money(PRO_PRICES[plan])}</bdi>
+								<span>
+									<Trans id="home.pricing.month">/month</Trans>
+								</span>
+							</p>
+							<p className="mt-1 text-muted-foreground text-sm">
+								{plan === "yearly" ? (
+									<Trans id="billing.picker.yearlyNote">
+										Billed <bdi>{money(PRO_PRICES.yearlyTotal)}</bdi> once a year — less than a coffee a month.
+									</Trans>
+								) : (
+									<Trans id="home.pricing.flexible">Prefer flexibility? Choose the monthly option.</Trans>
+								)}
+							</p>
+						</>
+					)}
 				</div>
 
 				<p className="mt-5 text-muted-foreground text-sm">
@@ -149,10 +169,16 @@ export function PlanPicker({ hideTrial = false, className }: PlanPickerProps) {
 
 				<Button
 					disabled={isLoading}
-					onClick={() => checkout(period)}
+					onClick={() => checkout(plan)}
 					className="mt-5 h-auto min-h-12 w-full whitespace-normal py-3 font-semibold"
 				>
-					{ctaLabel(period, <Trans id="home.pricing.getPro">Get Pro</Trans>)}
+					{pendingPlan === plan ? (
+						<Trans id="home.pricing.loading">Redirecting to checkout...</Trans>
+					) : plan === "trial" ? (
+						<Trans id="home.pricing.startTrial">Start 7-day trial</Trans>
+					) : (
+						<Trans id="home.pricing.getPro">Get Pro</Trans>
+					)}
 				</Button>
 				<p className="mt-2 flex items-center justify-center gap-1.5 text-muted-foreground text-xs">
 					<LockSimpleIcon aria-hidden="true" className="size-3.5" />

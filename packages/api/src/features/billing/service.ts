@@ -13,8 +13,14 @@ import { resume, userSubscription, userUsage, webhookEventLog } from "@headcv/db
 // Plan limits
 // ---------------------------------------------------------------------------
 
-/** "trial" is the retired $3 weekly product, kept only for subscriptions still winding down. */
-export type PlanSlug = "free" | "trial" | "monthly" | "yearly";
+/**
+ * "trial_pass" is the one-time 7-day trial: Pro until its period ends, with nothing that renews.
+ * "trial" is the retired $3 weekly subscription, kept only for subscriptions still winding down.
+ */
+export type PlanSlug = "free" | "trial" | "trial_pass" | "monthly" | "yearly";
+
+export const TRIAL_PASS_DAYS = 7;
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 interface PlanLimits {
 	resumes: number; // resumes owned at once; -1 = unlimited
@@ -24,6 +30,7 @@ interface PlanLimits {
 const PLAN_LIMITS: Record<PlanSlug, PlanLimits> = {
 	free: { resumes: 3, aiChats: 1 },
 	trial: { resumes: -1, aiChats: -1 },
+	trial_pass: { resumes: -1, aiChats: -1 },
 	monthly: { resumes: -1, aiChats: -1 },
 	yearly: { resumes: -1, aiChats: -1 },
 };
@@ -49,6 +56,10 @@ export function getEffectiveAccess(sub: {
 	currentPeriodEnd: Date | null;
 }): "paid" | "free" {
 	if (sub.status === "active") {
+		// A trial pass ends exactly on time: no renewal is coming, so there is nothing to wait for.
+		if (sub.plan === "trial_pass") {
+			return sub.currentPeriodEnd && sub.currentPeriodEnd.getTime() > Date.now() ? "paid" : "free";
+		}
 		// Defensive: if the period ended and no renewal webhook arrived within the grace window, treat as free.
 		if (sub.currentPeriodEnd && sub.currentPeriodEnd.getTime() + RENEWAL_GRACE_MS < Date.now()) return "free";
 		return sub.plan !== "free" ? "paid" : "free";
@@ -66,14 +77,14 @@ export function getEffectiveAccess(sub: {
 
 /** The trial is once per user: blocked after any recorded or current trial. */
 export function hasUsedTrial(sub: { plan: string; trialUsedAt: Date | null }): boolean {
-	return sub.trialUsedAt !== null || sub.plan === "trial";
+	return sub.trialUsedAt !== null || sub.plan === "trial" || sub.plan === "trial_pass";
 }
 
-/** When the user's running trial converts into their plan, or null when they aren't trialing. */
+/** When the user's running trial ends, or null when they aren't on one. */
 export function getTrialEnd(sub: Parameters<typeof getEffectiveAccess>[0] & { trialEndsAt: Date | null }): Date | null {
 	if (getEffectiveAccess(sub) !== "paid") return null;
-	// The retired $3 weekly trial was a plan of its own, ending with its period.
-	const end = sub.plan === "trial" ? sub.currentPeriodEnd : sub.trialEndsAt;
+	// The pass (and the retired weekly trial) is a plan of its own, ending with its period.
+	const end = sub.plan === "trial_pass" || sub.plan === "trial" ? sub.currentPeriodEnd : sub.trialEndsAt;
 	return end && end.getTime() > Date.now() ? end : null;
 }
 
@@ -155,6 +166,46 @@ export const billingService = {
 			.returning();
 
 		return row;
+	},
+
+	/**
+	 * Start the one-time 7-day trial pass, paid in a single charge: Pro until it ends, nothing to renew.
+	 * Shared by the payment webhook and the success-page fallback; returns when the pass ends.
+	 */
+	async startTrialPass(params: {
+		userId: string;
+		provider: string;
+		providerCustomerId: string | null;
+		startedAt: Date;
+		metadata: Record<string, unknown>;
+	}): Promise<Date> {
+		const endsAt = new Date(params.startedAt.getTime() + TRIAL_PASS_DAYS * DAY_MS);
+		await this.upsertSubscription({
+			userId: params.userId,
+			provider: params.provider,
+			providerCustomerId: params.providerCustomerId,
+			providerSubscriptionId: "", // a one-time payment, not a subscription
+			plan: "trial_pass",
+			status: "active",
+			currentPeriodStart: params.startedAt,
+			currentPeriodEnd: endsAt,
+			cancelAtPeriodEnd: false,
+			metadata: params.metadata,
+			trial: { endsAt: null }, // marks the trial used; the pass's end is its period end
+		});
+		return endsAt;
+	},
+
+	/**
+	 * Remember a checkout for a user who still has Pro (a pass holder buying a plan), without touching
+	 * their plan or period: the pending-row reset used for everyone else would end the pass early.
+	 */
+	async addPendingCheckout(userId: string, pending: { sessionId: string; pendingPlan: PlanSlug }) {
+		const patch = JSON.stringify({ ...pending, paymentVerified: false });
+		await db
+			.update(userSubscription)
+			.set({ metadata: sql`coalesce(${userSubscription.metadata}, '{}'::jsonb) || ${patch}::jsonb` })
+			.where(eq(userSubscription.userId, userId));
 	},
 
 	/** Find the local userId that owns a given provider subscription. */

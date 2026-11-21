@@ -133,7 +133,12 @@ export const env = createEnv({
 		DODO_PAYMENTS_ENVIRONMENT: z.enum(["test_mode", "live_mode"]).default("test_mode"),
 		DODO_PRODUCT_MONTHLY_ID: z.string().min(1).optional(),
 		DODO_PRODUCT_YEARLY_ID: z.string().min(1).optional(),
+		// Retired "$3 every 7 days" subscription product; mapped only while its subscriptions wind down.
 		DODO_PRODUCT_TRIAL_ID: z.string().min(1).optional(),
+		// One-time $3 product for the 7-day trial pass (nothing renews).
+		DODO_PRODUCT_TRIAL_PASS_ID: z.string().min(1).optional(),
+		// Vercel Cron sends it as a Bearer token; scheduled endpoints stay closed while it is unset.
+		CRON_SECRET: z.string().min(16).optional(),
 
 		// Billing – EPAY (Egypt-only, future)
 		EPAY_API_KEY: z.string().min(1).optional(),

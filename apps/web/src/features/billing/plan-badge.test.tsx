@@ -41,13 +41,12 @@ describe("PlanBadge", () => {
 		expect(useDialogStore.getState().activeDialog).toEqual({ type: "billing.upgrade", data: { reason: "badge" } });
 	});
 
-	it("shows the trial countdown without offering another plan", () => {
-		// The trial already turns into the plan chosen at checkout, so there is nothing to upgrade to.
-		subscription.current = { sub, isPaid: true, isTrial: true, trialDaysLeft: 4, showUpgrade: false };
+	it("shows the trial countdown with an upgrade button, since the trial pass never renews", () => {
+		subscription.current = { sub, isPaid: true, isTrial: true, trialDaysLeft: 4, showUpgrade: true };
 		render(<PlanBadge />, { wrapper: ({ children }) => <I18nProvider i18n={i18n}>{children}</I18nProvider> });
 
 		expect(screen.getByRole("link", { name: "Trial · 4d left" })).toBeInTheDocument();
-		expect(screen.queryByRole("button", { name: "Upgrade" })).not.toBeInTheDocument();
+		expect(screen.getByRole("button", { name: "Upgrade" })).toBeInTheDocument();
 	});
 
 	it("shows Pro without an upgrade button for paid plans", () => {

@@ -2,20 +2,14 @@ import { t } from "@lingui/core/macro";
 import { ORPCError } from "@orpc/client";
 
 /**
- * What a checkout button or plan link asks for: a billing period, optionally opening with the one-time
- * 7-day trial. One string so it survives the login redirect (`?plan=`) and sessionStorage unchanged.
+ * What a checkout button or plan link asks for. "trial" is the one-time $3 pass: 7 days of Pro, nothing renews.
+ * Kept as one string so it survives the login redirect (`?plan=`) and sessionStorage unchanged.
  */
-export const CHECKOUT_PLANS = ["monthly", "yearly", "monthly-trial", "yearly-trial"] as const;
+export const CHECKOUT_PLANS = ["monthly", "yearly", "trial"] as const;
 
 export type CheckoutPlan = (typeof CHECKOUT_PLANS)[number];
 
 export const isCheckoutPlan = (value: unknown): value is CheckoutPlan => CHECKOUT_PLANS.includes(value as CheckoutPlan);
-
-/** The `createCheckoutSession` input: the plan that will be billed, and whether it opens with the trial. */
-export const toCheckoutInput = (plan: CheckoutPlan) => ({
-	plan: plan.startsWith("yearly") ? ("yearly" as const) : ("monthly" as const),
-	trial: plan.endsWith("-trial"),
-});
 
 /** The message for a checkout the server refused on purpose, or null for an unexpected failure. */
 export function checkoutErrorMessage(error: unknown): string | null {

@@ -17,6 +17,7 @@ import { handleWebApp, handleWebAppHead, serveWebDistStatic } from "../static/we
 import { handleAuth, handleOAuth } from "./auth";
 import { handleDodoWebhook } from "./billing-webhook";
 import { handleHealth } from "./health";
+import { handleTrialPassCron } from "./trial-pass-cron";
 
 export function createApp() {
 	const app = new Hono();
@@ -29,6 +30,7 @@ export function createApp() {
 	app.all("/api/auth/*", (c) => handleAuth(c.req.raw));
 	app.get("/api/health", () => handleHealth());
 	app.post("/api/webhooks/dodo", (c) => handleDodoWebhook(c));
+	app.get("/api/cron/trial-pass", (c) => handleTrialPassCron(c));
 	app.get("/api/uploads/*", (c) => handleUpload(c.req.raw));
 	app.get("/uploads/*", (c) => handleUpload(c.req.raw));
 	app.get("/schema.json", () => handleSchemaJson());

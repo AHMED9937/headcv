@@ -1,12 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const PRODUCTS = { monthly: "pdt_monthly", yearly: "pdt_yearly", trial: "pdt_trial" };
+const PRODUCTS = { monthly: "pdt_monthly", yearly: "pdt_yearly", trial: "pdt_trial", pass: "pdt_pass" };
 
 vi.mock("@headcv/env/server", () => ({
 	env: {
 		DODO_PRODUCT_MONTHLY_ID: "pdt_monthly",
 		DODO_PRODUCT_YEARLY_ID: "pdt_yearly",
 		DODO_PRODUCT_TRIAL_ID: "pdt_trial",
+		DODO_PRODUCT_TRIAL_PASS_ID: "pdt_pass",
 	},
 }));
 
@@ -23,6 +24,7 @@ const billing = vi.hoisted(() => ({
 	getSubscription: vi.fn(),
 	findUserByProviderCustomer: vi.fn(),
 	findUserByProviderSubscription: vi.fn(),
+	startTrialPass: vi.fn(),
 }));
 
 vi.mock("./provider.js", () => ({ getPaymentProvider: () => ({ verifyWebhook: () => state.event }) }));
@@ -228,6 +230,54 @@ describe("processDodoWebhook", () => {
 		});
 
 		expect(lastUpsert()).toMatchObject({ providerSubscriptionId: "sub_new", plan: "monthly", status: "active" });
+	});
+
+	describe("the one-time 7-day trial pass", () => {
+		const passPayment = {
+			payment_id: "pay_1",
+			subscription_id: null,
+			product_cart: [{ product_id: PRODUCTS.pass, quantity: 1 }],
+			customer: { customer_id: "cus_9" },
+			metadata: { userId: "user-9" },
+			created_at: "2026-11-21T10:00:00Z",
+		};
+
+		it("starts the pass from the moment it was paid", async () => {
+			state.stored = { ...state.stored, plan: "free", status: "active" };
+
+			await run("payment.succeeded", passPayment);
+
+			expect(billing.startTrialPass).toHaveBeenCalledWith(
+				expect.objectContaining({
+					userId: "user-9",
+					providerCustomerId: "cus_9",
+					startedAt: new Date("2026-11-21T10:00:00Z"),
+				}),
+			);
+			expect(billing.upsertSubscription).not.toHaveBeenCalled();
+		});
+
+		it("leaves subscription payments to the subscription events", async () => {
+			await run("payment.succeeded", {
+				...passPayment,
+				subscription_id: "sub_1",
+				product_cart: [{ product_id: PRODUCTS.monthly, quantity: 1 }],
+			});
+			await run("payment.succeeded", { ...passPayment, product_cart: [{ product_id: "pdt_other", quantity: 1 }] });
+
+			expect(billing.startTrialPass).not.toHaveBeenCalled();
+		});
+
+		it("flags a pass paid by someone already on a plan instead of changing their plan", async () => {
+			state.stored = { ...state.stored, currentPeriodEnd: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000) };
+			const log = vi.spyOn(console, "error").mockImplementation(() => {});
+
+			await run("payment.succeeded", passPayment);
+
+			expect(billing.startTrialPass).not.toHaveBeenCalled();
+			expect(log).toHaveBeenCalledWith(expect.stringContaining("pay_1"));
+			log.mockRestore();
+		});
 	});
 
 	it("acknowledges disputes without changing the subscription", async () => {
