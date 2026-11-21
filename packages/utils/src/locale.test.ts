@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { defaultLocale, isLocale, isRTL } from "./locale";
+import { defaultLocale, isLocale, isRTL, negotiateLocale } from "./locale";
 
 describe("defaultLocale", () => {
 	it("is en-US", () => {
@@ -58,5 +58,29 @@ describe("isRTL", () => {
 		["en", false],
 	])("returns %s → %s", (locale, expected) => {
 		expect(isRTL(locale)).toBe(expected);
+	});
+});
+
+describe("negotiateLocale", () => {
+	it.each([
+		// Every Arabic variant resolves to the Arabic UI.
+		[["ar"], "ar-SA"],
+		[["ar-SA"], "ar-SA"],
+		[["ar-EG"], "ar-SA"],
+		[["ar-MA", "en-US"], "ar-SA"],
+		[["ar-u-nu-latn"], "ar-SA"],
+		[["AR-eg"], "ar-SA"],
+		[["ar_EG"], "ar-SA"],
+		// The first supported language in preference order wins.
+		[["fr-FR", "ar"], "ar-SA"],
+		[["en-GB", "ar"], "en-US"],
+		[["en"], "en-US"],
+		// Nothing supported: English.
+		[["fr-FR", "de"], "en-US"],
+		[["*"], "en-US"],
+		[[""], "en-US"],
+		[[], "en-US"],
+	])("%j → %s", (preferred, expected) => {
+		expect(negotiateLocale(preferred)).toBe(expected);
 	});
 });
