@@ -6,7 +6,9 @@
  * Create for real:
  *   ... node scripts/dodo-setup-products.mjs --apply
  *
- * Prices are in cents and must match the app UI ($20/mo, $60/yr, $3 trial).
+ * Prices are in cents and must match the app UI ($20/mo, $60/yr, each opening with a 7-day $3 trial).
+ * The trial is part of each plan's price, so it bills the chosen plan when it ends and never renews itself.
+ * Existing products are not updated here; use scripts/dodo-paid-trial.mjs for that.
  */
 import DodoPayments from "dodopayments";
 
@@ -39,27 +41,23 @@ const recurring = (price, interval, count, extra = {}) => ({
 	...extra,
 });
 
+// The app asks for this trial only once per user; everyone else's checkout switches it off.
+const PAID_TRIAL = { trial_period_days: 7, trial_amount: 300 };
+
 const PRODUCTS = [
 	{
 		env: "DODO_PRODUCT_MONTHLY_ID",
 		name: "HeadCV Pro Monthly",
 		description: "Unlimited resumes, cover letters, imports and AI assistance. Billed monthly, cancel anytime.",
-		price: recurring(2000, "Month", 1),
+		price: recurring(2000, "Month", 1, PAID_TRIAL),
 		metadata: { plan: "monthly" },
 	},
 	{
 		env: "DODO_PRODUCT_YEARLY_ID",
 		name: "HeadCV Pro Yearly",
 		description: "Everything in Pro for one year — save 75% compared with monthly. Cancel anytime.",
-		price: recurring(6000, "Year", 1),
+		price: recurring(6000, "Year", 1, PAID_TRIAL),
 		metadata: { plan: "yearly" },
-	},
-	{
-		env: "DODO_PRODUCT_TRIAL_ID",
-		name: "HeadCV Pro 7-Day Trial",
-		description: "7 days of every Pro tool for $3.",
-		price: recurring(300, "Day", 7),
-		metadata: { plan: "trial" },
 	},
 ];
 

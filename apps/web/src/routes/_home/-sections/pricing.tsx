@@ -7,7 +7,7 @@ import { useState } from "react";
 import { Button } from "@headcv/ui/components/button";
 import { Switch } from "@headcv/ui/components/switch";
 import { cn } from "@headcv/utils/style";
-import { getProFeatures } from "@/features/billing/plan-picker";
+import { getProFeatures, TrialTerms } from "@/features/billing/plan-picker";
 import { useCheckout, useLocalizedPricing, useSubscription } from "@/features/billing/use-subscription";
 
 function Benefits({ items, premium = false }: { items: string[]; premium?: boolean }) {
@@ -85,10 +85,13 @@ export function Pricing() {
 							<p className="mt-1 text-sm leading-relaxed">
 								<Trans id="home.offer.description">Every Pro tool. Unlimited resumes.</Trans>
 							</p>
+							<p aria-live="polite" className="mt-1 text-sm leading-relaxed">
+								<TrialTerms period={billing} money={money} />
+							</p>
 						</div>
 						<Button
 							disabled={checkoutLoading}
-							onClick={() => handleCheckout("trial")}
+							onClick={() => handleCheckout(`${billing}-trial`)}
 							className="col-span-2 h-auto min-h-11 whitespace-normal bg-[#152642] px-5 py-3 text-white lg:col-span-1"
 						>
 							{checkoutLoading ? (

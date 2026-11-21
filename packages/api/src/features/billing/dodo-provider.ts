@@ -6,9 +6,9 @@
  * uses `client.webhooks.unwrap()` on the raw body — never re-serialized JSON.
  */
 
-import type { CheckoutTheme } from "./checkout-theme";
 import type {
 	CheckoutSessionDetails,
+	CheckoutSessionParams,
 	CheckoutSessionResult,
 	CustomerPortalResult,
 	LocalizedPricing,
@@ -35,15 +35,15 @@ export function getPlanForProductId(productId: string | undefined): "monthly" | 
 	if (!productId) return null;
 	if (productId === env.DODO_PRODUCT_MONTHLY_ID) return "monthly";
 	if (productId === env.DODO_PRODUCT_YEARLY_ID) return "yearly";
+	// The retired $3 weekly product is no longer sold; mapped only for its subscriptions still winding down.
 	if (productId === env.DODO_PRODUCT_TRIAL_ID) return "trial";
 	return null;
 }
 
-function getProductId(plan: "monthly" | "yearly" | "trial"): string {
+function getProductId(plan: CheckoutSessionParams["plan"]): string {
 	const map: Record<string, string | undefined> = {
 		monthly: env.DODO_PRODUCT_MONTHLY_ID,
 		yearly: env.DODO_PRODUCT_YEARLY_ID,
-		trial: env.DODO_PRODUCT_TRIAL_ID,
 	};
 	const id = map[plan];
 	if (!id) throw new Error(`No Dodo product ID configured for plan: ${plan}`);
@@ -109,15 +109,7 @@ function getClient(): DodoPayments {
 export class DodoPaymentsProvider implements PaymentProvider {
 	readonly name = "dodo" as const;
 
-	async createCheckoutSession(params: {
-		plan: "monthly" | "yearly" | "trial";
-		customerEmail: string;
-		customerName?: string;
-		customerId?: string;
-		returnUrl: string;
-		metadata?: Record<string, string>;
-		theme?: CheckoutTheme;
-	}): Promise<CheckoutSessionResult> {
+	async createCheckoutSession(params: CheckoutSessionParams): Promise<CheckoutSessionResult> {
 		const client = getClient();
 		const productId = getProductId(params.plan);
 
@@ -126,6 +118,9 @@ export class DodoPaymentsProvider implements PaymentProvider {
 		// a different country (e.g. Vercel's edge) than the actual user.
 		const session = await client.checkoutSessions.create({
 			product_cart: [{ product_id: productId, quantity: 1 }],
+			// The paid 7-day trial lives on each plan's price, then the plan bills on its own. A trial checkout
+			// leaves it untouched: sending trial_period_days would also skip Dodo's "Prevent Trial Misuse" check.
+			...(params.trial ? {} : { subscription_data: { trial_period_days: 0 } }),
 			customer: {
 				email: params.customerEmail,
 				...(params.customerName ? { name: params.customerName } : {}),

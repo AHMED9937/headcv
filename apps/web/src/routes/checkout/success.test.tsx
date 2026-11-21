@@ -42,13 +42,24 @@ function renderPage() {
 
 describe("Checkout success page", () => {
 	it("shows progress immediately, then the activated plan", async () => {
-		mocks.verify.mockResolvedValue({ activated: true, plan: "trial", status: "active" });
+		mocks.verify.mockResolvedValue({ activated: true, plan: "yearly", status: "active", trial: false });
 		renderPage();
 
 		expect(screen.getByRole("heading", { name: "Verifying payment..." })).toBeInTheDocument();
 		expect(await screen.findByRole("heading", { name: "Welcome to Pro!" })).toBeInTheDocument();
-		expect(screen.getByText(/Your Pro Trial plan is active/)).toBeInTheDocument();
+		expect(screen.getByText(/Your Pro Yearly plan is active/)).toBeInTheDocument();
 		expect(screen.getByRole("link", { name: "Go to Dashboard" })).toHaveAttribute("href", "/dashboard");
+	});
+
+	it("confirms a started trial and the plan it turns into", async () => {
+		mocks.verify.mockResolvedValue({ activated: true, plan: "monthly", status: "active", trial: true });
+		renderPage();
+
+		expect(
+			await screen.findByText(
+				/Your 7-day Pro trial has started\. It continues as Pro Monthly unless you cancel before it ends\./,
+			),
+		).toBeInTheDocument();
 	});
 
 	it("keeps polling with a pending message while the payment is confirmed", async () => {

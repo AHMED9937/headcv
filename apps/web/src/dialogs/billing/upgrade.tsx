@@ -7,7 +7,7 @@ import { useSubscription } from "@/features/billing/use-subscription";
 import { useDialogStore } from "../store";
 
 export function UpgradeDialog({ data }: DialogProps<"billing.upgrade">) {
-	const { sub, isTrial, trialDaysLeft, trialEligible } = useSubscription();
+	const { sub, trialEligible } = useSubscription();
 	const closeDialog = useDialogStore((state) => state.closeDialog);
 
 	return (
@@ -18,8 +18,6 @@ export function UpgradeDialog({ data }: DialogProps<"billing.upgrade">) {
 						<Trans id="billing.upgrade.aiLimit.title">You've used all your free AI chats</Trans>
 					) : data.reason === "resume-limit" ? (
 						<Trans id="billing.upgrade.resumeLimit.title">You've created all your free resumes</Trans>
-					) : isTrial ? (
-						<Trans id="billing.upgrade.trial.title">Keep Pro after your trial</Trans>
 					) : (
 						<Trans id="billing.upgrade.badge.title">Land your next job faster with Pro</Trans>
 					)}
@@ -34,10 +32,6 @@ export function UpgradeDialog({ data }: DialogProps<"billing.upgrade">) {
 						<Trans id="billing.upgrade.resumeLimit.description">
 							{sub.usage.resumesUsed} of {sub.usage.resumesLimit} free resumes used. Tailor a resume to every job you
 							apply for — Pro removes the limit.
-						</Trans>
-					) : isTrial && trialDaysLeft !== null ? (
-						<Trans id="billing.upgrade.trial.description">
-							{trialDaysLeft} days left on your trial. Lock in yearly Pro and save 75% compared with monthly.
 						</Trans>
 					) : (
 						<Trans id="billing.upgrade.badge.description">

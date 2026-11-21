@@ -26,7 +26,7 @@ export const userSubscription = pg.pgTable(
 		providerSubscriptionId: pg.text("provider_subscription_id"),
 
 		// Plan details
-		plan: pg.text("plan").notNull().default("free"), // 'free' | 'trial' | 'monthly' | 'yearly'
+		plan: pg.text("plan").notNull().default("free"), // 'free' | 'monthly' | 'yearly' ('trial' = retired $3 weekly product)
 		status: pg.text("status").notNull().default("active"), // 'active' | 'on_hold' | 'cancelled' | 'expired' | 'failed' | 'pending'
 
 		// Billing period
@@ -34,8 +34,10 @@ export const userSubscription = pg.pgTable(
 		currentPeriodEnd: pg.timestamp("current_period_end", { withTimezone: true }),
 		cancelAtPeriodEnd: pg.boolean("cancel_at_period_end").notNull().default(false),
 
-		// The $3 trial can be bought once per user; set on first trial activation.
+		// The 7-day trial opens a monthly/yearly subscription once per user; set on first trial activation.
 		trialUsedAt: pg.timestamp("trial_used_at", { withTimezone: true }),
+		// When that trial converts into the chosen plan (from the provider's subscription).
+		trialEndsAt: pg.timestamp("trial_ends_at", { withTimezone: true }),
 
 		// Provider metadata (raw webhook data for debugging)
 		metadata: pg.jsonb("metadata"),

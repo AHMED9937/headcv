@@ -26,7 +26,11 @@ const billing = vi.hoisted(() => ({
 }));
 
 vi.mock("./provider.js", () => ({ getPaymentProvider: () => ({ verifyWebhook: () => state.event }) }));
-vi.mock("./service", () => ({ billingService: billing, entitlementService: { resetUsage: vi.fn() } }));
+vi.mock("./service", async (importOriginal) => ({
+	...(await importOriginal<typeof import("./service")>()),
+	billingService: billing,
+	entitlementService: { resetUsage: vi.fn() },
+}));
 vi.mock("@headcv/db/client", () => ({
 	db: {
 		select: () => ({
@@ -142,6 +146,90 @@ describe("processDodoWebhook", () => {
 		expect(billing.upsertSubscription).not.toHaveBeenCalled();
 	});
 
+	it("records the one-time trial on the plan the user chose when the subscription starts with it", async () => {
+		await run("subscription.active", {
+			subscription_id: "sub_1",
+			status: "active",
+			product_id: PRODUCTS.yearly,
+			customer: { customer_id: "cus_1" },
+			created_at: "2026-11-21T10:00:00Z",
+			next_billing_date: "2026-11-28T10:00:00Z",
+			trial_period_days: 7,
+		});
+		expect(lastUpsert()).toMatchObject({
+			plan: "yearly",
+			status: "active",
+			trial: { endsAt: new Date("2026-11-28T10:00:00Z") },
+		});
+	});
+
+	it("records no trial for a subscription bought without one", async () => {
+		await run("subscription.active", {
+			subscription_id: "sub_1",
+			status: "active",
+			product_id: PRODUCTS.monthly,
+			created_at: "2026-11-21T10:00:00Z",
+			trial_period_days: 0,
+		});
+		expect(lastUpsert()).toMatchObject({ plan: "monthly" });
+		expect(lastUpsert()?.trial).toBeUndefined();
+	});
+
+	it("bills the chosen plan when the trial converts, without starting another trial", async () => {
+		await run("subscription.renewed", {
+			subscription_id: "sub_1",
+			status: "active",
+			product_id: PRODUCTS.monthly,
+			created_at: "2026-11-21T10:00:00Z",
+			next_billing_date: "2026-12-28T10:00:00Z",
+			trial_period_days: 7,
+		});
+		expect(lastUpsert()).toMatchObject({
+			plan: "monthly",
+			status: "active",
+			currentPeriodEnd: new Date("2026-12-28T10:00:00Z"),
+		});
+		expect(lastUpsert()?.trial).toBeUndefined();
+	});
+
+	it("ignores a stray subscription while the user pays for another one", async () => {
+		// A leftover $3 weekly trial being wound down fires plan_changed; it must not replace the paid yearly plan.
+		state.stored = {
+			...state.stored,
+			plan: "yearly",
+			providerSubscriptionId: "sub_yearly",
+			currentPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+		};
+		billing.findUserByProviderCustomer.mockResolvedValue("user-1");
+		const log = vi.spyOn(console, "error").mockImplementation(() => {});
+
+		await run("subscription.plan_changed", {
+			subscription_id: "sub_legacy_trial",
+			status: "active",
+			product_id: PRODUCTS.trial,
+			customer: { customer_id: "cus_1" },
+			cancel_at_next_billing_date: true,
+		});
+
+		expect(billing.upsertSubscription).not.toHaveBeenCalled();
+		expect(log).toHaveBeenCalledWith(expect.stringContaining("sub_legacy_trial"));
+		log.mockRestore();
+	});
+
+	it("lets a returning customer's new subscription replace the one that ended", async () => {
+		state.stored = { ...state.stored, plan: "free", status: "expired", providerSubscriptionId: "sub_old" };
+		billing.findUserByProviderCustomer.mockResolvedValue("user-1");
+
+		await run("subscription.active", {
+			subscription_id: "sub_new",
+			status: "active",
+			product_id: PRODUCTS.monthly,
+			customer: { customer_id: "cus_1" },
+		});
+
+		expect(lastUpsert()).toMatchObject({ providerSubscriptionId: "sub_new", plan: "monthly", status: "active" });
+	});
+
 	it("acknowledges disputes without changing the subscription", async () => {
 		const log = vi.spyOn(console, "error").mockImplementation(() => {});
 		await run("dispute.opened", { dispute_id: "dsp_1", payment_id: "pay_1" });
@@ -153,6 +241,7 @@ describe("processDodoWebhook", () => {
 
 describe("resolvePlan", () => {
 	it("prefers the product, then the pending checkout plan, then the stored plan", () => {
+		// The retired $3 weekly product still maps, so its wind-down events land on the right plan.
 		expect(resolvePlan({ product_id: PRODUCTS.trial }, "monthly", "yearly")).toBe("trial");
 		expect(resolvePlan({ product_id: "pdt_unknown" }, "yearly", "monthly")).toBe("yearly");
 		expect(resolvePlan({}, undefined, "yearly")).toBe("yearly");

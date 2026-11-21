@@ -1,8 +1,9 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import z from "zod";
 import { LoginPage } from "@/features/auth/pages/login";
+import { CHECKOUT_PLANS } from "@/features/billing/checkout-plan";
 
-const planSchema = z.enum(["monthly", "yearly", "trial"]).optional().catch(undefined);
+const planSchema = z.enum(CHECKOUT_PLANS).optional().catch(undefined);
 
 export const Route = createFileRoute("/auth/login")({
 	component: RouteComponent,

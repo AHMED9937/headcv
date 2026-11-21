@@ -6,7 +6,14 @@ import { env } from "@headcv/env/server";
 import { protectedProcedure, publicProcedure } from "../../context";
 import { checkoutThemeFromCookie } from "./checkout-theme";
 import { getPaymentProvider } from "./provider.js";
-import { billingService, entitlementService, getEffectiveAccess, getPlanLimits, hasUsedTrial } from "./service";
+import {
+	billingService,
+	entitlementService,
+	getEffectiveAccess,
+	getPlanLimits,
+	getTrialEnd,
+	hasUsedTrial,
+} from "./service";
 
 const IP_GEO_TTL_MS = 24 * 60 * 60 * 1000;
 const ipCountryCache = new Map<string, { country: string | undefined; expires: number }>();
@@ -88,13 +95,6 @@ export const billingRouter = {
 						limits: getPlanLimits("free"),
 					},
 					{
-						slug: "trial",
-						name: "Pro 7-Day Trial",
-						price: 300, // $3.00 every 7 days, renewable
-						interval: "week" as const,
-						limits: getPlanLimits("trial"),
-					},
-					{
 						slug: "monthly",
 						name: "Pro Monthly",
 						price: 2000, // $20.00 in cents
@@ -167,6 +167,7 @@ export const billingRouter = {
 				currentPeriodEnd: sub.currentPeriodEnd?.toISOString() ?? null,
 				effectiveAccess: access,
 				trialEligible: !hasUsedTrial(sub),
+				trialEndsAt: getTrialEnd(sub)?.toISOString() ?? null,
 				usage: {
 					resumesUsed: resumes.used,
 					resumesLimit: resumes.limit,
@@ -187,7 +188,9 @@ export const billingRouter = {
 		})
 		.input(
 			z.object({
-				plan: z.enum(["monthly", "yearly", "trial"]),
+				plan: z.enum(["monthly", "yearly"]),
+				/** Open with the one-time 7-day trial; the chosen plan bills automatically when it ends. */
+				trial: z.boolean().default(false),
 			}),
 		)
 		.errors({
@@ -199,9 +202,23 @@ export const billingRouter = {
 				message: "The 7-day trial can only be used once. Choose a monthly or yearly plan.",
 				status: 409,
 			},
+			ALREADY_SUBSCRIBED: {
+				message: "You already have Pro. Manage your plan from billing settings.",
+				status: 409,
+			},
 		})
 		.handler(async ({ context, input }) => {
-			if (input.plan === "trial" && hasUsedTrial(await billingService.getSubscription(context.user.id))) {
+			const sub = await billingService.getSubscription(context.user.id);
+
+			// A second checkout would start a second subscription billed alongside the first (and overwrite
+			// the row tracking it below). Plan changes and cancellations go through the customer portal.
+			if (getEffectiveAccess(sub) === "paid") {
+				throw new ORPCError("ALREADY_SUBSCRIBED", {
+					message: "You already have Pro. Manage your plan from billing settings.",
+				});
+			}
+
+			if (input.trial && hasUsedTrial(sub)) {
 				throw new ORPCError("TRIAL_ALREADY_USED", {
 					message: "The 7-day trial can only be used once. Choose a monthly or yearly plan.",
 				});
@@ -215,6 +232,7 @@ export const billingRouter = {
 
 				const result = await provider.createCheckoutSession({
 					plan: input.plan,
+					trial: input.trial,
 					customerEmail: context.user.email,
 					customerName: context.user.name,
 					returnUrl,
@@ -233,7 +251,7 @@ export const billingRouter = {
 					currentPeriodStart: null,
 					currentPeriodEnd: null,
 					cancelAtPeriodEnd: false,
-					metadata: { sessionId: result.sessionId, pendingPlan: input.plan },
+					metadata: { sessionId: result.sessionId, pendingPlan: input.plan, trial: input.trial },
 				});
 
 				return { checkoutUrl: result.checkoutUrl };
@@ -268,7 +286,7 @@ export const billingRouter = {
 
 			// Already active — nothing to do
 			if (sub.status === "active" && sub.plan !== "free") {
-				return { activated: true, plan: sub.plan, status: "active" };
+				return { activated: true, plan: sub.plan, status: "active", trial: getTrialEnd(sub) !== null };
 			}
 
 			// No pending checkout to verify
@@ -277,7 +295,7 @@ export const billingRouter = {
 			const pendingPlan = meta?.pendingPlan as string | undefined;
 
 			if (!sessionId) {
-				return { activated: false, plan: sub.plan, status: sub.status };
+				return { activated: false, plan: sub.plan, status: sub.status, trial: false };
 			}
 
 			// Verify with Dodo
@@ -285,11 +303,12 @@ export const billingRouter = {
 			const session = await provider.getCheckoutSession(sessionId);
 
 			if (!session || session.paymentStatus !== "succeeded") {
-				return { activated: false, plan: sub.plan, status: session?.paymentStatus ?? "unknown" };
+				return { activated: false, plan: sub.plan, status: session?.paymentStatus ?? "unknown", trial: false };
 			}
 
-			// Payment succeeded — activate
+			// Payment succeeded — activate. A trial is recorded as used now; its end date arrives with the webhook.
 			const plan = (pendingPlan ?? "monthly") as PlanSlug;
+			const trial = meta?.trial === true;
 
 			await billingService.upsertSubscription({
 				userId: context.user.id,
@@ -302,11 +321,12 @@ export const billingRouter = {
 				currentPeriodEnd: null, // will be set by webhook renewal
 				cancelAtPeriodEnd: false,
 				metadata: { ...meta, paymentVerified: true },
+				...(trial && { trial: { endsAt: null } }),
 			});
 
 			await entitlementService.resetUsage(context.user.id);
 
-			return { activated: true, plan, status: "active" };
+			return { activated: true, plan, status: "active", trial };
 		}),
 
 	/** Protected: get the customer portal URL for managing subscription. */

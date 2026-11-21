@@ -1,3 +1,4 @@
+import type { CheckoutPlan } from "@/features/billing/checkout-plan";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ArrowRightIcon, EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
@@ -16,7 +17,7 @@ import { authClient } from "@/libs/auth/client";
 import { useAppForm } from "@/libs/tanstack-form";
 import { SocialAuth } from "../components/social-auth";
 
-type PendingPlan = "monthly" | "yearly" | "trial";
+type PendingPlan = CheckoutPlan;
 
 /** Session-storage key used to persist plan intent across email verification redirects. */
 const PENDING_PLAN_KEY = "headcv_pending_plan";

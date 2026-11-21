@@ -23,7 +23,12 @@ const originalFetch = globalThis.fetch;
 const { DodoPaymentsProvider, resetFxCache } = await import("./dodo-provider");
 const { CHECKOUT_THEME_CONFIG, checkoutThemeFromCookie } = await import("./checkout-theme");
 
-const baseParams = { plan: "monthly" as const, customerEmail: "a@example.com", returnUrl: "https://app.test/done" };
+const baseParams = {
+	plan: "monthly" as const,
+	trial: false,
+	customerEmail: "a@example.com",
+	returnUrl: "https://app.test/done",
+};
 
 const sentBody = () => createSession.mock.calls.at(-1)?.[0];
 const sentCustomization = () => sentBody()?.customization;
@@ -66,6 +71,21 @@ describe("DodoPaymentsProvider.createCheckoutSession", () => {
 
 		expect(sentBody()?.billing_address).toBeUndefined();
 		expect(sentBody()?.billing_currency).toBeUndefined();
+	});
+
+	it("keeps the product's paid trial for a trial checkout, on the plan the user chose", async () => {
+		await new DodoPaymentsProvider().createCheckoutSession({ ...baseParams, plan: "yearly", trial: true });
+
+		expect(sentBody()?.product_cart).toEqual([{ product_id: "pdt_yearly", quantity: 1 }]);
+		// No override: sending trial_period_days would also skip Dodo's "Prevent Trial Misuse" check.
+		expect(sentBody()?.subscription_data).toBeUndefined();
+	});
+
+	it("switches the trial off for a direct purchase, so the plan is billed in full today", async () => {
+		await new DodoPaymentsProvider().createCheckoutSession(baseParams);
+
+		expect(sentBody()?.product_cart).toEqual([{ product_id: "pdt_monthly", quantity: 1 }]);
+		expect(sentBody()?.subscription_data).toEqual({ trial_period_days: 0 });
 	});
 });
 
