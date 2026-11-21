@@ -16,7 +16,7 @@ vi.mock("@headcv/db/client", () => ({
 	},
 }));
 
-const { entitlementService, getEffectiveAccess, getPlanLimits, hasUsedTrial } = await import("./service");
+const { entitlementService, getEffectiveAccess, getPlanLimits, getTrialEnd, hasUsedTrial } = await import("./service");
 
 const activeSubscription = (plan: string) => ({
 	userId: "user-1",
@@ -36,6 +36,34 @@ describe("hasUsedTrial", () => {
 		expect(hasUsedTrial({ plan: "trial", trialUsedAt: null })).toBe(true);
 		expect(hasUsedTrial({ plan: "free", trialUsedAt: new Date("2026-01-01") })).toBe(true);
 		expect(hasUsedTrial({ plan: "monthly", trialUsedAt: new Date("2026-01-01") })).toBe(true);
+	});
+});
+
+describe("getTrialEnd", () => {
+	const DAY = 24 * 60 * 60 * 1000;
+	const inDays = (days: number) => new Date(Date.now() + days * DAY);
+	const trialing = {
+		plan: "yearly",
+		status: "active",
+		cancelAtPeriodEnd: false,
+		currentPeriodEnd: inDays(3),
+		trialEndsAt: inDays(3),
+	};
+
+	it("reports a running trial on the plan it turns into", () => {
+		expect(getTrialEnd(trialing)).toEqual(trialing.trialEndsAt);
+	});
+
+	it("is over once the trial has converted", () => {
+		expect(getTrialEnd({ ...trialing, trialEndsAt: inDays(-1), currentPeriodEnd: inDays(360) })).toBeNull();
+	});
+
+	it("is over when the subscription ended during the trial", () => {
+		expect(getTrialEnd({ ...trialing, plan: "free", status: "expired" })).toBeNull();
+	});
+
+	it("reads the retired $3 weekly trial from its period end", () => {
+		expect(getTrialEnd({ ...trialing, plan: "trial", trialEndsAt: null })).toEqual(trialing.currentPeriodEnd);
 	});
 });
 

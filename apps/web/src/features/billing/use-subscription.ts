@@ -1,14 +1,15 @@
+import type { CheckoutPlan } from "./checkout-plan";
 import { t } from "@lingui/core/macro";
-import { ORPCError } from "@orpc/client";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useRouteContext } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { client, orpc } from "@/libs/orpc/client";
+import { checkoutErrorMessage, toCheckoutInput } from "./checkout-plan";
+
+export type { CheckoutPlan } from "./checkout-plan";
 
 const CHECKOUT_REDIRECT_TIMEOUT_MS = 10_000;
-
-export type CheckoutPlan = "monthly" | "yearly" | "trial";
 
 export type LocalizedPricing = { currency: string; rate: number };
 const USD_PRICING: LocalizedPricing = { currency: "USD", rate: 1 };
@@ -38,10 +39,11 @@ export function useSubscription({ enabled = true }: { enabled?: boolean } = {}) 
 	const sub = query.data;
 
 	const isPaid = sub?.effectiveAccess === "paid";
-	const isTrial = isPaid && sub?.plan === "trial";
+	// The server reports a trial end only while one is running; the trial already continues as the chosen plan.
+	const isTrial = isPaid && !!sub?.trialEndsAt;
 	const trialDaysLeft =
-		isTrial && sub?.currentPeriodEnd
-			? Math.max(0, Math.ceil((new Date(sub.currentPeriodEnd).getTime() - Date.now()) / DAY_MS))
+		isTrial && sub?.trialEndsAt
+			? Math.max(0, Math.ceil((new Date(sub.trialEndsAt).getTime() - Date.now()) / DAY_MS))
 			: null;
 	const nearLimit =
 		!!sub &&
@@ -58,7 +60,8 @@ export function useSubscription({ enabled = true }: { enabled?: boolean } = {}) 
 		nearLimit,
 		// Unknown (loading or signed out) stays eligible; the server enforces the rule.
 		trialEligible: sub?.trialEligible ?? true,
-		showUpgrade: !!sub && (!isPaid || isTrial),
+		// Anyone with Pro (trial included) changes plans in the portal; a second checkout would double-bill.
+		showUpgrade: !!sub && !isPaid,
 	};
 }
 
@@ -90,7 +93,7 @@ export function useCheckout() {
 		redirectTimeoutRef.current = setTimeout(() => setPendingPlan(null), CHECKOUT_REDIRECT_TIMEOUT_MS);
 
 		try {
-			const result = await client.billing.createCheckoutSession({ plan });
+			const result = await client.billing.createCheckoutSession(toCheckoutInput(plan));
 			if (redirectTimeoutRef.current) {
 				clearTimeout(redirectTimeoutRef.current);
 				redirectTimeoutRef.current = null;
@@ -103,11 +106,7 @@ export function useCheckout() {
 				redirectTimeoutRef.current = null;
 			}
 			setPendingPlan(null);
-			toast.error(
-				error instanceof ORPCError && error.code === "TRIAL_ALREADY_USED"
-					? t`You've already used your 7-day trial. Choose monthly or yearly to keep going.`
-					: t`Could not start checkout. Please try again.`,
-			);
+			toast.error(checkoutErrorMessage(error) ?? t`Could not start checkout. Please try again.`);
 		}
 	};
 

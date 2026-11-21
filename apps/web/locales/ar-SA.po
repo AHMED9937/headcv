@@ -86,9 +86,10 @@ msgid "billing.plan.trialLeft"
 msgstr "متبقٍ {trialDaysLeft} أيام في فترتك التجريبية."
 
 #. js-lingui-explicit-id
-#: src/dialogs/billing/upgrade.tsx
-msgid "billing.upgrade.trial.description"
-msgstr "متبقٍ {trialDaysLeft} أيام في فترتك التجريبية. ثبّت اشتراك Pro السنوي ووفّر 75% مقارنة بالشهري."
+#. placeholder {0}: planLabel(sub.plan)
+#: src/routes/dashboard/settings/billing.tsx
+msgid "billing.plan.trialThen"
+msgstr "متبقٍ {trialDaysLeft} أيام في فترتك التجريبية. بعدها يبدأ {0} في {trialEnd} — يمكنك الإلغاء في أي وقت قبل ذلك."
 
 #. js-lingui-explicit-id
 #: src/features/billing/plan-picker.tsx
@@ -137,11 +138,6 @@ msgstr "3 سير ذاتية"
 #: src/dialogs/api-key/create.tsx
 msgid "6 months"
 msgstr "6 أشهر"
-
-#. js-lingui-explicit-id
-#: src/features/billing/plan-picker.tsx
-msgid "billing.picker.trialNote"
-msgstr "7 أيام مع كل أدوات Pro. لست متأكدًا بعد؟ ابدأ من هنا."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/pricing.tsx
@@ -1049,6 +1045,7 @@ msgid "Could not start checkout. Please try again."
 msgstr "تعذّر بدء الدفع. يرجى المحاولة مجددًا."
 
 #: src/features/auth/pages/login.tsx
+#: src/routes/dashboard/route.tsx
 msgid "Could not start checkout. You can try again from your billing settings."
 msgstr "تعذّر بدء الدفع. يمكنك المحاولة مجددًا من إعدادات الفوترة."
 
@@ -2411,16 +2408,6 @@ msgstr "احتفظ بهذه التغييرات أو تراجع عنها قبل �
 msgid "Keep or revert this update before requesting another AI change."
 msgstr "احتفظ بهذا التحديث أو تراجع عنه قبل طلب تغيير آخر من الذكاء الاصطناعي."
 
-#. js-lingui-explicit-id
-#: src/routes/dashboard/settings/billing.tsx
-msgid "billing.upgrade.keepPro"
-msgstr "احتفظ بـ Pro بعد الفترة التجريبية"
-
-#. js-lingui-explicit-id
-#: src/dialogs/billing/upgrade.tsx
-msgid "billing.upgrade.trial.title"
-msgstr "احتفظ بـ Pro بعد الفترة التجريبية"
-
 #: src/components/section-tips.tsx
 msgid "Keep this entry relevant, specific, and easy to scan."
 msgstr "اجعل هذا الإدخال ذا صلة ومحددًا وسهل القراءة السريعة."
@@ -3110,20 +3097,16 @@ msgstr "اللون الأساسي"
 msgid "Prioritize the degree, relevant study, and distinctions that support the target role."
 msgstr "قدّم الدرجة العلمية والدراسة ذات الصلة والتميّز الذي يدعم الوظيفة المستهدفة."
 
-#: src/routes/checkout/success.tsx
+#: src/features/billing/checkout-plan.ts
 msgid "Pro Monthly"
 msgstr "Pro الشهري"
-
-#: src/routes/checkout/success.tsx
-msgid "Pro Trial"
-msgstr "تجربة Pro"
 
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.plan.trial"
 msgstr "تجربة Pro"
 
-#: src/routes/checkout/success.tsx
+#: src/features/billing/checkout-plan.ts
 msgid "Pro Yearly"
 msgstr "Pro السنوي"
 
@@ -4135,6 +4118,18 @@ msgstr "عنوان URL الذي أدخلته غير صالح."
 msgid "Theme"
 msgstr "السمة"
 
+#. js-lingui-explicit-id
+#. placeholder {0}: money(PRO_PRICES.monthly)
+#: src/features/billing/plan-picker.tsx
+msgid "billing.trial.thenMonthly"
+msgstr "بعدها <0>{0}</0>/شهر. يمكنك الإلغاء في أي وقت خلال الفترة التجريبية."
+
+#. js-lingui-explicit-id
+#. placeholder {0}: money(PRO_PRICES.yearlyTotal)
+#: src/features/billing/plan-picker.tsx
+msgid "billing.trial.thenYearly"
+msgstr "بعدها <0>{0}</0>/سنة. يمكنك الإلغاء في أي وقت خلال الفترة التجريبية."
+
 #: src/dialogs/auth/enable-two-factor.tsx
 msgid "Then, enter the 6 digit code that the app provides to continue."
 msgstr "بعد ذلك، أدخِل الرمز المكوَّن من 6 أرقام الذي يقدّمه التطبيق للمتابعة."
@@ -4834,6 +4829,10 @@ msgstr "نعم. يمكنك كتابة سيرتك الذاتية بلغات مت�
 msgid "home.faq.freeText"
 msgstr "يمكنك إنشاء ومعاينة وتحميل سيرتك الذاتية مجانًا اليوم. خطط Pro قريبة، ولا يلزمك اشتراك مدفوع حاليًا."
 
+#: src/features/billing/checkout-plan.ts
+msgid "You already have Pro. Manage your plan in billing settings."
+msgstr "لديك Pro بالفعل. يمكنك إدارة خطتك من إعدادات الفوترة."
+
 #: src/features/auth/pages/login.tsx
 msgid "You can also use your username to login."
 msgstr "يمكنك أيضًا استخدام اسم المستخدم لتسجيل الدخول."
@@ -4855,7 +4854,7 @@ msgstr "لقد احتفظت بهذه التغييرات."
 msgid "billing.plan.freeNote"
 msgstr "أنت تبني مجانًا. قم بالترقية في أي وقت لتحصل على كل شيء بلا حدود."
 
-#: src/features/billing/use-subscription.ts
+#: src/features/billing/checkout-plan.ts
 msgid "You've already used your 7-day trial. Choose monthly or yearly to keep going."
 msgstr "لقد استخدمت فترتك التجريبية لمدة 7 أيام من قبل. اختر الاشتراك الشهري أو السنوي للمتابعة."
 
@@ -4878,6 +4877,12 @@ msgstr "استخدمت كل محادثات الذكاء الاصطناعي ال�
 #: src/routes/checkout/success.tsx
 msgid "checkout.success.plan"
 msgstr "خطة {0} مفعّلة. استمتع بسير ذاتية ومحادثات ذكاء اصطناعي بلا حدود!"
+
+#. js-lingui-explicit-id
+#. placeholder {0}: planLabel(plan)
+#: src/routes/checkout/success.tsx
+msgid "checkout.success.trial"
+msgstr "بدأت فترتك التجريبية لـ Pro لمدة 7 أيام. ستستمر بعدها بخطة {0} ما لم تُلغِها قبل انتهائها."
 
 #: src/features/settings/pages/danger-zone.tsx
 msgid "Your account has been deleted successfully."

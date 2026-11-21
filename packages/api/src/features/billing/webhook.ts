@@ -21,7 +21,7 @@ import { db } from "@headcv/db/client";
 import { user, userSubscription } from "@headcv/db/schema";
 import { getPlanForProductId } from "./dodo-provider";
 import { getPaymentProvider } from "./provider.js";
-import { billingService, entitlementService } from "./service";
+import { billingService, entitlementService, getEffectiveAccess } from "./service";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -35,9 +35,12 @@ interface DodoSubscriptionData {
 	created_at?: string;
 	next_billing_date?: string;
 	cancel_at_next_billing_date?: boolean;
+	trial_period_days?: number;
 	metadata?: Record<string, unknown>;
 	[key: string]: unknown;
 }
+
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 // ---------------------------------------------------------------------------
 // Plan resolution
@@ -53,6 +56,17 @@ export function resolvePlan(data: DodoSubscriptionData, pendingPlan?: string, st
 	if (pendingPlan && pendingPlan !== "free") return pendingPlan as PlanSlug;
 	if (storedPlan && storedPlan !== "free") return storedPlan as PlanSlug;
 	return "monthly";
+}
+
+/**
+ * The trial a subscription opened with. Derived from its creation time, not `next_billing_date`, because
+ * Dodo keeps `trial_period_days` on the subscription for life: every later event must yield the same end.
+ */
+function getTrial(data: DodoSubscriptionData): { endsAt: Date | null } | undefined {
+	const days = data.trial_period_days ?? 0;
+	if (!(days > 0)) return undefined;
+	const start = data.created_at ? Date.parse(data.created_at) : Number.NaN;
+	return { endsAt: Number.isNaN(start) ? null : new Date(start + days * DAY_MS) };
 }
 
 /** A late `active`/`renewed` must not re-grant access to a subscription that has since ended. */
@@ -114,8 +128,22 @@ async function handleSubscriptionActive(data: DodoSubscriptionData, eventType = 
 		throw new Error(`[billing-webhook] ${eventType}: cannot find user for subscription ${subscriptionId}`);
 	}
 
-	// Resolve plan from pending metadata
 	const existingSub = await billingService.getSubscription(userId);
+
+	// The user is paying through another subscription (e.g. a leftover $3 weekly trial still winding down, which
+	// is matched by customer ID). Replacing the row would orphan the paid plan and later downgrade the user.
+	if (
+		existingSub.providerSubscriptionId &&
+		existingSub.providerSubscriptionId !== subscriptionId &&
+		getEffectiveAccess(existingSub) === "paid"
+	) {
+		console.error(
+			`[billing-webhook] ${eventType} ignored: user ${userId} pays via ${existingSub.providerSubscriptionId}, not ${subscriptionId}`,
+		);
+		return;
+	}
+
+	// Resolve plan from pending metadata
 	const pendingPlan =
 		existingSub.metadata && typeof existingSub.metadata === "object"
 			? ((existingSub.metadata as Record<string, unknown>).pendingPlan as string | undefined)
@@ -134,6 +162,7 @@ async function handleSubscriptionActive(data: DodoSubscriptionData, eventType = 
 		currentPeriodEnd: data.next_billing_date ? new Date(data.next_billing_date) : null,
 		cancelAtPeriodEnd: data.cancel_at_next_billing_date ?? false,
 		metadata: data,
+		trial: getTrial(data),
 	});
 
 	// Reset usage counters on activation

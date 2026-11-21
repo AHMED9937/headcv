@@ -13,6 +13,7 @@ import { resume, userSubscription, userUsage, webhookEventLog } from "@headcv/db
 // Plan limits
 // ---------------------------------------------------------------------------
 
+/** "trial" is the retired $3 weekly product, kept only for subscriptions still winding down. */
 export type PlanSlug = "free" | "trial" | "monthly" | "yearly";
 
 interface PlanLimits {
@@ -68,6 +69,14 @@ export function hasUsedTrial(sub: { plan: string; trialUsedAt: Date | null }): b
 	return sub.trialUsedAt !== null || sub.plan === "trial";
 }
 
+/** When the user's running trial converts into their plan, or null when they aren't trialing. */
+export function getTrialEnd(sub: Parameters<typeof getEffectiveAccess>[0] & { trialEndsAt: Date | null }): Date | null {
+	if (getEffectiveAccess(sub) !== "paid") return null;
+	// The retired $3 weekly trial was a plan of its own, ending with its period.
+	const end = sub.plan === "trial" ? sub.currentPeriodEnd : sub.trialEndsAt;
+	return end && end.getTime() > Date.now() ? end : null;
+}
+
 // ---------------------------------------------------------------------------
 // billingService
 // ---------------------------------------------------------------------------
@@ -107,7 +116,10 @@ export const billingService = {
 		currentPeriodEnd: Date | null;
 		cancelAtPeriodEnd: boolean;
 		metadata?: Record<string, unknown>;
+		/** Set when this subscription opened with the one-time trial; `endsAt` is null until the provider confirms it. */
+		trial?: { endsAt: Date | null } | undefined;
 	}) {
+		const usesTrial = params.trial !== undefined || params.plan === "trial";
 		const [row] = await db
 			.insert(userSubscription)
 			.values({
@@ -121,7 +133,8 @@ export const billingService = {
 				currentPeriodEnd: params.currentPeriodEnd,
 				cancelAtPeriodEnd: params.cancelAtPeriodEnd,
 				metadata: params.metadata ?? null,
-				trialUsedAt: params.plan === "trial" ? new Date() : null,
+				trialUsedAt: usesTrial ? new Date() : null,
+				trialEndsAt: params.trial?.endsAt ?? null,
 			})
 			.onConflictDoUpdate({
 				target: userSubscription.userId,
@@ -135,9 +148,8 @@ export const billingService = {
 					currentPeriodEnd: params.currentPeriodEnd,
 					cancelAtPeriodEnd: params.cancelAtPeriodEnd,
 					metadata: params.metadata ?? null,
-					...(params.plan === "trial" && {
-						trialUsedAt: sql`coalesce(${userSubscription.trialUsedAt}, now())`,
-					}),
+					...(usesTrial && { trialUsedAt: sql`coalesce(${userSubscription.trialUsedAt}, now())` }),
+					...(params.trial?.endsAt && { trialEndsAt: params.trial.endsAt }),
 				},
 			})
 			.returning();

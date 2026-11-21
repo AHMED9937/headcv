@@ -81,9 +81,10 @@ msgid "billing.plan.trialLeft"
 msgstr "{trialDaysLeft} days left in your trial."
 
 #. js-lingui-explicit-id
-#: src/dialogs/billing/upgrade.tsx
-msgid "billing.upgrade.trial.description"
-msgstr "{trialDaysLeft} days left on your trial. Lock in yearly Pro and save 75% compared with monthly."
+#. placeholder {0}: planLabel(sub.plan)
+#: src/routes/dashboard/settings/billing.tsx
+msgid "billing.plan.trialThen"
+msgstr "{trialDaysLeft} days left in your trial. Then {0} begins on {trialEnd} — cancel anytime before."
 
 #. js-lingui-explicit-id
 #: src/features/billing/plan-picker.tsx
@@ -132,11 +133,6 @@ msgstr "3 resumes"
 #: src/dialogs/api-key/create.tsx
 msgid "6 months"
 msgstr "6 months"
-
-#. js-lingui-explicit-id
-#: src/features/billing/plan-picker.tsx
-msgid "billing.picker.trialNote"
-msgstr "7 days of every Pro tool. Not sure yet? Start here."
 
 #. js-lingui-explicit-id
 #: src/routes/_home/-sections/pricing.tsx
@@ -1044,6 +1040,7 @@ msgid "Could not start checkout. Please try again."
 msgstr "Could not start checkout. Please try again."
 
 #: src/features/auth/pages/login.tsx
+#: src/routes/dashboard/route.tsx
 msgid "Could not start checkout. You can try again from your billing settings."
 msgstr "Could not start checkout. You can try again from your billing settings."
 
@@ -2406,16 +2403,6 @@ msgstr "Keep or revert these changes before requesting another AI update."
 msgid "Keep or revert this update before requesting another AI change."
 msgstr "Keep or revert this update before requesting another AI change."
 
-#. js-lingui-explicit-id
-#: src/routes/dashboard/settings/billing.tsx
-msgid "billing.upgrade.keepPro"
-msgstr "Keep Pro after your trial"
-
-#. js-lingui-explicit-id
-#: src/dialogs/billing/upgrade.tsx
-msgid "billing.upgrade.trial.title"
-msgstr "Keep Pro after your trial"
-
 #: src/components/section-tips.tsx
 msgid "Keep this entry relevant, specific, and easy to scan."
 msgstr "Keep this entry relevant, specific, and easy to scan."
@@ -3105,20 +3092,16 @@ msgstr "Primary Color"
 msgid "Prioritize the degree, relevant study, and distinctions that support the target role."
 msgstr "Prioritize the degree, relevant study, and distinctions that support the target role."
 
-#: src/routes/checkout/success.tsx
+#: src/features/billing/checkout-plan.ts
 msgid "Pro Monthly"
 msgstr "Pro Monthly"
-
-#: src/routes/checkout/success.tsx
-msgid "Pro Trial"
-msgstr "Pro Trial"
 
 #. js-lingui-explicit-id
 #: src/routes/dashboard/settings/billing.tsx
 msgid "billing.plan.trial"
 msgstr "Pro Trial"
 
-#: src/routes/checkout/success.tsx
+#: src/features/billing/checkout-plan.ts
 msgid "Pro Yearly"
 msgstr "Pro Yearly"
 
@@ -4130,6 +4113,18 @@ msgstr "The URL you entered is not valid."
 msgid "Theme"
 msgstr "Theme"
 
+#. js-lingui-explicit-id
+#. placeholder {0}: money(PRO_PRICES.monthly)
+#: src/features/billing/plan-picker.tsx
+msgid "billing.trial.thenMonthly"
+msgstr "Then <0>{0}</0>/month. Cancel anytime during the trial."
+
+#. js-lingui-explicit-id
+#. placeholder {0}: money(PRO_PRICES.yearlyTotal)
+#: src/features/billing/plan-picker.tsx
+msgid "billing.trial.thenYearly"
+msgstr "Then <0>{0}</0>/year. Cancel anytime during the trial."
+
 #: src/dialogs/auth/enable-two-factor.tsx
 msgid "Then, enter the 6 digit code that the app provides to continue."
 msgstr "Then, enter the 6 digit code that the app provides to continue."
@@ -4829,6 +4824,10 @@ msgstr "Yes. You can write your resume in multiple languages and customize secti
 msgid "home.faq.freeText"
 msgstr "Yes. Your first resume is free forever, with unlimited watermark-free PDF downloads, access to every template, and full layout and design control. No trial or credit card is required. You only pay for optional extras such as saving multiple resume versions or using AI writing assistance."
 
+#: src/features/billing/checkout-plan.ts
+msgid "You already have Pro. Manage your plan in billing settings."
+msgstr "You already have Pro. Manage your plan in billing settings."
+
 #: src/features/auth/pages/login.tsx
 msgid "You can also use your username to login."
 msgstr "You can also use your username to login."
@@ -4850,7 +4849,7 @@ msgstr "You kept these changes."
 msgid "billing.plan.freeNote"
 msgstr "You're building for free. Upgrade anytime for unlimited everything."
 
-#: src/features/billing/use-subscription.ts
+#: src/features/billing/checkout-plan.ts
 msgid "You've already used your 7-day trial. Choose monthly or yearly to keep going."
 msgstr "You've already used your 7-day trial. Choose monthly or yearly to keep going."
 
@@ -4873,6 +4872,12 @@ msgstr "You've used all your free AI chats"
 #: src/routes/checkout/success.tsx
 msgid "checkout.success.plan"
 msgstr "Your {0} plan is active. Enjoy unlimited resumes and AI chats!"
+
+#. js-lingui-explicit-id
+#. placeholder {0}: planLabel(plan)
+#: src/routes/checkout/success.tsx
+msgid "checkout.success.trial"
+msgstr "Your 7-day Pro trial has started. It continues as {0} unless you cancel before it ends."
 
 #: src/features/settings/pages/danger-zone.tsx
 msgid "Your account has been deleted successfully."

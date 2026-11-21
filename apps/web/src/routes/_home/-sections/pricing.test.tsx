@@ -97,9 +97,25 @@ describe("Landing pricing", () => {
 		expect(navigateMock).toHaveBeenCalledWith({ to: "/auth/login", search: { plan: "yearly" } });
 	});
 
-	it("redirects unauthenticated user to login with trial plan", () => {
+	it("redirects unauthenticated user to login with the trial on the selected plan", () => {
 		renderPricing();
-		fireEvent.click(screen.getByRole("button", { name: "Start 7-day trial" }));
-		expect(navigateMock).toHaveBeenCalledWith({ to: "/auth/login", search: { plan: "trial" } });
+		const startTrial = screen.getByRole("button", { name: "Start 7-day trial" });
+
+		fireEvent.click(startTrial);
+		expect(navigateMock).toHaveBeenLastCalledWith({ to: "/auth/login", search: { plan: "yearly-trial" } });
+
+		fireEvent.click(screen.getByRole("switch", { name: "Yearly billing" }));
+		fireEvent.click(startTrial);
+		expect(navigateMock).toHaveBeenLastCalledWith({ to: "/auth/login", search: { plan: "monthly-trial" } });
+	});
+
+	it("says what the trial turns into for the selected billing period", () => {
+		renderPricing();
+		const trial = screen.getByRole("region", { name: "Try all of Pro." });
+		const terms = () => within(trial).getByText(/Cancel anytime during the trial/);
+		expect(terms()).toHaveTextContent("Then $60/year. Cancel anytime during the trial.");
+
+		fireEvent.click(screen.getByRole("switch", { name: "Yearly billing" }));
+		expect(terms()).toHaveTextContent("Then $20/month. Cancel anytime during the trial.");
 	});
 });

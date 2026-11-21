@@ -4,6 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@headcv/ui/components/button";
 import { cn } from "@headcv/utils/style";
+import { planLabel } from "@/features/billing/checkout-plan";
 import { PlanPicker } from "@/features/billing/plan-picker";
 import { NEAR_LIMIT_RATIO, usageRatio, useSubscription } from "@/features/billing/use-subscription";
 import { client } from "@/libs/orpc/client";
@@ -100,6 +101,7 @@ function BillingPage() {
 	const isCancelled = sub.status === "cancelled" && sub.cancelAtPeriodEnd;
 	const isFailed = sub.status === "failed";
 	const periodEnd = sub.currentPeriodEnd ? new Date(sub.currentPeriodEnd).toLocaleDateString() : null;
+	const trialEnd = sub.trialEndsAt ? new Date(sub.trialEndsAt).toLocaleDateString() : null;
 
 	return (
 		<div className="space-y-6">
@@ -162,14 +164,20 @@ function BillingPage() {
 						)}
 					</p>
 					<p className="mt-2 text-muted-foreground text-sm">
-						{isTrial && trialDaysLeft !== null ? (
-							<Trans id="billing.plan.trialLeft">{trialDaysLeft} days left in your trial.</Trans>
-						) : isCancelled && periodEnd ? (
+						{/* A trial cancelled in the portal ends without a charge, so the cancellation note comes first. */}
+						{isCancelled && periodEnd ? (
 							<span className="text-amber-700">
 								<Trans id="billing.cancelPending">
 									Your Pro plan ends on {periodEnd}. You'll keep full access until then.
 								</Trans>
 							</span>
+						) : isTrial && trialDaysLeft !== null && trialEnd && sub.plan !== "trial" ? (
+							<Trans id="billing.plan.trialThen">
+								{trialDaysLeft} days left in your trial. Then {planLabel(sub.plan)} begins on {trialEnd} — cancel
+								anytime before.
+							</Trans>
+						) : isTrial && trialDaysLeft !== null ? (
+							<Trans id="billing.plan.trialLeft">{trialDaysLeft} days left in your trial.</Trans>
 						) : isPaid && periodEnd ? (
 							<Trans id="billing.plan.renews">Renews on {periodEnd}.</Trans>
 						) : (
@@ -208,15 +216,11 @@ function BillingPage() {
 				</section>
 			</div>
 
-			{(!isPaid || isTrial) && (
+			{!isPaid && (
 				<section aria-labelledby="upgrade-heading" className="space-y-3">
 					<h2 id="upgrade-heading" className="flex items-center gap-2 font-display font-semibold text-xl">
 						<SparkleIcon weight="fill" aria-hidden="true" className="size-5 text-primary" />
-						{isTrial ? (
-							<Trans id="billing.upgrade.keepPro">Keep Pro after your trial</Trans>
-						) : (
-							<Trans id="billing.upgrade.title">Upgrade to Pro</Trans>
-						)}
+						<Trans id="billing.upgrade.title">Upgrade to Pro</Trans>
 					</h2>
 					<PlanPicker hideTrial={!trialEligible} className="max-w-2xl" />
 				</section>

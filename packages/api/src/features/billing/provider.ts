@@ -33,6 +33,19 @@ export interface LocalizedPricing {
 	rate: number;
 }
 
+export interface CheckoutSessionParams {
+	plan: "monthly" | "yearly";
+	/** Open with the one-time 7-day trial, after which the chosen plan bills automatically. */
+	trial: boolean;
+	customerEmail: string;
+	customerName?: string;
+	customerId?: string;
+	returnUrl: string;
+	metadata?: Record<string, string>;
+	/** The app theme the user is on, so hosted checkout can match it. */
+	theme?: CheckoutTheme;
+}
+
 export interface SubscriptionInfo {
 	providerSubscriptionId: string;
 	status: string;
@@ -49,16 +62,7 @@ export interface SubscriptionInfo {
 export interface PaymentProvider {
 	readonly name: "dodo" | "epay";
 
-	createCheckoutSession(params: {
-		plan: "monthly" | "yearly" | "trial";
-		customerEmail: string;
-		customerName?: string;
-		customerId?: string;
-		returnUrl: string;
-		metadata?: Record<string, string>;
-		/** The app theme the user is on, so hosted checkout can match it. */
-		theme?: CheckoutTheme;
-	}): Promise<CheckoutSessionResult>;
+	createCheckoutSession(params: CheckoutSessionParams): Promise<CheckoutSessionResult>;
 
 	/**
 	 * Preview the adaptive-currency rate for a visitor's country so the pricing UI can show

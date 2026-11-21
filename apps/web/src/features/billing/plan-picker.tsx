@@ -17,15 +17,30 @@ export const getProFeatures = () => [
 	t`AI features`,
 ];
 
+type BillingPeriod = "monthly" | "yearly";
+
+/** What the trial turns into, shown wherever one can start so the price after it is never a surprise. */
+export function TrialTerms({ period, money }: { period: BillingPeriod; money: (usd: number) => string }) {
+	return period === "yearly" ? (
+		<Trans id="billing.trial.thenYearly">
+			Then <bdi>{money(PRO_PRICES.yearlyTotal)}</bdi>/year. Cancel anytime during the trial.
+		</Trans>
+	) : (
+		<Trans id="billing.trial.thenMonthly">
+			Then <bdi>{money(PRO_PRICES.monthly)}</bdi>/month. Cancel anytime during the trial.
+		</Trans>
+	);
+}
+
 type PlanPickerProps = {
-	/** Hide the $3 trial offer (e.g. for users already on the trial). */
+	/** Hide the $3 trial offer (e.g. for users who already used it). */
 	hideTrial?: boolean;
 	className?: string;
 };
 
 /** Pro plan picker shared by the upgrade dialog and billing settings. */
 export function PlanPicker({ hideTrial = false, className }: PlanPickerProps) {
-	const [period, setPeriod] = useState<"monthly" | "yearly">("yearly");
+	const [period, setPeriod] = useState<BillingPeriod>("yearly");
 	const { checkout, pendingPlan, isLoading } = useCheckout();
 	const { i18n } = useLingui();
 	const { currency, rate } = useLocalizedPricing();
@@ -43,16 +58,16 @@ export function PlanPicker({ hideTrial = false, className }: PlanPickerProps) {
 						<p className="font-semibold">
 							<Trans id="home.offer.title">Try all of Pro.</Trans>
 						</p>
-						<p className="text-sm">
-							<Trans id="billing.picker.trialNote">7 days of every Pro tool. Not sure yet? Start here.</Trans>
+						<p aria-live="polite" className="text-sm">
+							<TrialTerms period={period} money={money} />
 						</p>
 					</div>
 					<Button
 						disabled={isLoading}
-						onClick={() => checkout("trial")}
+						onClick={() => checkout(`${period}-trial`)}
 						className="h-auto min-h-11 whitespace-normal bg-[#152642] px-5 py-2 text-white hover:bg-[#152642]/90"
 					>
-						{ctaLabel("trial", <Trans id="home.pricing.startTrial">Start 7-day trial</Trans>)}
+						{ctaLabel(`${period}-trial`, <Trans id="home.pricing.startTrial">Start 7-day trial</Trans>)}
 					</Button>
 				</div>
 			)}

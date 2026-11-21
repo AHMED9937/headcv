@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@headcv/ui/components/avatar";
 import { BrandIcon } from "@headcv/ui/components/brand-icon";
 import { getInitials } from "@headcv/utils/string";
+import { checkoutErrorMessage, isCheckoutPlan, toCheckoutInput } from "@/features/billing/checkout-plan";
 import { PlanBadge } from "@/features/billing/plan-badge";
 import { UserDropdownMenu } from "@/features/user/dropdown-menu";
 import { client } from "@/libs/orpc/client";
@@ -12,7 +13,6 @@ import { createNoindexFollowMeta } from "@/libs/seo";
 
 /** Session-storage key matching the one set during register/OAuth. */
 const PENDING_PLAN_KEY = "headcv_pending_plan";
-const validPlans = new Set(["monthly", "yearly", "trial"]);
 
 export const Route = createFileRoute("/dashboard")({
 	component: RouteComponent,
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/dashboard")({
  * then auto-starts the Dodo checkout flow.
  *
  * Sources (in priority order):
- * 1. `?checkoutPlan=monthly` query param (OAuth callbackURL, register "Continue" link)
+ * 1. `?checkoutPlan=monthly` (or `yearly-trial`, …) query param (OAuth callbackURL, register "Continue" link)
  * 2. `headcv_pending_plan` sessionStorage (backup for email-verification redirect)
  */
 function useAutoCheckout() {
@@ -56,17 +56,18 @@ function useAutoCheckout() {
 			window.history.replaceState(null, "", newUrl);
 		}
 
-		if (!plan || !validPlans.has(plan)) return;
+		if (!isCheckoutPlan(plan)) return;
 		started.current = true;
+		const input = toCheckoutInput(plan);
 
 		const startCheckout = async () => {
 			try {
-				const result = await client.billing.createCheckoutSession({
-					plan: plan as "monthly" | "yearly" | "trial",
-				});
+				const result = await client.billing.createCheckoutSession(input);
 				window.location.href = result.checkoutUrl;
-			} catch {
-				toast.error("Could not start checkout. You can try again from your billing settings.");
+			} catch (error) {
+				toast.error(
+					checkoutErrorMessage(error) ?? t`Could not start checkout. You can try again from your billing settings.`,
+				);
 			}
 		};
 

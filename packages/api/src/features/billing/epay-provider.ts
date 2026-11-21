@@ -8,6 +8,7 @@
 
 import type {
 	CheckoutSessionDetails,
+	CheckoutSessionParams,
 	CheckoutSessionResult,
 	CustomerPortalResult,
 	NormalizedWebhookEvent,
@@ -22,14 +23,7 @@ function notImplemented(): never {
 export class EpayPaymentsProvider implements PaymentProvider {
 	readonly name = "epay" as const;
 
-	createCheckoutSession(_params: {
-		plan: "monthly" | "yearly" | "trial";
-		customerEmail: string;
-		customerName?: string;
-		customerId?: string;
-		returnUrl: string;
-		metadata?: Record<string, string>;
-	}): Promise<CheckoutSessionResult> {
+	createCheckoutSession(_params: CheckoutSessionParams): Promise<CheckoutSessionResult> {
 		notImplemented();
 	}
 

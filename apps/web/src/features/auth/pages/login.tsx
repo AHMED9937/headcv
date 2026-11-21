@@ -1,3 +1,4 @@
+import type { CheckoutPlan } from "@/features/billing/checkout-plan";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ArrowRightIcon, EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
@@ -11,12 +12,13 @@ import { Button } from "@headcv/ui/components/button";
 import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "@headcv/ui/components/form";
 import { Input } from "@headcv/ui/components/input";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@headcv/ui/components/input-group";
+import { checkoutErrorMessage, toCheckoutInput } from "@/features/billing/checkout-plan";
 import { authClient } from "@/libs/auth/client";
 import { client, orpc } from "@/libs/orpc/client";
 import { useAppForm } from "@/libs/tanstack-form";
 import { SocialAuth } from "../components/social-auth";
 
-type PendingPlan = "monthly" | "yearly" | "trial";
+type PendingPlan = CheckoutPlan;
 
 const formSchema = z.object({
 	identifier: z.string().trim().toLowerCase(),
@@ -102,11 +104,13 @@ export function LoginPage({ disableEmailAuth, disableSignups, pendingPlan }: Pro
 				// If the user arrived with a plan intent, start checkout immediately
 				if (pendingPlan) {
 					try {
-						const checkout = await client.billing.createCheckoutSession({ plan: pendingPlan });
+						const checkout = await client.billing.createCheckoutSession(toCheckoutInput(pendingPlan));
 						window.location.href = checkout.checkoutUrl;
 						return;
-					} catch {
-						toast.error(t`Could not start checkout. You can try again from your billing settings.`);
+					} catch (error) {
+						toast.error(
+							checkoutErrorMessage(error) ?? t`Could not start checkout. You can try again from your billing settings.`,
+						);
 					}
 				}
 

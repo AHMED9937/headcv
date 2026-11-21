@@ -1,3 +1,4 @@
+import type { CheckoutPlan } from "@/features/billing/checkout-plan";
 import type { RouterOutput } from "@/libs/orpc/client";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -10,7 +11,7 @@ import { Skeleton } from "@headcv/ui/components/skeleton";
 import { authClient } from "@/libs/auth/client";
 import { orpc } from "@/libs/orpc/client";
 
-type PendingPlan = "monthly" | "yearly" | "trial";
+type PendingPlan = CheckoutPlan;
 
 /** Session-storage key used to persist plan intent across OAuth redirects. */
 const PENDING_PLAN_KEY = "headcv_pending_plan";

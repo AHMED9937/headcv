@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ORPCError } from "@orpc/client";
 import { CheckCircleIcon, CircleNotchIcon, ClockIcon, WarningIcon, XCircleIcon } from "@phosphor-icons/react";
@@ -8,6 +7,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import z from "zod";
 import { Button } from "@headcv/ui/components/button";
+import { planLabel } from "@/features/billing/checkout-plan";
 import { client, orpc } from "@/libs/orpc/client";
 
 // Dodo appends ?subscription_id=…&status=… to the return URL. The status is only a UX hint;
@@ -28,15 +28,13 @@ const POLL_INTERVAL_MS = 3000;
 const MAX_ATTEMPTS = 10;
 const UNSUCCESSFUL_STATUSES = new Set(["failed", "cancelled", "expired"]);
 
-const planLabel = (plan: string) =>
-	plan === "trial" ? t`Pro Trial` : plan === "yearly" ? t`Pro Yearly` : t`Pro Monthly`;
-
 function CheckoutSuccess() {
 	const { status } = Route.useSearch();
 	const queryClient = useQueryClient();
 	const paymentUnsuccessful = !!status && UNSUCCESSFUL_STATUSES.has(status);
 	const [state, setState] = useState<ActivationState>(paymentUnsuccessful ? "not-completed" : "verifying");
 	const [plan, setPlan] = useState("");
+	const [trial, setTrial] = useState(false);
 	const attempts = useRef(0);
 	const timer = useRef<number | undefined>(undefined);
 
@@ -45,6 +43,7 @@ function CheckoutSuccess() {
 			const result = await client.billing.verifyAndActivate({});
 			if (result.activated) {
 				setPlan(result.plan);
+				setTrial(result.trial);
 				setState("activated");
 				// Refresh the plan badge and billing page everywhere.
 				void queryClient.invalidateQueries({ queryKey: orpc.billing.getSubscription.key() });
@@ -112,9 +111,15 @@ function CheckoutSuccess() {
 						icon={<CheckCircleIcon className="mx-auto size-16 text-green-600" weight="fill" aria-hidden="true" />}
 						title={<Trans id="checkout.success.title">Welcome to Pro!</Trans>}
 						description={
-							<Trans id="checkout.success.plan">
-								Your {planLabel(plan)} plan is active. Enjoy unlimited resumes and AI chats!
-							</Trans>
+							trial ? (
+								<Trans id="checkout.success.trial">
+									Your 7-day Pro trial has started. It continues as {planLabel(plan)} unless you cancel before it ends.
+								</Trans>
+							) : (
+								<Trans id="checkout.success.plan">
+									Your {planLabel(plan)} plan is active. Enjoy unlimited resumes and AI chats!
+								</Trans>
+							)
 						}
 						actions={
 							<>
