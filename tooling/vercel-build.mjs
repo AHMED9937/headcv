@@ -83,12 +83,19 @@ if (existsSync(promptsDir)) {
 mkdirSync(join(serverFuncDir, "apps", "web", "dist"), { recursive: true });
 cpSync(join(webDist, "index.html"), join(serverFuncDir, "apps", "web", "dist", "index.html"));
 
-// Function configuration.
+// Function configuration. Mirror what Vercel's own Node/Hono builder emits:
+// without `launcherType: "Nodejs"`, @vercel/build-utils deserializes the
+// function as a generic Lambda rather than a Node.js one. With only
+// runtime/handler set, usage was billed as legacy wall-clock Function
+// Duration even though Fluid compute was enabled for the project.
 writeFileSync(
 	join(serverFuncDir, ".vc-config.json"),
 	JSON.stringify({
 		runtime: "nodejs24.x",
 		handler: "index.mjs",
+		launcherType: "Nodejs",
+		shouldAddHelpers: true,
+		supportsResponseStreaming: true,
 		maxDuration: 60,
 	}),
 );

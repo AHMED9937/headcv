@@ -4,6 +4,14 @@ import { AuthError, authenticateRequest } from "./auth";
 import { createMcpServer } from "./server";
 
 export async function handleMcp(request: Request) {
+	// The server is stateless, so it never pushes server-initiated messages. A GET
+	// would open a standalone SSE stream that never closes and holds the serverless
+	// function open until maxDuration on every client reconnect. The MCP spec lets
+	// servers without that stream answer 405.
+	if (request.method === "GET") {
+		return new Response(null, { status: 405, headers: { Allow: "POST" } });
+	}
+
 	try {
 		await authenticateRequest(request);
 

@@ -3,6 +3,7 @@
 	"outputDirectory": ".vercel/output",
 	"installCommand": "pnpm install --frozen-lockfile",
 	"framework": null,
+	"fluid": true,
 	"rewrites": [
 		{ "source": "/(api|uploads|\\.well-known|mcp)(.*)", "destination": "/server" },
 		{ "source": "/(schema\\.json|robots\\.txt|sitemap\\.xml|llms\\.txt)", "destination": "/server" },
